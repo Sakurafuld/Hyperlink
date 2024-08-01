@@ -38,12 +38,12 @@ public class NovelHandler {
                 novelKill(from, entity);
             }
             entity.kill();
-            if(required(LogicalSide.CLIENT).ready())
+            if(side().isClient())
                 PacketHandler.INSTANCE.sendToServer(new C2SNovelKill(entity.getId()));
             return;
         }
         target.novelKill(from);
-        if(required(LogicalSide.CLIENT).ready())
+        if(side().isClient())
             PacketHandler.INSTANCE.sendToServer(new C2SNovelKill(entity.getId()));
     }
 }

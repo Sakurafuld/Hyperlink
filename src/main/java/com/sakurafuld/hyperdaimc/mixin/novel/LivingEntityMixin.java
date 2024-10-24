@@ -32,12 +32,12 @@ public abstract class LivingEntityMixin implements ILivingEntityNovel {
         NovelDamageSource damage = new NovelDamageSource(pEntity);
         self.getCombatTracker().recordDamage(damage, self.getHealth(), 0);
         this.novelSetHealth();
+        if(pEntity instanceof Player player)
+            self.setLastHurtByPlayer(player);
+        else
+            self.setLastHurtByMob(pEntity);
         required(LogicalSide.SERVER).run(() -> {
             if(self.isDeadOrDying()) {
-                if(pEntity instanceof Player player)
-                    self.setLastHurtByPlayer(player);
-                else
-                    self.setLastHurtByMob(pEntity);
                 self.die(damage);
                 if(!self.isDeadOrDying())
                     this.novelSetHealth();

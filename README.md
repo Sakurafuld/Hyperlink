@@ -1,7 +1,7 @@
 # Hyper-Arms
 Minecraft1.18.2
 
-マジにやばい神の恵みを追加するMod
+神の恵みを追加するMod
 
 # ムテキスター
 

@@ -33,10 +33,6 @@ public class HyperDaiMC {
     private void IMC(InterModEnqueueEvent event) {
         InterModComms.sendTo(CURIOS, SlotTypeMessage.REGISTER_TYPE, ()-> new SlotTypeMessage.Builder("maximum").icon(identifier(HYPERDAIMC, "item/empty_maximum_slot")).priority(Integer.MIN_VALUE).build());
     }
-    /*@OnlyIn(Dist.CLIENT)
-    private static void registerTextures(TextureStitchEvent.Pre event) {
-        event.addSprite(identifier(HYPERDAIMC, "item/empty_maximum_slot"));
-    }*/
     @Mod.EventBusSubscriber(modid = HYPERDAIMC, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientHandler {
         @SubscribeEvent

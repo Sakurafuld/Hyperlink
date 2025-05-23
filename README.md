@@ -1,3 +1,3 @@
 # Hyperlink
-Minecraft 1.18.2 Forge
+MinecraftForge
 ハイパー桁外れなアイテムとボスを追加するMod

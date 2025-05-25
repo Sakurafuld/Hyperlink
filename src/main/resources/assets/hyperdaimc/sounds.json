@@ -1,0 +1,64 @@
+{
+  "muteki_equip": {
+    "subtitle": "hyperdaimc.subtitle.muteki_equip",
+    "sounds": [ "hyperdaimc:muteki_equip" ]
+  },
+  "novelize": {
+    "subtitle": "hyperdaimc.subtitle.novelize",
+    "sounds": [ "hyperdaimc:novelize" ]
+  },
+  "chronicle_select": {
+    "subtitle": "hyperdaimc.subtitle.chronicle_select",
+    "sounds": [ "hyperdaimc:chronicle_select" ]
+  },
+  "chronicle_pause": {
+    "subtitle": "hyperdaimc.subtitle.chronicle_pause",
+    "sounds": [ "hyperdaimc:chronicle_pause" ]
+  },
+  "chronicle_restart": {
+    "subtitle": "hyperdaimc.subtitle.chronicle_restart",
+    "sounds": [ "hyperdaimc:chronicle_restart" ]
+  },
+  "perfect_knockout": {
+    "subtitle": "hyperdaimc.subtitle.perfect_knockout",
+    "sounds": [ "hyperdaimc:perfect_knockout" ]
+  },
+  "vrx_open": {
+    "subtitle": "hyperdaimc.subtitle.vrx_open",
+    "sounds": [ "hyperdaimc:vrx_open" ]
+  },
+  "vrx_create": {
+    "subtitle": "hyperdaimc.subtitle.vrx_create",
+    "sounds": [ "hyperdaimc:vrx_create" ]
+  },
+  "vrx_erase": {
+    "subtitle": "hyperdaimc.subtitle.vrx_erase",
+    "sounds": [ "hyperdaimc:vrx_erase" ]
+  },
+  "fumetsu_ambient": {
+    "subtitle": "hyperdaimc.subtitle.fumetsu_ambient",
+    "sounds": [
+      "hyperdaimc:fumetsu_idle1",
+      "hyperdaimc:fumetsu_idle2",
+      "hyperdaimc:fumetsu_idle3",
+      "hyperdaimc:fumetsu_idle4"
+    ]
+  },
+  "fumetsu_hurt": {
+    "subtitle": "hyperdaimc.subtitle.fumetsu_hurt",
+    "sounds": [
+      "hyperdaimc:fumetsu_hurt1",
+      "hyperdaimc:fumetsu_hurt2",
+      "hyperdaimc:fumetsu_hurt3",
+      "hyperdaimc:fumetsu_hurt4"
+    ]
+  },
+  "fumetsu_shoot": {
+    "subtitle": "hyperdaimc.subtitle.fumetsu_shoot",
+    "sounds": [ "hyperdaimc:fumetsu_shoot" ]
+  },
+  "fumetsu_storm": {
+    "subtitle": "hyperdaimc.subtitle.fumetsu_storm",
+    "sounds": [ "hyperdaimc:fumetsu_storm" ]
+  }
+}

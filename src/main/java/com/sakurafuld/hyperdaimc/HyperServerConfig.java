@@ -1,0 +1,123 @@
+package com.sakurafuld.hyperdaimc;
+
+import com.google.common.collect.Lists;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.ForgeConfigSpec;
+
+import java.util.List;
+
+public class HyperServerConfig {
+    public static final ForgeConfigSpec SPEC;
+
+    public static final ForgeConfigSpec.BooleanValue ENABLE_MUTEKI;
+    public static final ForgeConfigSpec.BooleanValue MUTEKI_NOVEL;
+    public static final ForgeConfigSpec.BooleanValue MUTEKI_SELECTOR;
+
+    public static final ForgeConfigSpec.BooleanValue ENABLE_NOVEL;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> NOVEL_IGNORE;
+    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> NOVEL_SPECIAL;
+
+    public static final ForgeConfigSpec.BooleanValue ENABLE_CHRONICLE;
+    public static final ForgeConfigSpec.BooleanValue CHRONICLE_PARADOX;
+    public static final ForgeConfigSpec.BooleanValue CHRONICLE_OWNER;
+    public static final ForgeConfigSpec.BooleanValue CHRONICLE_INTERACT;
+    public static final ForgeConfigSpec.IntValue CHRONICLE_SIZE;
+
+    public static final ForgeConfigSpec.BooleanValue ENABLE_PARADOX;
+    public static final ForgeConfigSpec.BooleanValue PARADOX_HIT_FLUID;
+
+    public static final ForgeConfigSpec.BooleanValue ENABLE_VRX;
+
+
+    static {
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+
+        builder.push("Hyperlink");
+        {
+            builder.push("Muteki");
+            {
+                ENABLE_MUTEKI = builder
+                        .comment("Enable behavior of Muteki",
+                                "Default: true")
+                        .define("Enable Muteki", true);
+                MUTEKI_NOVEL = builder
+                        .comment("Novel may not Novelize Muteki",
+                                "Default: false")
+                        .define("Hyper Muteki", false);
+                MUTEKI_SELECTOR = builder
+                        .comment("Muteki is not selected by command selector ( e.g. not included in @e or @a )",
+                                "Default: true")
+                        .define("Muteki command", true);
+            }
+            builder.pop();
+
+            builder.push("Novel");
+            {
+                ENABLE_NOVEL = builder
+                        .comment("Enable behavior of Novel",
+                                "Default: true")
+                        .define("Enable Novel", true);
+                NOVEL_IGNORE = builder
+                        .comment("Specific entities that ignore Novelize")
+                        .defineList("Ignore entities", Lists.newArrayList("minecraft:item", "minecraft:experience", "hyperdaimc:fumetsu_skull", "hyperdaimc:fumetsu_storm", "hyperdaimc:fumetsu_storm_skull"),
+                                object -> object instanceof String string && ResourceLocation.isValidResourceLocation(string));
+                NOVEL_SPECIAL = builder
+                        .comment("Specific entities that should be special Novelize")
+                        .defineList("Special entities", Lists.newArrayList("mekanism:robit"),
+                                object -> object instanceof String string && ResourceLocation.isValidResourceLocation(string));
+            }
+            builder.pop();
+
+            builder.push("Chronicle");
+            {
+                ENABLE_CHRONICLE = builder
+                        .comment("Enable behavior of Chronicle",
+                                "For optimization, it is recommended to temporarily set this to false when generating new chunks",
+                                "Default: true")
+                        .define("Enable Chronicle", true);
+                CHRONICLE_PARADOX = builder
+                        .comment("Paradox may not Perfect Knockout Chronicle",
+                                "Default: false")
+                        .define("Hyper Chronicle", false);
+                CHRONICLE_OWNER = builder
+                        .comment("Owner may not block action in Chronicle",
+                                "Default: false")
+                        .define("Paused owner", false);
+                CHRONICLE_INTERACT = builder
+                        .comment("Cannot interact with blocks in Chronicle ( Like in Adventure Mode )",
+                                "Default: false")
+                        .define("Interact Chronicle", false);
+                CHRONICLE_SIZE = builder
+                        .comment("max selection size of Chronicle",
+                                "Default: 4096")
+                        .defineInRange("Selection size", 4096, 1, Integer.MAX_VALUE);
+            }
+            builder.pop();
+
+            builder.push("Paradox");
+            {
+                ENABLE_PARADOX = builder
+                        .comment("Enable behavior of Paradox",
+                                "Default: true")
+                        .define("Enable Paradox", true);
+                PARADOX_HIT_FLUID = builder
+                        .comment("Paradox may Perfect Knockout liquid blocks",
+                                "Default: true")
+                        .define("Fluid Paradox", true);
+            }
+            builder.pop();
+
+            builder.push("VRX");
+            {
+                ENABLE_VRX = builder
+                        .comment("Enable behavior of VRX",
+                                "Default: true")
+                        .define("Enable VRX", true);
+            }
+            builder.pop();
+        }
+        builder.pop();
+
+        SPEC = builder.build();
+    }
+}

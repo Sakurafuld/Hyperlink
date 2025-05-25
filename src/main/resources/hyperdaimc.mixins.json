@@ -1,0 +1,48 @@
+{
+  "required": true,
+  "package": "com.sakurafuld.hyperdaimc.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "hyperdaimc.refmap.json",
+  "mixins": [
+    "chronicle.BlockStateBaseMixin",
+    "chronicle.BlockStateMixin",
+    "chronicle.BucketItemMixin",
+    "chronicle.ChunkAccessMixin",
+    "chronicle.ChunkStatusMixin",
+    "chronicle.EntityMixin",
+    "chronicle.FlowingFluidMixin",
+    "chronicle.ItemStackMixin",
+    "chronicle.LevelChunkMixin",
+    "chronicle.LevelChunkSectionMixin",
+    "chronicle.LevelMixin",
+    "chronicle.LootTableMixin",
+    "chronicle.PistonBaseBlockMixin",
+    "chronicle.PlayerMixin",
+    "chronicle.ServerLevelMixin",
+    "fumetsu.ServerLevelMixin",
+    "muteki.CommandSourceStackMixin",
+    "muteki.EntityArgumentMixin",
+    "muteki.LivingEntityAccessor",
+    "muteki.LivingEntityMixin",
+    "muteki.PlayerMixin",
+    "muteki.SynchedEntityDataMixin",
+    "muteki.TunnelAspectWriteBuildersMixin",
+    "novel.EntityMixin",
+    "novel.ForgeHooksMixin",
+    "novel.LivingEntityMixin",
+    "novel.MobMixin",
+    "paradox.LootTableMixin",
+    "paradox.ServerPlayerGameModeMixin"
+  ],
+  "server": [
+  ],
+  "client": [
+    "fumetsu.ClientLevelMixin",
+    "gameorb.ItemEntityRendererMixin",
+    "muteki.GameModeSwitchScreenMixin",
+    "paradox.MinecraftMixin",
+    "paradox.MultiPlayerGameModeMixin",
+    "vrx.AbstractContainerScreenMixin"
+  ],
+  "minVersion": "0.8"
+}

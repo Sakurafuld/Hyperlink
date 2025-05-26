@@ -7,7 +7,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
-import net.minecraftforge.fml.util.thread.SidedThreadGroup;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @Pseudo
 @Mixin(PixieAISteal.class)
 public abstract class PixieAIStealMixin {
-    @Shadow
+    @Shadow(remap = false)
     private Player temptingPlayer;
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/ArrayList;isEmpty()Z"), remap = false)

@@ -162,6 +162,8 @@ dependencies {
     implementation fg.deobf("curse.maven:patchouli-306770:6164575")
     implementation fg.deobf("curse.maven:brandons-core-231382:5422013")
     implementation fg.deobf("curse.maven:codechicken-lib-1-8-242818:5753868")
+    implementation fg.deobf("curse.maven:citadel-331936:6002521")
+    implementation fg.deobf("curse.maven:event-wrapper-1256971:6553656")
 
 
     implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")// core
@@ -186,6 +188,11 @@ dependencies {
     implementation fg.deobf("curse.maven:draconic-evolution-223565:6065044")
 
     implementation fg.deobf("curse.maven:botania-225643:6366547")
+    implementation fg.deobf("curse.maven:extrabotany-reburn-1271869:6577564")
+
+    implementation fg.deobf("curse.maven:pneumaticcraft-repressurized-281849:6142963")
+
+    implementation fg.deobf("curse.maven:ice-and-fire-dragons-264231:5633453")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

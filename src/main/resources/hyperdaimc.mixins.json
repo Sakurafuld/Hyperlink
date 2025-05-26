@@ -24,6 +24,8 @@
     "muteki.EntityArgumentMixin",
     "muteki.LivingEntityAccessor",
     "muteki.LivingEntityMixin",
+    "muteki.OmnidirectionalHopperBlockEntityMixin",
+    "muteki.PixieAIStealMixin",
     "muteki.PlayerMixin",
     "muteki.SynchedEntityDataMixin",
     "muteki.TunnelAspectWriteBuildersMixin",

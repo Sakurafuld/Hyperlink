@@ -188,6 +188,10 @@ dependencies {
 
     implementation fg.deobf("curse.maven:lendercataclysm-551586:4418426")
 
+    implementation fg.deobf("curse.maven:pneumaticcraft-repressurized-281849:4922258")
+
+    implementation fg.deobf("curse.maven:ice-and-fire-dragons-264231:5037775")
+
     implementation fg.deobf("curse.maven:clumps-256717:4153344")
     implementation fg.deobf("curse.maven:spark-361579:4505375")
     implementation fg.deobf("curse.maven:embeddium-908741:5322305")

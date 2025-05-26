@@ -217,10 +217,9 @@ public class VRXHandler {
             entries.stream()
                     .sorted(Comparator.comparingInt(entry -> entry.uuid.equals(mc.player.getUUID()) ? -1 : 1))
                     .forEach(entry -> Renders.with(poseStack, () -> {
+                        boolean mine = entry.uuid.equals(mc.player.getUUID());
 
                         poseStack.translate(entry.pos.getX() - camera.x(), entry.pos.getY() - camera.y(), entry.pos.getZ() - camera.z());
-
-                        boolean mine = entry.uuid.equals(mc.player.getUUID());
                         renderBlock(poseStack, entry.pos, entry.face, mine, entry.xRot, entry.yRot, posSet);
                     }));
         }
@@ -233,6 +232,12 @@ public class VRXHandler {
                     renderBlock(poseStack, block.getBlockPos(), null, true, 0, 0, Sets.newHashSet());
                 });
             }, entity -> {
+                AABB aabb = Boxes.identity(entity.getBoundingBox());
+                Renders.with(poseStack, () -> {
+                    poseStack.translate(entity.getX() - camera.x(), entity.getY() - camera.y(), entity.getZ() - camera.z());
+                    poseStack.translate(aabb.getXsize() / -2, 0, aabb.getZsize() / -2);
+                    Renders.cubeBox(poseStack.last().pose(), Renders.getBuffer(Renders.Type.HIGHLIGHT), aabb, 0x80AAFFFF, face -> true);
+                });
             });
         }
     }

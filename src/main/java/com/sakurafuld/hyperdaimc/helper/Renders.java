@@ -183,6 +183,7 @@ public class Renders {
 
     public static void model(BakedModel model, PoseStack poseStack, VertexConsumer consumer, int light, int overlay, Function<BakedQuad, Integer> colorizer) {
         for (Direction face : QUAD_FACES) {
+            RANDOM.setSeed(42);
             for (BakedQuad quad : model.getQuads(null, face, RANDOM, EmptyModelData.INSTANCE)) {
                 int color = colorizer.apply(quad);
 

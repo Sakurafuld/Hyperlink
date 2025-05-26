@@ -20,18 +20,20 @@ public class ParadoxItem extends AbstractGashatItem {
 
     @Override
     public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        if(!this.enabled.get()) {
+        if (!this.enabled.get()) {
             return super.isCorrectToolForDrops(stack, state);
         }
         return true;
     }
+
     @Override
     public boolean canPerformAction(ItemStack stack, ToolAction toolAction) {
-        if(!this.enabled.get()) {
+        if (!this.enabled.get()) {
             return super.canPerformAction(stack, toolAction);
         }
         return DIG_ACTIONS.contains(toolAction);
     }
+
     @Override
     public int getItemEnchantability(ItemStack stack) {
         if (!this.enabled.get()) {
@@ -39,6 +41,7 @@ public class ParadoxItem extends AbstractGashatItem {
         }
         return 30;
     }
+
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         if (!this.enabled.get()) {
@@ -46,6 +49,7 @@ public class ParadoxItem extends AbstractGashatItem {
         }
         return true;
     }
+
     @Override
     public boolean isEnchantable(ItemStack pStack) {
         if (!this.enabled.get()) {

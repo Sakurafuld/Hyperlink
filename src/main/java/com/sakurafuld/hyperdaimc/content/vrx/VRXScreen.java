@@ -22,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.GuiUtils;
 
 import java.util.Collections;
-import java.util.List;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;

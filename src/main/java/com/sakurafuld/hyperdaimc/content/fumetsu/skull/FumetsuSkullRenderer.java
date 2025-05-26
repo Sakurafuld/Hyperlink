@@ -16,6 +16,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class FumetsuSkullRenderer extends EntityRenderer<FumetsuSkull> {
     private final FumetsuSkullModel model;
+
     public FumetsuSkullRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
         this.model = new FumetsuSkullModel(FumetsuSkullModel.createLayer().bakeRoot());
@@ -35,14 +36,17 @@ public class FumetsuSkullRenderer extends EntityRenderer<FumetsuSkull> {
 
         super.render(pEntity, pEntityYaw, pPartialTick, pPoseStack, pBuffer, pPackedLight);
     }
+
     @Override
     protected int getBlockLightLevel(FumetsuSkull pEntity, BlockPos pPos) {
         return 15;
     }
+
     @Override
     public ResourceLocation getTextureLocation(FumetsuSkull pEntity) {
         return pEntity.getSkullType().getTexture();
     }
+
     protected float getSize() {
         return 1;
     }

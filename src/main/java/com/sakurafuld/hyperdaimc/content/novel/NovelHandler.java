@@ -5,8 +5,6 @@ import com.sakurafuld.hyperdaimc.HyperServerConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
-import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
-import com.sakurafuld.hyperdaimc.content.fumetsu.skull.FumetsuSkull;
 import com.sakurafuld.hyperdaimc.network.PacketHandler;
 import com.sakurafuld.hyperdaimc.network.novel.ServerboundNovelSound;
 import com.sakurafuld.hyperdaimc.network.novel.ServerboundNovelize;
@@ -37,10 +35,10 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 @Mod.EventBusSubscriber(modid = HYPERDAIMC)
 public class NovelHandler {
     private static final Predicate<Entity> PREDICATE = entity -> {
-        if(!entity.isRemoved() && entity.getPose() != Pose.DYING) {
-            if(entity instanceof Player player) {
+        if (!entity.isRemoved() && entity.getPose() != Pose.DYING) {
+            if (entity instanceof Player player) {
                 return player.getHealth() > 0;
-            } else if(!HyperServerConfig.NOVEL_IGNORE.get().isEmpty()) {
+            } else if (!HyperServerConfig.NOVEL_IGNORE.get().isEmpty()) {
                 return !HyperServerConfig.NOVEL_IGNORE.get().contains(entity.getType().getRegistryName().toString());
             } else {
                 return true;

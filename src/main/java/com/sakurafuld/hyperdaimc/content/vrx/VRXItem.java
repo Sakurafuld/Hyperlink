@@ -36,6 +36,7 @@ public class VRXItem extends AbstractGashatItem {
         }
         return !pPlayer.isCreative();
     }
+
     @Override
     public Component getName(ItemStack pStack) {
         if (!this.enabled.get()) {
@@ -47,6 +48,7 @@ public class VRXItem extends AbstractGashatItem {
         this.lastTime = Util.getMillis();
         return super.getName(pStack).copy().append(" (" + this.lastName + ")");
     }
+
     @Override
     public UseAnim getUseAnimation(ItemStack pStack) {
         if (!this.enabled.get()) {
@@ -54,6 +56,7 @@ public class VRXItem extends AbstractGashatItem {
         }
         return UseAnim.EAT;
     }
+
     @Override
     public int getUseDuration(ItemStack pStack) {
         if (!this.enabled.get()) {
@@ -62,6 +65,7 @@ public class VRXItem extends AbstractGashatItem {
 
         return 16;
     }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         if (!this.enabled.get()) {
@@ -75,6 +79,7 @@ public class VRXItem extends AbstractGashatItem {
             return super.use(pLevel, pPlayer, pUsedHand);
         }
     }
+
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
         if (!this.enabled.get()) {

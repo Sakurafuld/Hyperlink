@@ -90,7 +90,7 @@ public class VRXTooltip implements TooltipComponent {
                 } else {
                     VRXOne one = this.tooltip.contents.get(index);
                     this.blit(poseStack, x, y, blitOffset, Texture.SLOT);
-                    if(!one.isEmpty()) {
+                    if (!one.isEmpty()) {
                         poseStack.translate(0, 0, blitOffset);
                         one.render(poseStack, x + 1, y + 1);
                     }
@@ -126,7 +126,6 @@ public class VRXTooltip implements TooltipComponent {
 
         enum Texture {
             SLOT(0, 0, 18, 20),
-            BLOCKED_SLOT(0, 40, 18, 20),
             BORDER_VERTICAL(0, 18, 1, 20),
             BORDER_HORIZONTAL_TOP(0, 20, 18, 1),
             BORDER_HORIZONTAL_BOTTOM(0, 60, 18, 1),

@@ -71,6 +71,7 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
         }
         this.force(false);
     }
+
     @Inject(method = "die", at = @At("HEAD"), cancellable = true)
     private void dieMuteki$LivingEntity(DamageSource pDamageSource, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) ((Object) this);
@@ -79,6 +80,7 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
             ci.cancel();
         }
     }
+
     @Inject(method = "readAdditionalSaveData", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V"))
     private void readAdditionalSaveDataMuteki(CompoundTag pCompound, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) ((Object) this);

@@ -12,8 +12,6 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
-
 public class GashatParticle extends Particle {
     private final GashatParticleOptions options;
     private final int color;
@@ -38,7 +36,7 @@ public class GashatParticle extends Particle {
         float ticks = (float) this.age / (float) this.lifetime;
         float ticksO = (float) (this.age - 1) / (float) this.lifetime;
         float size;
-        if(ticks < 0.5) {
+        if (ticks < 0.5) {
             size = Mth.lerp(pPartialTicks, ticksO / 0.5f, ticks / 0.5f);
         } else {
             size = Mth.lerp(pPartialTicks, (1 - ticksO) / 0.5f, (1 - ticks) / 0.5f);

@@ -15,9 +15,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import org.jetbrains.annotations.NotNull;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
-
 @OnlyIn(Dist.CLIENT)
 public class FumetsuStormRenderer extends EntityRenderer<FumetsuStorm> {
 
@@ -31,7 +28,7 @@ public class FumetsuStormRenderer extends EntityRenderer<FumetsuStorm> {
 
         pPoseStack.pushPose();
         pPoseStack.translate(-aabb.getXsize() / 2, -aabb.getYsize() / 2 + 0.25, -aabb.getZsize() / 2);
-        if(pEntity.getId() % 2 == 0) {
+        if (pEntity.getId() % 2 == 0) {
             Renders.cubeBox(pPoseStack.last().pose(), pBuffer.getBuffer(Renders.Type.LIGHTNING_NO_CULL), aabb, 0x40FF0000, face -> true);
             LevelRenderer.renderLineBox(pPoseStack, pBuffer.getBuffer(RenderType.lines()), aabb, 0, 1, 1, 1);
         } else {
@@ -43,6 +40,7 @@ public class FumetsuStormRenderer extends EntityRenderer<FumetsuStorm> {
 
         super.render(pEntity, pEntityYaw, pPartialTick, pPoseStack, pBuffer, pPackedLight);
     }
+
     @Override
     public @NotNull ResourceLocation getTextureLocation(FumetsuStorm pEntity) {
         return ForgeModelBakery.MISSING_MODEL_LOCATION;

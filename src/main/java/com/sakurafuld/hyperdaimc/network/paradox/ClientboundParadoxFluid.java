@@ -66,16 +66,16 @@ public class ClientboundParadoxFluid {
                 int maxY = Math.max(2, Mth.ceil(minY / 0.25));
                 int maxZ = Math.max(2, Mth.ceil(minZ / 0.25));
 
-                for(int x = 0; x < maxX; ++x) {
-                    for(int y = 0; y < maxY; ++y) {
-                        for(int z = 0; z < maxZ; ++z) {
-                            double d4 = ((double)x + 0.5) / (double)maxX;
-                            double d5 = ((double)y + 0.5) / (double)maxY;
-                            double d6 = ((double)z + 0.5) / (double)maxZ;
+                for (int x = 0; x < maxX; ++x) {
+                    for (int y = 0; y < maxY; ++y) {
+                        for (int z = 0; z < maxZ; ++z) {
+                            double d4 = ((double) x + 0.5) / (double) maxX;
+                            double d5 = ((double) y + 0.5) / (double) maxY;
+                            double d6 = ((double) z + 0.5) / (double) maxZ;
                             double d7 = d4 * minX + startX;
                             double d8 = d5 * minY + startY;
                             double d9 = d6 * minZ + startZ;
-                            engine.add(new TerrainParticle(level, (double)pos.getX() + d7, (double)pos.getY() + d8, (double)pos.getZ() + d9, d4 - 0.5, d5 - 0.5, d6 - 0.5, state, pos).updateSprite(state, pos));
+                            engine.add(new TerrainParticle(level, (double) pos.getX() + d7, (double) pos.getY() + d8, (double) pos.getZ() + d9, d4 - 0.5, d5 - 0.5, d6 - 0.5, state, pos).updateSprite(state, pos));
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-package com.sakurafuld.hyperdaimc.api;
+package com.sakurafuld.hyperdaimc.api.compat;
 
 import mekanism.api.Action;
 import mekanism.api.chemical.IChemicalHandler;
@@ -40,6 +40,7 @@ public class CombinedGasHandler implements IGasHandler {
         }
         return fail.get();
     }
+
     protected void execute(int tank, BiConsumer<IGasHandler, Integer> consumer) {
         this.execute(tank, (handler, index) -> {
             consumer.accept(handler, index);
@@ -51,15 +52,18 @@ public class CombinedGasHandler implements IGasHandler {
     public int getTanks() {
         return this.totalTanks;
     }
+
     @NotNull
     @Override
     public GasStack getChemicalInTank(int tank) {
         return this.execute(tank, IGasHandler::getChemicalInTank, () -> GasStack.EMPTY);
     }
+
     @Override
     public void setChemicalInTank(int tank, GasStack stack) {
         this.execute(tank, (handler, index) -> handler.setChemicalInTank(index, stack));
     }
+
     @Override
     public long getTankCapacity(int tank) {
         return this.execute(tank, IChemicalHandler::getTankCapacity, () -> 0L);
@@ -74,6 +78,7 @@ public class CombinedGasHandler implements IGasHandler {
     public @NotNull GasStack insertChemical(int tank, GasStack stack, Action action) {
         return this.execute(tank, (handler, index) -> handler.insertChemical(index, stack, action), () -> stack);
     }
+
     @Override
     public @NotNull GasStack extractChemical(int tank, long amount, Action action) {
         return this.execute(tank, (handler, index) -> handler.extractChemical(index, amount, action), () -> GasStack.EMPTY);

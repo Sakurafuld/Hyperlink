@@ -14,15 +14,13 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Locale;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
-
 public class GashatParticleOptions implements ParticleOptions {
     public static final Codec<GashatParticleOptions> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
-                    Vector3f.CODEC.fieldOf("color").forGetter(self -> self.color),
-                    Codec.FLOAT.fieldOf("radius").forGetter(self -> self.radius),
-                    Codec.FLOAT.fieldOf("width").forGetter(self -> self.width),
-                    Codec.FLOAT.fieldOf("speed").forGetter(self -> self.speed))
+                            Vector3f.CODEC.fieldOf("color").forGetter(self -> self.color),
+                            Codec.FLOAT.fieldOf("radius").forGetter(self -> self.radius),
+                            Codec.FLOAT.fieldOf("width").forGetter(self -> self.width),
+                            Codec.FLOAT.fieldOf("speed").forGetter(self -> self.speed))
                     .apply(instance, GashatParticleOptions::new));
     public static final ParticleOptions.Deserializer<GashatParticleOptions> DESERIALIZER = new ParticleOptions.Deserializer<>() {
         @Override
@@ -36,13 +34,14 @@ public class GashatParticleOptions implements ParticleOptions {
             float speed = pReader.readFloat();
             return new GashatParticleOptions(color, radius, width, speed);
         }
+
         @Override
         public GashatParticleOptions fromNetwork(ParticleType<GashatParticleOptions> pParticleType, FriendlyByteBuf pBuffer) {
             return new GashatParticleOptions(DustParticleOptionsBase.readVector3f(pBuffer), pBuffer.readFloat(), pBuffer.readFloat(), pBuffer.readFloat());
         }
     };
-    
-    
+
+
     public final Vector3f color;
     public final float radius;
     public final float width;

@@ -1,12 +1,9 @@
 package com.sakurafuld.hyperdaimc.helper;
 
 import com.sakurafuld.hyperdaimc.content.HyperItems;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
@@ -19,7 +16,8 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 
 public class Deets {
-    private Deets() {}
+    private Deets() {
+    }
 
     public static final String HYPERDAIMC = "hyperdaimc";
     public static final Logger LOG = LoggerFactory.getLogger(HYPERDAIMC);
@@ -69,10 +67,6 @@ public class Deets {
 
     public static LogicalSide side() {
         return EffectiveSide.get();
-    }
-
-    public static String literalSide() {
-        return Thread.currentThread().getThreadGroup() instanceof SidedThreadGroup side ? side.getSide().name() : "SpecialThread";
     }
 
     public static Act require(LogicalSide side) {

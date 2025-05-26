@@ -5,9 +5,12 @@ public interface ILivingEntityMuteki {
 
     boolean initialized();
 
-    default void force(boolean force) {}
+    default void force(boolean force) {
+    }
 
-    default boolean forced() {return false;}
+    default boolean forced() {
+        return false;
+    }
 
     float lastHealth();
 }

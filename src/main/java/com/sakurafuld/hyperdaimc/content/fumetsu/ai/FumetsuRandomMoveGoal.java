@@ -5,11 +5,8 @@ import com.sakurafuld.hyperdaimc.helper.Boxes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.util.EnumSet;
-
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 
 public class FumetsuRandomMoveGoal extends Goal {
     private final FumetsuEntity fumetsu;
@@ -21,15 +18,17 @@ public class FumetsuRandomMoveGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if(this.fumetsu.getRandom().nextInt(reducedTickDelay(64)) == 0) {
+        if (this.fumetsu.getRandom().nextInt(reducedTickDelay(64)) == 0) {
             return true;
         }
         return (!this.fumetsu.getMoveControl().hasWanted() && this.fumetsu.getRandom().nextInt(reducedTickDelay(7)) == 0);
     }
+
     @Override
     public boolean canContinueToUse() {
         return false;
     }
+
     @Override
     public void tick() {
         BlockPos origin = this.fumetsu.getOrigin();

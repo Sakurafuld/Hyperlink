@@ -12,7 +12,8 @@ import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.*;
+import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class FumetsuEntityRenderer extends MobRenderer<FumetsuEntity, FumetsuEntityModel> {
@@ -24,11 +25,12 @@ public class FumetsuEntityRenderer extends MobRenderer<FumetsuEntity, FumetsuEnt
 
     @Override
     public void render(FumetsuEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
-        if(pEntity.isGenocide()) {
+        if (pEntity.isGenocide()) {
             this.renderAura(pMatrixStack, pBuffer, pEntity, pPartialTicks);
         }
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }
+
     private void renderAura(PoseStack poseStack, MultiBufferSource buffer, FumetsuEntity fumetsu, float partialTicks) {
         float xRot = Mth.cos(fumetsu.tickCount / 6f) * 6f;
         float size = Math.min(1f, fumetsu.genocideTime / 15f);
@@ -57,10 +59,12 @@ public class FumetsuEntityRenderer extends MobRenderer<FumetsuEntity, FumetsuEnt
     protected int getBlockLightLevel(FumetsuEntity pEntity, BlockPos pPos) {
         return 15;
     }
+
     @Override
     public ResourceLocation getTextureLocation(FumetsuEntity pEntity) {
         return TEXTURE;
     }
+
     @Override
     protected void scale(FumetsuEntity pLivingEntity, PoseStack pMatrixStack, float pPartialTickTime) {
         pMatrixStack.scale(2, 2, 2);

@@ -56,7 +56,7 @@ import java.util.List;
 import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 
 public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMuteki {
-    public static final  List<FumetsuEntity> EXISTING = Lists.newArrayList();
+    public static final List<FumetsuEntity> EXISTING = Lists.newArrayList();
     private static final EntityDataAccessor<Boolean> DATA_LOGOUT = SynchedEntityData.defineId(FumetsuEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_GENOCIDE = SynchedEntityData.defineId(FumetsuEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_TARGET = SynchedEntityData.defineId(FumetsuEntity.class, EntityDataSerializers.INT);
@@ -97,10 +97,12 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         this.getEntityData().define(DATA_ORIGIN, Boxes.INVALID);
         this.getEntityData().define(DATA_STORM, false);
     }
+
     @Override
     public MobType getMobType() {
         return MobType.UNDEAD;
     }
+
     @Override
     protected PathNavigation createNavigation(Level pLevel) {
         FlyingPathNavigation navi = new FlyingPathNavigation(this, pLevel);
@@ -138,7 +140,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
             this.lastHealth = health;
         }
         this.force(false);
-        if(this.getEntityData().get(DATA_LOGOUT)) {
+        if (this.getEntityData().get(DATA_LOGOUT)) {
             ItemEntity entity = new ItemEntity(this.getLevel(), this.getX(), this.getY(), this.getZ(), new ItemStack(HyperItems.GAME_ORB.get()), 0, 0, 0);
             entity.setNoGravity(true);
             entity.setGlowingTag(true);
@@ -149,23 +151,23 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
             LOG.debug("FumetsuLogout");
             return;
         }
-        if(this.isGenocide()) {
+        if (this.isGenocide()) {
             this.genocideTime++;
         }
-        if(!this.isGenocide() && this.getHealth() < this.getMaxHealth()) {
+        if (!this.isGenocide() && this.getHealth() < this.getMaxHealth()) {
             this.genocide();
         }
-        if(this.getOrigin().equals(Boxes.INVALID)) {
+        if (this.getOrigin().equals(Boxes.INVALID)) {
             this.originate();
         }
 
-        if(this.getEntityData().get(DATA_TARGET) > 0) {
+        if (this.getEntityData().get(DATA_TARGET) > 0) {
             Entity target = this.getLevel().getEntity(this.getEntityData().get(DATA_TARGET));
-            if(!this.isAvailableTarget(target)) {
+            if (!this.isAvailableTarget(target)) {
                 this.getEntityData().set(DATA_TARGET, 0);
             }
         }
-        if(this.getXRot() > 35) {
+        if (this.getXRot() > 35) {
             this.setXRot(35);
         }
 
@@ -174,14 +176,14 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         this.noPhysics = false;
         this.setNoGravity(true);
 
-        if(this.tickCount % 2 == 0) {
+        if (this.tickCount % 2 == 0) {
             Vec3 center = this.getBoundingBox().getCenter();
             this.getLevel().addParticle(
                     new GashatParticleOptions(new Vector3f(this.getRandom().nextFloat(), this.getRandom().nextFloat(), this.getRandom().nextFloat()), 0.5f, 0.1f, 10),
                     center.x() + this.getRandom().nextInt(-2, 2), center.y() + this.getRandom().nextInt(-2, 2), center.z() + this.getRandom().nextInt(-2, 2), 0, 0, 0);
         }
 
-        if(this.tickCount % 20 == 0) {
+        if (this.tickCount % 20 == 0) {
             this.heal(2);
         }
 
@@ -222,15 +224,15 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         this.aiStep();
         double dx = this.getX() - this.xo;
         double dz = this.getZ() - this.zo;
-        float distance = (float)(dx * dx + dz * dz);
+        float distance = (float) (dx * dx + dz * dz);
         float yBodyRot = this.yBodyRot;
         float animStep = 0;
         this.oRun = this.run;
         float running = 0;
         if (distance > 0.0025000002F) {
             running = 1;
-            animStep = (float)Math.sqrt(distance) * 3;
-            float f4 = (float)Mth.atan2(dz, dx) * (180F / (float)Math.PI) - 90;
+            animStep = (float) Math.sqrt(distance) * 3;
+            float f4 = (float) Mth.atan2(dz, dx) * (180F / (float) Math.PI) - 90;
             float f5 = Mth.abs(Mth.wrapDegrees(this.getYRot()) - f4);
             if (95 < f5 && f5 < 265) {
                 yBodyRot = f4 - 180;
@@ -253,35 +255,35 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         this.getLevel().getProfiler().pop();
         this.getLevel().getProfiler().push("rangeChecks");
 
-        while(this.getYRot() - this.yRotO < -180) {
+        while (this.getYRot() - this.yRotO < -180) {
             this.yRotO -= 360;
         }
 
-        while(this.getYRot() - this.yRotO >= 180) {
+        while (this.getYRot() - this.yRotO >= 180) {
             this.yRotO += 360;
         }
 
-        while(this.yBodyRot - this.yBodyRotO < -180) {
+        while (this.yBodyRot - this.yBodyRotO < -180) {
             this.yBodyRotO -= 360;
         }
 
-        while(this.yBodyRot - this.yBodyRotO >= 180) {
+        while (this.yBodyRot - this.yBodyRotO >= 180) {
             this.yBodyRotO += 360;
         }
 
-        while(this.getXRot() - this.xRotO < -180) {
+        while (this.getXRot() - this.xRotO < -180) {
             this.xRotO -= 360;
         }
 
-        while(this.getXRot() - this.xRotO >= 180) {
+        while (this.getXRot() - this.xRotO >= 180) {
             this.xRotO += 360;
         }
 
-        while(this.getYHeadRot() - this.yHeadRotO < -180) {
+        while (this.getYHeadRot() - this.yHeadRotO < -180) {
             this.yHeadRotO -= 360;
         }
 
-        while(this.getYHeadRot() - this.yHeadRotO >= 180) {
+        while (this.getYHeadRot() - this.yHeadRotO >= 180) {
             this.yHeadRotO += 360;
         }
 
@@ -299,7 +301,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
                 this.updateControlFlags();
             }
         }
-        if(this.getVehicle() != null) {
+        if (this.getVehicle() != null) {
             this.stopRiding();
             while (this.getVehicle() != null) {
                 this.removeVehicle();
@@ -311,24 +313,27 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public boolean initialized() {
         return this.initialized;
     }
+
     @Override
     public boolean muteki() {
         return true;
     }
+
     @Override
     public float lastHealth() {
         return this.lastHealth;
     }
 
     @Override
-    public void tick() {}
+    public void tick() {
+    }
 
     @Override
     public void aiStep() {
         super.aiStep();
-        
+
         Entity target = this.getTarget();
-        if(!this.isStorming()) {
+        if (!this.isStorming()) {
             if (target != null) {
 
                 double dx = target.getX() - this.getX();
@@ -374,8 +379,8 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
             for (int head = 0; head < 2; ++head) {
                 this.yRotOHeads[head] = this.yRotHeads[head];
                 this.xRotOHeads[head] = this.xRotHeads[head];
-                
-                if(target != null) {
+
+                if (target != null) {
                     double dx = target.getX() - this.getX();
                     double dz = target.getZ() - this.getZ();
 
@@ -383,8 +388,8 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
                     this.setYRot(Mth.rotateIfNecessary(this.getYRot(), (float) Math.toDegrees(-Mth.atan2(dx, dz)), 2));
                     this.setYHeadRot(this.getYRot());
                     this.setYBodyRot(this.getYRot());
-                    
-                    
+
+
                     Vec3 sideHead = new Vec3(this.getHeadX(head + 1), this.getHeadY(head + 1), this.getHeadZ(head + 1));
                     Vec3 vec = sideHead.subtract(centerHead);
 
@@ -403,15 +408,17 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         skull.setup(type, this, start, target.subtract(start), power);
 
         this.getLevel().addFreshEntity(skull);
-        if(this.getLevel() instanceof ServerLevel serverLevel) {
+        if (this.getLevel() instanceof ServerLevel serverLevel) {
             serverLevel.playSound(null, start.x(), start.y(), start.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 2, 1 + (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f);
         }
     }
+
     public void shoot(FumetsuSkull.Type type, int head, Vec3 target, float power) {
         this.shoot(type, new Vec3(this.getHeadX(head), this.getHeadY(head), this.getHeadZ(head)), target, power);
     }
+
     public void shoot(FumetsuSkull.Type type, int head) {
-        if(this.getTarget() != null) {
+        if (this.getTarget() != null) {
             this.shoot(type, head, this.getTarget().position(), 1);
         }
     }
@@ -420,13 +427,15 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public Component getDisplayName() {
         return Writes.gameOver(super.getDisplayName().getString());
     }
+
     @Override
     public boolean hurt(DamageSource pSource, float pAmount) {
-        if(pAmount > 0) {
+        if (pAmount > 0) {
             this.genocide();
         }
         return super.hurt(pSource, pAmount);
     }
+
     @Override
     public int getTeamColor() {
         TextColor color = Writes.gameOver("A").getSiblings().get(0).getStyle().getColor();
@@ -436,47 +445,56 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public void logout() {
         this.getEntityData().set(DATA_LOGOUT, true);
     }
+
     public boolean isGenocide() {
         return this.getEntityData().get(DATA_GENOCIDE);
     }
+
     public void genocide() {
         this.getEntityData().set(DATA_GENOCIDE, true);
     }
+
     public BlockPos getOrigin() {
         return this.getEntityData().get(DATA_ORIGIN);
     }
+
     public void originate() {
         this.getEntityData().set(DATA_ORIGIN, this.blockPosition());
     }
+
     public boolean isAvailableTarget(@Nullable Entity target) {
-        if(this != target && target instanceof FumetsuEntity) {
+        if (this != target && target instanceof FumetsuEntity) {
             return false;
-        } else if(target != null && !(target instanceof Player) && this.getOrigin().distToCenterSqr(target.position()) > 48 * 48) {
+        } else if (target != null && !(target instanceof Player) && this.getOrigin().distToCenterSqr(target.position()) > 48 * 48) {
             return false;
-        } else if(target instanceof Player player && (player.isCreative() || player.getHealth() <= 0)) {
+        } else if (target instanceof Player player && (player.isCreative() || player.getHealth() <= 0)) {
             return false;
         } else {
             return target instanceof LivingEntity && target.getPose() != Pose.DYING && !target.isRemoved() && !target.isSpectator();
         }
     }
+
     public boolean isStorming() {
         return this.getEntityData().get(DATA_STORM);
     }
+
     public void setStorm(boolean step) {
         this.getEntityData().set(DATA_STORM, step);
     }
+
     @Nullable
     @Override
     public LivingEntity getTarget() {
-        if(this.getEntityData().get(DATA_TARGET) > 0 && this.getLevel().getEntity(this.getEntityData().get(DATA_TARGET)) instanceof LivingEntity target) {
+        if (this.getEntityData().get(DATA_TARGET) > 0 && this.getLevel().getEntity(this.getEntityData().get(DATA_TARGET)) instanceof LivingEntity target) {
             return target;
         } else {
             return null;
         }
     }
+
     @Override
     public void setTarget(@Nullable LivingEntity pTarget) {
-        if(this.getEntityData().get(DATA_TARGET) <= 0 && this.isAvailableTarget(pTarget)) {
+        if (this.getEntityData().get(DATA_TARGET) <= 0 && this.isAvailableTarget(pTarget)) {
             this.getEntityData().set(DATA_TARGET, pTarget.getId());
         }
     }
@@ -485,7 +503,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public boolean hasLineOfSight(Entity pEntity) {
         if (pEntity.getLevel() != this.getLevel()) {
             return false;
-        } else if(pEntity instanceof Player) {
+        } else if (pEntity instanceof Player) {
             return true;
         } else {
             Vec3 from = new Vec3(this.getX(), this.getEyeY(), this.getZ());
@@ -495,56 +513,71 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
             return hit.getType() == HitResult.Type.MISS || !(hit.getDirection() == Direction.UP && this.getEyeY() > pEntity.getEyeY());
         }
     }
+
     @Override
     protected SoundEvent getAmbientSound() {
         return HyperSounds.FUMETSU_AMBIENT.get();
     }
+
     @Override
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
         return HyperSounds.FUMETSU_HURT.get();
     }
+
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.WITHER_DEATH;
     }
+
     @Override
     public boolean isEffectiveAi() {
         return !this.getLevel().isClientSide();
     }
+
     @Override
     public boolean startRiding(Entity pEntity, boolean pForce) {
         return false;
     }
+
     @Override
     public boolean canAttack(LivingEntity pTarget) {
         return true;
     }
+
     @Override
     public boolean canAttack(LivingEntity pLivingentity, TargetingConditions pCondition) {
         return true;
     }
+
     @Override
     public boolean canAttackType(EntityType<?> pType) {
         return true;
     }
+
     @Override
     public boolean isAlliedTo(Entity pEntity) {
         return pEntity instanceof FumetsuEntity;
     }
+
     @Override
     public boolean isAlliedTo(Team pTeam) {
         return false;
     }
+
     @Override
     public void checkDespawn() {
         this.noActionTime = 0;
     }
+
     @Override
-    public void makeStuckInBlock(BlockState pState, Vec3 pMotionMultiplier) {}
+    public void makeStuckInBlock(BlockState pState, Vec3 pMotionMultiplier) {
+    }
+
     @Override
     public boolean causeFallDamage(float pFallDistance, float pMultiplier, DamageSource pSource) {
         return false;
     }
+
     @Override
     public boolean canChangeDimensions() {
         return false;
@@ -559,9 +592,11 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
             return this.getX() + offset * 1.3;
         }
     }
+
     public double getHeadY(int head) {
         return head <= 0 ? this.getY() + 3 : this.getY() + 2.2;
     }
+
     public double getHeadZ(int head) {
         if (head <= 0) {
             return this.getZ();
@@ -571,15 +606,19 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
             return this.getZ() + offset * 1.3;
         }
     }
+
     public float getOldHeadYRot(int head) {
         return this.yRotOHeads[head];
     }
+
     public float getOldHeadXRot(int head) {
         return this.xRotOHeads[head];
     }
+
     public float getHeadXRot(int head) {
         return this.xRotHeads[head];
     }
+
     public float getHeadYRot(int head) {
         return this.yRotHeads[head];
     }
@@ -589,13 +628,15 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         super.addAdditionalSaveData(pCompound);
         pCompound.putBoolean("Logout", this.getEntityData().get(DATA_LOGOUT));
     }
+
     @Override
     public void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
-        if(pCompound.contains("Logout")) {
+        if (pCompound.contains("Logout")) {
             this.logout();
         }
     }
+
     @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);

@@ -183,7 +183,7 @@ public class VRXHandler {
                 if (optional.isPresent()) {
                     VRXCapability vrx = optional.orElseThrow(IllegalStateException::new);
                     if (vrx.erase(player.getUUID())) {
-                        player.playSound(SoundEvents.UI_BUTTON_CLICK,0.25f, 1);
+                        player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.25f, 1);
                         PacketHandler.INSTANCE.sendToServer(new ServerboundVRXEraseCapability(player.getId()));
                         event.setCanceled(true);
                     }
@@ -307,8 +307,8 @@ public class VRXHandler {
             Minecraft.getInstance().player.getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
                 List<VRXOne> ones = vrx.getEntries().isEmpty() ? Collections.emptyList()
                         : vrx.getEntries().stream()
-                                .flatMap(entry -> entry.contents.stream())
-                                .toList();
+                        .flatMap(entry -> entry.contents.stream())
+                        .toList();
 
                 screen.renderTooltip(event.getPoseStack(), Collections.singletonList(new TranslatableComponent("tooltip.hyperdaimc.vrx_player").withStyle(style -> style.withColor(0xAAFFFF))), Optional.of(new VRXTooltip(ones)), event.getMouseX(), event.getMouseY());
             });
@@ -336,7 +336,7 @@ public class VRXHandler {
         VRXSavedData data = VRXSavedData.get(level);
         List<Runnable> future = Lists.newArrayList();
         for (VRXSavedData.Entry entry : Lists.newArrayList(data.getEntries())) {
-            if(!level.hasChunkAt(entry.pos)) {
+            if (!level.hasChunkAt(entry.pos)) {
                 continue;
             }
             BlockEntity blockEntity = level.getBlockEntity(entry.pos);
@@ -390,12 +390,13 @@ public class VRXHandler {
     }
 
     public static void playSound(ServerLevel level, Vec3 position, boolean create) {
-        if(create) {
+        if (create) {
             level.playSound(null, position.x(), position.y(), position.z(), HyperSounds.VRX_CREATE.get(), SoundSource.PLAYERS, 1, 1);
         } else {
             level.playSound(null, position.x(), position.y(), position.z(), HyperSounds.VRX_ERASE.get(), SoundSource.PLAYERS, 1, 1.5f);
         }
     }
+
     public enum Check {
         INSTANCE;
 

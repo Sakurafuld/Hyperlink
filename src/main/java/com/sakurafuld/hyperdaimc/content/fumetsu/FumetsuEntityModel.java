@@ -3,7 +3,10 @@ package com.sakurafuld.hyperdaimc.content.fumetsu;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -71,7 +74,7 @@ public class FumetsuEntityModel extends HierarchicalModel<FumetsuEntity> {
         centerHead.addOrReplaceChild("center_head_mirror", CubeListBuilder.create().texOffs(6, 35).addBox(-1.5F, -1.5F, -0.5F, 3, 3, 0), PartPose.offsetAndRotation(0, -4, -3.6F, 0.1047F, 0, 0));
         centerHead.addOrReplaceChild("left_head_mirror", CubeListBuilder.create().texOffs(0, 32).mirror().addBox(1, -9, -1, 0, 9, 3).mirror(false), PartPose.offsetAndRotation(-0.1F, -1, -3.3F, 0.3894F, 0.1778F, -0.017F));
         centerHead.addOrReplaceChild("right_head_mirror", CubeListBuilder.create().texOffs(0, 32).addBox(-1, -9, -1, 0, 9, 3), PartPose.offsetAndRotation(0.1F, -1, -3.3F, 0.3894F, -0.1778F, 0.017F));
-        
+
         centerHead.addOrReplaceChild("right_circlet", CubeListBuilder.create().texOffs(50, 25).mirror().addBox(-4.5F, -1, 0, 9, 4, 0).mirror(false), PartPose.offsetAndRotation(-3.6126F, -5.8F, -2.1548F, 0.2912F, 0.3297F, 0.7469F));
         centerHead.addOrReplaceChild("left_circlet", CubeListBuilder.create().texOffs(50, 19).addBox(-4.5F, -3, 0, 9, 6, 0), PartPose.offsetAndRotation(4.1126F, -6.5F, -2.1548F, 0.0808F, -0.4293F, -0.1922F));
 
@@ -79,7 +82,7 @@ public class FumetsuEntityModel extends HierarchicalModel<FumetsuEntity> {
         centerHead.addOrReplaceChild("right_hair_1", CubeListBuilder.create().texOffs(80, 0).addBox(-0.5044F, -2.5658F, -0.5F, 1, 7, 1), PartPose.offsetAndRotation(-4.3956F, -3.8342F, -4.7F, -0.3696F, 0.2943F, 0.0842F));
         centerHead.addOrReplaceChild("right_hair_2", CubeListBuilder.create().texOffs(80, 0).addBox(-0.4543F, -2.6158F, -0.45F, 1, 8, 1), PartPose.offsetAndRotation(-4.9957F, 2.5658F, -6.2F, 0.0201F, 0.2646F, -0.0903F));
         centerHead.addOrReplaceChild("right_hair_3", CubeListBuilder.create().texOffs(80, 9).addBox(-0.4043F, -2.5658F, -0.5F, 1, 4, 1), PartPose.offsetAndRotation(-4.5957F, 10.3658F, -5.9F, 0.0553F, 0.2596F, 0.0451F));
-        
+
         centerHead.addOrReplaceChild("left_hair_0", CubeListBuilder.create().texOffs(84, 0).mirror().addBox(-0.4956F, -1.5658F, -0.5F, 1, 5, 1).mirror(false), PartPose.offsetAndRotation(2.9956F, -4.9342F, -3.6F, 0.0838F, -0.0805F, 0.6295F));
         centerHead.addOrReplaceChild("left_hair_1", CubeListBuilder.create().texOffs(84, 0).mirror().addBox(-0.4956F, -2.5658F, -0.5F, 1, 7, 1).mirror(false), PartPose.offsetAndRotation(4.3956F, -3.8342F, -4.7F, -0.3696F, -0.2943F, -0.0842F));
         centerHead.addOrReplaceChild("left_hair_2", CubeListBuilder.create().texOffs(84, 0).mirror().addBox(-0.5457F, -2.6158F, -0.45F, 1, 8, 1).mirror(false), PartPose.offsetAndRotation(4.9957F, 2.5658F, -6.2F, 0.0201F, -0.2646F, 0.0903F));
@@ -149,7 +152,7 @@ public class FumetsuEntityModel extends HierarchicalModel<FumetsuEntity> {
 
         float xRot;
         float zRot;
-        if(pEntity.isGenocide()) {
+        if (pEntity.isGenocide()) {
             xRot = 0.6f + (0.05f * wing * (float) Math.PI);
             zRot = -0.96f - (0.1f * wing * (float) Math.PI);
         } else {

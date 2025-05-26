@@ -19,8 +19,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 import java.util.List;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.side;
-
 public class FumetsuAttackGoal extends Goal {
     private final FumetsuEntity fumetsu;
     private final float range;
@@ -64,14 +62,14 @@ public class FumetsuAttackGoal extends Goal {
             squall.setup(this.fumetsu, start, this.fumetsu.getViewVector(1), 0.75f);
 
             this.fumetsu.getLevel().addFreshEntity(squall);
-            if(this.fumetsu.getLevel() instanceof ServerLevel serverLevel) {
+            if (this.fumetsu.getLevel() instanceof ServerLevel serverLevel) {
                 serverLevel.playSound(null, start.x(), start.y(), start.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 2, 1 + (this.fumetsu.getRandom().nextFloat() - this.fumetsu.getRandom().nextFloat()) * 0.2f);
             }
         }, 10));
         this.attacks.add(WeightedEntry.wrap(this::annihilate, 5));
 
     }
-    
+
     @Override
     public boolean canUse() {
         LivingEntity target = this.fumetsu.getTarget();
@@ -82,10 +80,12 @@ public class FumetsuAttackGoal extends Goal {
             return false;
         }
     }
+
     @Override
     public boolean canContinueToUse() {
         return this.canUse() || !this.fumetsu.getNavigation().isDone();
     }
+
     @Override
     public boolean requiresUpdateEveryTick() {
         return true;
@@ -96,9 +96,10 @@ public class FumetsuAttackGoal extends Goal {
         this.target = null;
         this.attackTime = -1;
     }
+
     @Override
     public void tick() {
-        if(this.target != null) {
+        if (this.target != null) {
 
             Vec3 movement = this.fumetsu.getDeltaMovement().multiply(1, 0.6, 1);
 
@@ -111,7 +112,7 @@ public class FumetsuAttackGoal extends Goal {
             movement = movement.add(normalized.x() * 0.5, normalized.y() * 0.5, normalized.z() * 0.5);
 
             double length = point.subtract(this.fumetsu.position()).length();
-            if(length <= 0.2) {
+            if (length <= 0.2) {
                 movement = movement.scale(0.01);
             }
 
@@ -124,7 +125,7 @@ public class FumetsuAttackGoal extends Goal {
                 double distance = this.fumetsu.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
                 this.attackTime = (int) Math.round(Math.sqrt(distance) / this.range * interval);
 
-                if(--this.annihilate <= 0) {
+                if (--this.annihilate <= 0) {
                     this.annihilate = 12;
                     this.annihilate();
                 } else {
@@ -135,6 +136,7 @@ public class FumetsuAttackGoal extends Goal {
             }
         }
     }
+
     private void annihilate() {
         for (int count = 0; count < 12; count++) {
             double x = this.fumetsu.getX() + Math.cos(Math.toRadians(this.fumetsu.getRandom().nextInt(360)));

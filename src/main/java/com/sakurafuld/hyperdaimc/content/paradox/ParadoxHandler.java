@@ -2,6 +2,7 @@ package com.sakurafuld.hyperdaimc.content.paradox;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.api.mixin.ILootTableParadox;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.chronicle.ChronicleHandler;
@@ -12,6 +13,7 @@ import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -114,7 +116,7 @@ public class ParadoxHandler {
 
             blockState.onDestroyedByPlayer(level, pos, player, false, fluidState);
             blockState.getBlock().destroy(level, pos, blockState);
-            if(blockState.getBlock() instanceof LiquidBlock) {
+            if (blockState.getBlock() instanceof LiquidBlock) {
                 PacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new ClientboundParadoxFluid(pos, blockState));
             }
             level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(blockState));
@@ -122,16 +124,17 @@ public class ParadoxHandler {
         } else {
 
             blockState.onDestroyedByPlayer(level, pos, player, true, fluidState);
-            if(blockState.getBlock() instanceof LiquidBlock) {
+            if (blockState.getBlock() instanceof LiquidBlock) {
                 PacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new ClientboundParadoxFluid(pos, blockState));
             }
             level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(blockState));
             blockState.getBlock().destroy(level, pos, blockState);
             blockState.getBlock().playerDestroy(level, player, pos, blockState, blockEntity, player.getMainHandItem());
 
-            if (blockState.getBlock().getLootTable() == BuiltInLootTables.EMPTY) {
+            ResourceLocation loot = blockState.getBlock().getLootTable();
+            if (loot == BuiltInLootTables.EMPTY || (level.getServer().getLootTables().get(loot) instanceof ILootTableParadox table && table.isNoDrop())) {
                 ItemStack stack = new ItemStack(blockState.getBlock());
-                if(!stack.isEmpty()) {
+                if (!stack.isEmpty()) {
                     Block.popResource(level, pos, stack);
                 }
             }

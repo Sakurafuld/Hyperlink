@@ -17,6 +17,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class FumetsuSkullModel extends Model {
     private final ModelPart root;
     private final ModelPart head;
+
     public FumetsuSkullModel(ModelPart pRoot) {
         super(Renders.Type::additiveEntityTranslucent);
         this.root = pRoot;
@@ -31,10 +32,12 @@ public class FumetsuSkullModel extends Model {
                 .addBox(-4, -8, -4, 8, 8, 8), PartPose.ZERO);
         return LayerDefinition.create(meshdefinition, 32, 32);
     }
+
     public void setup(float yaw, float pitch) {
         this.head.yRot = (float) Math.toRadians(yaw - 180);
         this.head.xRot = (float) Math.toRadians(pitch);
     }
+
     @Override
     public void renderToBuffer(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay, float pRed, float pGreen, float pBlue, float pAlpha) {
         this.root.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay, pRed, pGreen, pBlue, pAlpha);

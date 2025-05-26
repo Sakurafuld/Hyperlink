@@ -12,8 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
-
 public class ServerboundVRXSetJeiGhost {
     private final int id;
     private final int index;
@@ -28,6 +26,7 @@ public class ServerboundVRXSetJeiGhost {
         this.one = one;
         this.stack = null;
     }
+
     public ServerboundVRXSetJeiGhost(int id, int index, ItemStack stack) {
         this.id = id;
         this.index = index;
@@ -38,7 +37,7 @@ public class ServerboundVRXSetJeiGhost {
     public static void encode(ServerboundVRXSetJeiGhost msg, FriendlyByteBuf buf) {
         buf.writeVarInt(msg.id);
         buf.writeVarInt(msg.index);
-        if(msg.one != null) {
+        if (msg.one != null) {
             buf.writeBoolean(true);
             buf.writeNbt(msg.one.serialize());
         } else {
@@ -51,7 +50,7 @@ public class ServerboundVRXSetJeiGhost {
         int id = buf.readVarInt();
         int index = buf.readVarInt();
 
-        if(buf.readBoolean()) {
+        if (buf.readBoolean()) {
             CompoundTag tag = buf.readNbt();
             VRXOne.Type type = VRXOne.Type.of(tag.getString("Type"));
             VRXOne one = type.load(tag.getCompound("Data"));
@@ -65,9 +64,9 @@ public class ServerboundVRXSetJeiGhost {
         ctx.get().enqueueWork(() -> {
             if (ctx.get().getSender().containerMenu instanceof VRXMenu menu && menu.containerId == this.id) {
                 Slot slot = menu.getSlot(this.index);
-                if(slot instanceof VRXSlot vrxSlot && this.one != null) {
+                if (slot instanceof VRXSlot vrxSlot && this.one != null) {
                     vrxSlot.setOne(this.one);
-                } else if(this.stack != null) {
+                } else if (this.stack != null) {
                     slot.set(this.stack);
                 }
             }

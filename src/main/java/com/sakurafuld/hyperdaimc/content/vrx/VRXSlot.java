@@ -7,8 +7,6 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
-
 public class VRXSlot extends SlotItemHandler {
     private VRXOne one = VRXOne.EMPTY;
 
@@ -60,7 +58,7 @@ public class VRXSlot extends SlotItemHandler {
 
     public void grow(long quantity) {
         quantity = Math.max(0, Math.round(Math.min(Long.MAX_VALUE, (double) this.getOne().getQuantity() + (double) quantity)));
-        if(quantity > 0) {
+        if (quantity > 0) {
             this.getOne().setQuantity(quantity);
         } else {
             this.setOne(VRXOne.EMPTY);
@@ -73,13 +71,16 @@ public class VRXSlot extends SlotItemHandler {
     public ItemStack getItem() {
         return !this.isEmpty() && this.getOne() instanceof VRXOne.Item item ? item.getItemStack() : ItemStack.EMPTY;
     }
+
     @Override
     public void set(@NotNull ItemStack stack) {
     }
+
     @Override
     public int getMaxStackSize() {
         return Integer.MAX_VALUE;
     }
+
     @Override
     public int getMaxStackSize(@NotNull ItemStack stack) {
         return Integer.MAX_VALUE;

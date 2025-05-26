@@ -2,13 +2,9 @@ package com.sakurafuld.hyperdaimc.content.muteki;
 
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.sakurafuld.hyperdaimc.HyperServerConfig;
-import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
-import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
-import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
-import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,8 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -61,19 +55,19 @@ public class MutekiHandler {
         });
     }
 
-    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
-    public static void postmortal(LivingDeathEvent event) {
-
-        LivingEntity entity = event.getEntityLiving();
-        if ((!Float.isFinite(entity.getHealth()) || HyperServerConfig.MUTEKI_NOVEL.get() || !NovelHandler.novelized(entity)) && muteki(entity)) {
-
-            event.setCanceled(true);
-        } else if (NovelHandler.novelized(entity)) {
-
-            ((IEntityNovel) entity).killsOver();
-            event.setCanceled(false);
-        }
-    }
+//    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+//    public static void postmortal(LivingDeathEvent event) {
+//
+//        LivingEntity entity = event.getEntityLiving();
+//        if ((!Float.isFinite(entity.getHealth()) || HyperServerConfig.MUTEKI_NOVEL.get() || !NovelHandler.novelized(entity)) && muteki(entity)) {
+//
+//            event.setCanceled(true);
+//        } else if (NovelHandler.novelized(entity)) {
+//
+//            ((IEntityNovel) entity).killsOver();
+//            event.setCanceled(false);
+//        }
+//    }
 
     private enum Attach {
         INSTANCE;

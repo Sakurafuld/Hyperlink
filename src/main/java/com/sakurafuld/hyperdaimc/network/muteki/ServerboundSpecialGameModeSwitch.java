@@ -7,8 +7,6 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
-
 public class ServerboundSpecialGameModeSwitch {
     private final String command;
 

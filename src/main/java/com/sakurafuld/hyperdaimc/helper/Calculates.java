@@ -1,7 +1,8 @@
 package com.sakurafuld.hyperdaimc.helper;
 
 public class Calculates {
-    private Calculates() {}
+    private Calculates() {
+    }
 
     public static double curve(double delta, double p1, double p2, double p3) {
         return Math.pow(1 - delta, 2) * p1
@@ -10,6 +11,7 @@ public class Calculates {
                 +
                 Math.pow(delta, 2) * p3;
     }
+
     public static double curve(double delta, double p1, double p2, double p3, double p4) {
         return Math.pow(1 - delta, 3) * p1
                 +

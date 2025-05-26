@@ -26,7 +26,7 @@ public abstract class ChunkStatusMixin {
         ChronicleHandler.chunkGenerating.set(true);
     }
 
-    @Inject(method = "generate", at = @At("HEAD"))
+    @Inject(method = "generate", at = @At("RETURN"))
     private void generateChronicle$RETURN(Executor pExecutor, ServerLevel pLevel, ChunkGenerator pGenerator, StructureManager pStructureManager, ThreadedLevelLightEngine pLightEngine, Function<ChunkAccess, CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> pTask, List<ChunkAccess> pNeighbouringChunks, boolean p_187796_, CallbackInfoReturnable<CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> cir) {
         ChronicleHandler.chunkGenerating.set(false);
     }

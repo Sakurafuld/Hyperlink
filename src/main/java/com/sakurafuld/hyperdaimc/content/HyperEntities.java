@@ -1,13 +1,12 @@
 package com.sakurafuld.hyperdaimc.content;
 
 import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
+import com.sakurafuld.hyperdaimc.content.fumetsu.skull.FumetsuSkull;
 import com.sakurafuld.hyperdaimc.content.fumetsu.squall.FumetsuSquall;
 import com.sakurafuld.hyperdaimc.content.fumetsu.storm.FumetsuStorm;
-import com.sakurafuld.hyperdaimc.content.fumetsu.skull.FumetsuSkull;
 import com.sakurafuld.hyperdaimc.content.fumetsu.storm.FumetsuStormSkull;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -28,8 +27,6 @@ public class HyperEntities {
     static {
         FUMETSU = REGISTRY.register("fumetsu", () ->
                 EntityType.Builder.of(FumetsuEntity::new, MobCategory.MONSTER)
-                        .fireImmune()
-                        .immuneTo(Blocks.WITHER_ROSE, Blocks.SWEET_BERRY_BUSH, Blocks.CACTUS, Blocks.POWDER_SNOW)
                         .sized(0.9F, 3.5F)
                         .clientTrackingRange(10)
                         .build(identifier(HYPERDAIMC, "fumetsu").toString()));

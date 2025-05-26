@@ -3,7 +3,6 @@ package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Final;
@@ -15,14 +14,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientLevel.class)
 public abstract class ClientLevelMixin {
-    @Shadow protected abstract void tickPassenger(Entity pMount, Entity pRider);
+    @Shadow
+    protected abstract void tickPassenger(Entity pMount, Entity pRider);
 
-    @Shadow @Final
+    @Shadow
+    @Final
     EntityTickList tickingEntities;
 
     @Inject(method = "tickNonPassenger", at = @At("HEAD"), cancellable = true)
     private void tickNonPassenger(Entity entity, CallbackInfo ci) {
-        if(entity instanceof IFumetsu fumetsu) {
+        if (entity instanceof IFumetsu fumetsu) {
             ci.cancel();
             ClientLevel self = (ClientLevel) ((Object) this);
             entity.setOldPosAndRot();
@@ -31,7 +32,7 @@ public abstract class ClientLevelMixin {
             fumetsu.fumetsuTick();
             self.getProfiler().pop();
 
-            for(Entity passenger : entity.getPassengers()) {
+            for (Entity passenger : entity.getPassengers()) {
                 this.tickPassenger(passenger, passenger);
             }
         }
@@ -39,7 +40,7 @@ public abstract class ClientLevelMixin {
 
     @Inject(method = "tickPassenger", at = @At("HEAD"), cancellable = true)
     private void tickPassengerFumetsu(Entity pMount, Entity pRider, CallbackInfo ci) {
-        if(pRider instanceof IFumetsu fumetsu) {
+        if (pRider instanceof IFumetsu fumetsu) {
             ci.cancel();
             if (!pRider.isRemoved() && pRider.getVehicle() == pMount) {
                 if (this.tickingEntities.contains(pRider)) {
@@ -47,7 +48,7 @@ public abstract class ClientLevelMixin {
                     ++pRider.tickCount;
                     fumetsu.fumetsuTick();
 
-                    for(Entity entity : pRider.getPassengers()) {
+                    for (Entity entity : pRider.getPassengers()) {
                         this.tickPassenger(pRider, entity);
                     }
                 }

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class GameModeSwitchScreenMixin {
     @Redirect(method = "switchToHoveredGameMode(Lnet/minecraft/client/Minecraft;Ljava/util/Optional;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;chat(Ljava/lang/String;)V"))
     private static void switchToHoveredGameModeMuteki(LocalPlayer instance, String pMessage) {
-        if(MutekiHandler.muteki(instance)) {
+        if (MutekiHandler.muteki(instance)) {
             PacketHandler.INSTANCE.sendToServer(new ServerboundSpecialGameModeSwitch(pMessage));
         } else {
             instance.chat(pMessage);

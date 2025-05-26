@@ -7,6 +7,7 @@ import java.util.EnumSet;
 
 public class FumetsuNoTargetGoal extends Goal {
     private final FumetsuEntity fumetsu;
+
     public FumetsuNoTargetGoal(FumetsuEntity fumetsu) {
         this.fumetsu = fumetsu;
         this.setFlags(EnumSet.of(Flag.TARGET));

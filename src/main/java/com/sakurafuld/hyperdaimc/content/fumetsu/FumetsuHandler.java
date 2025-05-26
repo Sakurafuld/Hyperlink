@@ -19,17 +19,18 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 
 @Mod.EventBusSubscriber(modid = HYPERDAIMC)
 public class FumetsuHandler {
-    private static final Object2ObjectOpenHashMap<ResourceKey<Level>, List<ServerPlayer>> MAP = new Object2ObjectOpenHashMap<>();
     private static final List<ServerPlayer> PLAYERS = Lists.newArrayList();
 
     @SubscribeEvent
     public static void loggedIn(PlayerEvent.PlayerLoggedInEvent event) {
         FumetsuEntity.EXISTING.forEach(FumetsuEntity::logout);
     }
+
     @SubscribeEvent
     public static void loggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         FumetsuEntity.EXISTING.forEach(FumetsuEntity::logout);
     }
+
     @SubscribeEvent
     public static void serverTick(TickEvent.ServerTickEvent event) {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
@@ -38,7 +39,7 @@ public class FumetsuHandler {
                 .filter(player -> !player.isRemoved() && player.getPose() != Pose.DYING)
                 .toList();
 
-        if(!current.equals(PLAYERS)) {
+        if (!current.equals(PLAYERS)) {
             FumetsuEntity.EXISTING.forEach(FumetsuEntity::logout);
             PLAYERS.clear();
             PLAYERS.addAll(current);

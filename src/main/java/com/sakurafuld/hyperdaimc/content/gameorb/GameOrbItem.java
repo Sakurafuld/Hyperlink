@@ -27,12 +27,14 @@ public class GameOrbItem extends Item {
     public Component getName(ItemStack pStack) {
         return Writes.gameOver(super.getName(pStack).getString());
     }
+
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(new TranslatableComponent("tooltip.hyperdaimc.game_orb_0").withStyle(ChatFormatting.GRAY));
         pTooltipComponents.add(new TranslatableComponent("tooltip.hyperdaimc.game_orb_1").withStyle(ChatFormatting.GRAY));
         pTooltipComponents.add(new TranslatableComponent("tooltip.hyperdaimc.game_orb_2").withStyle(ChatFormatting.GRAY));
     }
+
     @Override
     @OnlyIn(Dist.CLIENT)
     public void initializeClient(Consumer<IItemRenderProperties> consumer) {

@@ -5,7 +5,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 
 public class Boxes {
-    private Boxes() {}
+    private Boxes() {
+    }
 
     public static final BlockPos INVALID = new BlockPos(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
 
@@ -16,6 +17,7 @@ public class Boxes {
     public static AABB of(BlockPos start, BlockPos end) {
         return new AABB(start, end).expandTowards(1, 1, 1);
     }
+
     public static AABB lerp(float delta, AABB aa, AABB bb) {
         double minX = Mth.lerp(delta, aa.minX, bb.minX);
         double minY = Mth.lerp(delta, aa.minY, bb.minY);

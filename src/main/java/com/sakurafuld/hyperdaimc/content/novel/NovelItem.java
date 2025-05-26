@@ -22,6 +22,7 @@ public class NovelItem extends AbstractGashatItem {
         }
         return !pPlayer.isCreative();
     }
+
     @Override
     public int getItemEnchantability(ItemStack stack) {
         if (!this.enabled.get()) {
@@ -29,6 +30,7 @@ public class NovelItem extends AbstractGashatItem {
         }
         return 30;
     }
+
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         if (!this.enabled.get()) {
@@ -36,6 +38,7 @@ public class NovelItem extends AbstractGashatItem {
         }
         return true;
     }
+
     @Override
     public boolean isEnchantable(ItemStack pStack) {
         if (!this.enabled.get()) {

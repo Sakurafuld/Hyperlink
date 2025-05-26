@@ -12,7 +12,7 @@ public class FumetsuItem extends ForgeSpawnEggItem {
 
     @Override
     public int getColor(int pTintIndex) {
-        if(pTintIndex == 0) {
+        if (pTintIndex == 0) {
             return super.getColor(pTintIndex);
         } else {
             TextColor color = Writes.gameOver("A").getSiblings().get(0).getStyle().getColor();

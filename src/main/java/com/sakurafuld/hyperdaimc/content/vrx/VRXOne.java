@@ -148,6 +148,7 @@ public abstract class VRXOne {
             LOG.debug("registerVRXType:{}", name);
             return type;
         }
+
         public static Type register(String name, int priority,
                                     Supplier<VRXOne> creator,
                                     Function<ItemStack, VRXOne> converter,
@@ -195,13 +196,14 @@ public abstract class VRXOne {
 
             return false;
         }
+
         @Nullable
         @SuppressWarnings("unchecked")
         public static <I> VRXJeiWrapper<I> cast(I ingredient) {
             for (Type type : VALUES) {
-                if(type.caster != null) {
+                if (type.caster != null) {
                     VRXJeiWrapper<I> wrapper = (VRXJeiWrapper<I>) type.caster.apply(ingredient);
-                    if(wrapper != null) {
+                    if (wrapper != null) {
                         return wrapper;
                     }
                 }
@@ -306,8 +308,9 @@ public abstract class VRXOne {
         public static boolean check(CapabilityProvider<?> provider, Direction face) {
             return provider.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, face).isPresent();
         }
+
         public static VRXJeiWrapper<ItemStack> cast(Object ingredient) {
-            if(ingredient instanceof ItemStack stack) {
+            if (ingredient instanceof ItemStack stack) {
                 return new VRXJeiWrapper<>(stack.copy()) {
                     @Override
                     public void accept(int containerId, VRXSlot slot) {
@@ -429,6 +432,7 @@ public abstract class VRXOne {
         public ItemStack getItemStack() {
             return this.stack.copy();
         }
+
         @Override
         public String toString() {
             return this.stack.toString();
@@ -577,8 +581,9 @@ public abstract class VRXOne {
         public static boolean check(CapabilityProvider<?> provider, Direction face) {
             return provider.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, face).isPresent();
         }
+
         public static VRXJeiWrapper<FluidStack> cast(Object ingredient) {
-            if(ingredient instanceof FluidStack stack) {
+            if (ingredient instanceof FluidStack stack) {
                 return new VRXJeiWrapper<>(stack.copy()) {
                     @Override
                     public void accept(int containerId, VRXSlot slot) {

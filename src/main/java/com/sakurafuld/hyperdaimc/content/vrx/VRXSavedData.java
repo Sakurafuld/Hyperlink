@@ -35,7 +35,8 @@ public class VRXSavedData extends SavedData {
     private final List<Entry> entries = Lists.newArrayList();
     private final Long2ObjectOpenHashMap<List<Entry>> map = new Long2ObjectOpenHashMap<>();
 
-    private VRXSavedData() {}
+    private VRXSavedData() {
+    }
 
     private VRXSavedData(CompoundTag tag) {
         this.load(tag);

@@ -17,8 +17,6 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
-
 public class FumetsuSquall extends FumetsuSkull {
     public FumetsuSquall(EntityType<? extends FumetsuSquall> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -36,11 +34,12 @@ public class FumetsuSquall extends FumetsuSkull {
 
         this.setDeltaMovement(this.getPoweredRotVec());
     }
+
     @Override
     protected void skullTick() {
         super.skullTick();
 
-        if(this.tickCount % 5 == 0) {
+        if (this.tickCount % 5 == 0) {
             Vec3 center = this.getBoundingBox().getCenter();
 
             for (int count = 0; count < 4; count++) {
@@ -56,7 +55,7 @@ public class FumetsuSquall extends FumetsuSkull {
             }
 
 
-            if(this.getLevel() instanceof ServerLevel serverLevel) {
+            if (this.getLevel() instanceof ServerLevel serverLevel) {
                 serverLevel.playSound(null, center.x(), center.y(), center.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 0.25f, 3 + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
             }
         }
@@ -66,10 +65,12 @@ public class FumetsuSquall extends FumetsuSkull {
     protected int getAge() {
         return 80;
     }
+
     @Override
     protected float getHomingDelta(Vec3 homing) {
         return 0.1f;
     }
+
     @Override
     protected ParticleOptions getParticle() {
         Vector3f color = switch (this.random.nextInt(3)) {
@@ -79,6 +80,7 @@ public class FumetsuSquall extends FumetsuSkull {
         };
         return new GashatParticleOptions(color, 2, 0.4f, this.random.nextBoolean() ? 16 : -16);
     }
+
     @Override
     protected @Nullable EntityHitResult rayBoxTrace(Vec3 delta, AABB area) {
         return null;

@@ -10,7 +10,6 @@ import com.sakurafuld.hyperdaimc.content.novel.NovelItem;
 import com.sakurafuld.hyperdaimc.content.paradox.ParadoxItem;
 import com.sakurafuld.hyperdaimc.content.vrx.VRXItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

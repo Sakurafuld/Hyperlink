@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.compat;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.sakurafuld.hyperdaimc.api.CombinedGasHandler;
+import com.sakurafuld.hyperdaimc.api.compat.CombinedGasHandler;
 import com.sakurafuld.hyperdaimc.content.vrx.*;
 import com.sakurafuld.hyperdaimc.helper.Renders;
 import com.sakurafuld.hyperdaimc.network.PacketHandler;
@@ -48,9 +48,11 @@ public class VRXOneGas extends VRXOne {
         this();
         this.stack = stack;
     }
+
     public VRXOneGas() {
         super(TYPE);
     }
+
     public static void initialize() {
         TYPE = VRXOne.Type.register("gas", 20, VRXOneGas::new, VRXOneGas::convert, VRXOneGas::collect, VRXOneGas::check, VRXOneGas::cast);
     }
@@ -70,7 +72,7 @@ public class VRXOneGas extends VRXOne {
                 for (int index = 0; index < items.getSlots(); index++) {
                     LazyOptional<IGasHandler> gases = items.getStackInSlot(index).getCapability(Capabilities.GAS_HANDLER_CAPABILITY);
                     if (gases.isPresent()) {
-                        if(handler == null) {
+                        if (handler == null) {
                             handler = gases.orElseThrow(IllegalStateException::new);
                         } else {
                             handler = new CombinedGasHandler(handler, gases.orElseThrow(IllegalStateException::new));
@@ -96,6 +98,7 @@ public class VRXOneGas extends VRXOne {
             return amount;
         }
     }
+
     @Override
     public void insert(CapabilityProvider<?> provider, @Nullable Direction face, Object prepared) {
         if (prepared instanceof Long amount && amount < this.getQuantity()) {
@@ -113,7 +116,7 @@ public class VRXOneGas extends VRXOne {
                     for (int index = 0; index < items.getSlots(); index++) {
                         LazyOptional<IGasHandler> gases = items.getStackInSlot(index).getCapability(Capabilities.GAS_HANDLER_CAPABILITY);
                         if (gases.isPresent()) {
-                            if(handler == null) {
+                            if (handler == null) {
                                 handler = gases.orElseThrow(IllegalStateException::new);
                             } else {
                                 handler = new CombinedGasHandler(handler, gases.orElseThrow(IllegalStateException::new));
@@ -132,26 +135,32 @@ public class VRXOneGas extends VRXOne {
             }
         }
     }
+
     @Override
     protected CompoundTag save() {
         return this.stack.write(new CompoundTag());
     }
+
     @Override
     public void load(CompoundTag tag) {
         this.stack = GasStack.readFromNBT(tag);
     }
+
     @Override
     public boolean isEmpty() {
         return this.stack.isEmpty();
     }
+
     @Override
     public long getQuantity() {
         return this.stack.getAmount();
     }
+
     @Override
     public void setQuantity(long quantity) {
         this.stack.setAmount(quantity);
     }
+
     @Override
     public void stackSlot(VRXMenu menu, VRXSlot slot, int button, ClickType type) {
         GasStack stack = this.stack.copy();
@@ -200,13 +209,14 @@ public class VRXOneGas extends VRXOne {
                 slot.setOne(EMPTY);
             }
         } else if (type == ClickType.CLONE && !menu.getCarried().isEmpty()) {
-            if(slot.isEmpty()) {
+            if (slot.isEmpty()) {
                 slot.setOne(new Item(menu.getCarried()));
             } else if (!(slot.getOne() instanceof Item item && ItemHandlerHelper.canItemStacksStack(item.getItemStack(), menu.getCarried()))) {
                 slot.setOne(EMPTY);
             }
         }
     }
+
     @Override
     public boolean scrollSlot(VRXMenu menu, VRXSlot slot, double delta, boolean shiftDown) {
         double amount;
@@ -220,7 +230,7 @@ public class VRXOneGas extends VRXOne {
             amount = -amount;
         }
 
-        if(amount > Long.MAX_VALUE) {
+        if (amount > Long.MAX_VALUE) {
             amount = Long.MAX_VALUE;
         }
 
@@ -303,11 +313,13 @@ public class VRXOneGas extends VRXOne {
 
         return list;
     }
+
     public static boolean check(CapabilityProvider<?> provider, Direction face) {
         return provider.getCapability(Capabilities.GAS_HANDLER_CAPABILITY, face).isPresent();
     }
+
     public static VRXJeiWrapper<GasStack> cast(Object ingredient) {
-        if(ingredient instanceof GasStack stack) {
+        if (ingredient instanceof GasStack stack) {
             return new VRXJeiWrapper<>(stack.copy()) {
                 @Override
                 public void accept(int containerId, VRXSlot slot) {

@@ -10,8 +10,6 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
-
 public class Writes {
     private Writes() {
     }
@@ -103,7 +101,8 @@ public class Writes {
 
         return component;
     }
+
     private static int mix(double delta, int first, int second) {
-        return (int)(delta * (double)first + (1d - delta) * (double)second);
+        return (int) (delta * (double) first + (1d - delta) * (double) second);
     }
 }

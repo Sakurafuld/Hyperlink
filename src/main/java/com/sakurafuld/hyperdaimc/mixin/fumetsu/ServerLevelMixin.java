@@ -1,11 +1,9 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
-import net.minecraft.core.Registry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.entity.EntityTickList;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Final;
@@ -17,14 +15,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerLevel.class)
 public abstract class ServerLevelMixin {
-    @Shadow protected abstract void tickPassenger(Entity pRidingEntity, Entity pPassengerEntity);
+    @Shadow
+    protected abstract void tickPassenger(Entity pRidingEntity, Entity pPassengerEntity);
 
-    @Shadow @Final
+    @Shadow
+    @Final
     EntityTickList entityTickList;
 
     @Inject(method = "tickNonPassenger", at = @At("HEAD"), cancellable = true)
     private void tickNonPassengerFumetsu(Entity entity, CallbackInfo ci) {
-        if(entity instanceof IFumetsu fumetsu) {
+        if (entity instanceof IFumetsu fumetsu) {
             ci.cancel();
             ServerLevel self = (ServerLevel) ((Object) this);
             entity.setOldPosAndRot();
@@ -35,7 +35,7 @@ public abstract class ServerLevelMixin {
             fumetsu.fumetsuTick();
             self.getProfiler().pop();
 
-            for(Entity passenger : entity.getPassengers()) {
+            for (Entity passenger : entity.getPassengers()) {
                 this.tickPassenger(passenger, passenger);
             }
         }
@@ -43,7 +43,7 @@ public abstract class ServerLevelMixin {
 
     @Inject(method = "tickPassenger", at = @At("HEAD"), cancellable = true)
     private void tickPassengerFumetsu(Entity pRidingEntity, Entity pPassengerEntity, CallbackInfo ci) {
-        if(pPassengerEntity instanceof IFumetsu fumetsu) {
+        if (pPassengerEntity instanceof IFumetsu fumetsu) {
             ci.cancel();
             ServerLevel self = (ServerLevel) ((Object) this);
             if (!pPassengerEntity.isRemoved() && pPassengerEntity.getVehicle() == pRidingEntity) {
@@ -56,7 +56,7 @@ public abstract class ServerLevelMixin {
                     fumetsu.fumetsuTick();
                     profiler.pop();
 
-                    for(Entity entity : pPassengerEntity.getPassengers()) {
+                    for (Entity entity : pPassengerEntity.getPassengers()) {
                         this.tickPassenger(pPassengerEntity, entity);
                     }
                 }

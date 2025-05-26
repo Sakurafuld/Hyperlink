@@ -5,7 +5,6 @@ import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.fumetsu.skull.FumetsuSkull;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +22,8 @@ public class FumetsuStormSkull extends FumetsuSkull {
         super(pEntityType, pLevel);
     }
 
-    public void setup(Type type, FumetsuEntity owner, Vec3 start, Vec3 vector, float power, BlockPos home) {
+    @Override
+    public void setup(Type type, FumetsuEntity owner, Vec3 start, Vec3 vector, float power) {
         this.setSkullType(type);
         this.setOwner(owner);
         this.setPower(power);

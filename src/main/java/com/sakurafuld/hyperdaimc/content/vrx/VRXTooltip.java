@@ -120,7 +120,6 @@ public class VRXTooltip implements TooltipComponent {
 
         enum Texture {
             SLOT(0, 0, 18, 20),
-            BLOCKED_SLOT(0, 40, 18, 20),
             BORDER_VERTICAL(0, 18, 1, 20),
             BORDER_HORIZONTAL_TOP(0, 20, 18, 1),
             BORDER_HORIZONTAL_BOTTOM(0, 60, 18, 1),

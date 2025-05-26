@@ -31,11 +31,7 @@ public class FumetsuStormGoal extends Goal {
     @Override
     public boolean canUse() {
         this.target = this.fumetsu.getTarget();
-        if (this.target != null && !this.target.isRemoved() && this.fumetsu.level().getGameTime() - this.lastUse > 100) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.target != null && !this.target.isRemoved() && this.fumetsu.level().getGameTime() - this.lastUse > 100;
     }
 
     @Override
@@ -96,7 +92,7 @@ public class FumetsuStormGoal extends Goal {
             if (this.tickCount == 35) {
 
                 FumetsuStormSkull skull = new FumetsuStormSkull(HyperEntities.FUMETSU_STORM_SKULL.get(), this.fumetsu.level());
-                skull.setup(FumetsuSkull.Type.CRYSTAL, this.fumetsu, centerHead, Vec3.ZERO, 1, this.target.blockPosition());
+                skull.setup(FumetsuSkull.Type.CRYSTAL, this.fumetsu, centerHead, Vec3.ZERO, 1);
                 skull.moveTo(skull.getX(), skull.getY(), skull.getZ(), this.fumetsu.getYHeadRot(), -50);
                 skull.setDeltaMovement(skull.getPoweredRotVec());
 
@@ -116,7 +112,7 @@ public class FumetsuStormGoal extends Goal {
         Vec3 sideHead = new Vec3(this.fumetsu.getHeadX(head), this.fumetsu.getHeadY(head), this.fumetsu.getHeadZ(head));
         Vec3 vec = sideHead.subtract(centerHead).add(0, -1, 0);
         FumetsuStormSkull skull = new FumetsuStormSkull(HyperEntities.FUMETSU_STORM_SKULL.get(), this.fumetsu.level());
-        skull.setup(head == 1 ? FumetsuSkull.Type.CRIMSON : FumetsuSkull.Type.CYAN, this.fumetsu, sideHead, vec, 1, this.target.blockPosition());
+        skull.setup(head == 1 ? FumetsuSkull.Type.CRIMSON : FumetsuSkull.Type.CYAN, this.fumetsu, sideHead, vec, 1);
 
         this.fumetsu.level().addFreshEntity(skull);
         if (this.fumetsu.level() instanceof ServerLevel serverLevel) {

@@ -3,6 +3,8 @@ package com.sakurafuld.hyperdaimc.helper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.sakurafuld.hyperdaimc.HyperSetup;
+import me.jellysquid.mods.sodium.client.model.quad.ModelQuadView;
+import me.jellysquid.mods.sodium.client.render.texture.SpriteUtil;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -255,9 +257,9 @@ public class Renders {
         INSTANCE;
 
         public void activateSprite(BakedQuad quad) {
-//            if (quad instanceof ModelQuadView view) {
-//                SpriteUtil.markSpriteActive(view.getSprite());
-//            }
+            if (quad instanceof ModelQuadView view) {
+                SpriteUtil.markSpriteActive(view.getSprite());
+            }
         }
     }
 

@@ -109,7 +109,7 @@ public class ChronicleHandler {
                     PacketHandler.INSTANCE.sendToServer(new ServerboundChronicleSound(Vec3.atCenterOf(cursor), true));
                 } else if (Util.getMillis() - lastRestart > 200) {
 
-                    BlockPos target = Boxes.INVALID;
+                    BlockPos target;
 
                     Vec3 eye = mc.player.getEyePosition();
                     Vec3 view = eye.add(mc.player.getViewVector(1).multiply(4, 4, 4));
@@ -117,12 +117,6 @@ public class ChronicleHandler {
                     target = BlockGetter.traverseBlocks(eye, view, Unit.INSTANCE, (unit, current) -> {
                         Optional<List<ChronicleSavedData.Entry>> list = data.getPaused(current);
                         return list.isPresent() && list.get().stream().anyMatch(entry -> entry.uuid.equals(mc.player.getUUID())) ? current : null;
-
-//                            if (mc.level.getBlockState(current).isAir()) {
-//
-//                               } else {
-//                                return Boxes.INVALID;
-//                            }
                     }, unit -> Boxes.INVALID);
 
                     if (target == Boxes.INVALID) {

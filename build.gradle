@@ -148,7 +148,7 @@ dependencies {
 //    implementation fg.deobf('com.sakurafuld.hyperdaimc:ticex:mc1.20.1-0.1.2.4')
 
 
-
+    implementation fg.deobf("curse.maven:embeddium-908741:5681725")
     implementation fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
     implementation fg.deobf("curse.maven:jade-324717:6271651")
 

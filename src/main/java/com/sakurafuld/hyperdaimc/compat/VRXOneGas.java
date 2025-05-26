@@ -248,7 +248,7 @@ public class VRXOneGas extends VRXOne {
     @Override
     public void render(GuiGraphics graphics, int x, int y) {
         MekanismRenderer.color(graphics, this.stack);
-        GuiUtils.drawTiledSprite(graphics, 0, 0, 0, 16, 16, MekanismRenderer.getSprite(this.stack.getType().getIcon()),
+        GuiUtils.drawTiledSprite(graphics, x, y, 16, 16, 16, MekanismRenderer.getSprite(this.stack.getType().getIcon()),
                 16, 16, 100, GuiUtils.TilingDirection.UP_RIGHT);
         MekanismRenderer.resetColor(graphics);
         Renders.fluidAmount(graphics.pose(), this.getQuantity(), x, y);

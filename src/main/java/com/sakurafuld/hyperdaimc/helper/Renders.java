@@ -226,7 +226,6 @@ public class Renders {
         builder.vertex(matrix, x + 0, y + 16, 0).color(red, green, blue, 255).uv(u0, v1).endVertex();
         builder.vertex(matrix, x + 16, y + 16, 0).color(red, green, blue, 255).uv(u1, v1).endVertex();
         builder.vertex(matrix, x + 16, y + 0, 0).color(red, green, blue, 255).uv(u1, v0).endVertex();
-        builder.end();
         tesselator.end();
     }
 

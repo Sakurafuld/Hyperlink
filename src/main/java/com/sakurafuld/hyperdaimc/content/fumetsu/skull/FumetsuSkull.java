@@ -149,10 +149,11 @@ public class FumetsuSkull extends Entity implements IFumetsu {
                 EntityHitResult hit = this.rayBoxTrace(movement, this.getBoundingBox().expandTowards(movement).inflate(1));
                 if (hit != null) {
                     this.onHitEntity(hit);
+
                 }
-
+            }
+            if (fumetsu.isAvailableTarget(this.getTarget())) {
                 Vec3 homing = this.getHome().subtract(this.getBoundingBox().getCenter());
-
                 float delta = this.getHomingDelta(homing);
 
                 float homingXRot = (float) Math.toDegrees(-Mth.atan2(homing.y(), homing.horizontalDistance()));

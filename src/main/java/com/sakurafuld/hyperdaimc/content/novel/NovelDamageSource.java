@@ -12,6 +12,7 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 public class NovelDamageSource extends DamageSource {
     private static final ResourceKey<DamageType> TYPE = ResourceKey.create(Registries.DAMAGE_TYPE, identifier(HYPERDAIMC, "novel"));
+
     public NovelDamageSource(LivingEntity entity) {
         super(entity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(TYPE), entity);
     }

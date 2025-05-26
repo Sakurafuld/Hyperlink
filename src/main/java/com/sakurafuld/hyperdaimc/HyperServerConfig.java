@@ -62,8 +62,8 @@ public class HyperServerConfig {
                         .defineList("Ignore entities", Lists.newArrayList("minecraft:item", "minecraft:experience", "hyperdaimc:fumetsu_skull", "hyperdaimc:fumetsu_storm", "hyperdaimc:fumetsu_storm_skull"),
                                 object -> object instanceof String string && ResourceLocation.isValidResourceLocation(string));
                 NOVEL_SPECIAL = builder
-                        .comment("Specific entities that should be special Novelize")
-                        .defineList("Special entities", Lists.newArrayList("mekanism:robit"),
+                        .comment("Specific entities not interrupted in the death process by Novel ( e.g. entities with a death animation )")
+                        .defineList("Special entities", Lists.newArrayList("minecraft:ender_dragon", "draconicevolution:draconic_guardian", "cataclysm:ender_guardian", "cataclysm:netherite_monstrosity", "cataclysm:ignis", "cataclysm:the_harbinger", "cataclysm:the_prowler", "cataclysm:coralssus", "cataclysm:amethyst_crab", "cataclysm:ancient_remnant", "cataclysm:wadjet", "cataclysm:maledictus", "cataclysm:aptrgangr"),
                                 object -> object instanceof String string && ResourceLocation.isValidResourceLocation(string));
             }
             builder.pop();
@@ -72,7 +72,6 @@ public class HyperServerConfig {
             {
                 ENABLE_CHRONICLE = builder
                         .comment("Enable behavior of Chronicle",
-                                "For optimization, it is recommended to temporarily set this to false when generating new chunks",
                                 "Default: true")
                         .define("Enable Chronicle", true);
                 CHRONICLE_PARADOX = builder

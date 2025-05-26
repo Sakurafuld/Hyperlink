@@ -19,7 +19,7 @@ public abstract class LevelMixin {
     @Inject(method = "setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z", at = @At("HEAD"), cancellable = true)
     private void setBlockChronicle$HEAD(BlockPos pPos, BlockState pState, int pFlags, int pRecursionLeft, CallbackInfoReturnable<Boolean> cir) {
         Level self = (Level) ((Object) this);
-        if(self instanceof ClientLevel) {
+        if (self instanceof ClientLevel) {
             ChronicleHandler.clientForceNonPaused = true;
         }
         if (!pState.is(self.getBlockState(pPos).getBlock()) &&
@@ -28,9 +28,10 @@ public abstract class LevelMixin {
             cir.setReturnValue(false);
         }
     }
+
     @Inject(method = "setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z", at = @At("RETURN"))
     private void setBlockChronicle$RETURN(BlockPos pPos, BlockState pState, int pFlags, int pRecursionLeft, CallbackInfoReturnable<Boolean> cir) {
-        if(((Object) this) instanceof ClientLevel) {
+        if (((Object) this) instanceof ClientLevel) {
             ChronicleHandler.clientForceNonPaused = false;
         }
     }

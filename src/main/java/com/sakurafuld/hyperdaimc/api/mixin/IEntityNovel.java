@@ -9,6 +9,4 @@ public interface IEntityNovel {
     void novelize(LivingEntity writer);
 
     boolean isNovelized();
-
-    void killsOver();
 }

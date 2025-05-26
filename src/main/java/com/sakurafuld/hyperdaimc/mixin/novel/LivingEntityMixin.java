@@ -35,6 +35,8 @@ public abstract class LivingEntityMixin implements IEntityNovel {
     private boolean novelized = false;
     @Unique
     private int novelizedTime = 0;
+    @Unique
+    private int lastdeathTime = -1;
 
     @Override
     public void novelize(LivingEntity writer) {
@@ -71,7 +73,18 @@ public abstract class LivingEntityMixin implements IEntityNovel {
         if (this.isNovelized()) {
             require(LogicalSide.SERVER).run(() ->
                     self.die(damage));
-            this.killsOver();
+
+            if (!FumetsuEntity.class.equals(self.getClass())) {
+                ((ILivingEntityMuteki) self).force(true);
+                for (int count = 0; count < 2048 && (self.getHealth() > 0 || self.isAlive()); count++) {
+                    self.setHealth(0);
+                    self.getEntityData().set(DATA_HEALTH_ID, 0f);
+                }
+                if ((self.getHealth() > 0 || self.isAlive()) && HyperServerConfig.NOVEL_SPECIAL.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(self.getType()).toString())) {
+                    this.novelRemove(Entity.RemovalReason.KILLED);
+                }
+                ((ILivingEntityMuteki) self).force(false);
+            }
         }
 
         ((ILivingEntityMuteki) self).force(false);
@@ -99,16 +112,20 @@ public abstract class LivingEntityMixin implements IEntityNovel {
         }
     }
 
-    @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;tickDeath()V", shift = At.Shift.AFTER))
+    @Inject(method = "baseTick", at = @At("RETURN"))
     private void baseTickNovel(CallbackInfo ci) {
         if (!HyperServerConfig.ENABLE_NOVEL.get()) {
             return;
         }
 
         LivingEntity self = (LivingEntity) ((Object) this);
-        if (!(self instanceof FumetsuEntity) && NovelHandler.novelized(self) && !self.isRemoved() && !HyperServerConfig.NOVEL_SPECIAL.get().isEmpty()) {
-            if (HyperServerConfig.NOVEL_SPECIAL.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(self.getType()).toString())) {
-                ++self.deathTime;
+
+        if (!FumetsuEntity.class.equals(self.getClass()) && NovelHandler.novelized(self) && !self.isRemoved() && self.level().shouldTickDeath(self)) {
+            if (!HyperServerConfig.NOVEL_SPECIAL.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(self.getType()).toString())) {
+                if (self.deathTime != (this.lastdeathTime + 1)) {
+                    ++self.deathTime;
+                }
+
                 require(LogicalSide.SERVER).run(() -> {
                     ++this.novelizedTime;
                     if (this.novelizedTime >= 20) {
@@ -118,5 +135,6 @@ public abstract class LivingEntityMixin implements IEntityNovel {
                 });
             }
         }
+        this.lastdeathTime = self.deathTime;
     }
 }

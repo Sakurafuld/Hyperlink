@@ -5,7 +5,6 @@ import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
-import com.sakurafuld.hyperdaimc.mixin.muteki.LivingEntityAccessor;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -25,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 import static com.sakurafuld.hyperdaimc.helper.Deets.require;
 
 @Mixin(Entity.class)
@@ -87,21 +85,21 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
         return HyperServerConfig.ENABLE_NOVEL.get() && this.novelized;
     }
 
-    @Override
-    @SuppressWarnings("all")
-    public void killsOver() {
-        if (((Object) this) instanceof LivingEntity self && !FumetsuEntity.class.equals(self.getClass())) {
-            ((ILivingEntityMuteki) self).force(true);
-            for (int count = 0; count < 256 && (self.getHealth() > 0 || self.isAlive()); count++) {
-                self.setHealth(0);
-                self.getEntityData().set(LivingEntityAccessor.getDATA_HEALTH_ID(), 0f);
-            }
-            if (self.getHealth() > 0 || self.isAlive()) {
-                this.novelRemove(Entity.RemovalReason.KILLED);
-            }
-            ((ILivingEntityMuteki) self).force(false);
-        }
-    }
+//    @Override
+//    @SuppressWarnings("all")
+//    public void killsOver() {
+//        if (((Object) this) instanceof LivingEntity self && !FumetsuEntity.class.equals(self.getClass())) {
+//            ((ILivingEntityMuteki) self).force(true);
+//            for (int count = 0; count < 256 && (self.getHealth() > 0 || self.isAlive()); count++) {
+//                self.setHealth(0);
+//                self.getEntityData().set(LivingEntityAccessor.getDATA_HEALTH_ID(), 0f);
+//            }
+//            if (self.getHealth() > 0 || self.isAlive()) {
+//                this.novelRemove(Entity.RemovalReason.KILLED);
+//            }
+//            ((ILivingEntityMuteki) self).force(false);
+//        }
+//    }
 
     @Inject(method = "remove", at = @At("HEAD"), cancellable = true)
     @SuppressWarnings("all")
@@ -109,7 +107,6 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
         require(LogicalSide.SERVER).run(() -> {
             if (pReason.shouldDestroy() && FumetsuEntity.class.equals(this.getClass()) && !this.isNovelized()) {
                 ci.cancel();
-                LOG.debug("remove:{}", pReason);
             }
         });
     }
@@ -120,7 +117,6 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
         require(LogicalSide.SERVER).run(() -> {
             if (pReason.shouldDestroy() && FumetsuEntity.class.equals(this.getClass()) && !this.isNovelized()) {
                 ci.cancel();
-                LOG.debug("setRemoved:{}", pReason);
             }
         });
     }

@@ -28,7 +28,6 @@
     "muteki.SynchedEntityDataMixin",
     "muteki.TunnelAspectWriteBuildersMixin",
     "novel.EntityMixin",
-    "novel.ForgeHooksMixin",
     "novel.LivingEntityMixin",
     "novel.MobMixin",
     "paradox.LootTableMixin",

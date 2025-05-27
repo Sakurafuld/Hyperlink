@@ -72,14 +72,12 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public float wingModelZRot = 0;
     public int genocideTime = 0;
     private float lastHealth = 1;
-    private boolean initialized = false;
 
     public FumetsuEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.moveControl = new FumetsuMoveControl();
         this.xpReward = 0;
         EXISTING.add(this);
-        this.initialized = true;
     }
 
     public static AttributeSupplier createAttributes() {
@@ -308,11 +306,6 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
                 this.removeVehicle();
             }
         }
-    }
-
-    @Override
-    public boolean initialized() {
-        return this.initialized;
     }
 
     @Override

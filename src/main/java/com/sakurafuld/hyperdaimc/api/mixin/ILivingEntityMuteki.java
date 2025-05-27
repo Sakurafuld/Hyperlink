@@ -10,7 +10,5 @@ public interface ILivingEntityMuteki {
 
     boolean muteki();
 
-    boolean initialized();
-
     float lastHealth();
 }

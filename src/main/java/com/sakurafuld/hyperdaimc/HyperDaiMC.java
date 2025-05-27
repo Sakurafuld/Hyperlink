@@ -11,8 +11,9 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 
 @Mod(HYPERDAIMC)
 public class HyperDaiMC {
-    public HyperDaiMC(FMLJavaModLoadingContext context) {
+    public HyperDaiMC() {
         LOG.debug("hyperdaimc Wakeup");
+        FMLJavaModLoadingContext context = FMLJavaModLoadingContext.get();
         IEventBus bus = context.getModEventBus();
 
         bus.register(new HyperSetup());

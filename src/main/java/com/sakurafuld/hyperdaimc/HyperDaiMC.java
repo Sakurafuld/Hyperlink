@@ -11,6 +11,7 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 
 @Mod(HYPERDAIMC)
 public class HyperDaiMC {
+    @SuppressWarnings("removal")
     public HyperDaiMC() {
         LOG.debug("hyperdaimc Wakeup");
         FMLJavaModLoadingContext context = FMLJavaModLoadingContext.get();

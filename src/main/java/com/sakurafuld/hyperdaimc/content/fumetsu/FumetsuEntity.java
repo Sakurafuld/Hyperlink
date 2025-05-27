@@ -2,6 +2,7 @@ package com.sakurafuld.hyperdaimc.content.fumetsu;
 
 import com.google.common.collect.Lists;
 import com.mojang.math.Vector3f;
+import com.sakurafuld.hyperdaimc.HyperServerConfig;
 import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
@@ -309,7 +310,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
 
     @Override
     public boolean muteki() {
-        return true;
+        return HyperServerConfig.ENABLE_MUTEKI.get();
     }
 
     @Override

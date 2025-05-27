@@ -88,8 +88,8 @@ public class HyperServerConfig {
                         .define("Interact Chronicle", false);
                 CHRONICLE_SIZE = builder
                         .comment("max selection size of Chronicle",
-                                "Default: 4096")
-                        .defineInRange("Selection size", 4096, 1, Integer.MAX_VALUE);
+                                "Default: 16384")
+                        .defineInRange("Selection size", 16384, 1, Integer.MAX_VALUE);
             }
             builder.pop();
 

@@ -90,15 +90,15 @@ public class VRXScreen extends AbstractContainerScreen<VRXMenu> {
 
     @Override
     protected void renderLabels(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY) {
-        pGuiGraphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0x404040);
+        pGuiGraphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 0x404040, false);
         int fontWidth = this.font.width(this.title.getString());
         int x = (this.imageWidth / 2) - (fontWidth / 2);
         pGuiGraphics.blitNineSliced(BACKGROUND, x - 2, this.titleLabelY - 1, fontWidth + 4, this.font.lineHeight + 1, 2, 2, 2, 2, 6, 10, 176, 0);
-        pGuiGraphics.drawString(this.font, this.title, x, this.titleLabelY, 0xA0F0F0);
+        pGuiGraphics.drawString(this.font, this.title, x, this.titleLabelY, 0xA0F0F0, false);
 
         MutableComponent component = this.getFaceButton();
         boolean hovering = this.isHoveringFaceButton(pMouseX, pMouseY);
-        pGuiGraphics.drawString(this.font, component, 168 - this.font.width(component), this.inventoryLabelY, hovering ? this.clicking ? 0x202020 : 0x606060 : 0x305050);
+        pGuiGraphics.drawString(this.font, component, 168 - this.font.width(component), this.inventoryLabelY, hovering ? this.clicking ? 0x202020 : 0x606060 : 0x305050, false);
     }
 
     @Override

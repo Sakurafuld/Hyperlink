@@ -32,7 +32,7 @@ public abstract class SynchedEntityDataMixin {
     private <T> void setMuteki(EntityDataAccessor<T> pKey, T pValue, CallbackInfo ci) {
         if (pKey == LivingEntityAccessor.getDATA_HEALTH_ID() && this.entity instanceof LivingEntity living && pValue instanceof Float health) {
             if (MutekiHandler.muteki(living)) {
-                if (!((ILivingEntityMuteki) living).initialized() || ((ILivingEntityMuteki) living).forced()) {
+                if (((ILivingEntityMuteki) living).forced()) {
                     return;
                 }
                 if (health <= this.getItem(LivingEntityAccessor.getDATA_HEALTH_ID()).getValue() || !Float.isFinite(health)) {

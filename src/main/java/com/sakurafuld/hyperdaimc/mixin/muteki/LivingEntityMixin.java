@@ -21,8 +21,6 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
     @Unique
     private boolean muteki = false;
     @Unique
-    private boolean initialized = false;
-    @Unique
     private boolean forced = false;
     @Unique
     private float lastHealth = 1;
@@ -37,11 +35,6 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
     @Override
     public boolean muteki() {
         return this.muteki;
-    }
-
-    @Override
-    public boolean initialized() {
-        return this.initialized;
     }
 
     @Override
@@ -61,7 +54,6 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tickMuteki(CallbackInfo ci) {
-        this.initialized = true;
         this.muteki = MutekiHandler.checkMuteki((LivingEntity) ((Object) this));
 
         this.force(true);

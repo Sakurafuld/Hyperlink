@@ -36,8 +36,10 @@ public class MutekiHandler {
     }
 
     public static boolean checkMuteki(LivingEntity entity) {
-
-        return HyperServerConfig.ENABLE_MUTEKI.get() && Check.INSTANCE.isMuteki(entity);
+        ((ILivingEntityMuteki) entity).force(true);
+        boolean muteki = HyperServerConfig.ENABLE_MUTEKI.get() && Check.INSTANCE.isMuteki(entity);
+        ((ILivingEntityMuteki) entity).force(false);
+        return muteki;
     }
 
     @SubscribeEvent

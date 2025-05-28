@@ -53,6 +53,10 @@ public class NovelHandler {
         return ((IEntityNovel) entity).isNovelized();
     }
 
+    public static boolean special(Entity entity) {
+        return HyperServerConfig.NOVEL_SPECIAL.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
+    }
+
     @SubscribeEvent(receiveCanceled = true)
     @OnlyIn(Dist.CLIENT)
     public static void novel(InputEvent.InteractionKeyMappingTriggered event) {
@@ -98,8 +102,9 @@ public class NovelHandler {
 
         if (victim instanceof PartEntity<?> part) {
             novelize(writer, part.getParent(), send);
+        } else {
+            ((IEntityNovel) victim).novelize(writer);
         }
-        ((IEntityNovel) victim).novelize(writer);
 
         if (send) {
             PacketHandler.INSTANCE.sendToServer(new ServerboundNovelize(writer.getId(), victim.getId()));

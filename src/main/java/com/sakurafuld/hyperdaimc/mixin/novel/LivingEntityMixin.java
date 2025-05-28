@@ -13,7 +13,6 @@ import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -80,7 +79,7 @@ public abstract class LivingEntityMixin implements IEntityNovel {
                     self.setHealth(0);
                     self.getEntityData().set(DATA_HEALTH_ID, 0f);
                 }
-                if ((self.getHealth() > 0 || self.isAlive()) && HyperServerConfig.NOVEL_SPECIAL.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(self.getType()).toString())) {
+                if ((self.getHealth() > 0 || self.isAlive()) && NovelHandler.special(self)) {
                     this.novelRemove(Entity.RemovalReason.KILLED);
                 }
                 ((ILivingEntityMuteki) self).force(false);
@@ -121,7 +120,7 @@ public abstract class LivingEntityMixin implements IEntityNovel {
         LivingEntity self = (LivingEntity) ((Object) this);
 
         if (!FumetsuEntity.class.equals(self.getClass()) && NovelHandler.novelized(self) && !self.isRemoved() && self.level().shouldTickDeath(self)) {
-            if (!HyperServerConfig.NOVEL_SPECIAL.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(self.getType()).toString())) {
+            if (!NovelHandler.special(self)) {
                 if (self.deathTime != (this.lastdeathTime + 1)) {
                     ++self.deathTime;
                 }

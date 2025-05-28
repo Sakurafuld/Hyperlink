@@ -29,6 +29,10 @@ public class HyperServerConfig {
     public static final ForgeConfigSpec.BooleanValue ENABLE_VRX;
 
 
+    public static final ForgeConfigSpec.IntValue FUMETSU_RANGE;
+    public static final ForgeConfigSpec.BooleanValue FUMETSU_UNDERGROUND;
+
+
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
@@ -87,7 +91,7 @@ public class HyperServerConfig {
                                 "Default: false")
                         .define("Interact Chronicle", false);
                 CHRONICLE_SIZE = builder
-                        .comment("max selection size of Chronicle",
+                        .comment("Max selection size of Chronicle",
                                 "Default: 16384")
                         .defineInRange("Selection size", 16384, 1, Integer.MAX_VALUE);
             }
@@ -112,6 +116,19 @@ public class HyperServerConfig {
                         .comment("Enable behavior of VRX",
                                 "Default: true")
                         .define("Enable VRX", true);
+            }
+            builder.pop();
+
+            builder.push("Fumetsu");
+            {
+                FUMETSU_RANGE = builder
+                        .comment("The range for which Fumetsu sets targets",
+                                "Default: 64")
+                        .defineInRange("Fumetsu range", 64, 128, Integer.MAX_VALUE);
+                FUMETSU_UNDERGROUND = builder
+                        .comment("Fumetsu will try to define the underground opponent as a target",
+                                "Default: false")
+                        .define("Fumetsu underground", false);
             }
             builder.pop();
         }

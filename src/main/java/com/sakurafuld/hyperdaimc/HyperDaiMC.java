@@ -13,8 +13,11 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 public class HyperDaiMC {
     @SuppressWarnings("removal")
     public HyperDaiMC() {
+        this(FMLJavaModLoadingContext.get());
+    }
+
+    public HyperDaiMC(FMLJavaModLoadingContext context) {
         LOG.debug("hyperdaimc Wakeup");
-        FMLJavaModLoadingContext context = FMLJavaModLoadingContext.get();
         IEventBus bus = context.getModEventBus();
 
         bus.register(new HyperSetup());

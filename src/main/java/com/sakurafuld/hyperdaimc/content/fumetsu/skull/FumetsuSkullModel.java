@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -34,7 +35,7 @@ public class FumetsuSkullModel extends Model {
     }
 
     public void setup(float yaw, float pitch) {
-        this.head.yRot = (float) Math.toRadians(yaw - 180);
+        this.head.yRot = (float) Math.toRadians(Mth.wrapDegrees(yaw - 180));
         this.head.xRot = (float) Math.toRadians(pitch);
     }
 

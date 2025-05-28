@@ -27,7 +27,7 @@ public class FumetsuSkullRenderer extends EntityRenderer<FumetsuSkull> {
         Renders.with(pPoseStack, () -> {
             pPoseStack.scale(-1, -1, 1);
             pPoseStack.scale(this.getSize(), this.getSize(), this.getSize());
-            float yaw = Mth.rotLerp(pEntity.yRotO, pEntity.getYRot(), pPartialTick);
+            float yaw = Mth.rotLerp(pPartialTick, pEntity.yRotO, pEntity.getYRot());
             float pitch = Mth.lerp(pPartialTick, pEntity.xRotO, pEntity.getXRot());
             VertexConsumer vertexconsumer = pBuffer.getBuffer(this.model.renderType(this.getTextureLocation(pEntity)));
             this.model.setup(yaw, pitch);

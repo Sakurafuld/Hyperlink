@@ -12,6 +12,7 @@ import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.fumetsu.ai.*;
 import com.sakurafuld.hyperdaimc.content.fumetsu.skull.FumetsuSkull;
+import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import com.sakurafuld.hyperdaimc.helper.Boxes;
 import com.sakurafuld.hyperdaimc.helper.Writes;
 import net.minecraft.core.BlockPos;
@@ -83,7 +84,6 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public static AttributeSupplier createAttributes() {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 20)
-                .add(Attributes.FOLLOW_RANGE, 64)
                 .build();
     }
 
@@ -431,6 +431,20 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     }
 
     @Override
+    public void die(DamageSource pDamageSource) {
+        if (NovelHandler.novelized(this)) {
+            super.die(pDamageSource);
+        }
+    }
+
+    @Override
+    protected void tickDeath() {
+        if (NovelHandler.novelized(this)) {
+            super.tickDeath();
+        }
+    }
+
+    @Override
     public int getTeamColor() {
         TextColor color = Writes.gameOver("A").getSiblings().get(0).getStyle().getColor();
         return color != null ? color.getValue() : super.getTeamColor();
@@ -459,7 +473,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public boolean isAvailableTarget(@Nullable Entity target) {
         if (this != target && target instanceof FumetsuEntity) {
             return false;
-        } else if (target != null && !(target instanceof Player) && this.getOrigin().distToCenterSqr(target.position()) > 48 * 48) {
+        } else if (target != null && !(target instanceof Player) && Math.sqrt(this.getOrigin().distToCenterSqr(target.position())) > HyperServerConfig.FUMETSU_RANGE.get()) {
             return false;
         } else if (target instanceof Player player && (player.isCreative() || player.getHealth() <= 0)) {
             return false;
@@ -497,7 +511,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public boolean hasLineOfSight(Entity pEntity) {
         if (pEntity.getLevel() != this.getLevel()) {
             return false;
-        } else if (pEntity instanceof Player) {
+        } else if (HyperServerConfig.FUMETSU_UNDERGROUND.get() || pEntity instanceof Player) {
             return true;
         } else {
             Vec3 from = new Vec3(this.getX(), this.getEyeY(), this.getZ());

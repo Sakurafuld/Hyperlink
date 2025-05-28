@@ -20,7 +20,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.18.2-1.2'
+version = '1.18.2-1.3'
 group = 'com.sakurafuld.hyperdaimc'
 archivesBaseName = 'Hyperlink'
 

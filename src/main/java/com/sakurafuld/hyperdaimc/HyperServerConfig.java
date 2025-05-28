@@ -29,6 +29,10 @@ public class HyperServerConfig {
     public static final ForgeConfigSpec.BooleanValue ENABLE_VRX;
 
 
+    public static final ForgeConfigSpec.IntValue FUMETSU_RANGE;
+    public static final ForgeConfigSpec.BooleanValue FUMETSU_UNDERGROUND;
+
+
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
@@ -112,6 +116,19 @@ public class HyperServerConfig {
                         .comment("Enable behavior of VRX",
                                 "Default: true")
                         .define("Enable VRX", true);
+            }
+            builder.pop();
+
+            builder.push("Fumetsu");
+            {
+                FUMETSU_RANGE = builder
+                        .comment("The range for which Fumetsu sets targets",
+                                "Default: 64")
+                        .defineInRange("Fumetsu range", 64, 64, Integer.MAX_VALUE);
+                FUMETSU_UNDERGROUND = builder
+                        .comment("Fumetsu will try to define the underground opponent as a target",
+                                "Default: false")
+                        .define("Fumetsu underground", false);
             }
             builder.pop();
         }

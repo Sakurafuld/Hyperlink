@@ -51,9 +51,6 @@ public class VRXOneGas extends VRXOne {
         super(TYPE);
     }
 
-    public static void initialize() {
-        TYPE = Type.register("gas", 20, VRXOneGas::new, VRXOneGas::convert, VRXOneGas::collect, VRXOneGas::check, VRXOneGas::cast);
-    }
 
     @Override
     public @Nullable Object prepareInsert(CapabilityProvider<?> provider, @Nullable Direction face, List<VRXOne> previous) {

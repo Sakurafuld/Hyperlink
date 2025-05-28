@@ -36,13 +36,10 @@ public class MutekiHandler {
     }
 
     public static boolean checkMuteki(LivingEntity entity) {
-        try {
-            return HyperServerConfig.ENABLE_MUTEKI.get() && Check.INSTANCE.isMuteki(entity);
-        } catch (Throwable ignore) {
-            LOG.debug("MutekiError!!");
-        }
-        LOG.debug("MutekiError!!");
-        return false;
+        ((ILivingEntityMuteki) entity).force(true);
+        boolean muteki = HyperServerConfig.ENABLE_MUTEKI.get() && Check.INSTANCE.isMuteki(entity);
+        ((ILivingEntityMuteki) entity).force(false);
+        return muteki;
     }
 
     @SubscribeEvent
@@ -54,20 +51,6 @@ public class MutekiHandler {
             }
         });
     }
-
-//    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
-//    public static void postmortal(LivingDeathEvent event) {
-//
-//        LivingEntity entity = event.getEntityLiving();
-//        if ((!Float.isFinite(entity.getHealth()) || HyperServerConfig.MUTEKI_NOVEL.get() || !NovelHandler.novelized(entity)) && muteki(entity)) {
-//
-//            event.setCanceled(true);
-//        } else if (NovelHandler.novelized(entity)) {
-//
-//            ((IEntityNovel) entity).killsOver();
-//            event.setCanceled(false);
-//        }
-//    }
 
     private enum Attach {
         INSTANCE;

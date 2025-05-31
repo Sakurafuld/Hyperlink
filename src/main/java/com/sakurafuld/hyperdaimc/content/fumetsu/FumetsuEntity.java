@@ -73,6 +73,12 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public float wingModelZRot = 0;
     public int genocideTime = 0;
     private float lastHealth = 1;
+    private Vec3 lastPos = this.position();
+    private Vec3 lastDelta = this.getDeltaMovement();
+    private float lastXRot = this.getXRot();
+    private float lastYRot = this.getYRot();
+    private float lastYHeadRot = this.getYHeadRot();
+    private boolean movable = false;
 
     public FumetsuEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -111,11 +117,6 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         return navi;
     }
 
-    @Override
-    public void move(MoverType pType, Vec3 pPos) {
-        super.move(pType, pPos);
-        this.checkInsideBlocks();
-    }
 
     @Override
     protected void registerGoals() {
@@ -132,7 +133,15 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
 
     @Override
     public void fumetsuTick() {
-
+        this.movable = true;
+        if (!this.firstTick) {
+            this.setPosRaw(this.lastPos.x(), this.lastPos.y(), this.lastPos.z());
+            this.setDeltaMovement(this.lastDelta);
+            this.setXRot(this.lastXRot);
+            this.setYRot(this.lastYRot);
+            this.setYHeadRot(this.lastYHeadRot);
+        }
+        this.setOldPosAndRot();
         this.force(true);
         float health = this.getHealth();
         if (health > 0) {
@@ -186,6 +195,12 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
             this.heal(2);
         }
 
+        this.lastPos = this.position();
+        this.lastDelta = this.getDeltaMovement();
+        this.lastXRot = this.getXRot();
+        this.lastYRot = this.getYRot();
+        this.lastYHeadRot = this.getYHeadRot();
+        this.movable = false;
     }
 
     private void defaultTick() {
@@ -305,6 +320,52 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
             while (this.getVehicle() != null) {
                 this.removeVehicle();
             }
+        }
+    }
+
+    @Override
+    public boolean isMovable() {
+        return this.movable;
+    }
+
+    @Override
+    public void setMovable(boolean movable) {
+        this.movable = movable;
+    }
+
+    @Override
+    public void move(MoverType pType, Vec3 pPos) {
+        if (this.isMovable()) {
+            super.move(pType, pPos);
+            this.checkInsideBlocks();
+        }
+    }
+
+    @Override
+    public void setXRot(float pXRot) {
+        if (this.isMovable()) {
+            super.setXRot(pXRot);
+        }
+    }
+
+    @Override
+    public void setYRot(float pYRot) {
+        if (this.isMovable()) {
+            super.setYRot(pYRot);
+        }
+    }
+
+    @Override
+    public void setYHeadRot(float pRotation) {
+        if (this.isMovable()) {
+            super.setYHeadRot(pRotation);
+        }
+    }
+
+    @Override
+    public void setDeltaMovement(Vec3 pDeltaMovement) {
+        if (this.isMovable()) {
+            super.setDeltaMovement(pDeltaMovement);
         }
     }
 
@@ -478,7 +539,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         } else if (target instanceof Player player && (player.isCreative() || player.getHealth() <= 0)) {
             return false;
         } else {
-            return target instanceof LivingEntity && target.getPose() != Pose.DYING && !target.isRemoved() && !target.isSpectator();
+            return target instanceof LivingEntity && !NovelHandler.novelized(target) && !target.isRemoved() && !target.isSpectator();
         }
     }
 

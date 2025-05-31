@@ -23,7 +23,6 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Arrays;
@@ -184,7 +183,7 @@ public class Renders {
     public static void model(BakedModel model, PoseStack poseStack, VertexConsumer consumer, int light, int overlay, Function<BakedQuad, Integer> colorizer) {
         for (Direction face : QUAD_FACES) {
             RANDOM.setSeed(42);
-            for (BakedQuad quad : model.getQuads(null, face, RANDOM, EmptyModelData.INSTANCE)) {
+            for (BakedQuad quad : model.getQuads(null, face, RANDOM)) {
                 int color = colorizer.apply(quad);
 
                 float alpha = ((color >> 24) & 0xFF) / 255f;

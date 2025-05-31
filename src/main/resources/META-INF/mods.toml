@@ -61,3 +61,9 @@ license="MIT"
     versionRange="[10.2.5,)"
     ordering="AFTER"
     side="BOTH"
+[[dependencies.hyperdaimc]]
+    modId="tconstruct"
+    mandatory=false
+    versionRange="[3.7.2.167,)"
+    ordering="AFTER"
+    side="BOTH"

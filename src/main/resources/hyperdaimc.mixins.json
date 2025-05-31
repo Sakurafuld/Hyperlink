@@ -19,6 +19,7 @@
     "chronicle.PistonBaseBlockMixin",
     "chronicle.PlayerMixin",
     "chronicle.ServerLevelMixin",
+    "fumetsu.EntityMixin",
     "fumetsu.ServerLevelMixin",
     "muteki.CommandSourceStackMixin",
     "muteki.EntityArgumentMixin",
@@ -27,6 +28,7 @@
     "muteki.OmnidirectionalHopperBlockEntityMixin",
     "muteki.PixieAIStealMixin",
     "muteki.PlayerMixin",
+    "muteki.ServerPlayerMixin",
     "muteki.SynchedEntityDataMixin",
     "muteki.TunnelAspectWriteBuildersMixin",
     "novel.EntityMixin",
@@ -39,11 +41,13 @@
   ],
   "client": [
     "fumetsu.ClientLevelMixin",
+    "fumetsu.ClientPacketListenerMixin",
     "gameorb.ItemEntityRendererMixin",
     "muteki.GameModeSwitchScreenMixin",
     "paradox.ClientLevelMixin",
     "paradox.MinecraftMixin",
     "paradox.MultiPlayerGameModeMixin",
+    "tconstruct.ItemRendererMixin",
     "vrx.AbstractContainerScreenMixin"
   ],
   "minVersion": "0.8"

@@ -106,6 +106,10 @@ repositories {
     maven { url = "https://maven.theillusivec4.top/" }//curios
     maven { url 'https://maven.blamejared.com' }//botania
     maven { url 'https://modmaven.dev/' }//mekanism
+    maven {
+        name 'DVS1 Maven FS'
+        url 'https://dvs1.progwml6.com/files/maven'//TiC
+    }
 
     flatDir {
         dirs 'build/libs'
@@ -114,8 +118,6 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.2.0'
-
-    compileOnly fg.deobf("curse.maven:salmons-genesis-reincarnation-898734:5567527")
 
     implementation fg.deobf('com.sakurafuld.hyperdaimc:MmmMmmMmmMmm:1.18.2-1.5.2')
     implementation fg.deobf('com.sakurafuld.hyperdaimc:entityculling:forge-1.6.1-mc1.18.2')
@@ -134,6 +136,7 @@ dependencies {
     implementation fg.deobf("curse.maven:iceberg-520110:4035917")
     implementation fg.deobf("curse.maven:titanium-287342:5151207")
     implementation fg.deobf("curse.maven:citadel-331936:3783096")
+    implementation fg.deobf("slimeknights.mantle:Mantle:${mc_version}-${mantle_build}")
 
 
     implementation fg.deobf("curse.maven:ftb-teams-forge-404468:4579981")
@@ -191,6 +194,8 @@ dependencies {
     implementation fg.deobf("curse.maven:pneumaticcraft-repressurized-281849:4922258")
 
     implementation fg.deobf("curse.maven:ice-and-fire-dragons-264231:5037775")
+
+    implementation fg.deobf("slimeknights.tconstruct:TConstruct:${mc_version}-${tinkers_build}")
 
     implementation fg.deobf("curse.maven:clumps-256717:4153344")
     implementation fg.deobf("curse.maven:spark-361579:4505375")

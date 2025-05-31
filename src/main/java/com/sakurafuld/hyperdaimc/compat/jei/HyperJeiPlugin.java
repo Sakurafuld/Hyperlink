@@ -1,4 +1,4 @@
-package com.sakurafuld.hyperdaimc.compat;
+package com.sakurafuld.hyperdaimc.compat.jei;
 
 import com.sakurafuld.hyperdaimc.content.vrx.VRXJeiWrapper;
 import com.sakurafuld.hyperdaimc.content.vrx.VRXOne;

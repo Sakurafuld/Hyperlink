@@ -66,5 +66,7 @@
   "argument.muteki.notfound": "No §enon§c-§6Muteki entity was found",
   "permissions.requires.muteki": "A §enon§c-§6Muteki entity is required to run this command here",
 
-  "container.hyperdaimc.vrx_face": "Direction: %s"
+  "container.hyperdaimc.vrx_face": "Direction: %s",
+
+  "modifier.hyperdaimc.novel": "Novelization"
 }

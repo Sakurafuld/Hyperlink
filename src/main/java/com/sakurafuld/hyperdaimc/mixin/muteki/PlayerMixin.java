@@ -2,7 +2,6 @@ package com.sakurafuld.hyperdaimc.mixin.muteki;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
@@ -27,7 +26,7 @@ public abstract class PlayerMixin implements ILivingEntityMuteki {
     private void dieMuteki$Player(DamageSource pDamageSource, CallbackInfo ci) {
         Player self = (Player) ((Object) this);
 
-        if ((!Float.isFinite(self.getHealth()) || HyperServerConfig.MUTEKI_NOVEL.get() || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
+        if ((!Float.isFinite(self.getHealth()) || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
             ci.cancel();
         }
     }

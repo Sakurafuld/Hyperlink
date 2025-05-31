@@ -1,6 +1,5 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
@@ -49,11 +48,7 @@ public abstract class SynchedEntityDataMixin {
             CallbackInfoReturnable<Float> cirf = ((CallbackInfoReturnable<Float>) cir);
             boolean muteki = MutekiHandler.muteki(living);
             if (NovelHandler.novelized(living)) {
-                if (!(muteki && HyperServerConfig.MUTEKI_NOVEL.get())) {
-                    cirf.setReturnValue(0f);
-                } else {
-                    cirf.setReturnValue(((ILivingEntityMuteki) living).lastHealth());
-                }
+                cirf.setReturnValue(0f);
             } else if (muteki) {
                 cirf.setReturnValue(((ILivingEntityMuteki) living).lastHealth());
             }

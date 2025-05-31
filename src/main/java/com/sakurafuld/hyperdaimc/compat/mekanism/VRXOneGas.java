@@ -1,4 +1,4 @@
-package com.sakurafuld.hyperdaimc.compat;
+package com.sakurafuld.hyperdaimc.compat.mekanism;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -51,10 +51,6 @@ public class VRXOneGas extends VRXOne {
 
     public VRXOneGas() {
         super(TYPE);
-    }
-
-    public static void initialize() {
-        TYPE = VRXOne.Type.register("gas", 20, VRXOneGas::new, VRXOneGas::convert, VRXOneGas::collect, VRXOneGas::check, VRXOneGas::cast);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.sakurafuld.hyperdaimc.content.fumetsu;
 import com.google.common.collect.Lists;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,7 +33,7 @@ public class FumetsuHandler {
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         List<ServerPlayer> current = server.getPlayerList().getPlayers()
                 .stream()
-                .filter(player -> !player.isRemoved() && player.getPose() != Pose.DYING)
+                .filter(LivingEntity::isAlive)
                 .toList();
 
         if (!current.equals(PLAYERS)) {

@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:modifier",
+  "tools": [
+    {
+      "tag": "tconstruct:modifiable/melee/primary"
+    },
+    {
+      "tag": "tconstruct:modifiable/ranged"
+    }
+  ],
+  "inputs": [
+    {
+      "item": "hyperdaimc:novel"
+    }
+  ],
+  "slots": {
+    "abilities": 1
+  },
+  "result": "hyperdaimc:novel",
+  "level": 1
+}

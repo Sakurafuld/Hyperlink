@@ -5,6 +5,7 @@ import com.sakurafuld.hyperdaimc.HyperServerConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
+import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.network.PacketHandler;
 import com.sakurafuld.hyperdaimc.network.novel.ServerboundNovelSound;
 import com.sakurafuld.hyperdaimc.network.novel.ServerboundNovelize;
@@ -13,7 +14,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -35,8 +35,8 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 
 @Mod.EventBusSubscriber(modid = HYPERDAIMC)
 public class NovelHandler {
-    private static final Predicate<Entity> PREDICATE = entity -> {
-        if (!entity.isRemoved() && entity.getPose() != Pose.DYING) {
+    public static final Predicate<Entity> PREDICATE = entity -> {
+        if (!entity.isRemoved() && !novelized(entity)) {
             if (entity instanceof Player player) {
                 return player.getHealth() > 0;
             } else if (!HyperServerConfig.NOVEL_IGNORE.get().isEmpty()) {
@@ -50,11 +50,11 @@ public class NovelHandler {
     };
 
     public static boolean novelized(Entity entity) {
-        return ((IEntityNovel) entity).isNovelized();
+        return HyperServerConfig.ENABLE_NOVEL.get() && ((IEntityNovel) entity).isNovelized() && !(HyperServerConfig.MUTEKI_NOVEL.get() && entity instanceof LivingEntity living && MutekiHandler.muteki(living));
     }
 
     public static boolean special(Entity entity) {
-        return HyperServerConfig.NOVEL_SPECIAL.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
+        return entity instanceof Player || HyperServerConfig.NOVEL_SPECIAL.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
     }
 
     @SubscribeEvent(receiveCanceled = true)

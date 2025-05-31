@@ -1,5 +1,7 @@
 package com.sakurafuld.hyperdaimc;
 
+import com.sakurafuld.hyperdaimc.compat.mekanism.HyperMekanism;
+import com.sakurafuld.hyperdaimc.compat.tconstruct.HyperTConstruct;
 import com.sakurafuld.hyperdaimc.content.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -31,5 +33,8 @@ public class HyperDaiMC {
 
         context.registerConfig(ModConfig.Type.COMMON, HyperCommonConfig.SPEC, HYPERDAIMC + "-common.toml");
         context.registerConfig(ModConfig.Type.SERVER, HyperServerConfig.SPEC, HYPERDAIMC + "-server.toml");
+
+        new HyperMekanism(context);
+        new HyperTConstruct(context);
     }
 }

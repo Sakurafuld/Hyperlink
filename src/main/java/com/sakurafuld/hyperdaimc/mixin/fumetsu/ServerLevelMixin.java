@@ -27,7 +27,6 @@ public abstract class ServerLevelMixin {
         if (entity instanceof IFumetsu fumetsu) {
             ci.cancel();
             ServerLevel self = (ServerLevel) ((Object) this);
-            entity.setOldPosAndRot();
             ProfilerFiller profilerfiller = self.getProfiler();
             ++entity.tickCount;
             self.getProfiler().push(() -> ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
@@ -48,7 +47,6 @@ public abstract class ServerLevelMixin {
             ServerLevel self = (ServerLevel) ((Object) this);
             if (!pPassengerEntity.isRemoved() && pPassengerEntity.getVehicle() == pRidingEntity) {
                 if (this.entityTickList.contains(pPassengerEntity)) {
-                    pPassengerEntity.setOldPosAndRot();
                     ++pPassengerEntity.tickCount;
                     ProfilerFiller profiler = self.getProfiler();
                     profiler.push(() -> ForgeRegistries.ENTITY_TYPES.getKey(pPassengerEntity.getType()).toString());

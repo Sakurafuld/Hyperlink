@@ -2,9 +2,12 @@ package com.sakurafuld.hyperdaimc.content.fumetsu.skull;
 
 import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
+import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import com.sakurafuld.hyperdaimc.helper.Calculates;
+import com.sakurafuld.hyperdaimc.network.PacketHandler;
+import com.sakurafuld.hyperdaimc.network.novel.ClientboundNovelize;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -19,11 +22,14 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
@@ -33,20 +39,25 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.helper.Deets.*;
 
 public class FumetsuSkull extends Entity implements IFumetsu {
     private static final EntityDataAccessor<String> DATA_TYPE = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> DATA_OWNER = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TARGET = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_POWER = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.FLOAT);
+    private Vec3 lastPos = this.position();
+    private Vec3 lastDelta = this.getDeltaMovement();
+    private float lastXRot = this.getXRot();
+    private float lastYRot = this.getYRot();
+    private boolean movable = false;
 
     public FumetsuSkull(EntityType<? extends FumetsuSkull> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     public void setup(Type type, FumetsuEntity owner, Vec3 start, Vec3 vector, float power) {
+        this.movable = true;
         this.setSkullType(type);
         this.setOwner(owner);
         this.setPower(power);
@@ -60,8 +71,12 @@ public class FumetsuSkull extends Entity implements IFumetsu {
         yRot += Mth.lerp(this.level().random.nextFloat(), -22.5f, 22.5f);
 
         this.moveTo(start.x(), start.y(), start.z(), yRot, xRot);
-
         this.setDeltaMovement(this.getPoweredRotVec());
+        this.lastPos = this.position();
+        this.lastDelta = this.getDeltaMovement();
+        this.lastXRot = this.getXRot();
+        this.lastYRot = this.getYRot();
+        this.movable = false;
     }
 
     @Override
@@ -122,13 +137,37 @@ public class FumetsuSkull extends Entity implements IFumetsu {
 
     @Override
     public void fumetsuTick() {
+        this.movable = true;
+        if (!this.firstTick && this.level().getGameTime() % 40 == 0) {
+            this.setPosRaw(this.lastPos.x(), this.lastPos.y(), this.lastPos.z());
+            this.setDeltaMovement(this.lastDelta);
+            this.setXRot(this.lastXRot);
+            this.setYRot(this.lastYRot);
+        }
+        this.setOldPosAndRot();
         if (this.tickCount > this.getAge() || !this.level().hasChunkAt(this.blockPosition()) || this.getOwner() == null || this.getOwner().isRemoved()) {
-            this.discard();
+            ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
             return;
         }
         this.noPhysics = true;
         this.baseTick();
         this.skullTick();
+
+        this.lastPos = this.position();
+        this.lastDelta = this.getDeltaMovement();
+        this.lastXRot = this.getXRot();
+        this.lastYRot = this.getYRot();
+        this.movable = false;
+    }
+
+    @Override
+    public boolean isMovable() {
+        return this.movable;
+    }
+
+    @Override
+    public void setMovable(boolean movable) {
+        this.movable = movable;
     }
 
     @Override
@@ -149,7 +188,6 @@ public class FumetsuSkull extends Entity implements IFumetsu {
                 EntityHitResult hit = this.rayBoxTrace(movement, this.getBoundingBox().expandTowards(movement).inflate(1));
                 if (hit != null) {
                     this.onHitEntity(hit);
-
                 }
             }
             if (fumetsu.isAvailableTarget(this.getTarget())) {
@@ -178,6 +216,42 @@ public class FumetsuSkull extends Entity implements IFumetsu {
 
         this.level().addParticle(this.getParticle(), moveX, moveY + 0.5, moveZ, 0, 0, 0);
         this.checkInsideBlocks();
+    }
+
+    @Override
+    public void move(MoverType pType, Vec3 pPos) {
+        if (this.isMovable()) {
+            super.move(pType, pPos);
+            this.checkInsideBlocks();
+        }
+    }
+
+    @Override
+    public void setXRot(float pXRot) {
+        if (this.isMovable()) {
+            super.setXRot(pXRot);
+        }
+    }
+
+    @Override
+    public void setYRot(float pYRot) {
+        if (this.isMovable()) {
+            super.setYRot(pYRot);
+        }
+    }
+
+    @Override
+    public void setYHeadRot(float pRotation) {
+        if (this.isMovable()) {
+            super.setYHeadRot(pRotation);
+        }
+    }
+
+    @Override
+    public void setDeltaMovement(Vec3 pDeltaMovement) {
+        if (this.isMovable()) {
+            super.setDeltaMovement(pDeltaMovement);
+        }
     }
 
     protected int getAge() {
@@ -234,28 +308,32 @@ public class FumetsuSkull extends Entity implements IFumetsu {
     protected void onHitEntity(EntityHitResult pResult) {
         FumetsuEntity fumetsu = this.getOwner();
         if (fumetsu != null && fumetsu.isAvailableTarget(pResult.getEntity())) {
-            if (this.level() instanceof ServerLevel serverLevel) {
-                NovelHandler.playSound(serverLevel, pResult.getEntity().position());
-            }
-
-            this.level().getEntities(this, pResult.getEntity().getBoundingBox().inflate(1), this::canHitEntity).forEach(entity -> {
-
-                NovelHandler.novelize(fumetsu, entity, false);
-                if (entity instanceof LivingEntity living) {
-                    int max;
-                    if (this.getSkullType() == Type.CRYSTAL) {
-                        living.removeAllEffects();
-                        max = 20;
-                    } else {
-                        max = this.random.nextInt(4, 10);
-                    }
-                    for (int count = 0; count < max && !NovelHandler.novelized(living); count++) {
-                        NovelHandler.novelize(fumetsu, living, false);
-                    }
+            require(LogicalSide.SERVER).run(() -> {
+                if (this.level() instanceof ServerLevel serverLevel) {
+                    NovelHandler.playSound(serverLevel, pResult.getEntity().position());
                 }
+
+                this.level().getEntities(this, pResult.getEntity().getBoundingBox().inflate(1), this::canHitEntity).forEach(entity -> {
+                    int page = 1;
+                    NovelHandler.novelize(fumetsu, entity, false);
+                    if (entity instanceof LivingEntity living) {
+                        int max;
+                        if (this.getSkullType() == Type.CRYSTAL) {
+                            living.removeAllEffects();
+                            max = 20;
+                        } else {
+                            max = this.random.nextInt(4, 10);
+                        }
+                        page += max;
+                        for (int count = 0; count < max && !NovelHandler.novelized(living); count++) {
+                            NovelHandler.novelize(fumetsu, living, false);
+                        }
+                    }
+                    PacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(this.level()::dimension), new ClientboundNovelize(fumetsu.getId(), entity.getId(), page));
+                });
             });
 
-            this.discard();
+            ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
         }
     }
 
@@ -292,10 +370,6 @@ public class FumetsuSkull extends Entity implements IFumetsu {
     public boolean isOnFire() {
         return false;
     }
-//    @Override
-//    public float getBrightness() {
-//        return 1;
-//    }
 
     @Override
     public void addAdditionalSaveData(CompoundTag pCompound) {

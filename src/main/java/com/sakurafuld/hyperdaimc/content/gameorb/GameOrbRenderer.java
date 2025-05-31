@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ForgeHooksClient;
 
 import java.util.Random;
 import java.util.function.Supplier;
@@ -51,7 +52,7 @@ public class GameOrbRenderer extends BlockEntityWithoutLevelRenderer {
             poseStack.scale(RANDOM.nextFloat(0.5f, 1.5f), RANDOM.nextFloat(0.5f, 1.5f), RANDOM.nextFloat(0.5f, 1.5f));
         }
 
-        BakedModel model = ORB.get().applyTransform(context, poseStack, context == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || context == ItemDisplayContext.THIRD_PERSON_LEFT_HAND);
+        BakedModel model = ForgeHooksClient.handleCameraTransforms(poseStack, ORB.get(), context, context == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || context == ItemDisplayContext.THIRD_PERSON_LEFT_HAND);
         poseStack.translate(-0.5, -0.5, -0.5);
 
         double blur = Util.getMillis() % 1500 / 1500d;

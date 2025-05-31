@@ -1,7 +1,6 @@
 package com.sakurafuld.hyperdaimc;
 
 import com.google.common.collect.Sets;
-import com.sakurafuld.hyperdaimc.compat.VRXOneGas;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperMenus;
 import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
@@ -9,7 +8,6 @@ import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntityRenderer;
 import com.sakurafuld.hyperdaimc.content.fumetsu.skull.FumetsuSkullRenderer;
 import com.sakurafuld.hyperdaimc.content.fumetsu.squall.FumetsuSquallRenderer;
 import com.sakurafuld.hyperdaimc.content.fumetsu.storm.FumetsuStormRenderer;
-import com.sakurafuld.hyperdaimc.content.vrx.VRXOne;
 import com.sakurafuld.hyperdaimc.content.vrx.VRXOverlay;
 import com.sakurafuld.hyperdaimc.content.vrx.VRXScreen;
 import com.sakurafuld.hyperdaimc.content.vrx.VRXTooltip;
@@ -29,20 +27,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.Set;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.MEKANISM;
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
-
 public class HyperSetup {
     public static final Set<ResourceLocation> specialModels = Sets.newHashSet();
 
     @SubscribeEvent
     public void commonSetup(FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> {
-            PacketHandler.initialize();
-            require(MEKANISM).run(() -> {
-                VRXOneGas.TYPE = VRXOne.Type.register("gas", 20, VRXOneGas::new, VRXOneGas::convert, VRXOneGas::collect, VRXOneGas::check, VRXOneGas::cast);
-            });
-        });
+        event.enqueueWork(PacketHandler::initialize);
     }
 
     @SubscribeEvent

@@ -1,4 +1,4 @@
-package com.sakurafuld.hyperdaimc.compat;
+package com.sakurafuld.hyperdaimc.compat.mekanism;
 
 import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.api.compat.CombinedGasHandler;

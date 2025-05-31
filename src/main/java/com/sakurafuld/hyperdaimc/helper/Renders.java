@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -182,21 +183,30 @@ public class Renders {
         builder.vertex(matrix, innerX2, innerY2, 0).color(red, green, blue, alpha).normal(0, 0, 1).endVertex();
     }
 
-    public static void model(BakedModel model, PoseStack poseStack, VertexConsumer consumer, int light, int overlay, Function<BakedQuad, Integer> colorizer) {
+    public static void model(BakedModel model, ItemStack stack, PoseStack poseStack, VertexConsumer consumer, int light, int overlay, Function<BakedQuad, Integer> colorizer) {
         for (Direction face : QUAD_FACES) {
             RANDOM.setSeed(42);
-            for (BakedQuad quad : model.getQuads(null, face, RANDOM, ModelData.EMPTY, null)) {
-                int color = colorizer.apply(quad);
+            for (BakedModel pass : model.getRenderPasses(stack, true)) {
+                for (RenderType type : pass.getRenderTypes(stack, true)) {
+                    for (BakedQuad quad : pass.getQuads(null, face, RANDOM, ModelData.EMPTY, type)) {
+                        int color = colorizer.apply(quad);
 
-                float alpha = ((color >> 24) & 0xFF) / 255f;
-                float red = ((color >> 16) & 0xFF) / 255f;
-                float green = ((color >> 8) & 0xFF) / 255f;
-                float blue = (color & 0xFF) / 255f;
+                        float alpha = ((color >> 24) & 0xFF) / 255f;
+                        float red = ((color >> 16) & 0xFF) / 255f;
+                        float green = ((color >> 8) & 0xFF) / 255f;
+                        float blue = (color & 0xFF) / 255f;
 
-                consumer.putBulkData(poseStack.last(), quad, red, green, blue, alpha, light, overlay, true);
-                require(EMBEDDIUM).run(() -> Embeddium.INSTANCE.activateSprite(quad));
+                        consumer.putBulkData(poseStack.last(), quad, red, green, blue, alpha, light, overlay, true);
+                        require(EMBEDDIUM).run(() -> Embeddium.INSTANCE.activateSprite(quad));
+                    }
+                }
             }
+
         }
+    }
+
+    public static void model(BakedModel model, PoseStack poseStack, VertexConsumer consumer, int light, int overlay, Function<BakedQuad, Integer> colorizer) {
+        model(model, ItemStack.EMPTY, poseStack, consumer, light, overlay, colorizer);
     }
 
     public static void model(BakedModel model, PoseStack poseStack, VertexConsumer consumer, int light, int overlay) {

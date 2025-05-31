@@ -34,8 +34,6 @@ public abstract class LivingEntityMixin implements IEntityNovel {
     private boolean novelized = false;
     @Unique
     private int novelizedTime = 0;
-    @Unique
-    private int lastdeathTime = -1;
 
     @Override
     public void novelize(LivingEntity writer) {
@@ -69,7 +67,7 @@ public abstract class LivingEntityMixin implements IEntityNovel {
 //
 //        self.hurtDir = (float)(Math.toDegrees(Mth.atan2(dz, dx)) - self.getYRot());
 //        self.knockback(0.4, dx, dz);
-        if (this.isNovelized()) {
+        if (NovelHandler.novelized(self)) {
             require(LogicalSide.SERVER).run(() ->
                     self.die(damage));
 
@@ -78,9 +76,6 @@ public abstract class LivingEntityMixin implements IEntityNovel {
                 for (int count = 0; count < 2048 && (self.getHealth() > 0 || self.isAlive()); count++) {
                     self.setHealth(0);
                     self.getEntityData().set(DATA_HEALTH_ID, 0f);
-                }
-                if ((self.getHealth() > 0 || self.isAlive()) && NovelHandler.special(self)) {
-                    this.novelRemove(Entity.RemovalReason.KILLED);
                 }
                 ((ILivingEntityMuteki) self).force(false);
             }
@@ -111,20 +106,12 @@ public abstract class LivingEntityMixin implements IEntityNovel {
         }
     }
 
-    @Inject(method = "baseTick", at = @At("RETURN"))
-    private void baseTickNovel(CallbackInfo ci) {
-        if (!HyperServerConfig.ENABLE_NOVEL.get()) {
-            return;
-        }
-
+    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
+    private void tickNovel$HEAD(CallbackInfo ci) {
         LivingEntity self = (LivingEntity) ((Object) this);
-
-        if (!FumetsuEntity.class.equals(self.getClass()) && NovelHandler.novelized(self) && !self.isRemoved() && self.level().shouldTickDeath(self)) {
-            if (!NovelHandler.special(self)) {
-                if (self.deathTime != (this.lastdeathTime + 1)) {
-                    ++self.deathTime;
-                }
-
+        if (NovelHandler.novelized(self) && !NovelHandler.special(self)) {
+            if (!self.isRemoved() && self.level().shouldTickDeath(self)) {
+                ++self.deathTime;
                 require(LogicalSide.SERVER).run(() -> {
                     ++this.novelizedTime;
                     if (this.novelizedTime >= 20) {
@@ -133,7 +120,7 @@ public abstract class LivingEntityMixin implements IEntityNovel {
                     }
                 });
             }
+            ci.cancel();
         }
-        this.lastdeathTime = self.deathTime;
     }
 }

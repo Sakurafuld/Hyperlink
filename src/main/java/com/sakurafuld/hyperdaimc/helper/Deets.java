@@ -21,6 +21,7 @@ public class Deets {
     public static final String CURIOS = "curios";
     public static final String EMBEDDIUM = "embeddium";
     public static final String MEKANISM = "mekanism";
+    public static final String TINKERSCONSTRUCT = "tconstruct";
 
 
     public static Act require(String modid) {

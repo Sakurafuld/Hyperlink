@@ -1,6 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.fumetsu.storm;
 
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
+import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import com.sakurafuld.hyperdaimc.helper.Calculates;
@@ -29,17 +30,22 @@ public class FumetsuStorm extends Entity implements IFumetsu {
     private static final EntityDataAccessor<Integer> DATA_OWNER = SynchedEntityData.defineId(FumetsuStorm.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TARGET = SynchedEntityData.defineId(FumetsuStorm.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_INFLATION = SynchedEntityData.defineId(FumetsuStorm.class, EntityDataSerializers.FLOAT);
-
-
     private final double SPEED = 0.875f;
 
     public AABB oldAABB = this.getBoundingBox();
+    private Vec3 lastPos = this.position();
+    private Vec3 lastDelta = this.getDeltaMovement();
+    private float lastXRot = this.getXRot();
+    private float lastYRot = this.getYRot();
+    private boolean movable = false;
+
 
     public FumetsuStorm(EntityType<FumetsuStorm> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     public void setup(FumetsuEntity fumetsu, Vec3 position) {
+        this.movable = true;
         this.setOwner(fumetsu);
         LivingEntity target = fumetsu.getTarget();
         this.setTarget(target);
@@ -49,6 +55,11 @@ public class FumetsuStorm extends Entity implements IFumetsu {
             this.setDeltaMovement(target.getBoundingBox().getCenter().subtract(this.getBoundingBox().getCenter()).normalize().scale(SPEED));
         }
 
+        this.lastPos = this.position();
+        this.lastDelta = this.getDeltaMovement();
+        this.lastXRot = this.getXRot();
+        this.lastYRot = this.getYRot();
+        this.movable = false;
     }
 
     @Override
@@ -60,9 +71,18 @@ public class FumetsuStorm extends Entity implements IFumetsu {
 
     @Override
     public void fumetsuTick() {
+        this.movable = true;
+        if (!this.firstTick && this.tickCount % 50 == 0) {
+            this.setPosRaw(this.lastPos.x(), this.lastPos.y(), this.lastPos.z());
+            this.setDeltaMovement(this.lastDelta);
+            this.setXRot(this.lastXRot);
+            this.setYRot(this.lastYRot);
+        }
+        this.setOldPosAndRot();
+
         FumetsuEntity fumetsu = this.getOwner();
         if (this.tickCount > 40 || fumetsu == null || fumetsu.isRemoved()) {
-            this.discard();
+            ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
         } else {
             this.baseTick();
 
@@ -103,6 +123,22 @@ public class FumetsuStorm extends Entity implements IFumetsu {
                 });
             }
         }
+
+        this.lastPos = this.position();
+        this.lastDelta = this.getDeltaMovement();
+        this.lastXRot = this.getXRot();
+        this.lastYRot = this.getYRot();
+        this.movable = false;
+    }
+
+    @Override
+    public boolean isMovable() {
+        return this.movable;
+    }
+
+    @Override
+    public void setMovable(boolean movable) {
+        this.movable = movable;
     }
 
     @Override

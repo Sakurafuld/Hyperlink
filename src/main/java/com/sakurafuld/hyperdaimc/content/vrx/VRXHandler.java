@@ -42,6 +42,7 @@ import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -260,7 +261,7 @@ public class VRXHandler {
             poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
             poseStack.mulPose(Axis.YP.rotationDegrees(180 - yRot));
 
-            model = model.applyTransform(ItemDisplayContext.FIXED, poseStack, false);
+            model = ForgeHooksClient.handleCameraTransforms(poseStack, model, ItemDisplayContext.FIXED, false);
             poseStack.translate(-0.5, -0.5, -0.5);
 
             Renders.model(model, poseStack, Renders.getBuffer(Sheets.translucentCullBlockSheet()), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, quad -> mine ? 0xFFFFFFFF : 0xFF805050);

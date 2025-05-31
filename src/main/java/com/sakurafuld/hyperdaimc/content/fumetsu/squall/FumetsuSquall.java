@@ -23,6 +23,7 @@ public class FumetsuSquall extends FumetsuSkull {
     }
 
     public void setup(FumetsuEntity owner, Vec3 start, Vec3 vector, float power) {
+        this.setMovable(true);
         this.setSkullType(Type.CRYSTAL);
         this.setOwner(owner);
         this.setPower(power);
@@ -33,6 +34,7 @@ public class FumetsuSquall extends FumetsuSkull {
         this.moveTo(start.x(), start.y(), start.z(), yRot, xRot);
 
         this.setDeltaMovement(this.getPoweredRotVec());
+        this.setMovable(false);
     }
 
     @Override

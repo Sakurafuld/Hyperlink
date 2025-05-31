@@ -1,10 +1,10 @@
 package com.sakurafuld.hyperdaimc.mixin.novel;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
-import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
+import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -82,30 +82,15 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
 
     @Override
     public boolean isNovelized() {
-        return HyperServerConfig.ENABLE_NOVEL.get() && this.novelized;
+        return this.novelized;
     }
-
-//    @Override
-//    @SuppressWarnings("all")
-//    public void killsOver() {
-//        if (((Object) this) instanceof LivingEntity self && !FumetsuEntity.class.equals(self.getClass())) {
-//            ((ILivingEntityMuteki) self).force(true);
-//            for (int count = 0; count < 256 && (self.getHealth() > 0 || self.isAlive()); count++) {
-//                self.setHealth(0);
-//                self.getEntityData().set(LivingEntityAccessor.getDATA_HEALTH_ID(), 0f);
-//            }
-//            if (self.getHealth() > 0 || self.isAlive()) {
-//                this.novelRemove(Entity.RemovalReason.KILLED);
-//            }
-//            ((ILivingEntityMuteki) self).force(false);
-//        }
-//    }
 
     @Inject(method = "remove", at = @At("HEAD"), cancellable = true)
     @SuppressWarnings("all")
     private void removeNovel(Entity.RemovalReason pReason, CallbackInfo ci) {
         require(LogicalSide.SERVER).run(() -> {
-            if (pReason.shouldDestroy() && FumetsuEntity.class.equals(this.getClass()) && !this.isNovelized()) {
+            Entity self = (Entity) (Object) this;
+            if (pReason.shouldDestroy() && self instanceof IFumetsu && !NovelHandler.novelized(self)) {
                 ci.cancel();
             }
         });
@@ -115,7 +100,8 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     @SuppressWarnings("all")
     private void setRemovedNovel(Entity.RemovalReason pReason, CallbackInfo ci) {
         require(LogicalSide.SERVER).run(() -> {
-            if (pReason.shouldDestroy() && FumetsuEntity.class.equals(this.getClass()) && !this.isNovelized()) {
+            Entity self = (Entity) (Object) this;
+            if (pReason.shouldDestroy() && self instanceof IFumetsu && !NovelHandler.novelized(self)) {
                 ci.cancel();
             }
         });
@@ -125,7 +111,8 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     @SuppressWarnings("all")
     private void getRemovalReasonNovel(CallbackInfoReturnable<Entity.RemovalReason> cir) {
         require(LogicalSide.SERVER).run(() -> {
-            if (this.removalReason != null && this.removalReason.shouldDestroy() && FumetsuEntity.class.equals(this.getClass()) && !this.isNovelized()) {
+            Entity self = (Entity) (Object) this;
+            if (this.removalReason != null && this.removalReason.shouldDestroy() && self instanceof IFumetsu && !NovelHandler.novelized(self)) {
                 cir.setReturnValue(null);
             }
         });
@@ -135,7 +122,8 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     @SuppressWarnings("all")
     private void isRemovedNovel(CallbackInfoReturnable<Boolean> cir) {
         require(LogicalSide.SERVER).run(() -> {
-            if (this.removalReason != null && this.removalReason.shouldDestroy() && FumetsuEntity.class.equals(this.getClass()) && !this.isNovelized()) {
+            Entity self = (Entity) (Object) this;
+            if (this.removalReason != null && this.removalReason.shouldDestroy() && self instanceof IFumetsu && !NovelHandler.novelized(self)) {
                 cir.setReturnValue(false);
             }
         });
@@ -146,10 +134,10 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     private void shouldBeSavedNovel(CallbackInfoReturnable<Boolean> cir) {
         if (((Object) this) instanceof LivingEntity self && !((ILivingEntityMuteki) self).forced()) {
             boolean muteki = MutekiHandler.muteki(self);
-            if (this.isNovelized() && !(muteki && HyperServerConfig.MUTEKI_NOVEL.get())) {
+            if (NovelHandler.novelized(self)) {
                 cir.setReturnValue(false);
             }
-        } else if (this.isNovelized()) {
+        } else if (NovelHandler.novelized((Entity) (Object) this)) {
             cir.setReturnValue(false);
         }
     }
@@ -159,10 +147,10 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     private void saveAsPassengerNovel(CompoundTag pCompound, CallbackInfoReturnable<Boolean> cir) {
         if (((Object) this) instanceof LivingEntity self && !((ILivingEntityMuteki) self).forced()) {
             boolean muteki = MutekiHandler.muteki(self);
-            if (this.isNovelized() && !(muteki && HyperServerConfig.MUTEKI_NOVEL.get())) {
+            if (NovelHandler.novelized(self)) {
                 cir.setReturnValue(false);
             }
-        } else if (this.isNovelized()) {
+        } else if (NovelHandler.novelized((Entity) (Object) this)) {
             cir.setReturnValue(false);
         }
     }

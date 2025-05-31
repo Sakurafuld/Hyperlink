@@ -53,7 +53,6 @@ public class FumetsuStormGoal extends Goal {
     public void start() {
         this.tickCount = 0;
         this.fumetsu.setStorm(true);
-        this.fumetsu.setGlowingTag(true);
     }
 
     @Override
@@ -63,7 +62,6 @@ public class FumetsuStormGoal extends Goal {
         this.end = false;
         this.lastUse = this.fumetsu.level().getGameTime();
         this.fumetsu.setStorm(false);
-        this.fumetsu.setGlowingTag(false);
     }
 
     @Override

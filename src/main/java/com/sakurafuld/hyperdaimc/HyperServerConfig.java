@@ -63,7 +63,7 @@ public class HyperServerConfig {
                         .define("Enable Novel", true);
                 NOVEL_IGNORE = builder
                         .comment("Specific entities that ignore Novelize")
-                        .defineList("Ignore entities", Lists.newArrayList("minecraft:item", "minecraft:experience", "hyperdaimc:fumetsu_skull", "hyperdaimc:fumetsu_storm", "hyperdaimc:fumetsu_storm_skull"),
+                        .defineList("Ignore entities", Lists.newArrayList("minecraft:item", "minecraft:experience_orb", "hyperdaimc:fumetsu_skull", "hyperdaimc:fumetsu_storm", "hyperdaimc:fumetsu_storm_skull"),
                                 object -> object instanceof String string && ResourceLocation.isValidResourceLocation(string));
                 NOVEL_SPECIAL = builder
                         .comment("Specific entities not interrupted in the death process by Novel ( e.g. entities with a death animation )")

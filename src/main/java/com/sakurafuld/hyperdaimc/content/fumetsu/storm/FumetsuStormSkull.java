@@ -1,6 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.fumetsu.storm;
 
 import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
+import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
@@ -24,6 +25,7 @@ public class FumetsuStormSkull extends FumetsuSkull {
 
     @Override
     public void setup(Type type, FumetsuEntity owner, Vec3 start, Vec3 vector, float power) {
+        this.setMovable(true);
         this.setSkullType(type);
         this.setOwner(owner);
         this.setPower(power);
@@ -32,6 +34,7 @@ public class FumetsuStormSkull extends FumetsuSkull {
         float yRot = (float) Math.toDegrees(-Mth.atan2(vector.x(), vector.z()));
         this.moveTo(start.x(), start.y(), start.z(), yRot, xRot);
         this.setDeltaMovement(this.getPoweredRotVec());
+        this.setMovable(false);
     }
 
     @Override
@@ -56,7 +59,7 @@ public class FumetsuStormSkull extends FumetsuSkull {
         FumetsuStorm storm = new FumetsuStorm(HyperEntities.FUMETSU_STORM.get(), this.level());
         storm.setup(this.getOwner(), this.position());
         this.level().addFreshEntity(storm);
-        this.discard();
+        ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
     }
 
     @Override

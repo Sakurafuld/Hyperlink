@@ -1,6 +1,5 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
 import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,7 +15,7 @@ public abstract class ServerPlayerMixin {
     private void dieMuteki$Player(DamageSource pDamageSource, CallbackInfo ci) {
         ServerPlayer self = (ServerPlayer) ((Object) this);
 
-        if ((!Float.isFinite(self.getHealth()) || HyperServerConfig.MUTEKI_NOVEL.get() || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
+        if ((!Float.isFinite(self.getHealth()) || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
             ci.cancel();
         }
     }

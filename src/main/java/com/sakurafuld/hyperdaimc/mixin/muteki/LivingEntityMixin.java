@@ -1,6 +1,5 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
@@ -68,7 +67,7 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
     private void dieMuteki$LivingEntity(DamageSource pDamageSource, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) ((Object) this);
 
-        if ((!Float.isFinite(self.getHealth()) || HyperServerConfig.MUTEKI_NOVEL.get() || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
+        if ((!Float.isFinite(self.getHealth()) || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
             ci.cancel();
         }
     }

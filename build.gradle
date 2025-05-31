@@ -182,8 +182,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:salmons-genesis-reincarnation-898734:5567527")
 
-    implementation fg.deobf("slimeknights.tconstruct:TConstruct:${minecraft_version}-${tinkers_build}")
-    implementation fg.deobf("curse.maven:ticex-tinkers-construct-ex-1242469:6558338")
+    compileOnly fg.deobf("slimeknights.tconstruct:TConstruct:${minecraft_version}-${tinkers_build}")
+    compileOnly fg.deobf("curse.maven:ticex-tinkers-construct-ex-1242469:6558338")
 
     implementation fg.deobf("curse.maven:slashblade-resharped-1022428:6428724")
 

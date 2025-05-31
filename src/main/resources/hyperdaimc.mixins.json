@@ -3,6 +3,7 @@
   "package": "com.sakurafuld.hyperdaimc.mixin",
   "compatibilityLevel": "JAVA_17",
   "refmap": "hyperdaimc.refmap.json",
+  "plugin": "com.sakurafuld.hyperdaimc.HyperMixin",
   "mixins": [
     "chronicle.BlockStateBaseMixin",
     "chronicle.BlockStateMixin",

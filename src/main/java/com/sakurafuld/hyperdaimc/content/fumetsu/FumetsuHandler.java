@@ -37,7 +37,7 @@ public class FumetsuHandler {
     }
 
     @SubscribeEvent
-    public static void died(LivingDeathEvent event) {
+    public static void death(LivingDeathEvent event) {
         if(event.getEntityLiving() instanceof Player) {
             FumetsuEntity.EXISTING.forEach(FumetsuEntity::logout);
         }

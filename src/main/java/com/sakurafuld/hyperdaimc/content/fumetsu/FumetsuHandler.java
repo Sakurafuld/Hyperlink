@@ -4,7 +4,9 @@ import com.google.common.collect.Lists;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,6 +19,7 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 @Mod.EventBusSubscriber(modid = HYPERDAIMC)
 public class FumetsuHandler {
     private static final List<ServerPlayer> PLAYERS = Lists.newArrayList();
+    public static boolean clientSpecialRemove = false;
 
     @SubscribeEvent
     public static void loggedIn(PlayerEvent.PlayerLoggedInEvent event) {
@@ -26,6 +29,18 @@ public class FumetsuHandler {
     @SubscribeEvent
     public static void loggedOut(PlayerEvent.PlayerLoggedOutEvent event) {
         FumetsuEntity.EXISTING.forEach(FumetsuEntity::logout);
+    }
+
+    @SubscribeEvent
+    public static void clone(PlayerEvent.Clone event) {
+        FumetsuEntity.EXISTING.forEach(FumetsuEntity::logout);
+    }
+
+    @SubscribeEvent
+    public static void died(LivingDeathEvent event) {
+        if(event.getEntityLiving() instanceof Player) {
+            FumetsuEntity.EXISTING.forEach(FumetsuEntity::logout);
+        }
     }
 
     @SubscribeEvent

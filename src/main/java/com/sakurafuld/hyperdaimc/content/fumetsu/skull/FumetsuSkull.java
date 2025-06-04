@@ -46,10 +46,6 @@ public class FumetsuSkull extends Entity implements IFumetsu {
     private static final EntityDataAccessor<Integer> DATA_OWNER = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TARGET = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_POWER = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.FLOAT);
-    private Vec3 lastPos = this.position();
-    private Vec3 lastDelta = this.getDeltaMovement();
-    private float lastXRot = this.getXRot();
-    private float lastYRot = this.getYRot();
     private boolean movable = false;
 
     public FumetsuSkull(EntityType<? extends FumetsuSkull> pEntityType, Level pLevel) {
@@ -57,7 +53,7 @@ public class FumetsuSkull extends Entity implements IFumetsu {
     }
 
     public void setup(Type type, FumetsuEntity owner, Vec3 start, Vec3 vector, float power) {
-        this.movable = true;
+        this.setMovable(true);
         this.setSkullType(type);
         this.setOwner(owner);
         this.setPower(power);
@@ -72,11 +68,7 @@ public class FumetsuSkull extends Entity implements IFumetsu {
 
         this.moveTo(start.x(), start.y(), start.z(), yRot, xRot);
         this.setDeltaMovement(this.getPoweredRotVec());
-        this.lastPos = this.position();
-        this.lastDelta = this.getDeltaMovement();
-        this.lastXRot = this.getXRot();
-        this.lastYRot = this.getYRot();
-        this.movable = false;
+        this.setMovable(false);
     }
 
     @Override
@@ -137,14 +129,6 @@ public class FumetsuSkull extends Entity implements IFumetsu {
 
     @Override
     public void fumetsuTick() {
-        this.movable = true;
-        if (!this.firstTick && this.level().getGameTime() % 40 == 0) {
-            this.setPosRaw(this.lastPos.x(), this.lastPos.y(), this.lastPos.z());
-            this.setDeltaMovement(this.lastDelta);
-            this.setXRot(this.lastXRot);
-            this.setYRot(this.lastYRot);
-        }
-        this.setOldPosAndRot();
         if (this.tickCount > this.getAge() || !this.level().hasChunkAt(this.blockPosition()) || this.getOwner() == null || this.getOwner().isRemoved()) {
             ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
             return;
@@ -152,12 +136,6 @@ public class FumetsuSkull extends Entity implements IFumetsu {
         this.noPhysics = true;
         this.baseTick();
         this.skullTick();
-
-        this.lastPos = this.position();
-        this.lastDelta = this.getDeltaMovement();
-        this.lastXRot = this.getXRot();
-        this.lastYRot = this.getYRot();
-        this.movable = false;
     }
 
     @Override
@@ -385,6 +363,13 @@ public class FumetsuSkull extends Entity implements IFumetsu {
         this.getEntityData().set(DATA_OWNER, pCompound.getInt("SkullOwner"));
         this.getEntityData().set(DATA_TARGET, pCompound.getInt("SkullTarget"));
         this.setPower(pCompound.getFloat("SkullPower"));
+    }
+
+    @Override
+    public void load(CompoundTag pCompound) {
+        this.setMovable(true);
+        super.load(pCompound);
+        this.setMovable(false);
     }
 
     @Override

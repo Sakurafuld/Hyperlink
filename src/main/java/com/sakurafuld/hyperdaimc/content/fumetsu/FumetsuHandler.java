@@ -17,6 +17,7 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 @Mod.EventBusSubscriber(modid = HYPERDAIMC)
 public class FumetsuHandler {
     private static final List<ServerPlayer> PLAYERS = Lists.newArrayList();
+    public static boolean clientSpecialRemove = false;
 
     @SubscribeEvent
     public static void loggedIn(PlayerEvent.PlayerLoggedInEvent event) {

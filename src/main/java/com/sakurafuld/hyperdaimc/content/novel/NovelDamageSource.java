@@ -19,7 +19,7 @@ public class NovelDamageSource extends DamageSource {
 
     @Override
     public Component getLocalizedDeathMessage(LivingEntity pLivingEntity) {
-        String s = "death.attack." + this.getMsgId() + "." + pLivingEntity.getRandom().nextInt(7);
+        String s = "death.attack." + this.getMsgId() + "_" + pLivingEntity.getRandom().nextInt(7);
         return Component.translatable(s, pLivingEntity.getDisplayName());
     }
 }

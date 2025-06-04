@@ -11,24 +11,25 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.common.TinkerTags;
-import slimeknights.tconstruct.library.modifiers.Modifier;
 import slimeknights.tconstruct.library.modifiers.ModifierEntry;
 import slimeknights.tconstruct.library.modifiers.ModifierHooks;
 import slimeknights.tconstruct.library.modifiers.hook.combat.MeleeHitModifierHook;
 import slimeknights.tconstruct.library.modifiers.hook.ranged.ProjectileHitModifierHook;
+import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
 import slimeknights.tconstruct.library.module.ModuleHookMap;
 import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
+import static com.sakurafuld.hyperdaimc.helper.Deets.*;
 
-public class NovelModifier extends Modifier implements MeleeHitModifierHook, ProjectileHitModifierHook {
+public class NovelModifier extends NoLevelsModifier implements MeleeHitModifierHook, ProjectileHitModifierHook {
     @Override
     public @NotNull Component getDisplayName() {
         return Writes.gameOver(super.getDisplayName().getString());
@@ -60,6 +61,9 @@ public class NovelModifier extends Modifier implements MeleeHitModifierHook, Pro
             }
         });
 
+//        ComparableVersion v = new ComparableVersion(FMLLoader.getLoadingModList().getModFileById(TICEX).getMods().get(0).getVersion().getQualifier());
+        LOG.debug("novele:{}", FMLLoader.getLoadingModList().getModFileById(HYPERDAIMC).getMods().get(0).getVersion().getQualifier());
+
         return MeleeHitModifierHook.super.beforeMeleeHit(tool, modifier, context, damage, baseKnockback, knockback);
     }
 
@@ -68,10 +72,12 @@ public class NovelModifier extends Modifier implements MeleeHitModifierHook, Pro
         require(LogicalSide.SERVER).run(() -> {
             if (attacker != null) {
                 Entity entity = hit.getEntity();
-                NovelHandler.novelize(attacker, entity, false);
-                PacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(attacker.level()::dimension), new ClientboundNovelize(attacker.getId(), entity.getId(), 1));
-                if (attacker.level() instanceof ServerLevel serverLevel) {
-                    NovelHandler.playSound(serverLevel, entity.position());
+                if (!NovelHandler.novelized(entity)) {
+                    NovelHandler.novelize(attacker, entity, false);
+                    PacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(attacker.level()::dimension), new ClientboundNovelize(attacker.getId(), entity.getId(), 1));
+                    if (attacker.level() instanceof ServerLevel serverLevel) {
+                        NovelHandler.playSound(serverLevel, entity.position());
+                    }
                 }
             }
         });

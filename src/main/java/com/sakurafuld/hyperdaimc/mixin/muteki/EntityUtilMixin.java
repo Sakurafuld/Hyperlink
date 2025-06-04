@@ -28,6 +28,7 @@ public abstract class EntityUtilMixin {
     @Inject(method = "forceHurt", at = @At("HEAD"), cancellable = true, remap = false)
     private static void forceHurtMuteki(LivingEntity attacker, LivingEntity entity, ForceDamageSource damageSource, CallbackInfo ci) {
         if (MutekiHandler.muteki(entity)) {
+            entity.hurt(entity.damageSources().generic(), 1);
             ci.cancel();
         }
     }

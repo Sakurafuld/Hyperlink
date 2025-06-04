@@ -9,7 +9,6 @@
   "item.hyperdaimc.vrx": "V.R.X.",
   "item.hyperdaimc.fumetsu": "Fumetsu Wither Spawn Egg",
 
-
   "entity.hyperdaimc.fumetsu": "Fumetsu Wither",
   "entity.hyperdaimc.fumetsu_skull": "Fumetsu Skull",
   "entity.hyperdaimc.fumetsu_storm": "Fumetsu Storm",
@@ -41,13 +40,13 @@
 
   "chat.chronicle.too_large": "Selection is too large",
 
-  "death.attack.novel.0": "%s was gone",
-  "death.attack.novel.1": "%s became an ant and was trampled",
-  "death.attack.novel.2": "%s became a dust and was blown away",
-  "death.attack.novel.3": "%s became a leaf and was torn up",
-  "death.attack.novel.4": "%s became a glass and was smashed up",
-  "death.attack.novel.5": "%s became a fire and burned out",
-  "death.attack.novel.6": "%s become empty",
+  "death.attack.novel_0": "%s was gone",
+  "death.attack.novel_1": "%s became an ant and was trampled",
+  "death.attack.novel_2": "%s became a dust and was blown away",
+  "death.attack.novel_3": "%s became a leaf and was torn up",
+  "death.attack.novel_4": "%s became a glass and was smashed up",
+  "death.attack.novel_5": "%s became a fire and burned out",
+  "death.attack.novel_6": "%s become empty",
 
   "hyperdaimc.subtitle.muteki_equip": "Pakkaaan!!!!",
   "hyperdaimc.subtitle.novelize": "Critical Destiny!!!",
@@ -66,5 +65,9 @@
   "argument.muteki.notfound": "No §enon§c-§6Muteki entity was found",
   "permissions.requires.muteki": "A §enon§c-§6Muteki entity is required to run this command here",
 
-  "container.hyperdaimc.vrx_face": "Direction: %s"
+  "container.hyperdaimc.vrx_face": "Direction: %s",
+
+  "modifier.hyperdaimc.novel": "Mighty Novel X",
+  "modifier.hyperdaimc.novel.flavor": "Critical Destiny!",
+  "modifier.hyperdaimc.novel.description": "All attacks kill the target instantly."
 }

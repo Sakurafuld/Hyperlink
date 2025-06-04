@@ -100,7 +100,6 @@ public class FumetsuAttackGoal extends Goal {
     @Override
     public void tick() {
         if (this.target != null) {
-
             Vec3 movement = this.fumetsu.getDeltaMovement().multiply(1, 0.6, 1);
 
             Vec3 point = this.target.position();
@@ -119,7 +118,6 @@ public class FumetsuAttackGoal extends Goal {
             this.fumetsu.setDeltaMovement(movement);
 
             float interval = Mth.lerp(this.fumetsu.getHealth() / this.fumetsu.getMaxHealth(), 0, 10);
-            this.fumetsu.getLookControl().setLookAt(this.target, 30, 60);
             if (--this.attackTime == 0) {
 
                 double distance = this.fumetsu.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());

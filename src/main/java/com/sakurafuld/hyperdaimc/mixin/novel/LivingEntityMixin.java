@@ -8,8 +8,6 @@ import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.novel.NovelDamageSource;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
@@ -17,9 +15,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 import static com.sakurafuld.hyperdaimc.helper.Deets.require;
@@ -29,11 +24,6 @@ public abstract class LivingEntityMixin implements IEntityNovel {
     @Shadow
     @Final
     private static EntityDataAccessor<Float> DATA_HEALTH_ID;
-
-    @Unique
-    private boolean novelized = false;
-    @Unique
-    private int novelizedTime = 0;
 
     @Override
     public void novelize(LivingEntity writer) {
@@ -48,7 +38,7 @@ public abstract class LivingEntityMixin implements IEntityNovel {
 
         if (!MutekiHandler.muteki(self) || (!HyperServerConfig.MUTEKI_NOVEL.get() && self.getHealth() <= 1)) {
             LOG.debug("completeNovelized");
-            this.novelized = true;
+            this.setNovelized();
         }
 
         self.setLastHurtByMob(writer);
@@ -84,11 +74,6 @@ public abstract class LivingEntityMixin implements IEntityNovel {
         ((ILivingEntityMuteki) self).force(false);
     }
 
-    @Override
-    public boolean isNovelized() {
-        return this.novelized;
-    }
-
     @Unique
     private void novelSetHealth() {
         LivingEntity self = (LivingEntity) ((Object) this);
@@ -103,24 +88,6 @@ public abstract class LivingEntityMixin implements IEntityNovel {
         } else {
             self.setHealth(0);
             self.getEntityData().set(DATA_HEALTH_ID, 0f);
-        }
-    }
-
-    @Inject(method = "tick", at = @At("HEAD"), cancellable = true)
-    private void tickNovel$HEAD(CallbackInfo ci) {
-        LivingEntity self = (LivingEntity) ((Object) this);
-        if (NovelHandler.novelized(self) && !NovelHandler.special(self)) {
-            if (!self.isRemoved() && self.level().shouldTickDeath(self)) {
-                ++self.deathTime;
-                require(LogicalSide.SERVER).run(() -> {
-                    ++this.novelizedTime;
-                    if (this.novelizedTime >= 20) {
-                        self.level().broadcastEntityEvent(self, EntityEvent.POOF);
-                        this.novelRemove(Entity.RemovalReason.KILLED);
-                    }
-                });
-            }
-            ci.cancel();
         }
     }
 }

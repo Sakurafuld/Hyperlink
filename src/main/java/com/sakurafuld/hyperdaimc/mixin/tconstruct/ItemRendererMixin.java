@@ -15,6 +15,8 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,8 +29,12 @@ import slimeknights.tconstruct.library.tools.nbt.ToolStack;
 
 import java.util.Set;
 
+import static com.sakurafuld.hyperdaimc.helper.Deets.TICEX;
+import static com.sakurafuld.hyperdaimc.helper.Deets.require;
+
 @Pseudo
 @Mixin(ItemRenderer.class)
+@OnlyIn(Dist.CLIENT)
 public abstract class ItemRendererMixin {
     @Unique
     private int color = 0xFFFFFFFF;
@@ -78,7 +84,7 @@ public abstract class ItemRendererMixin {
             }
 
             Renders.with(pPoseStack, () -> {
-                if (pItemStack.getItem() instanceof ModifiableSlashBladeItem) {
+                if (isSlashblade(pItemStack)) {
                     switch (pDisplayContext) {
                         case FIRST_PERSON_RIGHT_HAND -> {
                             pPoseStack.translate(-1.25, 0, -0.5);
@@ -108,5 +114,10 @@ public abstract class ItemRendererMixin {
         } else {
             return false;
         }
+    }
+
+    @Unique
+    private boolean isSlashblade(ItemStack stack) {
+        return require(TICEX).ready() && stack.getItem() instanceof ModifiableSlashBladeItem;
     }
 }

@@ -6,7 +6,6 @@ import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
@@ -52,6 +51,30 @@ public class MutekiHandler {
         });
     }
 
+    private enum Check {
+        INSTANCE;
+
+        public boolean isMuteki(LivingEntity entity) {
+            if (require(CURIOS).ready() && CuriosApi.getCuriosInventory(entity).filter(handler -> !handler.findCurios(HyperItems.MUTEKI.get()).isEmpty()).isPresent()) {
+                return true;
+            }
+            if (entity instanceof Player player) {
+                for (int index = 0; index < Inventory.getSelectionSize(); index++) {
+                    if (player.getInventory().getItem(index).is(HyperItems.MUTEKI.get())) {
+                        return true;
+                    }
+                }
+            }
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                if (entity.getItemBySlot(slot).is(HyperItems.MUTEKI.get())) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
     private enum Attach {
         INSTANCE;
 
@@ -72,32 +95,6 @@ public class MutekiHandler {
 
         public ICapabilityProvider capability(ItemStack stack) {
             return CurioItemCapability.createProvider(new ItemizedCurioCapability(this.CURIO, stack));
-        }
-    }
-
-    private enum Check {
-        INSTANCE;
-
-        public boolean isMuteki(Entity entity) {
-            if (entity instanceof LivingEntity living) {
-                if (require(CURIOS).ready() && CuriosApi.getCuriosInventory(living).filter(handler -> !handler.findCurios(HyperItems.MUTEKI.get()).isEmpty()).isPresent()) {
-                    return true;
-                }
-                if (living instanceof Player player) {
-                    for (int index = 0; index < Inventory.getSelectionSize(); index++) {
-                        if (player.getInventory().getItem(index).is(HyperItems.MUTEKI.get())) {
-                            return true;
-                        }
-                    }
-                }
-                for (EquipmentSlot slot : EquipmentSlot.values()) {
-                    if (living.getItemBySlot(slot).is(HyperItems.MUTEKI.get())) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
     }
 }

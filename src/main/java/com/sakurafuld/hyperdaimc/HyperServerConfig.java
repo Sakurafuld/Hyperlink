@@ -28,7 +28,7 @@ public class HyperServerConfig {
 
     public static final ForgeConfigSpec.BooleanValue ENABLE_VRX;
 
-
+    public static final ForgeConfigSpec.IntValue FUMETSU_HEALTH;
     public static final ForgeConfigSpec.IntValue FUMETSU_RANGE;
     public static final ForgeConfigSpec.BooleanValue FUMETSU_UNDERGROUND;
 
@@ -121,10 +121,15 @@ public class HyperServerConfig {
 
             builder.push("Fumetsu");
             {
+                FUMETSU_HEALTH = builder
+                        .comment("Maximum health of Fumetsu Wither",
+                                "Default: 20")
+                        .worldRestart()
+                        .defineInRange("Fumetsu health", 20, 20, Integer.MAX_VALUE);
                 FUMETSU_RANGE = builder
                         .comment("The range for which Fumetsu sets targets",
-                                "Default: 64")
-                        .defineInRange("Fumetsu range", 64, 128, Integer.MAX_VALUE);
+                                "Default: 128")
+                        .defineInRange("Fumetsu range", 128, 64, Integer.MAX_VALUE);
                 FUMETSU_UNDERGROUND = builder
                         .comment("Fumetsu will try to define the underground opponent as a target",
                                 "Default: false")

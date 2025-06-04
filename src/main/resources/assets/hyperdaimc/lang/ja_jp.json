@@ -9,7 +9,6 @@
   "item.hyperdaimc.vrx": "V.R.X.",
   "item.hyperdaimc.fumetsu": "フメツウィザーのスポーンエッグ",
 
-
   "entity.hyperdaimc.fumetsu": "フメツウィザー",
   "entity.hyperdaimc.fumetsu_skull": "フメツガイコツ",
   "entity.hyperdaimc.fumetsu_storm": "フメツストーム",
@@ -41,13 +40,13 @@
 
   "chat.chronicle.too_large": "選択範囲が大きすぎます",
 
-  "death.attack.novel.0": "%sは無くなった",
-  "death.attack.novel.1": "%sはアリになって踏み潰された",
-  "death.attack.novel.2": "%sは塵になって吹き飛ばされた",
-  "death.attack.novel.3": "%sは葉っぱになって引き裂かれた",
-  "death.attack.novel.4": "%sはガラスになって砕け散った",
-  "death.attack.novel.5": "%sは炎となって燃え尽きた",
-  "death.attack.novel.6": "%sはからっぽになった",
+  "death.attack.novel_0": "%sは無くなった",
+  "death.attack.novel_1": "%sはアリになって踏み潰された",
+  "death.attack.novel_2": "%sは塵になって吹き飛ばされた",
+  "death.attack.novel_3": "%sは葉っぱになって引き裂かれた",
+  "death.attack.novel_4": "%sはガラスになって砕け散った",
+  "death.attack.novel_5": "%sは炎となって燃え尽きた",
+  "death.attack.novel_6": "%sはからっぽになった",
 
   "hyperdaimc.subtitle.muteki_equip": "パッカーーン！！！",
   "hyperdaimc.subtitle.novelize": "クリティカルディスティニー！！",
@@ -66,5 +65,9 @@
   "argument.muteki.notfound": "§6ムテキ§e状態§cで無いエンティティが見つかりませんでした",
   "permissions.requires.muteki": "このコマンドを実行するためには§6ムテキ§e状態§cで無いエンティティが必要です",
 
-  "container.hyperdaimc.vrx_face": "方向: %s"
+  "container.hyperdaimc.vrx_face": "方向: %s",
+
+  "modifier.hyperdaimc.novel": "マイティノベル X",
+  "modifier.hyperdaimc.novel.flavor": "なぜ君がぁ、、、！",
+  "modifier.hyperdaimc.novel.description": "全ての攻撃が相手を即死させる"
 }

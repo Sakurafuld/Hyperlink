@@ -95,18 +95,17 @@ public class NovelHandler {
         }
     }
 
-    public static void novelize(LivingEntity writer, Entity victim, boolean send) {
+    public static void novelize(LivingEntity writer, Entity victim, boolean sendToServer) {
         if (!HyperServerConfig.ENABLE_NOVEL.get()) {
             return;
         }
 
         if (victim instanceof PartEntity<?> part) {
-            novelize(writer, part.getParent(), send);
-        } else {
-            ((IEntityNovel) victim).novelize(writer);
+            novelize(writer, part.getParent(), sendToServer);
         }
+        ((IEntityNovel) victim).novelize(writer);
 
-        if (send) {
+        if (sendToServer) {
             PacketHandler.INSTANCE.sendToServer(new ServerboundNovelize(writer.getId(), victim.getId()));
         }
     }

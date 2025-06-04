@@ -4,6 +4,8 @@ import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.EntityTickList;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientLevel.class)
+@OnlyIn(Dist.CLIENT)
 public abstract class ClientLevelMixin {
     @Shadow
     protected abstract void tickPassenger(Entity pMount, Entity pRider);
@@ -26,10 +29,13 @@ public abstract class ClientLevelMixin {
         if (entity instanceof IFumetsu fumetsu) {
             ci.cancel();
             ClientLevel self = (ClientLevel) ((Object) this);
+            fumetsu.setMovable(true);
+            entity.setOldPosAndRot();
             ++entity.tickCount;
             self.getProfiler().push(() -> ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
             fumetsu.fumetsuTick();
             self.getProfiler().pop();
+            fumetsu.setMovable(false);
 
             for (Entity passenger : entity.getPassengers()) {
                 this.tickPassenger(passenger, passenger);
@@ -43,9 +49,11 @@ public abstract class ClientLevelMixin {
             ci.cancel();
             if (!pRider.isRemoved() && pRider.getVehicle() == pMount) {
                 if (this.tickingEntities.contains(pRider)) {
+                    fumetsu.setMovable(true);
+                    pRider.setOldPosAndRot();
                     ++pRider.tickCount;
                     fumetsu.fumetsuTick();
-
+                    fumetsu.setMovable(false);
                     for (Entity entity : pRider.getPassengers()) {
                         this.tickPassenger(pRider, entity);
                     }

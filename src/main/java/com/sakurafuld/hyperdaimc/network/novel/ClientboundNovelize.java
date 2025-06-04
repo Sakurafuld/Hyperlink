@@ -46,7 +46,7 @@ public class ClientboundNovelize {
         Entity mob = Minecraft.getInstance().level.getEntity(this.writer);
         Entity victim = Minecraft.getInstance().level.getEntity(this.victim);
         if (mob instanceof LivingEntity living && victim != null) {
-            for (int pen = 0; pen < this.page; pen++) {
+            for (int pen = 0; pen < this.page && !NovelHandler.novelized(victim); pen++) {
                 NovelHandler.novelize(living, victim, false);
             }
         }

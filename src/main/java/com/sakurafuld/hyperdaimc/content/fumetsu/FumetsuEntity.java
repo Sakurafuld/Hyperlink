@@ -6,6 +6,7 @@ import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
+import com.sakurafuld.hyperdaimc.api.mixin.IServerLevelFumetsu;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
@@ -134,7 +135,6 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
 
     @Override
     public void fumetsuTick() {
-        this.movable = true;
         if (!this.firstTick) {
             this.setPosRaw(this.lastPos.x(), this.lastPos.y(), this.lastPos.z());
             this.setDeltaMovement(this.lastDelta);
@@ -201,7 +201,6 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         this.lastXRot = this.getXRot();
         this.lastYRot = this.getYRot();
         this.lastYHeadRot = this.getYHeadRot();
-        this.movable = false;
     }
 
     private void defaultTick() {
@@ -325,6 +324,83 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     }
 
     @Override
+    public void aiStep() {
+        super.aiStep();
+
+        Entity target = this.getTarget();
+        if (!this.isStorming()) {
+            if (target != null) {
+
+                double dx = target.getX() - this.getX();
+                double dy = target.getEyeY() - this.getEyeY();
+                double dz = target.getZ() - this.getZ();
+                double distance = Math.sqrt(dx * dx + dz * dz);
+
+                this.setYRot(Mth.rotateIfNecessary(this.getYRot(), (float) Math.toDegrees(-Mth.atan2(dx, dz)), 2));
+                this.setYHeadRot(this.getYRot());
+                this.setYBodyRot(this.getYRot());
+                this.setXRot(Mth.rotateIfNecessary(this.getXRot(), Math.min(35, (float) Math.toDegrees(-Mth.atan2(dy, distance))), 2));
+                if (this.level().getGameTime() % 100 == 0) {
+                    NovelHandler.novelize(this, target, false);
+                }
+            } else {
+                this.setDeltaMovement(this.getDeltaMovement().multiply(1, 0.6, 1));
+            }
+
+
+            for (int head = 0; head < 2; ++head) {
+                this.yRotOHeads[head] = this.yRotHeads[head];
+                this.xRotOHeads[head] = this.xRotHeads[head];
+                if (target != null) {
+                    double headX = this.getHeadX(head + 1);
+                    double headY = this.getHeadY(head + 1);
+                    double headZ = this.getHeadZ(head + 1);
+
+                    double dx = target.getX() - headX;
+                    double dy = target.getEyeY() - headY;
+                    double dz = target.getZ() - headZ;
+                    double distance = Math.sqrt(dx * dx + dz * dz);
+
+                    float xRot = (float) Math.toDegrees(-Mth.atan2(dy, distance));
+                    float yRot = (float) Math.toDegrees(-Mth.atan2(dx, dz));
+
+                    this.xRotHeads[head] = Mth.rotateIfNecessary(this.xRotHeads[head], xRot, this.getMaxHeadXRot());
+                    this.yRotHeads[head] = Mth.rotateIfNecessary(this.yRotHeads[head], yRot, this.getHeadRotSpeed());
+                } else {
+                    this.xRotHeads[head] = Mth.rotateIfNecessary(this.xRotHeads[head], this.getXRot(), 10);
+                    this.yRotHeads[head] = Mth.rotateIfNecessary(this.yRotHeads[head], this.yBodyRot, 10);
+                }
+            }
+        } else {
+            Vec3 centerHead = new Vec3(this.getHeadX(0), this.getHeadY(0), this.getHeadZ(0));
+
+            for (int head = 0; head < 2; ++head) {
+                this.yRotOHeads[head] = this.yRotHeads[head];
+                this.xRotOHeads[head] = this.xRotHeads[head];
+
+                if (target != null) {
+                    double dx = target.getX() - this.getX();
+                    double dz = target.getZ() - this.getZ();
+
+                    this.setXRot(Mth.rotateIfNecessary(this.getXRot(), -40, 2));
+                    this.setYRot(Mth.rotateIfNecessary(this.getYRot(), (float) Math.toDegrees(-Mth.atan2(dx, dz)), 2));
+                    this.setYHeadRot(this.getYRot());
+                    this.setYBodyRot(this.getYRot());
+
+
+                    Vec3 sideHead = new Vec3(this.getHeadX(head + 1), this.getHeadY(head + 1), this.getHeadZ(head + 1));
+                    Vec3 vec = sideHead.subtract(centerHead);
+
+                    this.xRotHeads[head] = Mth.rotateIfNecessary(this.xRotHeads[head], (float) Math.toDegrees(-Mth.atan2(vec.y(), vec.horizontalDistance())), 2);
+                    this.yRotHeads[head] = Mth.rotateIfNecessary(this.yRotHeads[head], (float) Math.toDegrees(-Mth.atan2(vec.x(), vec.z())), 2);
+
+                }
+            }
+
+        }
+    }
+
+    @Override
     public boolean isMovable() {
         return this.movable;
     }
@@ -384,87 +460,14 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public void tick() {
     }
 
-    @Override
-    public void aiStep() {
-        super.aiStep();
-
-        Entity target = this.getTarget();
-        if (!this.isStorming()) {
-            if (target != null) {
-
-                double dx = target.getX() - this.getX();
-                double dy = target.getEyeY() - this.getEyeY();
-                double dz = target.getZ() - this.getZ();
-                double distance = Math.sqrt(dx * dx + dz * dz);
-
-                this.setYRot(Mth.rotateIfNecessary(this.getYRot(), (float) Math.toDegrees(-Mth.atan2(dx, dz)), 2));
-                this.setYHeadRot(this.getYRot());
-                this.setYBodyRot(this.getYRot());
-                this.setXRot(Mth.rotateIfNecessary(this.getXRot(), Math.min(35, (float) Math.toDegrees(-Mth.atan2(dy, distance))), 2));
-            } else {
-                this.setDeltaMovement(this.getDeltaMovement().multiply(1, 0.6, 1));
-            }
-
-
-            for (int head = 0; head < 2; ++head) {
-                this.yRotOHeads[head] = this.yRotHeads[head];
-                this.xRotOHeads[head] = this.xRotHeads[head];
-                if (target != null) {
-                    double headX = this.getHeadX(head + 1);
-                    double headY = this.getHeadY(head + 1);
-                    double headZ = this.getHeadZ(head + 1);
-
-                    double dx = target.getX() - headX;
-                    double dy = target.getEyeY() - headY;
-                    double dz = target.getZ() - headZ;
-                    double distance = Math.sqrt(dx * dx + dz * dz);
-
-                    float xRot = (float) Math.toDegrees(-Mth.atan2(dy, distance));
-                    float yRot = (float) Math.toDegrees(-Mth.atan2(dx, dz));
-
-                    this.xRotHeads[head] = Mth.rotateIfNecessary(this.xRotHeads[head], xRot, this.getMaxHeadXRot());
-                    this.yRotHeads[head] = Mth.rotateIfNecessary(this.yRotHeads[head], yRot, this.getHeadRotSpeed());
-                } else {
-                    this.xRotHeads[head] = Mth.rotateIfNecessary(this.xRotHeads[head], this.getXRot(), 10);
-                    this.yRotHeads[head] = Mth.rotateIfNecessary(this.yRotHeads[head], this.yBodyRot, 10);
-                }
-            }
-        } else {
-            Vec3 centerHead = new Vec3(this.getHeadX(0), this.getHeadY(0), this.getHeadZ(0));
-
-            for (int head = 0; head < 2; ++head) {
-                this.yRotOHeads[head] = this.yRotHeads[head];
-                this.xRotOHeads[head] = this.xRotHeads[head];
-
-                if (target != null) {
-                    double dx = target.getX() - this.getX();
-                    double dz = target.getZ() - this.getZ();
-
-                    this.setXRot(Mth.rotateIfNecessary(this.getXRot(), -40, 2));
-                    this.setYRot(Mth.rotateIfNecessary(this.getYRot(), (float) Math.toDegrees(-Mth.atan2(dx, dz)), 2));
-                    this.setYHeadRot(this.getYRot());
-                    this.setYBodyRot(this.getYRot());
-
-
-                    Vec3 sideHead = new Vec3(this.getHeadX(head + 1), this.getHeadY(head + 1), this.getHeadZ(head + 1));
-                    Vec3 vec = sideHead.subtract(centerHead);
-
-                    this.xRotHeads[head] = Mth.rotateIfNecessary(this.xRotHeads[head], (float) Math.toDegrees(-Mth.atan2(vec.y(), vec.horizontalDistance())), 2);
-                    this.yRotHeads[head] = Mth.rotateIfNecessary(this.yRotHeads[head], (float) Math.toDegrees(-Mth.atan2(vec.x(), vec.z())), 2);
-
-                }
-            }
-
-        }
-    }
 
     public void shoot(FumetsuSkull.Type type, Vec3 start, Vec3 target, float power) {
-        FumetsuSkull skull = new FumetsuSkull(HyperEntities.FUMETSU_SKULL.get(), this.level());
-
-        skull.setup(type, this, start, target.subtract(start), power);
-
-        this.level().addFreshEntity(skull);
         if (this.level() instanceof ServerLevel serverLevel) {
+            FumetsuSkull skull = new FumetsuSkull(HyperEntities.FUMETSU_SKULL.get(), this.level());
+
+            skull.setup(type, this, start, target.subtract(start), power);
+
+            ((IServerLevelFumetsu) serverLevel).spawn(skull);
             serverLevel.playSound(null, start.x(), start.y(), start.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 2, 1 + (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f);
         }
     }
@@ -586,7 +589,10 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
 
     @Override
     public boolean isCurrentlyGlowing() {
-        return this.isStorming();
+        if (this.isStorming()) {
+            return true;
+        }
+        return super.isCurrentlyGlowing();
     }
 
     @Override
@@ -658,6 +664,13 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         return false;
     }
 
+    @Override
+    public void onRemovedFromWorld() {
+        if (NovelHandler.novelized(this)) {
+            super.onRemovedFromWorld();
+        }
+    }
+
     public double getHeadX(int head) {
         if (head <= 0) {
             return this.getX();
@@ -710,6 +723,13 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         if (pCompound.contains("Logout")) {
             this.logout();
         }
+    }
+
+    @Override
+    public void load(CompoundTag pCompound) {
+        this.setMovable(true);
+        super.load(pCompound);
+        this.setMovable(false);
     }
 
     @Override

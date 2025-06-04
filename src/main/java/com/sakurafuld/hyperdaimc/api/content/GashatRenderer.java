@@ -1,7 +1,6 @@
 package com.sakurafuld.hyperdaimc.api.content;
 
 import com.google.common.collect.Sets;
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -71,9 +70,6 @@ public class GashatRenderer extends BlockEntityWithoutLevelRenderer {
 
         float cos = Mth.cos(delayed / 800f);
 
-        if (context == ItemDisplayContext.GUI) {
-            Lighting.setupForFlatItems();
-        }
         poseStack.mulPose(Axis.ZP.rotationDegrees(cos * 8));
         poseStack.mulPose(Axis.XP.rotationDegrees(cos * 2));
         poseStack.mulPose(Axis.YP.rotationDegrees(cos * 2));

@@ -1,6 +1,5 @@
 package com.sakurafuld.hyperdaimc.mixin.novel;
 
-import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import com.sakurafuld.hyperdaimc.network.PacketHandler;
 import com.sakurafuld.hyperdaimc.network.novel.ClientboundNovelize;
@@ -20,7 +19,7 @@ public abstract class MobMixin {
     @Inject(method = "doHurtTarget", at = @At("HEAD"))
     private void doHurtTargetNovel(Entity pEntity, CallbackInfoReturnable<Boolean> cir) {
         Mob self = (Mob) ((Object) this);
-        if (self.getMainHandItem().is(HyperItems.NOVEL.get()) && self.getLevel() instanceof ServerLevel level) {
+        if (NovelHandler.hasNovel(self) && self.getLevel() instanceof ServerLevel level) {
             LOG.debug("MobNovelize");
             NovelHandler.novelize(self, pEntity, false);
             NovelHandler.playSound(level, pEntity.position());

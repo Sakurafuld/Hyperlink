@@ -177,6 +177,9 @@ public class VRXHandler {
     @OnlyIn(Dist.CLIENT)
     public static void createAndErase(ScreenEvent.MouseClickedEvent.Pre event) {
         if (event.getScreen() instanceof AbstractContainerScreen<?> screen && screen.getMenu().getCarried().is(HyperItems.VRX.get()) && Check.INSTANCE.isIn(screen, event.getMouseX(), event.getMouseY())) {
+            if (!HyperServerConfig.ENABLE_VRX.get()) {
+                return;
+            }
             LocalPlayer player = Minecraft.getInstance().player;
             if (event.getButton() == 0) {
                 LazyOptional<VRXCapability> optional = player.getCapability(VRXCapability.CAPABILITY);
@@ -284,6 +287,9 @@ public class VRXHandler {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void render(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
+        if (!HyperServerConfig.ENABLE_VRX.get()) {
+            return;
+        }
         Entity entity = event.getEntity();
         entity.getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
             Minecraft mc = Minecraft.getInstance();
@@ -309,6 +315,9 @@ public class VRXHandler {
     @OnlyIn(Dist.CLIENT)
     public static void render(ScreenEvent.DrawScreenEvent.Post event) {
         if (event.getScreen() instanceof AbstractContainerScreen<?> screen && screen.getMenu().getCarried().is(HyperItems.VRX.get()) && Check.INSTANCE.isIn(screen, event.getMouseX(), event.getMouseY())) {
+            if (!HyperServerConfig.ENABLE_VRX.get()) {
+                return;
+            }
             Minecraft.getInstance().player.getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
                 List<VRXOne> ones = vrx.getEntries().isEmpty() ? Collections.emptyList()
                         : vrx.getEntries().stream()

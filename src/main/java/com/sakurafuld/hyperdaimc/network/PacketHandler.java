@@ -4,7 +4,7 @@ import com.sakurafuld.hyperdaimc.network.chronicle.ClientboundChronicleSyncSave;
 import com.sakurafuld.hyperdaimc.network.chronicle.ServerboundChronicleSound;
 import com.sakurafuld.hyperdaimc.network.chronicle.ServerboundChronicleSyncSave;
 import com.sakurafuld.hyperdaimc.network.muteki.ServerboundSpecialGameModeSwitch;
-import com.sakurafuld.hyperdaimc.network.novel.ClientboundMobNovelize;
+import com.sakurafuld.hyperdaimc.network.novel.ClientboundNovelize;
 import com.sakurafuld.hyperdaimc.network.novel.ServerboundNovelSound;
 import com.sakurafuld.hyperdaimc.network.novel.ServerboundNovelize;
 import com.sakurafuld.hyperdaimc.network.paradox.ClientboundParadoxFluid;
@@ -26,7 +26,7 @@ public class PacketHandler {
 
         INSTANCE.registerMessage(id++, ServerboundSpecialGameModeSwitch.class, ServerboundSpecialGameModeSwitch::encode, ServerboundSpecialGameModeSwitch::decode, ServerboundSpecialGameModeSwitch::handle);
 
-        INSTANCE.registerMessage(id++, ClientboundMobNovelize.class, ClientboundMobNovelize::encode, ClientboundMobNovelize::decode, ClientboundMobNovelize::handle);
+        INSTANCE.registerMessage(id++, ClientboundNovelize.class, ClientboundNovelize::encode, ClientboundNovelize::decode, ClientboundNovelize::handle);
         INSTANCE.registerMessage(id++, ServerboundNovelize.class, ServerboundNovelize::encode, ServerboundNovelize::decode, ServerboundNovelize::handle);
         INSTANCE.registerMessage(id++, ServerboundNovelSound.class, ServerboundNovelSound::encode, ServerboundNovelSound::decode, ServerboundNovelSound::handle);
 

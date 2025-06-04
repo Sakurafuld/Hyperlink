@@ -1,5 +1,6 @@
 package com.sakurafuld.hyperdaimc.helper;
 
+import com.google.common.base.Suppliers;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -20,16 +21,17 @@ public class Deets {
 
     public static final String HYPERDAIMC = "hyperdaimc";
     public static final Logger LOG = LoggerFactory.getLogger(HYPERDAIMC);
-    public static final CreativeModeTab TAB = new CreativeModeTab(HYPERDAIMC) {
+    public static final Supplier<CreativeModeTab> TAB = Suppliers.memoize(() -> new CreativeModeTab(HYPERDAIMC) {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(HyperItems.MUTEKI.get());
         }
-    };
+    });
 
     public static final String CURIOS = "curios";
     public static final String EMBEDDIUM = "embeddium";
     public static final String MEKANISM = "mekanism";
+    public static final String TINKERSCONSTRUCT = "tconstruct";
 
 
     public static Act require(String modid) {

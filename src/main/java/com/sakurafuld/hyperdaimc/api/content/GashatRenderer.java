@@ -1,7 +1,6 @@
 package com.sakurafuld.hyperdaimc.api.content;
 
 import com.google.common.collect.Sets;
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
@@ -27,8 +26,7 @@ import java.util.function.Supplier;
 
 @OnlyIn(Dist.CLIENT)
 public class GashatRenderer extends BlockEntityWithoutLevelRenderer {
-    private static final Random RANDOM = new Random();
-    private static final Supplier<BakedModel> PARTICLE = Renders.importSpecialModel("gashat_particle");
+    public static final Random RANDOM = new Random();
     private static final Set<Particle> PARTICLES = Sets.newHashSet();
     private final Supplier<ResourceLocation> model;
     private final long delay = Math.round(Mth.lerp(Math.random(), 0, 10000));
@@ -46,7 +44,7 @@ public class GashatRenderer extends BlockEntityWithoutLevelRenderer {
 
         for (int count = 0; count < 3; count++) {
             if (RANDOM.nextInt(400) == 0) {
-                PARTICLES.add(new Particle(pStack));
+                PARTICLES.add(new Particle(pStack, () -> Minecraft.getInstance().getModelManager().getModel(this.model.get())));
             }
         }
 
@@ -72,9 +70,6 @@ public class GashatRenderer extends BlockEntityWithoutLevelRenderer {
 
         float cos = Mth.cos(delayed / 800f);
 
-        if (transformType == ItemTransforms.TransformType.GUI) {
-            Lighting.setupForFlatItems();
-        }
         poseStack.mulPose(Vector3f.ZP.rotationDegrees(cos * 8));
         poseStack.mulPose(Vector3f.XP.rotationDegrees(cos * 2));
         poseStack.mulPose(Vector3f.YP.rotationDegrees(cos * 2));
@@ -85,8 +80,9 @@ public class GashatRenderer extends BlockEntityWithoutLevelRenderer {
         Renders.model(model, poseStack, consumer, light, overlay, quad -> color);
     }
 
-    private class Particle {
+    public static class Particle {
         private final ItemStack stack;
+        private final Supplier<BakedModel> model;
         private final long made;
         private final float age;
         private final long delay;
@@ -97,8 +93,9 @@ public class GashatRenderer extends BlockEntityWithoutLevelRenderer {
         private final float yRot;
 
 
-        private Particle(ItemStack stack) {
+        public Particle(ItemStack stack, Supplier<BakedModel> model) {
             this.stack = stack;
+            this.model = model;
             this.made = Util.getMillis();
             this.age = RANDOM.nextInt(500, 1000);
             this.delay = Math.round(Mth.lerp(Math.random(), 0, 10000));
@@ -120,8 +117,7 @@ public class GashatRenderer extends BlockEntityWithoutLevelRenderer {
 
                 poseStack.translate(0.5, 0.5, 0.5);
 
-                ForgeHooksClient.handleCameraTransforms(poseStack, Minecraft.getInstance().getModelManager().getModel(GashatRenderer.this.model.get()), transformType, transformType == ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND || transformType == ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND);
-
+                ForgeHooksClient.handleCameraTransforms(poseStack, this.model.get(), transformType, transformType == ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND || transformType == ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND);
                 poseStack.translate(this.x, this.y, 0);
 
                 float cos = Mth.cos((this.delay + Util.getMillis()) / 200f);
@@ -134,10 +130,6 @@ public class GashatRenderer extends BlockEntityWithoutLevelRenderer {
                 poseStack.scale(t, t, 0);
 
                 Renders.hollowTriangle(poseStack.last().pose(), Renders.getBuffer(Renders.Type.LIGHTNING_NO_CULL), 0.3f, 0.1f, (0x7F << 24) | this.color);
-
-//                poseStack.translate(-0.5, -0.5, -0.5);
-//
-//                Renders.model(PARTICLE.get(), poseStack, bufferSource.getBuffer(Sheets.translucentCullBlockSheet()), light, overlay, quad -> this.color);
 
                 poseStack.popPose();
             }

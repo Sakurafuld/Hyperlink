@@ -26,11 +26,13 @@ public abstract class ClientLevelMixin {
         if (entity instanceof IFumetsu fumetsu) {
             ci.cancel();
             ClientLevel self = (ClientLevel) ((Object) this);
+            fumetsu.setMovable(true);
             entity.setOldPosAndRot();
             ++entity.tickCount;
             self.getProfiler().push(() -> ForgeRegistries.ENTITIES.getKey(entity.getType()).toString());
             fumetsu.fumetsuTick();
             self.getProfiler().pop();
+            fumetsu.setMovable(false);
 
             for (Entity passenger : entity.getPassengers()) {
                 this.tickPassenger(passenger, passenger);
@@ -44,10 +46,11 @@ public abstract class ClientLevelMixin {
             ci.cancel();
             if (!pRider.isRemoved() && pRider.getVehicle() == pMount) {
                 if (this.tickingEntities.contains(pRider)) {
+                    fumetsu.setMovable(true);
                     pRider.setOldPosAndRot();
                     ++pRider.tickCount;
                     fumetsu.fumetsuTick();
-
+                    fumetsu.setMovable(false);
                     for (Entity entity : pRider.getPassengers()) {
                         this.tickPassenger(pRider, entity);
                     }

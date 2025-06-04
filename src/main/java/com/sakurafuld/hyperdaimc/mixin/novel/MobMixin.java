@@ -3,7 +3,7 @@ package com.sakurafuld.hyperdaimc.mixin.novel;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import com.sakurafuld.hyperdaimc.network.PacketHandler;
-import com.sakurafuld.hyperdaimc.network.novel.ClientboundMobNovelize;
+import com.sakurafuld.hyperdaimc.network.novel.ClientboundNovelize;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -24,7 +24,7 @@ public abstract class MobMixin {
             LOG.debug("MobNovelize");
             NovelHandler.novelize(self, pEntity, false);
             NovelHandler.playSound(level, pEntity.position());
-            PacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new ClientboundMobNovelize(self.getId(), pEntity.getId()));
+            PacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new ClientboundNovelize(self.getId(), pEntity.getId(), 1));
         }
     }
 }

@@ -1,18 +1,22 @@
 package com.sakurafuld.hyperdaimc.mixin.novel;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
-import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
+import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuHandler;
 import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
+import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.entity.EntityInLevelCallback;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.common.capabilities.CapabilityProvider;
-import net.minecraftforge.fml.LogicalSide;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -24,7 +28,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
+import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.helper.Deets.side;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin extends CapabilityProvider<Entity> implements IEntityNovel {
@@ -51,12 +56,17 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     @Shadow
     public abstract EntityType<?> getType();
 
+    @Shadow
+    public abstract SynchedEntityData getEntityData();
+
     @Unique
-    private boolean novelized = false;
+    private static EntityDataAccessor<Boolean> DATA_NOVELIZED;
+    @Unique
+    private boolean initialized = false;
 
     @Override
     public void novelRemove(Entity.RemovalReason reason) {
-        this.novelized = true;
+        this.setNovelized();
         if (this.removalReason == null) {
             this.removalReason = reason;
         }
@@ -82,72 +92,95 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
 
     @Override
     public boolean isNovelized() {
-        return HyperServerConfig.ENABLE_NOVEL.get() && this.novelized;
+        return this.initialized && this.getEntityData().get(DATA_NOVELIZED);
+    }
+
+    @Override
+    public void setNovelized() {
+        if (this.initialized) {
+            this.getEntityData().set(DATA_NOVELIZED, true);
+        }
+    }
+
+    @Inject(method = "<clinit>", at = @At("HEAD"))
+    private static void staticInitializerNovel(CallbackInfo ci) {
+        DATA_NOVELIZED = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BOOLEAN);
+    }
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void initializerNovel(CallbackInfo ci) {
+        this.getEntityData().define(DATA_NOVELIZED, false);
+        this.initialized = true;
+
     }
 
     @Inject(method = "remove", at = @At("HEAD"), cancellable = true)
     @SuppressWarnings("all")
     private void removeNovel(Entity.RemovalReason pReason, CallbackInfo ci) {
-        require(LogicalSide.SERVER).run(() -> {
-            if (pReason.shouldDestroy() && FumetsuEntity.class.equals(this.getClass()) && !this.isNovelized()) {
-                ci.cancel();
-            }
-        });
+        Entity self = (Entity) (Object) this;
+        if (side().isClient() && FumetsuHandler.clientSpecialRemove) {
+            return;
+        }
+        if (self instanceof Player) {
+            return;
+        }
+        if (pReason.shouldDestroy() && (self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
+            ci.cancel();
+        }
     }
 
     @Inject(method = "setRemoved", at = @At("HEAD"), cancellable = true)
     @SuppressWarnings("all")
     private void setRemovedNovel(Entity.RemovalReason pReason, CallbackInfo ci) {
-        require(LogicalSide.SERVER).run(() -> {
-            if (pReason.shouldDestroy() && FumetsuEntity.class.equals(this.getClass()) && !this.isNovelized()) {
-                ci.cancel();
-            }
-        });
+        Entity self = (Entity) (Object) this;
+        if (side().isClient() && FumetsuHandler.clientSpecialRemove) {
+            return;
+        }
+        if (self instanceof Player) {
+            return;
+        }
+        if (pReason.shouldDestroy() && (self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
+            ci.cancel();
+        }
     }
 
     @Inject(method = "getRemovalReason", at = @At("HEAD"), cancellable = true)
     @SuppressWarnings("all")
     private void getRemovalReasonNovel(CallbackInfoReturnable<Entity.RemovalReason> cir) {
-        require(LogicalSide.SERVER).run(() -> {
-            if (this.removalReason != null && this.removalReason.shouldDestroy() && FumetsuEntity.class.equals(this.getClass()) && !this.isNovelized()) {
-                cir.setReturnValue(null);
-            }
-        });
+        Entity self = (Entity) (Object) this;
+        if (self instanceof Player) {
+            return;
+        }
+        if (self instanceof LivingEntity living && ((ILivingEntityMuteki) living).forced()) {
+            return;
+        }
+        if (this.removalReason != null && this.removalReason.shouldDestroy() && (self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
+            cir.setReturnValue(null);
+        }
     }
 
     @Inject(method = "isRemoved", at = @At("HEAD"), cancellable = true)
     @SuppressWarnings("all")
     private void isRemovedNovel(CallbackInfoReturnable<Boolean> cir) {
-        require(LogicalSide.SERVER).run(() -> {
-            if (this.removalReason != null && this.removalReason.shouldDestroy() && FumetsuEntity.class.equals(this.getClass()) && !this.isNovelized()) {
-                cir.setReturnValue(false);
-            }
-        });
-    }
-
-    @Inject(method = "shouldBeSaved", at = @At("HEAD"), cancellable = true)
-    @SuppressWarnings("all")
-    private void shouldBeSavedNovel(CallbackInfoReturnable<Boolean> cir) {
-        if (((Object) this) instanceof LivingEntity self && !((ILivingEntityMuteki) self).forced()) {
-            boolean muteki = MutekiHandler.muteki(self);
-            if (this.isNovelized() && !(muteki && HyperServerConfig.MUTEKI_NOVEL.get())) {
-                cir.setReturnValue(false);
-            }
-        } else if (this.isNovelized()) {
+        Entity self = (Entity) (Object) this;
+        if (self instanceof Player) {
+            return;
+        }
+        if (self instanceof LivingEntity living && ((ILivingEntityMuteki) living).forced()) {
+            return;
+        }
+        if (this.removalReason != null && this.removalReason.shouldDestroy() && (self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
             cir.setReturnValue(false);
         }
     }
 
-    @Inject(method = "saveAsPassenger", at = @At("HEAD"), cancellable = true)
-    @SuppressWarnings("all")
-    private void saveAsPassengerNovel(CompoundTag pCompound, CallbackInfoReturnable<Boolean> cir) {
-        if (((Object) this) instanceof LivingEntity self && !((ILivingEntityMuteki) self).forced()) {
-            boolean muteki = MutekiHandler.muteki(self);
-            if (this.isNovelized() && !(muteki && HyperServerConfig.MUTEKI_NOVEL.get())) {
-                cir.setReturnValue(false);
-            }
-        } else if (this.isNovelized()) {
-            cir.setReturnValue(false);
-        }
+    @Inject(method = "saveWithoutId", at = @At("RETURN"))
+    private void saveWithoutIdNovel(CompoundTag pCompound, CallbackInfoReturnable<CompoundTag> cir) {
+        pCompound.putBoolean(HYPERDAIMC + ":Novelized", this.isNovelized());
+    }
+
+    @Inject(method = "load", at = @At("HEAD"))
+    private void loadNovel(CompoundTag pCompound, CallbackInfo ci) {
+        this.getEntityData().set(DATA_NOVELIZED, pCompound.getBoolean(HYPERDAIMC + ":Novelized"));
     }
 }

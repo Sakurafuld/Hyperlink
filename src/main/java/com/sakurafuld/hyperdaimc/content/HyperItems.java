@@ -48,7 +48,7 @@ public class HyperItems {
     }
 
     public static RegistryObject<Item> register(String name) {
-        return register(name, new Item.Properties().tab(TAB));
+        return register(name, new Item.Properties().tab(TAB.get()));
     }
 
     public static RegistryObject<Item> register(String name, Item.Properties prop) {
@@ -56,12 +56,12 @@ public class HyperItems {
     }
 
     public static RegistryObject<Item> register(String name, Function<Item.Properties, ? extends Item> func) {
-        return REGISTRY.register(name, () -> func.apply(new Item.Properties().tab(TAB)));
+        return REGISTRY.register(name, () -> func.apply(new Item.Properties().tab(TAB.get())));
     }
 
     public static RegistryObject<Item> registerGashat(String name, BiFunction<String, Item.Properties, ? extends AbstractGashatItem> func) {
         require(LogicalSide.CLIENT).run(() ->
                 HyperSetup.specialModels.add(identifier(HYPERDAIMC, "special/" + name)));
-        return REGISTRY.register(name, () -> func.apply(name, new Item.Properties().tab(TAB)));
+        return REGISTRY.register(name, () -> func.apply(name, new Item.Properties().tab(TAB.get())));
     }
 }

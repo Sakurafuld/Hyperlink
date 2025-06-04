@@ -1,6 +1,5 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
@@ -8,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -54,7 +54,10 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tickMuteki(CallbackInfo ci) {
-        this.muteki = MutekiHandler.checkMuteki((LivingEntity) ((Object) this));
+        LivingEntity self = (LivingEntity) ((Object) this);
+        if (!(self instanceof Player)) {
+            this.muteki = MutekiHandler.checkMuteki((LivingEntity) ((Object) this));
+        }
 
         this.force(true);
         float health = this.getHealth();
@@ -68,7 +71,7 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
     private void dieMuteki$LivingEntity(DamageSource pDamageSource, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) ((Object) this);
 
-        if ((!Float.isFinite(self.getHealth()) || HyperServerConfig.MUTEKI_NOVEL.get() || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
+        if ((!Float.isFinite(self.getHealth()) || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
             ci.cancel();
         }
     }

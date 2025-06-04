@@ -3,9 +3,12 @@ package com.sakurafuld.hyperdaimc.content.fumetsu.skull;
 import com.mojang.math.Vector3f;
 import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
+import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import com.sakurafuld.hyperdaimc.helper.Calculates;
+import com.sakurafuld.hyperdaimc.network.PacketHandler;
+import com.sakurafuld.hyperdaimc.network.novel.ClientboundNovelize;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -19,11 +22,14 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
@@ -32,20 +38,21 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.helper.Deets.*;
 
 public class FumetsuSkull extends Entity implements IFumetsu {
     private static final EntityDataAccessor<String> DATA_TYPE = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> DATA_OWNER = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TARGET = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_POWER = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.FLOAT);
+    private boolean movable = false;
 
     public FumetsuSkull(EntityType<? extends FumetsuSkull> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     public void setup(Type type, FumetsuEntity owner, Vec3 start, Vec3 vector, float power) {
+        this.setMovable(true);
         this.setSkullType(type);
         this.setOwner(owner);
         this.setPower(power);
@@ -60,11 +67,12 @@ public class FumetsuSkull extends Entity implements IFumetsu {
         this.moveTo(start.x(), start.y(), start.z(), yRot, xRot);
 
         this.setDeltaMovement(this.getPoweredRotVec());
+        this.setMovable(false);
     }
 
     @Override
     protected void defineSynchedData() {
-        this.getEntityData().define(DATA_TYPE, "CYAN");
+        this.getEntityData().define(DATA_TYPE, Type.CRYSTAL.name());
         this.getEntityData().define(DATA_OWNER, 0);
         this.getEntityData().define(DATA_TARGET, 0);
         this.getEntityData().define(DATA_POWER, 1f);
@@ -121,7 +129,7 @@ public class FumetsuSkull extends Entity implements IFumetsu {
     @Override
     public void fumetsuTick() {
         if (this.tickCount > this.getAge() || !this.getLevel().hasChunkAt(this.blockPosition()) || this.getOwner() == null || this.getOwner().isRemoved()) {
-            this.discard();
+            ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
             return;
         }
         this.noPhysics = true;
@@ -177,6 +185,52 @@ public class FumetsuSkull extends Entity implements IFumetsu {
         this.checkInsideBlocks();
     }
 
+    @Override
+    public boolean isMovable() {
+        return this.movable;
+    }
+
+    @Override
+    public void setMovable(boolean movable) {
+        this.movable = movable;
+    }
+
+    @Override
+    public void move(MoverType pType, Vec3 pPos) {
+        if (this.isMovable()) {
+            super.move(pType, pPos);
+            this.checkInsideBlocks();
+        }
+    }
+
+    @Override
+    public void setXRot(float pXRot) {
+        if (this.isMovable()) {
+            super.setXRot(pXRot);
+        }
+    }
+
+    @Override
+    public void setYRot(float pYRot) {
+        if (this.isMovable()) {
+            super.setYRot(pYRot);
+        }
+    }
+
+    @Override
+    public void setYHeadRot(float pRotation) {
+        if (this.isMovable()) {
+            super.setYHeadRot(pRotation);
+        }
+    }
+
+    @Override
+    public void setDeltaMovement(Vec3 pDeltaMovement) {
+        if (this.isMovable()) {
+            super.setDeltaMovement(pDeltaMovement);
+        }
+    }
+
     protected int getAge() {
         return 400;
     }
@@ -228,31 +282,36 @@ public class FumetsuSkull extends Entity implements IFumetsu {
         return current == null ? null : new EntityHitResult(current);
     }
 
+
     protected void onHitEntity(EntityHitResult pResult) {
         FumetsuEntity fumetsu = this.getOwner();
         if (fumetsu != null && fumetsu.isAvailableTarget(pResult.getEntity())) {
-            if (this.getLevel() instanceof ServerLevel serverLevel) {
-                NovelHandler.playSound(serverLevel, pResult.getEntity().position());
-            }
-
-            this.getLevel().getEntities(this, pResult.getEntity().getBoundingBox().inflate(1), this::canHitEntity).forEach(entity -> {
-
-                NovelHandler.novelize(fumetsu, entity, false);
-                if (entity instanceof LivingEntity living) {
-                    int max;
-                    if (this.getSkullType() == Type.CRYSTAL) {
-                        living.removeAllEffects();
-                        max = 20;
-                    } else {
-                        max = this.random.nextInt(4, 10);
-                    }
-                    for (int count = 0; count < max && !NovelHandler.novelized(living); count++) {
-                        NovelHandler.novelize(fumetsu, living, false);
-                    }
+            require(LogicalSide.SERVER).run(() -> {
+                if (this.getLevel() instanceof ServerLevel serverLevel) {
+                    NovelHandler.playSound(serverLevel, pResult.getEntity().position());
                 }
+
+                this.getLevel().getEntities(this, pResult.getEntity().getBoundingBox().inflate(1), this::canHitEntity).forEach(entity -> {
+                    int page = 1;
+                    NovelHandler.novelize(fumetsu, entity, false);
+                    if (entity instanceof LivingEntity living) {
+                        int max;
+                        if (this.getSkullType() == Type.CRYSTAL) {
+                            living.removeAllEffects();
+                            max = 20;
+                        } else {
+                            max = this.random.nextInt(4, 10);
+                        }
+                        page += max;
+                        for (int count = 0; count < max && !NovelHandler.novelized(living); count++) {
+                            NovelHandler.novelize(fumetsu, living, false);
+                        }
+                    }
+                    PacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(this.getLevel()::dimension), new ClientboundNovelize(fumetsu.getId(), entity.getId(), page));
+                });
             });
 
-            this.discard();
+            ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
         }
     }
 
@@ -312,6 +371,13 @@ public class FumetsuSkull extends Entity implements IFumetsu {
     }
 
     @Override
+    public void load(CompoundTag pCompound) {
+        this.setMovable(true);
+        super.load(pCompound);
+        this.setMovable(false);
+    }
+
+    @Override
     public Packet<?> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -330,7 +396,7 @@ public class FumetsuSkull extends Entity implements IFumetsu {
         }
 
         public static Type of(String name) {
-            return BY_NAME.get(name);
+            return Objects.requireNonNullElse(BY_NAME.get(name), CRYSTAL);
         }
 
         public ResourceLocation getTexture() {

@@ -1,7 +1,6 @@
 package com.sakurafuld.hyperdaimc.helper;
 
 import net.minecraft.Util;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 
@@ -76,7 +75,7 @@ public class Writes {
         return FLUID_FORMAT.format((double) amount / (double) divide) + suffix;
     }
 
-    public static Component gameOver(String text) {
+    public static TextComponent gameOver(String text) {
         TextComponent component = new TextComponent("");
 
         long millis = Util.getMillis();

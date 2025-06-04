@@ -8,8 +8,6 @@ import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.novel.NovelDamageSource;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.fml.LogicalSide;
@@ -17,9 +15,6 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 import static com.sakurafuld.hyperdaimc.helper.Deets.require;
@@ -30,13 +25,6 @@ public abstract class LivingEntityMixin implements IEntityNovel {
     @Final
     private static EntityDataAccessor<Float> DATA_HEALTH_ID;
 
-    @Unique
-    private boolean novelized = false;
-    @Unique
-    private int novelizedTime = 0;
-    @Unique
-    private int lastdeathTime = -1;
-
     @Override
     public void novelize(LivingEntity writer) {
         if (!HyperServerConfig.ENABLE_NOVEL.get()) {
@@ -44,13 +32,13 @@ public abstract class LivingEntityMixin implements IEntityNovel {
         }
 
         LivingEntity self = (LivingEntity) ((Object) this);
-        NovelDamageSource.Looting damage = new NovelDamageSource.Looting(writer);
+        NovelDamageSource damage = new NovelDamageSource(writer);
 
         ((ILivingEntityMuteki) self).force(true);
 
         if (!MutekiHandler.muteki(self) || (!HyperServerConfig.MUTEKI_NOVEL.get() && self.getHealth() <= 1)) {
             LOG.debug("completeNovelized");
-            this.novelized = true;
+            this.setNovelized();
         }
 
         self.setLastHurtByMob(writer);
@@ -69,7 +57,7 @@ public abstract class LivingEntityMixin implements IEntityNovel {
 //
 //        self.hurtDir = (float)(Math.toDegrees(Mth.atan2(dz, dx)) - self.getYRot());
 //        self.knockback(0.4, dx, dz);
-        if (this.isNovelized()) {
+        if (NovelHandler.novelized(self)) {
             require(LogicalSide.SERVER).run(() ->
                     self.die(damage));
 
@@ -79,19 +67,11 @@ public abstract class LivingEntityMixin implements IEntityNovel {
                     self.setHealth(0);
                     self.getEntityData().set(DATA_HEALTH_ID, 0f);
                 }
-                if ((self.getHealth() > 0 || self.isAlive()) && NovelHandler.special(self)) {
-                    this.novelRemove(Entity.RemovalReason.KILLED);
-                }
                 ((ILivingEntityMuteki) self).force(false);
             }
         }
 
         ((ILivingEntityMuteki) self).force(false);
-    }
-
-    @Override
-    public boolean isNovelized() {
-        return this.novelized;
     }
 
     @Unique
@@ -109,32 +89,5 @@ public abstract class LivingEntityMixin implements IEntityNovel {
             self.setHealth(0);
             self.getEntityData().set(DATA_HEALTH_ID, 0f);
         }
-    }
-
-    @Inject(method = "baseTick", at = @At("RETURN"))
-    private void baseTickNovel(CallbackInfo ci) {
-        if (!HyperServerConfig.ENABLE_NOVEL.get()) {
-            return;
-        }
-
-        LivingEntity self = (LivingEntity) ((Object) this);
-
-        if (!FumetsuEntity.class.equals(self.getClass()) && NovelHandler.novelized(self) && !self.isRemoved() && self.getLevel().shouldTickDeath(self)) {
-            if (!NovelHandler.special(self)) {
-                if (self.deathTime != (this.lastdeathTime + 1)) {
-                    ++self.deathTime;
-                }
-
-                require(LogicalSide.SERVER).run(() -> {
-                    ++this.novelizedTime;
-                    if (this.novelizedTime >= 20) {
-                        self.getLevel().broadcastEntityEvent(self, EntityEvent.POOF);
-                        this.novelRemove(Entity.RemovalReason.KILLED);
-                        LOG.debug("novelizedRemove:{}", self.getType().getRegistryName());
-                    }
-                });
-            }
-        }
-        this.lastdeathTime = self.deathTime;
     }
 }

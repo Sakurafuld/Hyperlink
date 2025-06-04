@@ -1,6 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.fumetsu.storm;
 
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
+import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
 import com.sakurafuld.hyperdaimc.helper.Calculates;
@@ -15,6 +16,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -28,17 +30,16 @@ public class FumetsuStorm extends Entity implements IFumetsu {
     private static final EntityDataAccessor<Integer> DATA_OWNER = SynchedEntityData.defineId(FumetsuStorm.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_TARGET = SynchedEntityData.defineId(FumetsuStorm.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_INFLATION = SynchedEntityData.defineId(FumetsuStorm.class, EntityDataSerializers.FLOAT);
-
-
     private final double SPEED = 0.875f;
-
     public AABB oldAABB = this.getBoundingBox();
+    private boolean movable = false;
 
     public FumetsuStorm(EntityType<FumetsuStorm> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     public void setup(FumetsuEntity fumetsu, Vec3 position) {
+        this.setMovable(true);
         this.setOwner(fumetsu);
         LivingEntity target = fumetsu.getTarget();
         this.setTarget(target);
@@ -47,7 +48,7 @@ public class FumetsuStorm extends Entity implements IFumetsu {
         if (target != null) {
             this.setDeltaMovement(target.getBoundingBox().getCenter().subtract(this.getBoundingBox().getCenter()).normalize().scale(SPEED));
         }
-
+        this.setMovable(false);
     }
 
     @Override
@@ -61,7 +62,7 @@ public class FumetsuStorm extends Entity implements IFumetsu {
     public void fumetsuTick() {
         FumetsuEntity fumetsu = this.getOwner();
         if (this.tickCount > 40 || fumetsu == null || fumetsu.isRemoved()) {
-            this.discard();
+            ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
         } else {
             this.baseTick();
 
@@ -106,6 +107,52 @@ public class FumetsuStorm extends Entity implements IFumetsu {
 
     @Override
     public void tick() {
+    }
+
+    @Override
+    public boolean isMovable() {
+        return this.movable;
+    }
+
+    @Override
+    public void setMovable(boolean movable) {
+        this.movable = movable;
+    }
+
+    @Override
+    public void move(MoverType pType, Vec3 pPos) {
+        if (this.isMovable()) {
+            super.move(pType, pPos);
+            this.checkInsideBlocks();
+        }
+    }
+
+    @Override
+    public void setXRot(float pXRot) {
+        if (this.isMovable()) {
+            super.setXRot(pXRot);
+        }
+    }
+
+    @Override
+    public void setYRot(float pYRot) {
+        if (this.isMovable()) {
+            super.setYRot(pYRot);
+        }
+    }
+
+    @Override
+    public void setYHeadRot(float pRotation) {
+        if (this.isMovable()) {
+            super.setYHeadRot(pRotation);
+        }
+    }
+
+    @Override
+    public void setDeltaMovement(Vec3 pDeltaMovement) {
+        if (this.isMovable()) {
+            super.setDeltaMovement(pDeltaMovement);
+        }
     }
 
     @Override
@@ -170,6 +217,13 @@ public class FumetsuStorm extends Entity implements IFumetsu {
         pCompound.putInt("Owner", this.getEntityData().get(DATA_OWNER));
         pCompound.putInt("Target", this.getEntityData().get(DATA_TARGET));
         pCompound.putFloat("Inflation", this.getInflation());
+    }
+
+    @Override
+    public void load(CompoundTag pCompound) {
+        this.setMovable(true);
+        super.load(pCompound);
+        this.setMovable(false);
     }
 
     @Override

@@ -14,22 +14,26 @@ import java.util.function.Supplier;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.require;
 
-public class ClientboundMobNovelize {
+public class ClientboundNovelize {
+    private final int writer;
     private final int victim;
-    private final int mob;
+    private final int page;
 
-    public ClientboundMobNovelize(int mob, int victim) {
-        this.mob = mob;
+
+    public ClientboundNovelize(int writer, int victim, int page) {
+        this.writer = writer;
         this.victim = victim;
+        this.page = page;
     }
 
-    public static void encode(ClientboundMobNovelize msg, FriendlyByteBuf buf) {
-        buf.writeVarInt(msg.mob);
+    public static void encode(ClientboundNovelize msg, FriendlyByteBuf buf) {
+        buf.writeVarInt(msg.writer);
         buf.writeVarInt(msg.victim);
+        buf.writeVarInt(msg.page);
     }
 
-    public static ClientboundMobNovelize decode(FriendlyByteBuf buf) {
-        return new ClientboundMobNovelize(buf.readVarInt(), buf.readVarInt());
+    public static ClientboundNovelize decode(FriendlyByteBuf buf) {
+        return new ClientboundNovelize(buf.readVarInt(), buf.readVarInt(), buf.readVarInt());
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
@@ -39,9 +43,12 @@ public class ClientboundMobNovelize {
 
     @OnlyIn(Dist.CLIENT)
     private void handle() {
-        Entity mob = Minecraft.getInstance().level.getEntity(this.mob);
+        Entity mob = Minecraft.getInstance().level.getEntity(this.writer);
         Entity victim = Minecraft.getInstance().level.getEntity(this.victim);
-        if (mob instanceof LivingEntity living && victim != null)
-            NovelHandler.novelize(living, victim, false);
+        if (mob instanceof LivingEntity living && victim != null) {
+            for (int pen = 0; pen < this.page && !NovelHandler.novelized(victim); pen++) {
+                NovelHandler.novelize(living, victim, false);
+            }
+        }
     }
 }

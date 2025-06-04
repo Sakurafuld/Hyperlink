@@ -1,6 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.fumetsu.ai;
 
 import com.google.common.collect.Lists;
+import com.sakurafuld.hyperdaimc.api.mixin.IServerLevelFumetsu;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
@@ -56,13 +57,13 @@ public class FumetsuAttackGoal extends Goal {
             this.fumetsu.shoot(FumetsuSkull.Type.CYAN, 2);
         }, 10));
         this.attacks.add(WeightedEntry.wrap(() -> {
-            Vec3 start = this.fumetsu.getEyePosition();
-            FumetsuSquall squall = new FumetsuSquall(HyperEntities.FUMETSU_SQUALL.get(), this.fumetsu.getLevel());
-
-            squall.setup(this.fumetsu, start, this.fumetsu.getViewVector(1), 0.75f);
-
-            this.fumetsu.getLevel().addFreshEntity(squall);
             if (this.fumetsu.getLevel() instanceof ServerLevel serverLevel) {
+                Vec3 start = this.fumetsu.getEyePosition();
+
+                FumetsuSquall squall = new FumetsuSquall(HyperEntities.FUMETSU_SQUALL.get(), this.fumetsu.getLevel());
+                squall.setup(this.fumetsu, start, this.fumetsu.getViewVector(1), 0.75f);
+
+                ((IServerLevelFumetsu) serverLevel).spawn(squall);
                 serverLevel.playSound(null, start.x(), start.y(), start.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 2, 1 + (this.fumetsu.getRandom().nextFloat() - this.fumetsu.getRandom().nextFloat()) * 0.2f);
             }
         }, 10));

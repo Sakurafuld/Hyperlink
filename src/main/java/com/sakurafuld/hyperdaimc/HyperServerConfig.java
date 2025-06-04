@@ -28,7 +28,7 @@ public class HyperServerConfig {
 
     public static final ForgeConfigSpec.BooleanValue ENABLE_VRX;
 
-
+    public static final ForgeConfigSpec.IntValue FUMETSU_HEALTH;
     public static final ForgeConfigSpec.IntValue FUMETSU_RANGE;
     public static final ForgeConfigSpec.BooleanValue FUMETSU_UNDERGROUND;
 
@@ -63,7 +63,7 @@ public class HyperServerConfig {
                         .define("Enable Novel", true);
                 NOVEL_IGNORE = builder
                         .comment("Specific entities that ignore Novelize")
-                        .defineList("Ignore entities", Lists.newArrayList("minecraft:item", "minecraft:experience", "hyperdaimc:fumetsu_skull", "hyperdaimc:fumetsu_storm", "hyperdaimc:fumetsu_storm_skull"),
+                        .defineList("Ignore entities", Lists.newArrayList("minecraft:item", "minecraft:experience_orb", "hyperdaimc:fumetsu_skull", "hyperdaimc:fumetsu_storm", "hyperdaimc:fumetsu_storm_skull"),
                                 object -> object instanceof String string && ResourceLocation.isValidResourceLocation(string));
                 NOVEL_SPECIAL = builder
                         .comment("Specific entities not interrupted in the death process by Novel ( e.g. entities with a death animation )")
@@ -121,6 +121,11 @@ public class HyperServerConfig {
 
             builder.push("Fumetsu");
             {
+                FUMETSU_HEALTH = builder
+                        .comment("Maximum health of Fumetsu Wither",
+                                "Default: 20")
+                        .worldRestart()
+                        .defineInRange("Fumetsu health", 20, 20, Integer.MAX_VALUE);
                 FUMETSU_RANGE = builder
                         .comment("The range for which Fumetsu sets targets",
                                 "Default: 64")

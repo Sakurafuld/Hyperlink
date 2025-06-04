@@ -7,6 +7,7 @@ import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
+import com.sakurafuld.hyperdaimc.api.mixin.IServerLevelFumetsu;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
@@ -73,6 +74,12 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public float wingModelZRot = 0;
     public int genocideTime = 0;
     private float lastHealth = 1;
+    private Vec3 lastPos = this.position();
+    private Vec3 lastDelta = this.getDeltaMovement();
+    private float lastXRot = this.getXRot();
+    private float lastYRot = this.getYRot();
+    private float lastYHeadRot = this.getYHeadRot();
+    private boolean movable = false;
 
     public FumetsuEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -112,12 +119,6 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     }
 
     @Override
-    public void move(MoverType pType, Vec3 pPos) {
-        super.move(pType, pPos);
-        this.checkInsideBlocks();
-    }
-
-    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(-1, new FumetsuStormGoal(this));
         this.goalSelector.addGoal(0, new FumetsuAttackGoal(this, (float) Math.sqrt(Float.MAX_VALUE)));
@@ -132,7 +133,14 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
 
     @Override
     public void fumetsuTick() {
-
+        if (!this.firstTick) {
+            this.setPosRaw(this.lastPos.x(), this.lastPos.y(), this.lastPos.z());
+            this.setDeltaMovement(this.lastDelta);
+            this.setXRot(this.lastXRot);
+            this.setYRot(this.lastYRot);
+            this.setYHeadRot(this.lastYHeadRot);
+            this.setOldPosAndRot();
+        }
         this.force(true);
         float health = this.getHealth();
         if (health > 0) {
@@ -140,12 +148,15 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         }
         this.force(false);
         if (this.getEntityData().get(DATA_LOGOUT)) {
-            ItemEntity entity = new ItemEntity(this.getLevel(), this.getX(), this.getY(), this.getZ(), new ItemStack(HyperItems.GAME_ORB.get()), 0, 0, 0);
-            entity.setNoGravity(true);
-            entity.setGlowingTag(true);
-            entity.setExtendedLifetime();
-            this.getLevel().addFreshEntity(entity);
-            this.getLevel().broadcastEntityEvent(this, EntityEvent.POOF);
+            if (this.getLevel() instanceof IServerLevelFumetsu levelFumetsu) {
+                ItemEntity entity = new ItemEntity(this.getLevel(), this.getX(), this.getY(), this.getZ(), new ItemStack(HyperItems.GAME_ORB.get()), 0, 0, 0);
+                entity.setNoGravity(true);
+                entity.setGlowingTag(true);
+                entity.setExtendedLifetime();
+                levelFumetsu.spawn(entity);
+                this.getLevel().broadcastEntityEvent(this, EntityEvent.POOF);
+            }
+
             ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
             LOG.debug("FumetsuLogout");
             return;
@@ -186,6 +197,11 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
             this.heal(2);
         }
 
+        this.lastPos = this.position();
+        this.lastDelta = this.getDeltaMovement();
+        this.lastXRot = this.getXRot();
+        this.lastYRot = this.getYRot();
+        this.lastYHeadRot = this.getYHeadRot();
     }
 
     private void defaultTick() {
@@ -309,20 +325,6 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     }
 
     @Override
-    public boolean muteki() {
-        return HyperServerConfig.ENABLE_MUTEKI.get();
-    }
-
-    @Override
-    public float lastHealth() {
-        return this.lastHealth;
-    }
-
-    @Override
-    public void tick() {
-    }
-
-    @Override
     public void aiStep() {
         super.aiStep();
 
@@ -339,6 +341,9 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
                 this.setYHeadRot(this.getYRot());
                 this.setYBodyRot(this.getYRot());
                 this.setXRot(Mth.rotateIfNecessary(this.getXRot(), Math.min(35, (float) Math.toDegrees(-Mth.atan2(dy, distance))), 2));
+                if (this.getLevel().getGameTime() % 100 == 0) {
+                    NovelHandler.novelize(this, target, false);
+                }
             } else {
                 this.setDeltaMovement(this.getDeltaMovement().multiply(1, 0.6, 1));
             }
@@ -396,13 +401,74 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         }
     }
 
+    @Override
+    public boolean isMovable() {
+        return this.movable;
+    }
+
+    @Override
+    public void setMovable(boolean movable) {
+        this.movable = movable;
+    }
+
+    @Override
+    public void move(MoverType pType, Vec3 pPos) {
+        if (this.isMovable()) {
+            super.move(pType, pPos);
+            this.checkInsideBlocks();
+        }
+    }
+
+    @Override
+    public void setXRot(float pXRot) {
+        if (this.isMovable()) {
+            super.setXRot(pXRot);
+        }
+    }
+
+    @Override
+    public void setYRot(float pYRot) {
+        if (this.isMovable()) {
+            super.setYRot(pYRot);
+        }
+    }
+
+    @Override
+    public void setYHeadRot(float pRotation) {
+        if (this.isMovable()) {
+            super.setYHeadRot(pRotation);
+        }
+    }
+
+    @Override
+    public void setDeltaMovement(Vec3 pDeltaMovement) {
+        if (this.isMovable()) {
+            super.setDeltaMovement(pDeltaMovement);
+        }
+    }
+
+    @Override
+    public boolean muteki() {
+        return HyperServerConfig.ENABLE_MUTEKI.get();
+    }
+
+    @Override
+    public float lastHealth() {
+        return this.lastHealth;
+    }
+
+    @Override
+    public void tick() {
+    }
+
+
     public void shoot(FumetsuSkull.Type type, Vec3 start, Vec3 target, float power) {
-        FumetsuSkull skull = new FumetsuSkull(HyperEntities.FUMETSU_SKULL.get(), this.getLevel());
-
-        skull.setup(type, this, start, target.subtract(start), power);
-
-        this.getLevel().addFreshEntity(skull);
         if (this.getLevel() instanceof ServerLevel serverLevel) {
+            FumetsuSkull skull = new FumetsuSkull(HyperEntities.FUMETSU_SKULL.get(), this.getLevel());
+
+            skull.setup(type, this, start, target.subtract(start), power);
+
+            ((IServerLevelFumetsu) serverLevel).spawn(skull);
             serverLevel.playSound(null, start.x(), start.y(), start.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 2, 1 + (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f);
         }
     }
@@ -478,7 +544,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         } else if (target instanceof Player player && (player.isCreative() || player.getHealth() <= 0)) {
             return false;
         } else {
-            return target instanceof LivingEntity && target.getPose() != Pose.DYING && !target.isRemoved() && !target.isSpectator();
+            return target instanceof LivingEntity && !NovelHandler.novelized(target) && !target.isRemoved() && !target.isSpectator();
         }
     }
 
@@ -643,6 +709,13 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         if (pCompound.contains("Logout")) {
             this.logout();
         }
+    }
+
+    @Override
+    public void load(CompoundTag pCompound) {
+        this.setMovable(true);
+        super.load(pCompound);
+        this.setMovable(false);
     }
 
     @Override

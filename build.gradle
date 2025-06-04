@@ -20,7 +20,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.18.2-1.3'
+version = '1182.1.4'
 group = 'com.sakurafuld.hyperdaimc'
 archivesBaseName = 'Hyperlink'
 
@@ -106,6 +106,10 @@ repositories {
     maven { url = "https://maven.theillusivec4.top/" }//curios
     maven { url 'https://maven.blamejared.com' }//botania
     maven { url 'https://modmaven.dev/' }//mekanism
+    maven {
+        name 'DVS1 Maven FS'
+        url 'https://dvs1.progwml6.com/files/maven'//TiC
+    }
 
     flatDir {
         dirs 'build/libs'
@@ -191,6 +195,10 @@ dependencies {
     implementation fg.deobf("curse.maven:pneumaticcraft-repressurized-281849:4922258")
 
     implementation fg.deobf("curse.maven:ice-and-fire-dragons-264231:5037775")
+
+    implementation fg.deobf("slimeknights.mantle:Mantle:${mc_version}-${mantle_build}")
+    implementation fg.deobf("slimeknights.tconstruct:TConstruct:${mc_version}-${tinkers_build}")
+
 
     implementation fg.deobf("curse.maven:clumps-256717:4153344")
     implementation fg.deobf("curse.maven:spark-361579:4505375")

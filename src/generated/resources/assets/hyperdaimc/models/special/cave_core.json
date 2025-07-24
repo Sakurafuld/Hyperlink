@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "hyperdaimc:item/material/core0",
+    "layer1": "hyperdaimc:item/material/core1"
+  }
+}

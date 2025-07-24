@@ -1,0 +1,10 @@
+{
+  "type": "hyperdaimc:shapeless_desk",
+  "result": {
+    "item": "hyperdaimc:marine_essence"
+  },
+  "values": [
+    "hyperdaimc:bug_star",
+    "#hyperdaimc:essence/marine"
+  ]
+}

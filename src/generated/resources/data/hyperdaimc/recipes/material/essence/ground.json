@@ -1,0 +1,16 @@
+{
+  "type": "hyperdaimc:shapeless_desk",
+  "exclusions": [
+    "minecraft:moss_block"
+  ],
+  "result": {
+    "item": "hyperdaimc:ground_essence"
+  },
+  "values": [
+    "hyperdaimc:bug_star",
+    "#hyperdaimc:essence/ground",
+    "#minecraft:dirt",
+    "#forge:sand",
+    "#forge:gravel"
+  ]
+}

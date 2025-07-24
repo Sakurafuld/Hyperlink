@@ -1,0 +1,24 @@
+{
+  "values": [
+    "minecraft:feather",
+    "minecraft:compass",
+    "minecraft:map",
+    "minecraft:ice",
+    "minecraft:packed_ice",
+    "minecraft:blue_ice",
+    "minecraft:ladder",
+    "#minecraft:boats",
+    "minecraft:minecart",
+    "minecraft:chest_minecart",
+    "minecraft:furnace_minecart",
+    "minecraft:hopper_minecart",
+    "minecraft:tnt_minecart",
+    "#minecraft:rails",
+    "minecraft:piston",
+    "minecraft:sticky_piston",
+    "minecraft:slime_block",
+    "minecraft:honey_block",
+    "minecraft:ender_pearl",
+    "minecraft:ender_eye"
+  ]
+}

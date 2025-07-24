@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.network.vrx;
 
-import com.sakurafuld.hyperdaimc.content.vrx.VRXMenu;
-import com.sakurafuld.hyperdaimc.content.vrx.VRXOne;
-import com.sakurafuld.hyperdaimc.content.vrx.VRXSlot;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXMenu;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXOne;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXSlot;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.Slot;

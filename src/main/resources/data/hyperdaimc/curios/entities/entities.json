@@ -1,4 +1,8 @@
 {
-  "entities": ["player"],
-  "slots": ["maximum"]
+  "entities": [
+    "player"
+  ],
+  "slots": [
+    "maximum"
+  ]
 }

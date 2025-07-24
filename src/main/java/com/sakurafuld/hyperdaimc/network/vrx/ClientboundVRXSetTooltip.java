@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.network.vrx;
 
-import com.sakurafuld.hyperdaimc.content.vrx.VRXMenu;
-import com.sakurafuld.hyperdaimc.content.vrx.VRXOne;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXMenu;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXOne;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.network.novel;
 
-import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;

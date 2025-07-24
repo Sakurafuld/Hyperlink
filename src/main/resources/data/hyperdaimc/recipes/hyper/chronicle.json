@@ -1,0 +1,41 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "     CEEC",
+    "     EPWE",
+    "     EWPE",
+    "    ECEEC",
+    "   EEE   ",
+    "  EEE    ",
+    " EEe     ",
+    "EE?E     ",
+    "EsEE     "
+  ],
+  "key": {
+    "?": {
+      "item": "hyperdaimc:game_orb"
+    },
+    "E": {
+      "item": "minecraft:emerald"
+    },
+    "C": {
+      "item": "minecraft:cactus"
+    },
+    "P": {
+      "item": "minecraft:prismarine_shard"
+    },
+    "W": {
+      "item": "minecraft:water_bucket"
+    },
+    "e": {
+      "item": "minecraft:ender_eye"
+    },
+    "s": {
+      "item": "minecraft:scute"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:chronicle"
+  },
+  "minecraft": true
+}

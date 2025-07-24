@@ -1,0 +1,19 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "hyperdaimc:block/soul"
+      }
+    },
+    {
+      "apply": {
+        "model": "hyperdaimc:block/soul_charge_inner"
+      }
+    },
+    {
+      "apply": {
+        "model": "hyperdaimc:block/soul_charge_outer"
+      }
+    }
+  ]
+}

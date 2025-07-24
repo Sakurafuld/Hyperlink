@@ -23,6 +23,7 @@ public class Deets {
     public static final String MEKANISM = "mekanism";
     public static final String TINKERSCONSTRUCT = "tconstruct";
     public static final String TICEX = "ticex";
+    public static final String SLASHBLADE = "slashblade";
 
 
     public static Act require(String modid) {

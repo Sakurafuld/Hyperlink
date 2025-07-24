@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.network.vrx;
 
-import com.sakurafuld.hyperdaimc.content.vrx.VRXCapability;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

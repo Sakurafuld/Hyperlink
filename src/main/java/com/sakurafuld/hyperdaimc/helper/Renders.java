@@ -280,7 +280,7 @@ public class Renders {
         }
 
         public static final RenderType HIGHLIGHT = create(HYPERDAIMC + ":highlight",
-                DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.QUADS, 256, false, false,
+                DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.QUADS, 256, true, true,
                 CompositeState.builder()
                         .setShaderState(POSITION_COLOR_SHADER)
                         .setLayeringState(VIEW_OFFSET_Z_LAYERING)

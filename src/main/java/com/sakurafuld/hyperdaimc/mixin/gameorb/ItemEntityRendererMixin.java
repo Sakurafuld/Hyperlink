@@ -3,7 +3,7 @@ package com.sakurafuld.hyperdaimc.mixin.gameorb;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
-import com.sakurafuld.hyperdaimc.content.gameorb.GameOrbRenderer;
+import com.sakurafuld.hyperdaimc.content.crafting.gameorb.GameOrbRenderer;
 import com.sakurafuld.hyperdaimc.helper.Renders;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;

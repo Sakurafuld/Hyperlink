@@ -1,0 +1,22 @@
+{
+  "values": [
+    "minecraft:stone",
+    "minecraft:cobblestone",
+    "minecraft:mossy_cobblestone",
+    "minecraft:deepslate",
+    "minecraft:cobbled_deepslate",
+    "minecraft:sandstone",
+    "minecraft:red_sandstone",
+    "minecraft:andesite",
+    "minecraft:diorite",
+    "minecraft:granite",
+    "minecraft:smooth_basalt",
+    "minecraft:calcite",
+    "minecraft:tuff",
+    "minecraft:dripstone_block",
+    "#forge:netherrack",
+    "minecraft:blackstone",
+    "minecraft:basalt",
+    "#forge:end_stones"
+  ]
+}

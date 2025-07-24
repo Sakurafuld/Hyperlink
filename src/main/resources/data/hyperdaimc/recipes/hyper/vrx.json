@@ -1,0 +1,41 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "E       T",
+    "DSSSSSSSD",
+    "SDCDDDCDS",
+    "SDDCDCDDS",
+    "SDCNDNCDS",
+    "SDCC?CCDS",
+    "SDDDDDDDS",
+    "DSSSSSSSD",
+    "T       E"
+  ],
+  "key": {
+    "?": {
+      "item": "hyperdaimc:game_orb"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "E": {
+      "item": "minecraft:egg"
+    },
+    "T": {
+      "item": "minecraft:turtle_egg"
+    },
+    "S": {
+      "item": "minecraft:snowball"
+    },
+    "C": {
+      "item": "minecraft:clay_ball"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:vrx"
+  },
+  "minecraft": true
+}

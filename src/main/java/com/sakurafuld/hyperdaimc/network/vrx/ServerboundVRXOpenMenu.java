@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.network.vrx;
 
 import com.mojang.datafixers.util.Pair;
-import com.sakurafuld.hyperdaimc.content.vrx.VRXMenu;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;

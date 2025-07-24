@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
-import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import me.desht.pneumaticcraft.common.block.entity.OmnidirectionalHopperBlockEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

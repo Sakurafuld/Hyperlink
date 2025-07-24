@@ -1,0 +1,10 @@
+{
+  "type": "hyperdaimc:shapeless_desk",
+  "result": {
+    "item": "hyperdaimc:sound_essence"
+  },
+  "values": [
+    "hyperdaimc:bug_star",
+    "#hyperdaimc:essence/sound"
+  ]
+}

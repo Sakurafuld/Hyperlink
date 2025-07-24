@@ -1,0 +1,30 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "key": {
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    },
+    "G": {
+      "item": "hyperdaimc:ground_essence"
+    },
+    "H": {
+      "item": "hyperdaimc:herb_essence"
+    },
+    "L": {
+      "item": "hyperdaimc:light_essence"
+    },
+    "P": {
+      "item": "hyperdaimc:partition_essence"
+    }
+  },
+  "pattern": [
+    "L L L",
+    "PLLLP",
+    "PH HP",
+    "PH HP",
+    "PGGG!"
+  ],
+  "result": {
+    "item": "hyperdaimc:garden_core"
+  }
+}

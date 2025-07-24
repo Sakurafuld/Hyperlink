@@ -24,9 +24,7 @@ public class HyperParticles {
     public static final RegistryObject<ParticleType<GashatParticleOptions>> GASHAT;
 
     static {
-
         GASHAT = register("gashat", false, GashatParticleOptions.DESERIALIZER, GashatParticleOptions.CODEC);
-
     }
 
     public static <T extends ParticleOptions> RegistryObject<ParticleType<T>> register(String name, boolean alwaysRender, ParticleOptions.Deserializer<T> deserializer, Codec<T> codec) {

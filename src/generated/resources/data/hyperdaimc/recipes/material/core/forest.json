@@ -1,0 +1,30 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "key": {
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    },
+    "F": {
+      "item": "hyperdaimc:food_essence"
+    },
+    "H": {
+      "item": "hyperdaimc:herb_essence"
+    },
+    "M": {
+      "item": "hyperdaimc:marine_essence"
+    },
+    "T": {
+      "item": "hyperdaimc:tree_essence"
+    }
+  },
+  "pattern": [
+    "  H  ",
+    "HHH!H",
+    "HTFTH",
+    " T T ",
+    "MTMTM"
+  ],
+  "result": {
+    "item": "hyperdaimc:forest_core"
+  }
+}

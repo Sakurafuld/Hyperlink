@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.network.vrx;
 
-import com.sakurafuld.hyperdaimc.content.vrx.VRXMenu;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXMenu;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;

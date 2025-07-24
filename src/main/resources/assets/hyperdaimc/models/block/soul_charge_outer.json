@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "render_type": "translucent",
+  "textures": {
+    "down": "hyperdaimc:block/soul_charge1",
+    "up": "hyperdaimc:block/soul_charge1",
+    "north": "hyperdaimc:block/soul_charge2",
+    "south": "hyperdaimc:block/soul_charge2",
+    "west": "hyperdaimc:block/soul_charge0",
+    "east": "hyperdaimc:block/soul_charge0"
+  }
+}

@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.compat.mekanism;
 
-import com.sakurafuld.hyperdaimc.content.vrx.VRXOne;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXOne;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.MEKANISM;

@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
-import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
-import com.sakurafuld.hyperdaimc.network.PacketHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
+import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.muteki.ServerboundSpecialGameModeSwitch;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.debug.GameModeSwitcherScreen;
@@ -18,7 +18,7 @@ public abstract class GameModeSwitchScreenMixin {
     @Redirect(method = "switchToHoveredGameMode(Lnet/minecraft/client/Minecraft;Lnet/minecraft/client/gui/screens/debug/GameModeSwitcherScreen$GameModeIcon;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientPacketListener;sendUnsignedCommand(Ljava/lang/String;)Z"))
     private static boolean switchToHoveredGameModeMuteki(ClientPacketListener instance, String string) {
         if (MutekiHandler.muteki(Minecraft.getInstance().player)) {
-            PacketHandler.INSTANCE.sendToServer(new ServerboundSpecialGameModeSwitch(string));
+            HyperConnection.INSTANCE.sendToServer(new ServerboundSpecialGameModeSwitch(string));
             return true;
         } else {
             return instance.sendUnsignedCommand(string);

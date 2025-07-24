@@ -55,11 +55,11 @@ public abstract class AbstractGashatItem extends Item {
     @OnlyIn(Dist.CLIENT)
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
-            private final GashatRenderer renderer = new GashatRenderer(() -> AbstractGashatItem.this.model);
+            private GashatItemRenderer renderer = null;
 
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return renderer;
+                return this.renderer == null ? this.renderer = new GashatItemRenderer(AbstractGashatItem.this.model) : this.renderer;
             }
         });
     }

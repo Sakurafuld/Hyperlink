@@ -3,9 +3,9 @@ package com.sakurafuld.hyperdaimc.mixin.novel;
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
-import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuHandler;
-import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
-import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -176,11 +176,15 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
 
     @Inject(method = "saveWithoutId", at = @At("RETURN"))
     private void saveWithoutIdNovel(CompoundTag pCompound, CallbackInfoReturnable<CompoundTag> cir) {
-        pCompound.putBoolean(HYPERDAIMC + ":Novelized", this.isNovelized());
+        if (!((Object) this instanceof Player)) {
+            pCompound.putBoolean(HYPERDAIMC + ":Novelized", this.isNovelized());
+        }
     }
 
     @Inject(method = "load", at = @At("HEAD"))
     private void loadNovel(CompoundTag pCompound, CallbackInfo ci) {
-        this.getEntityData().set(DATA_NOVELIZED, pCompound.getBoolean(HYPERDAIMC + ":Novelized"));
+        if (!((Object) this instanceof Player)) {
+            this.getEntityData().set(DATA_NOVELIZED, pCompound.getBoolean(HYPERDAIMC + ":Novelized"));
+        }
     }
 }

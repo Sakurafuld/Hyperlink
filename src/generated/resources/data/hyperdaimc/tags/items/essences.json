@@ -1,0 +1,19 @@
+{
+  "values": [
+    "hyperdaimc:shadow_essence",
+    "hyperdaimc:motion_essence",
+    "hyperdaimc:crust_essence",
+    "hyperdaimc:tree_essence",
+    "hyperdaimc:herb_essence",
+    "hyperdaimc:mineral_essence",
+    "hyperdaimc:partition_essence",
+    "hyperdaimc:light_essence",
+    "hyperdaimc:sound_essence",
+    "hyperdaimc:battle_essence",
+    "hyperdaimc:food_essence",
+    "hyperdaimc:work_essence",
+    "hyperdaimc:drawing_essence",
+    "hyperdaimc:marine_essence",
+    "hyperdaimc:ground_essence"
+  ]
+}

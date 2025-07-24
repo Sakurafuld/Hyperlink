@@ -1,0 +1,32 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "key": {
+    "!": {
+      "item": "hyperdaimc:bug_star_drei"
+    },
+    "F": {
+      "item": "hyperdaimc:flame_core"
+    },
+    "H": {
+      "item": "hyperdaimc:healing_core"
+    },
+    "M": {
+      "item": "hyperdaimc:monster_core"
+    },
+    "W": {
+      "item": "hyperdaimc:wonder_core"
+    }
+  },
+  "pattern": [
+    " H H H ",
+    "H  F  H",
+    " F F F ",
+    "WFFMFFW",
+    " FF!FF ",
+    "W FFF W",
+    " W W W "
+  ],
+  "result": {
+    "item": "hyperdaimc:fairy_gist"
+  }
+}

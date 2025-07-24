@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
-import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuItem;
+import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuItem;
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

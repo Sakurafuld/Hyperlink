@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
-import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import flashfur.omnimobs.util.EntityUtil;
 import flashfur.omnimobs.util.ForceDamageSource;
 import net.minecraft.network.syncher.EntityDataAccessor;

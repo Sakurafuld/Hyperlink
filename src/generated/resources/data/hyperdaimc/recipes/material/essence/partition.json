@@ -1,0 +1,10 @@
+{
+  "type": "hyperdaimc:shapeless_desk",
+  "result": {
+    "item": "hyperdaimc:partition_essence"
+  },
+  "values": [
+    "hyperdaimc:bug_star",
+    "#hyperdaimc:essence/partition"
+  ]
+}

@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.network.paradox;
 
-import com.sakurafuld.hyperdaimc.content.paradox.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;

@@ -1,0 +1,31 @@
+{
+  "values": [
+    "#forge:dyes",
+    "minecraft:white_glazed_terracotta",
+    "minecraft:orange_glazed_terracotta",
+    "minecraft:magenta_glazed_terracotta",
+    "minecraft:light_blue_glazed_terracotta",
+    "minecraft:yellow_glazed_terracotta",
+    "minecraft:lime_glazed_terracotta",
+    "minecraft:pink_glazed_terracotta",
+    "minecraft:gray_glazed_terracotta",
+    "minecraft:light_gray_glazed_terracotta",
+    "minecraft:cyan_glazed_terracotta",
+    "minecraft:purple_glazed_terracotta",
+    "minecraft:blue_glazed_terracotta",
+    "minecraft:brown_glazed_terracotta",
+    "minecraft:green_glazed_terracotta",
+    "minecraft:red_glazed_terracotta",
+    "minecraft:black_glazed_terracotta",
+    "minecraft:firework_rocket",
+    "minecraft:firework_star",
+    "minecraft:name_tag",
+    "minecraft:writable_book",
+    "minecraft:bookshelf",
+    "minecraft:lectern",
+    "minecraft:flower_banner_pattern",
+    "minecraft:creeper_banner_pattern",
+    "minecraft:skull_banner_pattern",
+    "minecraft:mojang_banner_pattern"
+  ]
+}

@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
-import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuEntity;
-import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
+import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import flashfur.omnimobs.entities.metapotent_flashfur.MetapotentFlashfur;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

@@ -1,0 +1,35 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "key": {
+    "!": {
+      "item": "hyperdaimc:bug_star_drei"
+    },
+    "F": {
+      "item": "hyperdaimc:frost_core"
+    },
+    "L": {
+      "item": "hyperdaimc:light_essence"
+    },
+    "M": {
+      "item": "hyperdaimc:marine_essence"
+    },
+    "T": {
+      "item": "hyperdaimc:thunder_core"
+    },
+    "W": {
+      "item": "hyperdaimc:wind_core"
+    }
+  },
+  "pattern": [
+    " WLLLW ",
+    "WLW!WLW",
+    "WTWMWFW",
+    "W T F W",
+    " T M F ",
+    "  T F  ",
+    " T M F "
+  ],
+  "result": {
+    "item": "hyperdaimc:sky_gist"
+  }
+}

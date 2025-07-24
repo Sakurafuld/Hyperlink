@@ -1,0 +1,35 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "key": {
+    "!": {
+      "item": "hyperdaimc:bug_star_drei"
+    },
+    "A": {
+      "item": "hyperdaimc:amusement_core"
+    },
+    "D": {
+      "item": "hyperdaimc:drawing_essence"
+    },
+    "O": {
+      "item": "hyperdaimc:order_core"
+    },
+    "S": {
+      "item": "hyperdaimc:sound_essence"
+    },
+    "W": {
+      "item": "hyperdaimc:wonder_core"
+    }
+  },
+  "pattern": [
+    " O   O ",
+    "O S S O",
+    "OSW WSO",
+    "OWSWSWO",
+    "O!DADDO",
+    "ODAAADO",
+    " OOOOO "
+  ],
+  "result": {
+    "item": "hyperdaimc:taint_gist"
+  }
+}

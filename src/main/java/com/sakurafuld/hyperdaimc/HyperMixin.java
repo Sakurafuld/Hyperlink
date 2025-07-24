@@ -1,6 +1,5 @@
 package com.sakurafuld.hyperdaimc;
 
-import net.minecraftforge.fml.loading.FMLLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -8,7 +7,8 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import java.util.List;
 import java.util.Set;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.*;
+import static com.sakurafuld.hyperdaimc.helper.Deets.TINKERSCONSTRUCT;
+import static com.sakurafuld.hyperdaimc.helper.Deets.require;
 
 public class HyperMixin implements IMixinConfigPlugin {
     @Override
@@ -25,17 +25,6 @@ public class HyperMixin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (mixinClassName.contains(TINKERSCONSTRUCT) && !require(TINKERSCONSTRUCT).ready()) {
             return false;
-        }
-
-        if (require(TICEX).ready()) {
-            if (mixinClassName.contains("ModifierDeflectionMixin")) {
-                if (FMLLoader.getLoadingModList().getModFileById(TICEX).getMods().get(0).getVersion().getMinorVersion() >= 2) {
-                    LOG.info("TICEXMixinCancel");
-                    return false;
-                } else {
-                    LOG.info("TICEXMixinDo");
-                }
-            }
         }
 
         return true;

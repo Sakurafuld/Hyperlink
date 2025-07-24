@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
 import com.sakurafuld.hyperdaimc.HyperServerConfig;
-import com.sakurafuld.hyperdaimc.content.chronicle.ChronicleHandler;
-import com.sakurafuld.hyperdaimc.content.paradox.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,8 +24,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import static com.sakurafuld.hyperdaimc.helper.Deets.side;
 
 @Mixin(BlockBehaviour.BlockStateBase.class)
 public abstract class BlockStateBaseMixin {
@@ -50,7 +48,7 @@ public abstract class BlockStateBaseMixin {
     @Inject(method = "getDestroySpeed", at = @At("HEAD"), cancellable = true)
     private void getDestroySpeedChronicle(BlockGetter pLevel, BlockPos pPos, CallbackInfoReturnable<Float> cir) {
         Player player = this.lastDestroyingPlayer;
-        if (side().isClient() && player == null) {
+        if (pLevel instanceof Level level && level.isClientSide() && player == null) {
             player = jade();
         }
         if (pLevel instanceof Level level && ChronicleHandler.isPaused(level, pPos, player)) {

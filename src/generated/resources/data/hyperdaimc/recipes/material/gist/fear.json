@@ -1,0 +1,32 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "key": {
+    "!": {
+      "item": "hyperdaimc:bug_star_drei"
+    },
+    "C": {
+      "item": "hyperdaimc:cave_core"
+    },
+    "E": {
+      "item": "hyperdaimc:echo_core"
+    },
+    "S": {
+      "item": "hyperdaimc:shadow_essence"
+    },
+    "W": {
+      "item": "hyperdaimc:wonder_core"
+    }
+  },
+  "pattern": [
+    " CCCCC ",
+    "CCSSSCC",
+    "C!EEESC",
+    "CEWWWEC",
+    "CSEEESC",
+    "CCSSSCC",
+    " CCCCC "
+  ],
+  "result": {
+    "item": "hyperdaimc:fear_gist"
+  }
+}

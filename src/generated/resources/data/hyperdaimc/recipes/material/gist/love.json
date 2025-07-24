@@ -1,0 +1,35 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "key": {
+    "!": {
+      "item": "hyperdaimc:bug_star_drei"
+    },
+    "A": {
+      "item": "hyperdaimc:animal_core"
+    },
+    "D": {
+      "item": "hyperdaimc:death_core"
+    },
+    "H": {
+      "item": "hyperdaimc:healing_core"
+    },
+    "O": {
+      "item": "hyperdaimc:order_core"
+    },
+    "a": {
+      "item": "hyperdaimc:amusement_core"
+    }
+  },
+  "pattern": [
+    "  O O  ",
+    " DOOOD ",
+    "DDaOaDD",
+    "DDAHADD",
+    " DaO!D ",
+    "  OOO  ",
+    "   O   "
+  ],
+  "result": {
+    "item": "hyperdaimc:love_gist"
+  }
+}

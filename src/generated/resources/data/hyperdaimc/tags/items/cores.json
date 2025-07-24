@@ -1,0 +1,21 @@
+{
+  "values": [
+    "hyperdaimc:monster_core",
+    "hyperdaimc:garden_core",
+    "hyperdaimc:order_core",
+    "hyperdaimc:frost_core",
+    "hyperdaimc:wind_core",
+    "hyperdaimc:amusement_core",
+    "hyperdaimc:wonder_core",
+    "hyperdaimc:forest_core",
+    "hyperdaimc:treasure_core",
+    "hyperdaimc:land_core",
+    "hyperdaimc:healing_core",
+    "hyperdaimc:death_core",
+    "hyperdaimc:animal_core",
+    "hyperdaimc:echo_core",
+    "hyperdaimc:flame_core",
+    "hyperdaimc:cave_core",
+    "hyperdaimc:thunder_core"
+  ]
+}

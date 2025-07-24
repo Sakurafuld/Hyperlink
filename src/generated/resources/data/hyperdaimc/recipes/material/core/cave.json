@@ -1,0 +1,27 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "key": {
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    },
+    "C": {
+      "item": "hyperdaimc:crust_essence"
+    },
+    "M": {
+      "item": "hyperdaimc:mineral_essence"
+    },
+    "S": {
+      "item": "hyperdaimc:shadow_essence"
+    }
+  },
+  "pattern": [
+    "CCCCC",
+    "CMCMC",
+    "MSSSM",
+    "CSSSC",
+    "C!CMC"
+  ],
+  "result": {
+    "item": "hyperdaimc:cave_core"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "key": {
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    },
+    "D": {
+      "item": "hyperdaimc:drawing_essence"
+    },
+    "F": {
+      "item": "hyperdaimc:food_essence"
+    },
+    "H": {
+      "item": "hyperdaimc:herb_essence"
+    },
+    "M": {
+      "item": "hyperdaimc:marine_essence"
+    },
+    "S": {
+      "item": "hyperdaimc:sound_essence"
+    }
+  },
+  "pattern": [
+    " HHH ",
+    "DSDSD",
+    " FSF ",
+    "DSD!D",
+    " MMM "
+  ],
+  "result": {
+    "item": "hyperdaimc:healing_core"
+  }
+}

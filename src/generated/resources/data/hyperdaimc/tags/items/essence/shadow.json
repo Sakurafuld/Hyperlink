@@ -1,0 +1,26 @@
+{
+  "values": [
+    "#minecraft:beds",
+    "minecraft:phantom_membrane",
+    "minecraft:ghast_tear",
+    "minecraft:wither_skeleton_skull",
+    "minecraft:soul_sand",
+    "minecraft:soul_soil",
+    "#forge:glass/tinted",
+    "minecraft:nether_bricks",
+    "minecraft:stone_bricks",
+    "minecraft:mossy_stone_bricks",
+    "minecraft:iron_bars",
+    "minecraft:purpur_block",
+    "minecraft:obsidian",
+    "minecraft:experience_bottle",
+    "minecraft:fermented_spider_eye",
+    "minecraft:totem_of_undying",
+    "minecraft:end_crystal",
+    "minecraft:sculk_vein",
+    "minecraft:sculk",
+    "minecraft:sculk_sensor",
+    "minecraft:sculk_shrieker",
+    "minecraft:sculk_shrieker"
+  ]
+}

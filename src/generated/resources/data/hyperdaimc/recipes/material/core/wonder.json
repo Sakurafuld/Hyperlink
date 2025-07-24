@@ -1,0 +1,27 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "key": {
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    },
+    "D": {
+      "item": "hyperdaimc:drawing_essence"
+    },
+    "L": {
+      "item": "hyperdaimc:light_essence"
+    },
+    "S": {
+      "item": "hyperdaimc:shadow_essence"
+    }
+  },
+  "pattern": [
+    "D D D",
+    " LSL ",
+    "DS!SD",
+    " LSL ",
+    "D D D"
+  ],
+  "result": {
+    "item": "hyperdaimc:wonder_core"
+  }
+}

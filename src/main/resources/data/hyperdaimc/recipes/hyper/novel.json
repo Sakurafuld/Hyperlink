@@ -1,0 +1,41 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "       Ii",
+    "      I I",
+    "     I I ",
+    "    I I  ",
+    " SSI I   ",
+    " SSNI    ",
+    "  ?SS    ",
+    " P SS    ",
+    "Q        "
+  ],
+  "key": {
+    "?": {
+      "item": "hyperdaimc:game_orb"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "i": {
+      "item": "minecraft:ink_sac"
+    },
+    "P": {
+      "item": "minecraft:paper"
+    },
+    "N": {
+      "item": "minecraft:name_tag"
+    },
+    "S": {
+      "tag": "minecraft:signs"
+    },
+    "Q": {
+      "item": "minecraft:written_book"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:novel"
+  },
+  "minecraft": true
+}

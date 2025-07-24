@@ -1,6 +1,7 @@
 package com.sakurafuld.hyperdaimc.network.chronicle;
 
-import com.sakurafuld.hyperdaimc.content.chronicle.ChronicleSavedData;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleSavedData;
+import com.sakurafuld.hyperdaimc.helper.Deets;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
@@ -25,6 +26,7 @@ public class ServerboundChronicleSyncSave {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
+            Deets.LOG.debug("handlerChronicleSyncServer");
             ServerLevel level = ctx.get().getSender().serverLevel();
             ChronicleSavedData data = ChronicleSavedData.get(level);
             data.load(this.tag);

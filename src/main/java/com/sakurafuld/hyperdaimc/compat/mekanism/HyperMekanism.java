@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.compat.mekanism;
 
-import com.sakurafuld.hyperdaimc.content.vrx.VRXOne;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXOne;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.MEKANISM;
 import static com.sakurafuld.hyperdaimc.helper.Deets.require;

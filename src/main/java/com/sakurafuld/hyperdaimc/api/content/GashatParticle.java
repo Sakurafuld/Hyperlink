@@ -44,26 +44,19 @@ public class GashatParticle extends Particle {
 
         PoseStack poseStack = new PoseStack();
 
-        poseStack.pushPose();
-        poseStack.translate(x, y, z);
-        poseStack.scale(size, size, size);
+        Renders.with(poseStack, () -> {
+            poseStack.translate(x, y, z);
+            poseStack.scale(size, size, size);
 
-        poseStack.mulPose(Vector3f.YP.rotationDegrees(this.yRot));
-        poseStack.mulPose(Vector3f.XP.rotationDegrees(this.xRot));
-        poseStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.rotLerp(pPartialTicks, ((this.age - 1) % 360f) * this.options.speed, (this.age % 360f) * this.options.speed)));
+            poseStack.mulPose(Vector3f.YP.rotationDegrees(this.yRot));
+            poseStack.mulPose(Vector3f.XP.rotationDegrees(this.xRot));
+            poseStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.rotLerp(pPartialTicks, ((this.age - 1) % 360f) * this.options.speed, (this.age % 360f) * this.options.speed)));
 
-        Renders.hollowTriangle(poseStack.last().pose(), Renders.getBuffer(Renders.Type.LIGHTNING_NO_CULL), this.options.radius, this.options.width, this.color);
+            Renders.hollowTriangle(poseStack.last().pose(), Renders.getBuffer(Renders.Type.LIGHTNING_NO_CULL), this.options.radius, this.options.width, this.color);
 
-        poseStack.popPose();
+        });
 
         Renders.endBatch(Renders.Type.LIGHTNING_NO_CULL);
-    }
-
-    @Override
-    public void tick() {
-
-
-        super.tick();
     }
 
     @Override

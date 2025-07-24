@@ -1,9 +1,9 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
 import com.sakurafuld.hyperdaimc.api.mixin.ILevelChunkSectionChronicle;
-import com.sakurafuld.hyperdaimc.content.chronicle.ChronicleHandler;
-import com.sakurafuld.hyperdaimc.content.chronicle.ChronicleSavedData;
-import com.sakurafuld.hyperdaimc.content.paradox.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleSavedData;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;

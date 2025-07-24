@@ -1,0 +1,27 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "L L L",
+    " L L ",
+    "LMLML",
+    "MFMF!",
+    "FMFMF"
+  ],
+  "key": {
+    "L": {
+      "item": "hyperdaimc:light_essence"
+    },
+    "F": {
+      "item": "hyperdaimc:food_essence"
+    },
+    "M": {
+      "item": "hyperdaimc:motion_essence"
+    },
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:animal_core"
+  }
+}

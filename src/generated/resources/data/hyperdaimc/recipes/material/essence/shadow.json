@@ -1,0 +1,10 @@
+{
+  "type": "hyperdaimc:shapeless_desk",
+  "values": [
+    "hyperdaimc:bug_star",
+    "#hyperdaimc:essence/shadow"
+  ],
+  "result": {
+    "item": "hyperdaimc:shadow_essence"
+  }
+}

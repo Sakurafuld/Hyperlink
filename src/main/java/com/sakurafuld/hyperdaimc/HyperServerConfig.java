@@ -27,6 +27,9 @@ public class HyperServerConfig {
     public static final ForgeConfigSpec.BooleanValue PARADOX_HIT_FLUID;
 
     public static final ForgeConfigSpec.BooleanValue ENABLE_VRX;
+    public static final ForgeConfigSpec.BooleanValue VRX_KEEP;
+    public static final ForgeConfigSpec.BooleanValue VRX_JEI;
+    public static final ForgeConfigSpec.BooleanValue VRX_SEAL_HYPERLINK;
 
     public static final ForgeConfigSpec.IntValue FUMETSU_HEALTH;
     public static final ForgeConfigSpec.IntValue FUMETSU_RANGE;
@@ -116,6 +119,18 @@ public class HyperServerConfig {
                         .comment("Enable behavior of VRX",
                                 "Default: true")
                         .define("Enable VRX", true);
+                VRX_KEEP = builder
+                        .comment("Keep VRX after death",
+                                "Default: false")
+                        .define("Keep VRX", false);
+                VRX_JEI = builder
+                        .comment("Can configure VRX using JEI",
+                                "Default: true")
+                        .define("Just Enough VRX", true);
+                VRX_SEAL_HYPERLINK = builder
+                        .comment("Unable to set Hyperlink items in VRX",
+                                "Default: true")
+                        .define("Seal Hyperlink", true);
             }
             builder.pop();
 

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "hyperdaimc:essences"
+    }
+  ],
+  "result": {
+    "item": "hyperdaimc:bug_star",
+    "count": 5
+  }
+}

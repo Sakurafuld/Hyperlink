@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.compat.tconstruct;
 
-import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
 import com.sakurafuld.hyperdaimc.helper.Writes;
-import com.sakurafuld.hyperdaimc.network.PacketHandler;
+import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.novel.ClientboundNovelize;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -52,7 +52,7 @@ public class NovelModifier extends NoLevelsModifier implements MeleeHitModifierH
                 Entity target = context.getTarget();
                 if (NovelHandler.PREDICATE.test(target)) {
                     NovelHandler.novelize(attacker, target, false);
-                    PacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(attacker.getLevel()::dimension), new ClientboundNovelize(attacker.getId(), target.getId(), 1));
+                    HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(attacker.getLevel()::dimension), new ClientboundNovelize(attacker.getId(), target.getId(), 1));
                     if (attacker.getLevel() instanceof ServerLevel serverLevel) {
                         NovelHandler.playSound(serverLevel, target.position());
                     }
@@ -70,7 +70,7 @@ public class NovelModifier extends NoLevelsModifier implements MeleeHitModifierH
                 Entity entity = hit.getEntity();
                 if (!NovelHandler.novelized(entity)) {
                     NovelHandler.novelize(attacker, entity, false);
-                    PacketHandler.INSTANCE.send(PacketDistributor.DIMENSION.with(attacker.getLevel()::dimension), new ClientboundNovelize(attacker.getId(), entity.getId(), 1));
+                    HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(attacker.getLevel()::dimension), new ClientboundNovelize(attacker.getId(), entity.getId(), 1));
                     if (attacker.getLevel() instanceof ServerLevel serverLevel) {
                         NovelHandler.playSound(serverLevel, entity.position());
                     }

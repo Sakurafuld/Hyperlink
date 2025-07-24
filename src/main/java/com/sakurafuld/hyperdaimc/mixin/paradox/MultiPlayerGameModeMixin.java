@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.mixin.paradox;
 
 import com.sakurafuld.hyperdaimc.HyperServerConfig;
-import com.sakurafuld.hyperdaimc.content.chronicle.ChronicleHandler;
-import com.sakurafuld.hyperdaimc.content.paradox.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
@@ -14,6 +14,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,6 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 
 @Mixin(MultiPlayerGameMode.class)
+@OnlyIn(Dist.CLIENT)
 public abstract class MultiPlayerGameModeMixin {
     @Shadow
     @Final

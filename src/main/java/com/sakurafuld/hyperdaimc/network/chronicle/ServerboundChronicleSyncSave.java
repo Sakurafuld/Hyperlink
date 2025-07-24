@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.network.chronicle;
 
-import com.sakurafuld.hyperdaimc.content.chronicle.ChronicleSavedData;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleSavedData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;

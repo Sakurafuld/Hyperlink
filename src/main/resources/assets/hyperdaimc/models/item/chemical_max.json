@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "hyperdaimc:item/chemical_max0",
+    "layer1": "hyperdaimc:item/chemical_max1"
+  }
+}

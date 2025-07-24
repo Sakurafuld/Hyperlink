@@ -1,0 +1,30 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    " SSS ",
+    "SMPMS",
+    "M!F M",
+    " PFP ",
+    " S S "
+  ],
+  "key": {
+    "S": {
+      "item": "hyperdaimc:shadow_essence"
+    },
+    "M": {
+      "item": "hyperdaimc:motion_essence"
+    },
+    "P": {
+      "item": "hyperdaimc:partition_essence"
+    },
+    "F": {
+      "item": "hyperdaimc:food_essence"
+    },
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:death_core"
+  }
+}

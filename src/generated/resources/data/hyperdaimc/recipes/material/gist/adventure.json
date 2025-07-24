@@ -1,0 +1,41 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "  TTT  ",
+    "FFCMMMH",
+    "FMFCWCM",
+    "MFMMMCM",
+    "MWFHCMC",
+    "MFMLLLL",
+    "HML!LTL"
+  ],
+  "key": {
+    "T": {
+      "item": "hyperdaimc:treasure_core"
+    },
+    "C": {
+      "item": "hyperdaimc:cave_core"
+    },
+    "F": {
+      "item": "hyperdaimc:forest_core"
+    },
+    "L": {
+      "item": "hyperdaimc:land_core"
+    },
+    "W": {
+      "item": "hyperdaimc:wonder_core"
+    },
+    "H": {
+      "item": "hyperdaimc:healing_core"
+    },
+    "M": {
+      "item": "hyperdaimc:motion_essence"
+    },
+    "!": {
+      "item": "hyperdaimc:bug_star_drei"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:adventure_gist"
+  }
+}

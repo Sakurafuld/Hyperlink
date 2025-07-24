@@ -1,0 +1,11 @@
+{
+  "type": "hyperdaimc:shapeless_desk",
+  "values": [
+    "hyperdaimc:bug_star",
+    "#hyperdaimc:essence/herb",
+    "#forge:seeds"
+  ],
+  "result": {
+    "item": "hyperdaimc:herb_essence"
+  }
+}

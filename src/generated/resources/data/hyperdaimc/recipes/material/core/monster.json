@@ -1,0 +1,27 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "S S S",
+    " S S ",
+    "SMSMS",
+    "!CMCM",
+    "CMCMC"
+  ],
+  "key": {
+    "S": {
+      "item": "hyperdaimc:shadow_essence"
+    },
+    "C": {
+      "item": "hyperdaimc:crust_essence"
+    },
+    "M": {
+      "item": "hyperdaimc:motion_essence"
+    },
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:monster_core"
+  }
+}

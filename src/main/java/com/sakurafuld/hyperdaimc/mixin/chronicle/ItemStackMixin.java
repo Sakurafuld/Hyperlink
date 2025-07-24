@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
 import com.sakurafuld.hyperdaimc.HyperServerConfig;
-import com.sakurafuld.hyperdaimc.content.chronicle.ChronicleHandler;
-import com.sakurafuld.hyperdaimc.content.paradox.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;

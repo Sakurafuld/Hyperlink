@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "EEE",
+    "E!E",
+    "EEE"
+  ],
+  "key": {
+    "E": {
+      "tag": "hyperdaimc:essences"
+    },
+    "!": {
+      "item": "hyperdaimc:bug_star"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:bug_star_zwei"
+  }
+}

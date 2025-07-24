@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "hyperdaimc:block/desk_top",
+    "down": "hyperdaimc:block/desk_bottom",
+    "up": "hyperdaimc:block/desk_top",
+    "north": "hyperdaimc:block/desk_z",
+    "east": "hyperdaimc:block/desk_x",
+    "south": "hyperdaimc:block/desk_z",
+    "west": "hyperdaimc:block/desk_x"
+  }
+}

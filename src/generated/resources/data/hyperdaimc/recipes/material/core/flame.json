@@ -1,0 +1,27 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "L L L",
+    "MLLLM",
+    "LLMLL",
+    "TLT!T",
+    " TTT "
+  ],
+  "key": {
+    "L": {
+      "item": "hyperdaimc:light_essence"
+    },
+    "M": {
+      "item": "hyperdaimc:motion_essence"
+    },
+    "T": {
+      "item": "hyperdaimc:tree_essence"
+    },
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:flame_core"
+  }
+}

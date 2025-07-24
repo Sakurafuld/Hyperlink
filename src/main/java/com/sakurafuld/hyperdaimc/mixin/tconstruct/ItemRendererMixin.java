@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
-import com.sakurafuld.hyperdaimc.api.content.GashatRenderer;
+import com.sakurafuld.hyperdaimc.api.content.GashatItemRenderer;
 import com.sakurafuld.hyperdaimc.compat.tconstruct.HyperModifiers;
 import com.sakurafuld.hyperdaimc.helper.Renders;
 import net.minecraft.Util;
@@ -35,7 +35,7 @@ public abstract class ItemRendererMixin {
     @Unique
     private int color = 0xFFFFFFFF;
     @Unique
-    private final Set<GashatRenderer.Particle> PARTICLES = Sets.newHashSet();
+    private final Set<GashatItemRenderer.Particle> PARTICLES = Sets.newHashSet();
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V", ordinal = 0, shift = At.Shift.AFTER))
     private void renderTConstruct$Transform(ItemStack pItemStack, ItemTransforms.TransformType pTransformType, boolean pLeftHand, PoseStack pPoseStack, MultiBufferSource pBuffer, int pCombinedLight, int pCombinedOverlay, BakedModel pModel, CallbackInfo ci) {
@@ -43,9 +43,9 @@ public abstract class ItemRendererMixin {
             long millis = Util.getMillis() + Mth.square(pItemStack.getDescriptionId().length() * 16);
             double time = millis % 20000;
             if (time <= 200 || (6000 < time && time <= 6200) || (10000 < time && (time <= 10300)) || (10400 < time && (time <= 10450))) {
-                pPoseStack.scale(GashatRenderer.RANDOM.nextFloat(0.5f, 1.75f), GashatRenderer.RANDOM.nextFloat(0.5f, 1.75f), GashatRenderer.RANDOM.nextFloat(0.5f, 1.75f));
+                pPoseStack.scale(GashatItemRenderer.RANDOM.nextFloat(0.5f, 1.75f), GashatItemRenderer.RANDOM.nextFloat(0.5f, 1.75f), GashatItemRenderer.RANDOM.nextFloat(0.5f, 1.75f));
                 if (10000 < time) {
-                    this.color = (0xFF000000) | GashatRenderer.RANDOM.nextInt(0xFFFFFF);
+                    this.color = (0xFF000000) | GashatItemRenderer.RANDOM.nextInt(0xFFFFFF);
                 } else {
                     this.color = 0xFFFFFFFF;
                 }
@@ -64,7 +64,7 @@ public abstract class ItemRendererMixin {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;renderModelLists(Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/item/ItemStack;IILcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;)V"))
     private void renderTConstruct$Color(ItemRenderer instance, BakedModel pModel, ItemStack pStack, int pCombinedLight, int pCombinedOverlay, PoseStack pMatrixStack, VertexConsumer pBuffer) {
         if (this.isGahast(pStack)) {
-            Renders.model(pModel, pMatrixStack, pBuffer, pCombinedLight, pCombinedOverlay, quad -> this.color);
+            Renders.model2(pModel, pMatrixStack, pBuffer, pCombinedLight, pCombinedOverlay, quad -> this.color);
         } else {
             instance.renderModelLists(pModel, pStack, pCombinedLight, pCombinedOverlay, pMatrixStack, pBuffer);
         }
@@ -74,8 +74,8 @@ public abstract class ItemRendererMixin {
     private void renderTConstruct$Particle(ItemStack pItemStack, ItemTransforms.TransformType pTransformType, boolean pLeftHand, PoseStack pPoseStack, MultiBufferSource pBuffer, int pCombinedLight, int pCombinedOverlay, BakedModel pModel, CallbackInfo ci) {
         if (this.isGahast(pItemStack)) {
             for (int count = 0; count < 3; count++) {
-                if (GashatRenderer.RANDOM.nextInt(400) == 0) {
-                    PARTICLES.add(new GashatRenderer.Particle(pItemStack, () -> pModel));
+                if (GashatItemRenderer.RANDOM.nextInt(400) == 0) {
+                    PARTICLES.add(new GashatItemRenderer.Particle(pItemStack, () -> pModel));
                 }
             }
 

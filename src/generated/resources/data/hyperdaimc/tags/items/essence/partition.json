@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:fences",
+    "#minecraft:walls",
+    "#minecraft:doors",
+    "#minecraft:trapdoors",
+    "#forge:glass/colorless",
+    "#forge:stained_glass"
+  ]
+}

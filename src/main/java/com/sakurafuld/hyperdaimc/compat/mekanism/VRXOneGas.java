@@ -3,9 +3,9 @@ package com.sakurafuld.hyperdaimc.compat.mekanism;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.sakurafuld.hyperdaimc.api.compat.CombinedGasHandler;
-import com.sakurafuld.hyperdaimc.content.vrx.*;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.*;
 import com.sakurafuld.hyperdaimc.helper.Renders;
-import com.sakurafuld.hyperdaimc.network.PacketHandler;
+import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.vrx.ServerboundVRXSetJeiGhost;
 import mekanism.api.Action;
 import mekanism.api.chemical.ChemicalUtils;
@@ -321,7 +321,7 @@ public class VRXOneGas extends VRXOne {
                 public void accept(int containerId, VRXSlot slot) {
                     VRXOne one = new VRXOneGas(this.ingredient);
                     slot.setOne(one);
-                    PacketHandler.INSTANCE.sendToServer(new ServerboundVRXSetJeiGhost(containerId, ((Slot) slot).index, one));
+                    HyperConnection.INSTANCE.sendToServer(new ServerboundVRXSetJeiGhost(containerId, ((Slot) slot).index, one));
                 }
             };
         } else {

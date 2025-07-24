@@ -5,6 +5,7 @@
   "refmap": "hyperdaimc.refmap.json",
   "plugin": "com.sakurafuld.hyperdaimc.HyperMixin",
   "mixins": [
+    "api.ServerLevelMixin",
     "chronicle.BlockStateBaseMixin",
     "chronicle.BlockStateMixin",
     "chronicle.BucketItemMixin",
@@ -41,11 +42,14 @@
     "novel.MobMixin",
     "novel.ServerLevelMixin",
     "paradox.LootTableMixin",
-    "paradox.ServerPlayerGameModeMixin"
+    "paradox.ServerPlayerGameModeMixin",
+    "sigil.WitherBossMixin"
   ],
   "server": [
   ],
   "client": [
+    "api.ClientLevelMixin",
+    "desk.AbstractContainerScreenMixin",
     "fumetsu.ClientLevelMixin",
     "fumetsu.ClientPacketListenerMixin",
     "gameorb.ItemEntityRendererMixin",

@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.mixin.muteki;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.sakurafuld.hyperdaimc.HyperServerConfig;
-import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;

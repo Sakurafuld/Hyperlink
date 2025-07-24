@@ -23,6 +23,7 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.model.data.EmptyModelData;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.util.Arrays;
@@ -183,6 +184,23 @@ public class Renders {
     public static void model(BakedModel model, PoseStack poseStack, VertexConsumer consumer, int light, int overlay, Function<BakedQuad, Integer> colorizer) {
         for (Direction face : QUAD_FACES) {
             RANDOM.setSeed(42);
+            for (BakedQuad quad : model.getQuads(null, face, RANDOM, EmptyModelData.INSTANCE)) {
+                int color = colorizer.apply(quad);
+
+                float alpha = ((color >> 24) & 0xFF) / 255f;
+                float red = ((color >> 16) & 0xFF) / 255f;
+                float green = ((color >> 8) & 0xFF) / 255f;
+                float blue = (color & 0xFF) / 255f;
+
+                consumer.putBulkData(poseStack.last(), quad, red, green, blue, alpha, light, overlay, true);
+                require(EMBEDDIUM).run(() -> Embeddium.INSTANCE.activateSprite(quad));
+            }
+        }
+    }
+
+    public static void model2(BakedModel model, PoseStack poseStack, VertexConsumer consumer, int light, int overlay, Function<BakedQuad, Integer> colorizer) {
+        for (Direction face : QUAD_FACES) {
+            RANDOM.setSeed(42);
             for (BakedQuad quad : model.getQuads(null, face, RANDOM)) {
                 int color = colorizer.apply(quad);
 
@@ -265,7 +283,7 @@ public class Renders {
         }
 
         public static final RenderType HIGHLIGHT = create(HYPERDAIMC + ":highlight",
-                DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.QUADS, 256, false, false,
+                DefaultVertexFormat.POSITION_COLOR_NORMAL, VertexFormat.Mode.QUADS, 256, true, true,
                 CompositeState.builder()
                         .setShaderState(POSITION_COLOR_SHADER)
                         .setLayeringState(VIEW_OFFSET_Z_LAYERING)

@@ -21,10 +21,16 @@ public class Deets {
 
     public static final String HYPERDAIMC = "hyperdaimc";
     public static final Logger LOG = LoggerFactory.getLogger(HYPERDAIMC);
-    public static final Supplier<CreativeModeTab> TAB = Suppliers.memoize(() -> new CreativeModeTab(HYPERDAIMC) {
+    public static final Supplier<CreativeModeTab> TAB_MAIN = Suppliers.memoize(() -> new CreativeModeTab(HYPERDAIMC + ".main") {
         @Override
         public ItemStack makeIcon() {
             return new ItemStack(HyperItems.MUTEKI.get());
+        }
+    });
+    public static final Supplier<CreativeModeTab> TAB_CRAFTING = Suppliers.memoize(() -> new CreativeModeTab(HYPERDAIMC + ".crafting") {
+        @Override
+        public ItemStack makeIcon() {
+            return new ItemStack(HyperItems.GAME_ORB.get());
         }
     });
 

@@ -1,0 +1,30 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "  H  ",
+    "HFHFH",
+    "GGG!G",
+    "GCGCG",
+    "CCCCC"
+  ],
+  "key": {
+    "H": {
+      "item": "hyperdaimc:herb_essence"
+    },
+    "F": {
+      "item": "hyperdaimc:food_essence"
+    },
+    "G": {
+      "item": "hyperdaimc:ground_essence"
+    },
+    "C": {
+      "item": "hyperdaimc:crust_essence"
+    },
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:land_core"
+  }
+}

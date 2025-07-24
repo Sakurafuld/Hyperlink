@@ -1,0 +1,10 @@
+{
+  "type": "hyperdaimc:shapeless_desk",
+  "values": [
+    "hyperdaimc:bug_star",
+    "#hyperdaimc:essence/drawing"
+  ],
+  "result": {
+    "item": "hyperdaimc:drawing_essence"
+  }
+}

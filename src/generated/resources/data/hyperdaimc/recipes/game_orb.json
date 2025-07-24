@@ -1,0 +1,21 @@
+{
+  "type": "hyperdaimc:shapeless_desk",
+  "minecraft": true,
+  "values": [
+    "hyperdaimc:god_sigil",
+    "hyperdaimc:chemical_max",
+    "hyperdaimc:soul",
+    "hyperdaimc:fumetsu_left_skull",
+    "hyperdaimc:fumetsu_skull",
+    "hyperdaimc:fumetsu_right_skull",
+    "hyperdaimc:bug_star",
+    "hyperdaimc:bug_star_zwei",
+    "hyperdaimc:bug_star_drei",
+    "#hyperdaimc:essences",
+    "#hyperdaimc:cores",
+    "#hyperdaimc:gists"
+  ],
+  "result": {
+    "item": "hyperdaimc:game_orb"
+  }
+}

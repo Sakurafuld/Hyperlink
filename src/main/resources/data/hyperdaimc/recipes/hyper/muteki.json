@@ -1,0 +1,59 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "    G    ",
+    "    B    ",
+    "   GTG   ",
+    "GCTIDETSG",
+    " GGL?RGG ",
+    "  GTGTG  ",
+    " GHG GAG ",
+    " GG   GG ",
+    "GG     GG"
+  ],
+  "key": {
+    "?": {
+      "item": "hyperdaimc:game_orb"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "T": {
+      "item": "minecraft:totem_of_undying"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "E": {
+      "item": "minecraft:emerald"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "B": {
+      "item": "minecraft:bell"
+    },
+    "S": {
+      "item": "minecraft:spyglass"
+    },
+    "A": {
+      "item": "minecraft:enchanted_golden_apple"
+    },
+    "H": {
+      "item": "minecraft:golden_horse_armor"
+    },
+    "C": {
+      "item": "minecraft:clock"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:muteki"
+  },
+  "minecraft": true
+}

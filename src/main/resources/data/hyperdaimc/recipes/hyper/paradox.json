@@ -1,0 +1,47 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "    LLLLL",
+    "   LLDL? ",
+    "  LLLLGR ",
+    "  LL SRTR",
+    "  L PFRRR",
+    "   PF  RR",
+    "  PF   R ",
+    " PF   R  ",
+    "PF       "
+  ],
+  "key": {
+    "?": {
+      "item": "hyperdaimc:game_orb"
+    },
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "minecraft:glowstone"
+    },
+    "D": {
+      "item": "minecraft:diamond_pickaxe"
+    },
+    "T": {
+      "item": "minecraft:tnt"
+    },
+    "S": {
+      "item": "minecraft:sponge"
+    },
+    "P": {
+      "item": "minecraft:gunpowder"
+    },
+    "F": {
+      "item": "minecraft:fire_charge"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:paradox"
+  },
+  "minecraft": true
+}

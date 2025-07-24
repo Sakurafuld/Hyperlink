@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
-import com.sakurafuld.hyperdaimc.content.fumetsu.FumetsuHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;

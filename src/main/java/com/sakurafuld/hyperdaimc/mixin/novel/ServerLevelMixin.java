@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.mixin.novel;
 
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
-import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityEvent;

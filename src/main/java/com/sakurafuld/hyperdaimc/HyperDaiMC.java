@@ -21,10 +21,14 @@ public class HyperDaiMC {
 
         bus.register(new HyperSetup());
 
+        HyperBlockEntities.REGISTRY.register(bus);
+        HyperBlocks.REGISTRY.register(bus);
         HyperEntities.REGISTRY.register(bus);
         HyperItems.REGISTRY.register(bus);
         HyperMenus.REGISTRY.register(bus);
         HyperParticles.REGISTRY.register(bus);
+        HyperRecipes.TYPE_REGISTRY.register(bus);
+        HyperRecipes.SERIALIZER_REGISTRY.register(bus);
         HyperSounds.REGISTRY.register(bus);
 
         ctx.registerConfig(ModConfig.Type.COMMON, HyperCommonConfig.SPEC, HYPERDAIMC + "-common.toml");

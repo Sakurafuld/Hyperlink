@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CCC",
+    "C!C",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "minecraft:crafting_table"
+    },
+    "!": {
+      "item": "hyperdaimc:god_sigil"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:desk"
+  }
+}

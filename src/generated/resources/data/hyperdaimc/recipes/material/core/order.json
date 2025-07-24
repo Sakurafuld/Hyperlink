@@ -1,0 +1,25 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "FPFPF",
+    "WPWPW",
+    "WP!PW"
+  ],
+  "key": {
+    "F": {
+      "item": "hyperdaimc:food_essence"
+    },
+    "W": {
+      "item": "hyperdaimc:work_essence"
+    },
+    "P": {
+      "item": "hyperdaimc:partition_essence"
+    },
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:order_core"
+  }
+}

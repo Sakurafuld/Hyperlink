@@ -20,7 +20,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1182.1.4'
+version = '1182.2.0-pre1'
 group = 'com.sakurafuld.hyperdaimc'
 archivesBaseName = 'Hyperlink'
 
@@ -121,8 +121,14 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:salmons-genesis-reincarnation-898734:5567527")
 
-    implementation fg.deobf('com.sakurafuld.hyperdaimc:MmmMmmMmmMmm:1.18.2-1.5.2')
+    compileOnly fg.deobf('com.sakurafuld.hyperdaimc:MmmMmmMmmMmm:1.18.2-1.5.2')
     implementation fg.deobf('com.sakurafuld.hyperdaimc:entityculling:forge-1.6.1-mc1.18.2')
+    implementation fg.deobf('com.sakurafuld.hyperdaimc:BetterTags:1.18.2-1.1')
+
+    implementation fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    implementation fg.deobf("curse.maven:mod-name-tooltip-238747:3574005")
+    implementation fg.deobf("curse.maven:jade-324717:5079263")
+
 
     implementation fg.deobf("curse.maven:brandons-core-231382:4790968")
     implementation fg.deobf("curse.maven:codechicken-lib-1-8-242818:4607274")
@@ -138,66 +144,61 @@ dependencies {
     implementation fg.deobf("curse.maven:iceberg-520110:4035917")
     implementation fg.deobf("curse.maven:titanium-287342:5151207")
     implementation fg.deobf("curse.maven:citadel-331936:3783096")
-
-
-    implementation fg.deobf("curse.maven:ftb-teams-forge-404468:4579981")
-    implementation fg.deobf("curse.maven:ftb-chunks-forge-314906:5423717")
-
     implementation fg.deobf("curse.maven:cofh-core-69162:4801048")
-    implementation fg.deobf("curse.maven:thermal-foundation-222880:4788649")
-    implementation fg.deobf("curse.maven:thermal-expansion-69163:4782927")
-    implementation fg.deobf("curse.maven:thermal-dynamics-227443:4760631")
-
-    implementation fg.deobf("curse.maven:projecte-226410:4860857")
-
-    implementation fg.deobf("curse.maven:botany-pots-353928:4711512")
-
-    implementation fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
-    implementation fg.deobf("curse.maven:mod-name-tooltip-238747:3574005")
-    implementation fg.deobf("curse.maven:jade-324717:5079263")
-
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:1.18.2-5.0.9.2")
 
-    implementation fg.deobf("vazkii.botania:Botania:${botania_version}")
 
-    implementation fg.deobf("curse.maven:draconic-evolution-223565:4953547")
+    compileOnly fg.deobf("curse.maven:ftb-teams-forge-404468:4579981")
+    compileOnly fg.deobf("curse.maven:ftb-chunks-forge-314906:5423717")
 
-    implementation fg.deobf("curse.maven:rftools-base-326041:4373521")
-    implementation fg.deobf("curse.maven:rftools-dimensions-240950:5386150")
-    implementation fg.deobf("curse.maven:rftools-builder-347706:5049046")
-    implementation fg.deobf("curse.maven:rftools-utility-342466:4938941")
+    compileOnly fg.deobf("curse.maven:thermal-foundation-222880:4788649")
+    compileOnly fg.deobf("curse.maven:thermal-expansion-69163:4782927")
+    compileOnly fg.deobf("curse.maven:thermal-dynamics-227443:4760631")
 
-    implementation fg.deobf("curse.maven:flux-networks-248020:4713885")
+    compileOnly fg.deobf("curse.maven:projecte-226410:4860857")
 
-    implementation fg.deobf("curse.maven:exponential-power-254249:3863542")
+    compileOnly fg.deobf("curse.maven:botany-pots-353928:4711512")
 
-    implementation fg.deobf("curse.maven:avaritia-1-10-261348:4406602")
+    compileOnly fg.deobf("vazkii.botania:Botania:${botania_version}")
 
-    implementation fg.deobf("curse.maven:blood-magic-224791:3953207")
+    compileOnly fg.deobf("curse.maven:draconic-evolution-223565:4953547")
 
-    implementation fg.deobf("curse.maven:integrated-dynamics-236307:5262070")
-    implementation fg.deobf("curse.maven:integrated-tunnels-251389:5314661")
+    compileOnly fg.deobf("curse.maven:rftools-base-326041:4373521")
+    compileOnly fg.deobf("curse.maven:rftools-dimensions-240950:5386150")
+    compileOnly fg.deobf("curse.maven:rftools-builder-347706:5049046")
+    compileOnly fg.deobf("curse.maven:rftools-utility-342466:4938941")
 
-    implementation fg.deobf("curse.maven:cyclic-239286:5258947")
+    compileOnly fg.deobf("curse.maven:flux-networks-248020:4713885")
 
-    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")
-    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")
-    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")
-    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")
-    implementation fg.deobf("curse.maven:mekanism-moresolarpanels-844063:4628351")
+    compileOnly fg.deobf("curse.maven:exponential-power-254249:3863542")
 
-    implementation fg.deobf("curse.maven:slashblade-241596:4440150")
+    compileOnly fg.deobf("curse.maven:avaritia-1-10-261348:4406602")
 
-    implementation fg.deobf("curse.maven:industrial-foregoing-266515:5334842")
+    compileOnly fg.deobf("curse.maven:blood-magic-224791:3953207")
 
-    implementation fg.deobf("curse.maven:lendercataclysm-551586:4418426")
+    compileOnly fg.deobf("curse.maven:integrated-dynamics-236307:5262070")
+    compileOnly fg.deobf("curse.maven:integrated-tunnels-251389:5314661")
 
-    implementation fg.deobf("curse.maven:pneumaticcraft-repressurized-281849:4922258")
+    compileOnly fg.deobf("curse.maven:cyclic-239286:5258947")
 
-    implementation fg.deobf("curse.maven:ice-and-fire-dragons-264231:5037775")
+    compileOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")
+    compileOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")
+    compileOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")
+    compileOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")
+    compileOnly fg.deobf("curse.maven:mekanism-moresolarpanels-844063:4628351")
 
-    implementation fg.deobf("slimeknights.mantle:Mantle:${mc_version}-${mantle_build}")
-    implementation fg.deobf("slimeknights.tconstruct:TConstruct:${mc_version}-${tinkers_build}")
+    compileOnly fg.deobf("curse.maven:slashblade-241596:4440150")
+
+    compileOnly fg.deobf("curse.maven:industrial-foregoing-266515:5334842")
+
+    compileOnly fg.deobf("curse.maven:lendercataclysm-551586:4418426")
+
+    compileOnly fg.deobf("curse.maven:pneumaticcraft-repressurized-281849:4922258")
+
+    compileOnly fg.deobf("curse.maven:ice-and-fire-dragons-264231:5037775")
+
+    compileOnly fg.deobf("slimeknights.mantle:Mantle:${mc_version}-${mantle_build}")
+    compileOnly fg.deobf("slimeknights.tconstruct:TConstruct:${mc_version}-${tinkers_build}")
 
 
     implementation fg.deobf("curse.maven:clumps-256717:4153344")

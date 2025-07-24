@@ -25,9 +25,16 @@ public class HyperSounds {
     public static final RegistryObject<SoundEvent> FUMETSU_HURT;
     public static final RegistryObject<SoundEvent> FUMETSU_SHOOT;
     public static final RegistryObject<SoundEvent> FUMETSU_STORM;
+    public static final RegistryObject<SoundEvent> DESK_POP;
+    public static final RegistryObject<SoundEvent> DESK_RESULT;
+    public static final RegistryObject<SoundEvent> DESK_MINING;
+    public static final RegistryObject<SoundEvent> DESK_MINECRAFT_START;
+    public static final RegistryObject<SoundEvent> DESK_MINECRAFT_FLAP;
+    public static final RegistryObject<SoundEvent> DESK_MINECRAFT_FINISH;
+    public static final RegistryObject<SoundEvent> CHEMICAL_MAXIMIZATION;
+    public static final RegistryObject<SoundEvent> SOUL;
 
     static {
-
         MUTEKI = register("muteki_equip");
         NOVEL = register("novelize");
         CHRONICLE_SELECT = register("chronicle_select");
@@ -41,6 +48,14 @@ public class HyperSounds {
         FUMETSU_HURT = register("fumetsu_hurt");
         FUMETSU_SHOOT = register("fumetsu_shoot");
         FUMETSU_STORM = register("fumetsu_storm");
+        DESK_POP = register("desk_pop");
+        DESK_RESULT = register("desk_result");
+        DESK_MINECRAFT_START = register("desk_minecraft_start");
+        DESK_MINING = register("desk_mining");
+        DESK_MINECRAFT_FLAP = register("desk_minecraft_flap");
+        DESK_MINECRAFT_FINISH = register("desk_minecraft_finish");
+        CHEMICAL_MAXIMIZATION = register("chemical_maximization");
+        SOUL = register("soul");
     }
 
     public static RegistryObject<SoundEvent> register(String name) {

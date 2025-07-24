@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
-import com.sakurafuld.hyperdaimc.content.muteki.MutekiHandler;
-import com.sakurafuld.hyperdaimc.content.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;

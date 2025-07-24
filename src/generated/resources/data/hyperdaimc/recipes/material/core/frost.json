@@ -1,0 +1,30 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    " PMP ",
+    "PMSMP",
+    "MSFSM",
+    "PMSMP",
+    " !MP "
+  ],
+  "key": {
+    "P": {
+      "item": "hyperdaimc:partition_essence"
+    },
+    "M": {
+      "item": "hyperdaimc:marine_essence"
+    },
+    "S": {
+      "item": "hyperdaimc:shadow_essence"
+    },
+    "F": {
+      "item": "hyperdaimc:food_essence"
+    },
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:frost_core"
+  }
+}

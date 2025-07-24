@@ -1,0 +1,27 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    " PPP ",
+    "PsSsP",
+    "PSs!P",
+    "PsSsP",
+    " PPP "
+  ],
+  "key": {
+    "P": {
+      "item": "hyperdaimc:partition_essence"
+    },
+    "S": {
+      "item": "hyperdaimc:shadow_essence"
+    },
+    "s": {
+      "item": "hyperdaimc:sound_essence"
+    },
+    "!": {
+      "item": "hyperdaimc:bug_star_zwei"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:echo_core"
+  }
+}

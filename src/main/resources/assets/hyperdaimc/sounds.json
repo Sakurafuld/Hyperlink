@@ -1,42 +1,60 @@
 {
   "muteki_equip": {
-    "subtitle": "hyperdaimc.subtitle.muteki_equip",
-    "sounds": [ "hyperdaimc:muteki_equip" ]
+    "subtitle": "subtitles.hyperdaimc.muteki_equip",
+    "sounds": [
+      "hyperdaimc:muteki_equip"
+    ]
   },
   "novelize": {
-    "subtitle": "hyperdaimc.subtitle.novelize",
-    "sounds": [ "hyperdaimc:novelize" ]
+    "subtitle": "subtitles.hyperdaimc.novelize",
+    "sounds": [
+      "hyperdaimc:novelize"
+    ]
   },
   "chronicle_select": {
-    "subtitle": "hyperdaimc.subtitle.chronicle_select",
-    "sounds": [ "hyperdaimc:chronicle_select" ]
+    "subtitle": "subtitles.hyperdaimc.chronicle_select",
+    "sounds": [
+      "hyperdaimc:chronicle_select"
+    ]
   },
   "chronicle_pause": {
-    "subtitle": "hyperdaimc.subtitle.chronicle_pause",
-    "sounds": [ "hyperdaimc:chronicle_pause" ]
+    "subtitle": "subtitles.hyperdaimc.chronicle_pause",
+    "sounds": [
+      "hyperdaimc:chronicle_pause"
+    ]
   },
   "chronicle_restart": {
-    "subtitle": "hyperdaimc.subtitle.chronicle_restart",
-    "sounds": [ "hyperdaimc:chronicle_restart" ]
+    "subtitle": "subtitles.hyperdaimc.chronicle_restart",
+    "sounds": [
+      "hyperdaimc:chronicle_restart"
+    ]
   },
   "perfect_knockout": {
-    "subtitle": "hyperdaimc.subtitle.perfect_knockout",
-    "sounds": [ "hyperdaimc:perfect_knockout" ]
+    "subtitle": "subtitles.hyperdaimc.perfect_knockout",
+    "sounds": [
+      "hyperdaimc:perfect_knockout"
+    ]
   },
   "vrx_open": {
-    "subtitle": "hyperdaimc.subtitle.vrx_open",
-    "sounds": [ "hyperdaimc:vrx_open" ]
+    "subtitle": "subtitles.hyperdaimc.vrx_open",
+    "sounds": [
+      "hyperdaimc:vrx_open"
+    ]
   },
   "vrx_create": {
-    "subtitle": "hyperdaimc.subtitle.vrx_create",
-    "sounds": [ "hyperdaimc:vrx_create" ]
+    "subtitle": "subtitles.hyperdaimc.vrx_create",
+    "sounds": [
+      "hyperdaimc:vrx_create"
+    ]
   },
   "vrx_erase": {
-    "subtitle": "hyperdaimc.subtitle.vrx_erase",
-    "sounds": [ "hyperdaimc:vrx_erase" ]
+    "subtitle": "subtitles.hyperdaimc.vrx_erase",
+    "sounds": [
+      "hyperdaimc:vrx_erase"
+    ]
   },
   "fumetsu_ambient": {
-    "subtitle": "hyperdaimc.subtitle.fumetsu_ambient",
+    "subtitle": "subtitles.hyperdaimc.fumetsu_ambient",
     "sounds": [
       "hyperdaimc:fumetsu_idle1",
       "hyperdaimc:fumetsu_idle2",
@@ -45,7 +63,7 @@
     ]
   },
   "fumetsu_hurt": {
-    "subtitle": "hyperdaimc.subtitle.fumetsu_hurt",
+    "subtitle": "subtitles.hyperdaimc.fumetsu_hurt",
     "sounds": [
       "hyperdaimc:fumetsu_hurt1",
       "hyperdaimc:fumetsu_hurt2",
@@ -54,11 +72,57 @@
     ]
   },
   "fumetsu_shoot": {
-    "subtitle": "hyperdaimc.subtitle.fumetsu_shoot",
-    "sounds": [ "hyperdaimc:fumetsu_shoot" ]
+    "subtitle": "subtitles.hyperdaimc.fumetsu_shoot",
+    "sounds": [
+      "hyperdaimc:fumetsu_shoot"
+    ]
   },
   "fumetsu_storm": {
-    "subtitle": "hyperdaimc.subtitle.fumetsu_storm",
-    "sounds": [ "hyperdaimc:fumetsu_storm" ]
+    "subtitle": "subtitles.hyperdaimc.fumetsu_storm",
+    "sounds": [
+      "hyperdaimc:fumetsu_storm"
+    ]
+  },
+  "desk_pop": {
+    "sounds": [
+      "hyperdaimc:desk_pop"
+    ]
+  },
+  "desk_result": {
+    "sounds": [
+      "hyperdaimc:desk_result"
+    ]
+  },
+  "desk_mining": {
+    "sounds": [
+      "hyperdaimc:desk_mining"
+    ]
+  },
+  "desk_minecraft_start": {
+    "sounds": [
+      "hyperdaimc:desk_minecraft_start"
+    ]
+  },
+  "desk_minecraft_flap": {
+    "sounds": [
+      "hyperdaimc:desk_minecraft_flap"
+    ]
+  },
+  "desk_minecraft_finish": {
+    "sounds": [
+      "hyperdaimc:desk_minecraft_finish"
+    ]
+  },
+  "chemical_maximization": {
+    "subtitle": "subtitles.hyperdaimc.chemical_maximization",
+    "sounds": [
+      "hyperdaimc:chemical_maximization"
+    ]
+  },
+  "soul": {
+    "subtitle": "subtitles.hyperdaimc.soul",
+    "sounds": [
+      "hyperdaimc:soul"
+    ]
   }
 }

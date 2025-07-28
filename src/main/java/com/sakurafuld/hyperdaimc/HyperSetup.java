@@ -14,6 +14,7 @@ import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.storm.FumetsuStormRendere
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXOverlay;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXScreen;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXTooltip;
+import com.sakurafuld.hyperdaimc.content.over.materializer.MaterializerScreen;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import net.minecraft.Util;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -169,6 +170,7 @@ public class HyperSetup {
 
             MenuScreens.register(HyperMenus.VRX.get(), VRXScreen::new);
             MenuScreens.register(HyperMenus.DESK.get(), DeskScreen::new);
+            MenuScreens.register(HyperMenus.MATERIALIZER.get(), MaterializerScreen::new);
         });
     }
 

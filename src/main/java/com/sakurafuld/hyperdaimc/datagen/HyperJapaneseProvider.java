@@ -194,6 +194,9 @@ public class HyperJapaneseProvider extends LanguageProvider {
         if (entry == HyperBlocks.SOUL.get()) {
             return "ボーンソウル";
         }
+        if (entry == HyperBlocks.MATERIALIZER.get()) {
+            return "Z-MAX マテリアライザー";
+        }
         if (entry == HyperEntities.FUMETSU.get()) {
             return "フメツウィザー";
         }

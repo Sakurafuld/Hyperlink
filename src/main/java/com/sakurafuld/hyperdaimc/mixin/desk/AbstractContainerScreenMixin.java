@@ -21,7 +21,7 @@ public abstract class AbstractContainerScreenMixin {
     private void renderSlotDesk$BEFORE(GuiGraphics pGuiGraphics, Slot pSlot, CallbackInfo ci) {
         if ((Object) this instanceof DeskScreen screen) {
             if (pSlot.index < 82) {
-                float partialTick = Minecraft.getInstance().getFrameTime();
+                float partialTick = Minecraft.getInstance().getPartialTick();
                 float pop = pSlot.getItem().getPopTime() - partialTick;
                 if (pop > 0) {
                     float popper = 1 + pop / 5;
@@ -50,7 +50,7 @@ public abstract class AbstractContainerScreenMixin {
     private void renderSlotDesk$AFTER(GuiGraphics pGuiGraphics, Slot pSlot, CallbackInfo ci) {
         if ((Object) this instanceof DeskScreen screen) {
             if (pSlot.index < 82) {
-                float partialTick = Minecraft.getInstance().getFrameTime();
+                float partialTick = Minecraft.getInstance().getPartialTick();
                 float pop = pSlot.getItem().getPopTime() - partialTick;
                 if (pop > 0 || (pSlot.index == 0 && screen.canCraftTicks > 0 && 37 > screen.canCraftTicks)) {
                     pGuiGraphics.pose().popPose();

@@ -25,11 +25,11 @@ public class DeskMenu extends AbstractContainerMenu {
         this(id, inventory, inventory.player.level().getBlockEntity(buf.readBlockPos(), HyperBlockEntities.DESK.get()).orElseThrow());
     }
 
-    public DeskMenu(int id, Inventory inventory, DeskBlockEntity tile) {
+    public DeskMenu(int id, Inventory inventory, DeskBlockEntity desk) {
         super(HyperMenus.DESK.get(), id);
-        this.access = ContainerLevelAccess.create(inventory.player.level(), tile.getBlockPos());
-        this.data = tile.data;
-        this.addSlot(new SlotItemHandler(tile.result, 0, 80, 188) {
+        this.access = ContainerLevelAccess.create(inventory.player.level(), desk.getBlockPos());
+        this.data = desk.data;
+        this.addSlot(new SlotItemHandler(desk.result, 0, 80, 188) {
 
             @Override
             public boolean mayPickup(Player playerIn) {
@@ -51,7 +51,7 @@ public class DeskMenu extends AbstractContainerMenu {
 
         for (int row = 0; row < 9; ++row) {
             for (int colunm = 0; colunm < 9; ++colunm) {
-                this.addSlot(new SlotItemHandler(tile.inventory, colunm + row * 9, 8 + colunm * 18, 18 + row * 18) {
+                this.addSlot(new SlotItemHandler(desk.inventory, colunm + row * 9, 8 + colunm * 18, 18 + row * 18) {
                     @Override
                     public boolean mayPickup(Player playerIn) {
                         return true;
@@ -75,7 +75,7 @@ public class DeskMenu extends AbstractContainerMenu {
         }
 
         this.addDataSlots(this.data);
-        tile.updateRecipe();
+        desk.updateRecipe();
     }
 
     @Override

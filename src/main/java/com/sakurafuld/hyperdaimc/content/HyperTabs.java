@@ -20,12 +20,12 @@ public class HyperTabs {
         MAIN = REGISTRY.register("main", () -> CreativeModeTab.builder()
                 .title(Component.translatable("itemGroup.hyperdaimc.main"))
                 .icon(HyperItems.MUTEKI.lazyMap(ItemStack::new))
-                .displayItems(((pParameters, pOutput) -> HyperItems.MAIN.forEach(object -> pOutput.accept(object.get()))))
+                .displayItems((pParameters, pOutput) -> HyperItems.MAIN.forEach(object -> pOutput.accept(object.get())))
                 .build());
         CRAFTING = REGISTRY.register("crafting", () -> CreativeModeTab.builder()
                 .title(Component.translatable("itemGroup.hyperdaimc.crafting"))
                 .icon(HyperItems.GAME_ORB.lazyMap(ItemStack::new))
-                .displayItems(((pParameters, pOutput) -> HyperItems.CRAFTING.forEach(object -> pOutput.accept(object.get()))))
+                .displayItems((pParameters, pOutput) -> HyperItems.CRAFTING.forEach(object -> pOutput.accept(object.get())))
                 .build());
     }
 }

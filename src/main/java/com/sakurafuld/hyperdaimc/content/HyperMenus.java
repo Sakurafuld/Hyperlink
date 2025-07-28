@@ -2,6 +2,7 @@ package com.sakurafuld.hyperdaimc.content;
 
 import com.sakurafuld.hyperdaimc.content.crafting.desk.DeskMenu;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXMenu;
+import com.sakurafuld.hyperdaimc.content.over.materializer.MaterializerMenu;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -18,10 +19,12 @@ public class HyperMenus {
 
     public static final RegistryObject<MenuType<VRXMenu>> VRX;
     public static final RegistryObject<MenuType<DeskMenu>> DESK;
+    public static final RegistryObject<MenuType<MaterializerMenu>> MATERIALIZER;
 
     static {
         VRX = register("vrx", VRXMenu::new);
         DESK = register("desk", DeskMenu::new);
+        MATERIALIZER = register("materializer", MaterializerMenu::new);
     }
 
     public static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> register(String id, IContainerFactory<T> factory) {

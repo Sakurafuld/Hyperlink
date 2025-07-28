@@ -156,6 +156,9 @@ public class HyperEnglishProvider extends LanguageProvider {
         if (entry == HyperBlocks.FUMETSU_LEFT.get()) {
             return "Left Fumetsu Skull";
         }
+        if (entry == HyperBlocks.MATERIALIZER.get()) {
+            return "Z-MAX Materializer";
+        }
         return null;
     }
 

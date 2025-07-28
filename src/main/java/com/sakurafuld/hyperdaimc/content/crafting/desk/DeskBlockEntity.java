@@ -250,6 +250,17 @@ public class DeskBlockEntity extends BlockEntity implements MenuProvider {
         this.capability = LazyOptional.of(() -> this.ioHandler);
     }
 
+    @Override
+    public Component getDisplayName() {
+        return this.getBlockState().getBlock().getName();
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
+        return new DeskMenu(pContainerId, pPlayerInventory, this);
+    }
+
     @Nullable
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
@@ -261,18 +272,6 @@ public class DeskBlockEntity extends BlockEntity implements MenuProvider {
         CompoundTag tag = new CompoundTag();
         this.saveAdditional(tag);
         return tag;
-    }
-
-    // MenuProvider for Spectator.
-    @Override
-    public Component getDisplayName() {
-        return this.getBlockState().getBlock().getName();
-    }
-
-    @Nullable
-    @Override
-    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-        return new DeskMenu(pContainerId, pPlayerInventory, this);
     }
 
     @Override

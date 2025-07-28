@@ -2,16 +2,12 @@ package com.sakurafuld.hyperdaimc.content.crafting.desk;
 
 import com.sakurafuld.hyperdaimc.content.HyperBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -42,18 +38,7 @@ public class DeskBlock extends Block implements EntityBlock {
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (pPlayer instanceof ServerPlayer serverPlayer) {
-            NetworkHooks.openGui(serverPlayer, new MenuProvider() {
-                @Override
-                public Component getDisplayName() {
-                    return DeskBlock.this.getName();
-                }
-
-                @Nullable
-                @Override
-                public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-                    return new DeskMenu(pContainerId, pPlayerInventory, pLevel.getBlockEntity(pPos, HyperBlockEntities.DESK.get()).orElseThrow());
-                }
-            }, pPos);
+            pLevel.getBlockEntity(pPos, HyperBlockEntities.DESK.get()).ifPresent(desk -> NetworkHooks.openGui(serverPlayer, desk, pPos));
         }
         return InteractionResult.sidedSuccess(side().isClient());
     }

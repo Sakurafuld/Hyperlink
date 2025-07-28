@@ -15,12 +15,16 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +44,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class DeskBlockEntity extends BlockEntity {
+public class DeskBlockEntity extends BlockEntity implements MenuProvider {
     private final Object2ObjectOpenHashMap<Item, IntAVLTreeSet> lock = new Object2ObjectOpenHashMap<>();
     private final Object2IntOpenHashMap<Item> minimum = new Object2IntOpenHashMap<>();
 
@@ -244,6 +248,17 @@ public class DeskBlockEntity extends BlockEntity {
     public void reviveCaps() {
         super.reviveCaps();
         this.capability = LazyOptional.of(() -> this.ioHandler);
+    }
+
+    @Override
+    public Component getDisplayName() {
+        return this.getBlockState().getBlock().getName();
+    }
+
+    @Nullable
+    @Override
+    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
+        return new DeskMenu(pContainerId, pPlayerInventory, this);
     }
 
     @Nullable

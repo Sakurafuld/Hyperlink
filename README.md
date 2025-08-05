@@ -3,7 +3,7 @@ MinecraftForge
 
 ハイパー桁外れなアイテムとボスを追加するMod
 
-# ↓Config(すべてデフォルトの値)
+# ↓Config(すべて1.20.1でのデフォルトの値)
 
 ## Muteki
 

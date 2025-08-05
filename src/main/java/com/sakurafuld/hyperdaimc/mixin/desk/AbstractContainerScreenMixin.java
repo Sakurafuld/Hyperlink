@@ -46,7 +46,7 @@ public abstract class AbstractContainerScreenMixin {
                     this.temporaryPose.pushPose();
                     this.temporaryPose.translate(x, y, 0);
                     this.temporaryPose.translate(pSlot.x + 8, pSlot.y + 8, 0);
-                    this.temporaryPose.scale(size, size, size);
+                    this.temporaryPose.scale(size, size, 1);
                     this.temporaryPose.mulPose(Vector3f.ZP.rotationDegrees(Mth.rotLerp(partialTick, screen.resultOldRot, screen.resultRot)));
                     this.temporaryPose.translate(-(pSlot.x + 8), -(pSlot.y + 8), 0);
                     RenderSystem.applyModelViewMatrix();

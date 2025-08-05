@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 public abstract class AbstractGashatItem extends Item {
@@ -33,7 +32,7 @@ public abstract class AbstractGashatItem extends Item {
         this.tooltip = new TranslatableComponent("tooltip.hyperdaimc." + name);
         this.rarity = Rarity.create(name, style -> style.withColor(rarity));
         this.enabled = enabled;
-        this.model = identifier(HYPERDAIMC, "special/" + name);
+        this.model = identifier("special/" + name);
     }
 
     @Override

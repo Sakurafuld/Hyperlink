@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
 import com.mojang.datafixers.util.Pair;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.content.AbstractGashatItem;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import net.minecraft.Util;
@@ -26,7 +26,7 @@ public class VRXItem extends AbstractGashatItem {
     private String lastName = VRXHandler.getMake();
 
     public VRXItem(String name, Properties pProperties) {
-        super(name, pProperties, 0xAAFFFF, HyperServerConfig.ENABLE_VRX);
+        super(name, pProperties, 0xAAFFFF, HyperCommonConfig.ENABLE_VRX);
     }
 
     @Override

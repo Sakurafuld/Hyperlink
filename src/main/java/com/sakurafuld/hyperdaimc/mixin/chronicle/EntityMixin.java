@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class EntityMixin {
     @Inject(method = "mayInteract", at = @At("HEAD"), cancellable = true)
     private void mayInteractChronicle(Level pLevel, BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
-        if (HyperServerConfig.CHRONICLE_INTERACT.get() && ChronicleHandler.isPaused(pLevel, pPos, (Entity) ((Object) this))) {
+        if (HyperCommonConfig.CHRONICLE_INTERACT.get() && ChronicleHandler.isPaused(pLevel, pPos, (Entity) ((Object) this))) {
             cir.setReturnValue(false);
         }
     }

@@ -1,5 +1,6 @@
 package com.sakurafuld.hyperdaimc.content.crafting.sigill;
 
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.HyperBlocks;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
@@ -56,7 +57,7 @@ public class SigilItem extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
-        if (pContext.getPlayer() != null && pContext.getPlayer().isShiftKeyDown()) {
+        if (HyperCommonConfig.FUMETSU_SUMMON.get() && pContext.getPlayer() != null && pContext.getPlayer().isShiftKeyDown()) {
 
             if (checkAndSpawn(pContext.getLevel(), pContext.getClickedPos(), getOrCreatePattern0()) || checkAndSpawn(pContext.getLevel(), pContext.getClickedPos(), getOrCreatePattern1()))
                 ;

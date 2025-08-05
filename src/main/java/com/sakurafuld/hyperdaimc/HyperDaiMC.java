@@ -32,7 +32,6 @@ public class HyperDaiMC {
         HyperSounds.REGISTRY.register(bus);
 
         ctx.registerConfig(ModConfig.Type.COMMON, HyperCommonConfig.SPEC, HYPERDAIMC + "-common.toml");
-        ctx.registerConfig(ModConfig.Type.SERVER, HyperServerConfig.SPEC, HYPERDAIMC + "-server.toml");
 
         new HyperMekanism();
         new HyperTConstruct();

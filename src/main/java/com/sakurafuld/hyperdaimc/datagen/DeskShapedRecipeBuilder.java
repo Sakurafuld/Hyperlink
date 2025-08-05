@@ -24,7 +24,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 public class DeskShapedRecipeBuilder implements RecipeBuilder {
@@ -110,7 +109,7 @@ public class DeskShapedRecipeBuilder implements RecipeBuilder {
         int separator = material.lastIndexOf('_');
         String base = material.substring(0, separator);
         String suffix = material.substring(separator + 1);
-        this.save(finisher, identifier(HYPERDAIMC, "material/" + suffix + "/" + base));
+        this.save(finisher, identifier("material/" + suffix + "/" + base));
     }
 
     private void ensureValid(ResourceLocation pId) {

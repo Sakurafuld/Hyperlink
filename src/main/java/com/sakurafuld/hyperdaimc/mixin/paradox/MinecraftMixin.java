@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.paradox;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -25,7 +25,7 @@ public abstract class MinecraftMixin {
     private HitResult.Type continueAttackMixin(HitResult instance) {
         LocalPlayer player = ((Minecraft) (Object) this).player;
         if (ParadoxHandler.hasParadox(player)) {
-            this.hitResult = player.pick(player.getReachDistance(), 1, HyperServerConfig.PARADOX_HIT_FLUID.get());
+            this.hitResult = player.pick(player.getReachDistance(), 1, HyperCommonConfig.PARADOX_HIT_FLUID.get());
             return this.hitResult.getType();
         } else {
             return instance.getType();

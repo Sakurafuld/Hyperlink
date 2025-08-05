@@ -23,12 +23,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class FumetsuSkullBlockEntityRenderer implements BlockEntityRenderer<FumetsuSkullBlockEntity> {
-    public static final ResourceLocation TEXTURE = identifier(HYPERDAIMC, "textures/block/fumetsu_skull.png");
+    public static final ResourceLocation TEXTURE = identifier("textures/block/fumetsu_skull.png");
 
     private final Object2ObjectOpenHashMap<Block, SkullModel> models;
     private final SkullModel center;

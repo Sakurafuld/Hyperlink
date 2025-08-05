@@ -102,12 +102,14 @@ public class HyperEnglishProvider extends LanguageProvider {
         this.add("curios.identifier.maximum", "Maximum");
 
         this.add("recipe.hyperdaimc.desk", "Gamacrafting");
+        this.add("recipe.hyperdaimc.materializer", "Materialization");
 
-//        this.add("information.hyperdaimc.material.0", "Right-click and hold to consume, and you will obtain one of the items that were used as materials for that item, equal to the total number of materials used. (Can also be used with a dispenser.)");
         this.add("information.hyperdaimc.fumetsu_wither.0", """
-                Place %2$s, %3$s, %4$s, and %5$s in the same way as summoning a Wither, and you can summon %7$s by holding %1$s and right-clicking while shifting.
+                Place %2$s, %3$s, %4$s, and %5$s in the same way as summoning a Wither, and you can summon %7$s by holding %1$s and right-clicking while sneaking.
                 %7$s is basically neutral and will not become hostile unless it takes damage (and must never become hostile).
                 If you log out of the game, move to another dimension, or die, %7$s will leave %6$s behind and disappear from this world.""");
+
+        this.add("tooltip.hyperdaimc.materializer.fuel", "Uses: %s");
 
         this.add("modifier.hyperdaimc.novel", "Mighty Novel X");
         this.add("modifier.hyperdaimc.novel.flavor", "Critical Destiny!");
@@ -154,6 +156,9 @@ public class HyperEnglishProvider extends LanguageProvider {
         }
         if (entry == HyperBlocks.FUMETSU_LEFT.get()) {
             return "Left Fumetsu Skull";
+        }
+        if (entry == HyperBlocks.MATERIALIZER.get()) {
+            return "Z-MAX Materializer";
         }
         return null;
     }

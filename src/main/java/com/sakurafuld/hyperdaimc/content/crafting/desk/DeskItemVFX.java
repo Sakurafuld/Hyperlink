@@ -3,7 +3,9 @@ package com.sakurafuld.hyperdaimc.content.crafting.desk;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import com.sakurafuld.hyperdaimc.api.content.IScreenVFX;
 import com.sakurafuld.hyperdaimc.helper.Calculates;
+import com.sakurafuld.hyperdaimc.helper.Renders;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.Slot;
@@ -16,7 +18,7 @@ import java.util.Objects;
 import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
-public class DeskItemVFX implements IDeskVFX {
+public class DeskItemVFX implements IScreenVFX {
     private final DeskScreen screen;
     private final Slot slot;
     private final Slot result;
@@ -88,21 +90,20 @@ public class DeskItemVFX implements IDeskVFX {
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-        float x = this.screen.getGuiLeft() + Mth.lerp(partialTick, this.oldPosition.x, this.position.x);
-        float y = this.screen.getGuiTop() + Mth.lerp(partialTick, this.oldPosition.y, this.position.y);
-        float rot = Mth.rotLerp(partialTick, this.oldRot, this.rot);
+    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+        float x = this.screen.getGuiLeft() + Mth.lerp(pPartialTick, this.oldPosition.x, this.position.x);
+        float y = this.screen.getGuiTop() + Mth.lerp(pPartialTick, this.oldPosition.y, this.position.y);
+        float rot = Mth.rotLerp(pPartialTick, this.oldRot, this.rot);
 
-        poseStack = RenderSystem.getModelViewStack();
-        poseStack.pushPose();
+        PoseStack poseStack = RenderSystem.getModelViewStack();
+        Renders.with(poseStack, () -> {
+            poseStack.translate(x, y, 200);
+            poseStack.translate(8, 8, 0);
+            poseStack.mulPose(Vector3f.ZP.rotationDegrees(rot));
+            poseStack.translate(-8, -8, 0);
+            Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.slot.getItem(), 0, 0);
 
-        poseStack.translate(x, y, 200);
-        poseStack.translate(8, 8, 0);
-        poseStack.mulPose(Vector3f.ZP.rotationDegrees(rot));
-        poseStack.translate(-8, -8, 0);
-        Minecraft.getInstance().getItemRenderer().renderAndDecorateItem(this.slot.getItem(), 0, 0);
-
-        poseStack.popPose();
+        });
         RenderSystem.applyModelViewMatrix();
     }
 }

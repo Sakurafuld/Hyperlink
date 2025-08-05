@@ -21,11 +21,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 public class DeskRecipeCategory implements IRecipeCategory<IDeskRecipe> {
-    public static final ResourceLocation ID = identifier(HYPERDAIMC, "desk");
+    public static final ResourceLocation ID = identifier("desk");
     public static final RecipeType<IDeskRecipe> TYPE = new RecipeType<>(ID, IDeskRecipe.class);
     private static final Component TITLE = new TranslatableComponent("recipe.hyperdaimc.desk");
 
@@ -36,7 +35,7 @@ public class DeskRecipeCategory implements IRecipeCategory<IDeskRecipe> {
     private final IDrawable blockOn;
 
     public DeskRecipeCategory(IGuiHelper helper) {
-        ResourceLocation desk = identifier(HYPERDAIMC, "textures/gui/container/desk.png");
+        ResourceLocation desk = identifier("textures/gui/container/desk.png");
         this.background = helper.drawableBuilder(desk, 7, 17, 162, 192).setTextureSize(512, 512).build();
         this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(HyperBlocks.DESK.get()));
         this.minecraftOff = helper.drawableBuilder(desk, 176, 0, 15, 12).setTextureSize(512, 512).build();

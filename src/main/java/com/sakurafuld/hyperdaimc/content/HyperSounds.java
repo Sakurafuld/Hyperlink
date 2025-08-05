@@ -33,6 +33,7 @@ public class HyperSounds {
     public static final RegistryObject<SoundEvent> DESK_MINECRAFT_FINISH;
     public static final RegistryObject<SoundEvent> CHEMICAL_MAXIMIZATION;
     public static final RegistryObject<SoundEvent> SOUL;
+    public static final RegistryObject<SoundEvent> MATERIALIZER_POP;
 
     static {
         MUTEKI = register("muteki_equip");
@@ -56,9 +57,10 @@ public class HyperSounds {
         DESK_MINECRAFT_FINISH = register("desk_minecraft_finish");
         CHEMICAL_MAXIMIZATION = register("chemical_maximization");
         SOUL = register("soul");
+        MATERIALIZER_POP = register("materializer_pop");
     }
 
     public static RegistryObject<SoundEvent> register(String name) {
-        return REGISTRY.register(name, () -> new SoundEvent(identifier(HYPERDAIMC, name)));
+        return REGISTRY.register(name, () -> new SoundEvent(identifier(name)));
     }
 }

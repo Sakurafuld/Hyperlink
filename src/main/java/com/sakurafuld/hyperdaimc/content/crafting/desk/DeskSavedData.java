@@ -211,7 +211,7 @@ public class DeskSavedData extends SavedData {
             }
 
             tag.put("Ingredients", list);
-            tag.put("Result", this.result.save(new CompoundTag()));
+            tag.put("Result", this.result.serializeNBT());
             tag.putInt("Ticks", this.ticks);
 
             tag.putBoolean("RenderOnes", this.renderOnes);
@@ -377,7 +377,7 @@ public class DeskSavedData extends SavedData {
         public CompoundTag save() {
             CompoundTag tag = new CompoundTag();
 
-            tag.put("Item", this.stack.save(new CompoundTag()));
+            tag.put("Item", this.stack.serializeNBT());
             tag.putFloat("Percent", this.percent);
             tag.putInt("Index", this.index);
             tag.putDouble("Reach", this.reach);

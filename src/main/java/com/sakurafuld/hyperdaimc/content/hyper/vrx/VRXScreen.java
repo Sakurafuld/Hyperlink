@@ -23,11 +23,10 @@ import net.minecraftforge.client.gui.GuiUtils;
 
 import java.util.Collections;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 public class VRXScreen extends AbstractContainerScreen<VRXMenu> {
-    private static final ResourceLocation BACKGROUND = identifier(HYPERDAIMC, "textures/gui/container/vrx.png");
+    private static final ResourceLocation BACKGROUND = identifier("textures/gui/container/vrx.png");
 
     private boolean clicking = false;
 

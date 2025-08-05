@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.compat.jei;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXJeiWrapper;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXOne;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXScreen;
@@ -23,7 +23,7 @@ public class VRXGhostIngredientHandler implements IGhostIngredientHandler<VRXScr
     @Override
     @SuppressWarnings("unchecked")
     public <I> List<Target<I>> getTargets(VRXScreen screen, I ingredient, boolean b) {
-        if (HyperServerConfig.VRX_JEI.get()) {
+        if (HyperCommonConfig.VRX_JEI.get()) {
             VRXJeiWrapper<I> wrapper = VRXOne.Type.cast(ingredient);
             if (wrapper != null) {
                 class WrappedTarget implements Target<I> {

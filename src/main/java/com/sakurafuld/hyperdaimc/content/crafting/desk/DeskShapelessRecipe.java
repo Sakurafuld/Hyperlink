@@ -155,8 +155,8 @@ public class DeskShapelessRecipe implements IDeskRecipe {
                             }
                         });
 
-                if (GsonHelper.isArrayNode(recipeJson, "exclusions")) {
-                    for (JsonElement element : GsonHelper.getAsJsonArray(recipeJson, "exclusions")) {
+                if (GsonHelper.isArrayNode(recipeJson, "exclusion")) {
+                    for (JsonElement element : GsonHelper.getAsJsonArray(recipeJson, "exclusion")) {
                         String exclusion = GsonHelper.convertToString(element, "exclusion");
                         if (exclusion.startsWith("#")) {
                             values.removeAll(context.getTag(ItemTags.create(new ResourceLocation(exclusion.substring(1)))).getValues().stream().map(Holder::value).toList());

@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
 import com.google.common.collect.Lists;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -31,14 +31,14 @@ public class VRXCapability implements ICapabilitySerializable<CompoundTag> {
     private final List<Entry> entries = Lists.newArrayList();
 
     public List<Entry> getEntries() {
-        if (!HyperServerConfig.ENABLE_VRX.get()) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return Collections.emptyList();
         }
         return this.entries;
     }
 
     public void create(UUID uuid, Direction face, List<VRXOne> list) {
-        if (!HyperServerConfig.ENABLE_VRX.get()) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return;
         }
         Entry entry = new Entry(uuid, face, list);

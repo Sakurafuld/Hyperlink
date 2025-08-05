@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.util.Pair;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.HyperMenus;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.vrx.ClientboundVRXSetTooltip;
@@ -119,7 +119,7 @@ public class VRXMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player pPlayer) {
-        if (!HyperServerConfig.ENABLE_VRX.get()) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return false;
         }
         if (this.first) {

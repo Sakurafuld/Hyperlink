@@ -16,7 +16,6 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.require;
 public class ClientboundChemicalMutation {
     private final int entity;
 
-
     public ClientboundChemicalMutation(int entity) {
         this.entity = entity;
     }

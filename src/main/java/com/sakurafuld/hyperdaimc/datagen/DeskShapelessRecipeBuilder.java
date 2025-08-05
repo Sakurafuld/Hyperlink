@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 public class DeskShapelessRecipeBuilder implements RecipeBuilder {
@@ -30,7 +29,7 @@ public class DeskShapelessRecipeBuilder implements RecipeBuilder {
     private final int count;
     private final List<Ingredient> ingredients = Lists.newArrayList();
     private final List<String> values = Lists.newArrayList();
-    private final List<String> exclusions = Lists.newArrayList();
+    private final List<String> exclusion = Lists.newArrayList();
 
     public DeskShapelessRecipeBuilder(ItemLike result, int count) {
         this.result = result;
@@ -44,7 +43,7 @@ public class DeskShapelessRecipeBuilder implements RecipeBuilder {
     public static DeskShapelessRecipeBuilder essence(String name) {
         return new DeskShapelessRecipeBuilder(HyperItems.getEssence(name))
                 .values(HyperItems.BUG_STARS.get(0).get())
-                .values(ItemTags.create(identifier(HYPERDAIMC, "essence/" + name)));
+                .values(ItemTags.create(identifier("essence/" + name)));
     }
 
     public DeskShapelessRecipeBuilder minecraft() {
@@ -68,14 +67,14 @@ public class DeskShapelessRecipeBuilder implements RecipeBuilder {
         return this;
     }
 
-    public DeskShapelessRecipeBuilder exclusions(Item... exclusions) {
-        this.exclusions.addAll(Arrays.stream(exclusions).map(item -> item.getRegistryName().toString()).toList());
+    public DeskShapelessRecipeBuilder exclusion(Item... exclusion) {
+        this.exclusion.addAll(Arrays.stream(exclusion).map(item -> item.getRegistryName().toString()).toList());
         return this;
     }
 
     @SafeVarargs
-    public final DeskShapelessRecipeBuilder exclusions(TagKey<Item>... exclusions) {
-        this.exclusions.addAll(Arrays.stream(exclusions).map(tag -> "#" + tag.location()).toList());
+    public final DeskShapelessRecipeBuilder exclusion(TagKey<Item>... exclusion) {
+        this.exclusion.addAll(Arrays.stream(exclusion).map(tag -> "#" + tag.location()).toList());
         return this;
     }
 
@@ -104,7 +103,7 @@ public class DeskShapelessRecipeBuilder implements RecipeBuilder {
         int separator = material.lastIndexOf('_');
         String base = material.substring(0, separator);
         String suffix = material.substring(separator + 1);
-        this.save(finisher, identifier(HYPERDAIMC, "material/" + suffix + "/" + base));
+        this.save(finisher, identifier("material/" + suffix + "/" + base));
     }
 
     class Finisher implements FinishedRecipe {
@@ -139,14 +138,14 @@ public class DeskShapelessRecipeBuilder implements RecipeBuilder {
                 pJson.add("values", values);
             }
 
-            if (!DeskShapelessRecipeBuilder.this.exclusions.isEmpty()) {
-                JsonArray exclusions = new JsonArray();
+            if (!DeskShapelessRecipeBuilder.this.exclusion.isEmpty()) {
+                JsonArray exclusion = new JsonArray();
 
-                for (String value : DeskShapelessRecipeBuilder.this.exclusions) {
-                    exclusions.add(value);
+                for (String value : DeskShapelessRecipeBuilder.this.exclusion) {
+                    exclusion.add(value);
                 }
 
-                pJson.add("exclusions", exclusions);
+                pJson.add("exclusion", exclusion);
             }
 
             JsonObject result = new JsonObject();

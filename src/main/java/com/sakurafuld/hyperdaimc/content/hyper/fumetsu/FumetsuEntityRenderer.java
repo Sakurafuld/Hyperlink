@@ -22,12 +22,11 @@ import net.minecraftforge.client.event.RenderNameplateEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class FumetsuEntityRenderer extends MobRenderer<FumetsuEntity, FumetsuEntityModel> {
-    public static final ResourceLocation TEXTURE = identifier(HYPERDAIMC, "textures/entity/fumetsu.png");
+    public static final ResourceLocation TEXTURE = identifier("textures/entity/fumetsu.png");
 
     public FumetsuEntityRenderer(EntityRendererProvider.Context pContext) {
         super(pContext, new FumetsuEntityModel(FumetsuEntityModel.createLayer().bakeRoot()), 1);

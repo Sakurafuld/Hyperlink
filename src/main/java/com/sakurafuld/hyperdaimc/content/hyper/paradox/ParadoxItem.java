@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.hyper.paradox;
 
 import com.google.common.collect.Sets;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.content.AbstractGashatItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -15,7 +15,7 @@ public class ParadoxItem extends AbstractGashatItem {
     private static final Set<ToolAction> DIG_ACTIONS = Sets.newHashSet(ToolActions.AXE_DIG, ToolActions.PICKAXE_DIG, ToolActions.SHOVEL_DIG, ToolActions.HOE_DIG, ToolActions.SWORD_DIG);
 
     public ParadoxItem(String name, Properties pProperties) {
-        super(name, pProperties, 0xAA00AA, HyperServerConfig.ENABLE_PARADOX);
+        super(name, pProperties, 0xAA00AA, HyperCommonConfig.ENABLE_PARADOX);
     }
 
     @Override

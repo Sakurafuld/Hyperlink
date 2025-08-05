@@ -58,7 +58,7 @@ public class HyperTagsProvider extends ItemTagsProvider {
                 .add(Items.SUGAR_CANE, Items.BAMBOO, Items.CACTUS, Items.VINE, Items.LILY_PAD)
                 .addTag(Tags.Items.MUSHROOMS)
                 .add(Items.WHEAT_SEEDS, Items.BEETROOT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS)
-                .add(Items.WHEAT, Items.COCOA_BEANS)
+                .add(Items.WHEAT, Items.COCOA_BEANS, Items.MELON, Items.PUMPKIN)
                 .add(Items.CRIMSON_ROOTS, Items.WEEPING_VINES, Items.WARPED_ROOTS, Items.TWISTING_VINES);
         this.tag("essence/marine")
                 .add(Items.WATER_BUCKET)
@@ -81,7 +81,7 @@ public class HyperTagsProvider extends ItemTagsProvider {
                 .add(Items.PORKCHOP, Items.BEEF, Items.CHICKEN, Items.MUTTON, Items.RABBIT)
                 .add(Items.COOKED_PORKCHOP, Items.COOKED_BEEF, Items.COOKED_CHICKEN, Items.COOKED_MUTTON, Items.COOKED_RABBIT)
                 .add(Items.DRIED_KELP, Items.COOKED_COD, Items.COOKED_SALMON)
-                .add(Items.CARROT, Items.POTATO, Items.BEETROOT, Items.MELON, Items.PUMPKIN, Items.SWEET_BERRIES/*, Items.GLOW_BERRIES*/)
+                .add(Items.CARROT, Items.POTATO, Items.BEETROOT, Items.SWEET_BERRIES)
                 .add(Items.BAKED_POTATO, Items.MUSHROOM_STEW, Items.RABBIT_STEW, Items.BEETROOT_SOUP)
                 .add(Items.COOKIE, Items.PUMPKIN_PIE)
                 .add(Items.ROTTEN_FLESH, Items.SPIDER_EYE, Items.POISONOUS_POTATO, Items.CHORUS_FRUIT)
@@ -139,6 +139,6 @@ public class HyperTagsProvider extends ItemTagsProvider {
     }
 
     private TagsProvider.TagAppender<Item> tag(String name) {
-        return this.tag(ItemTags.create(identifier(HYPERDAIMC, name)));
+        return this.tag(ItemTags.create(identifier(name)));
     }
 }

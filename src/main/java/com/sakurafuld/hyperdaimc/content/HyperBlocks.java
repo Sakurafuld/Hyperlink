@@ -4,6 +4,7 @@ import com.sakurafuld.hyperdaimc.content.crafting.desk.DeskBlock;
 import com.sakurafuld.hyperdaimc.content.crafting.skull.FumetsuSkullBlock;
 import com.sakurafuld.hyperdaimc.content.crafting.skull.FumetsuSkullWallBlock;
 import com.sakurafuld.hyperdaimc.content.crafting.soul.SoulBlock;
+import com.sakurafuld.hyperdaimc.content.over.materializer.MaterializerBlock;
 import net.minecraft.Util;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -26,8 +27,9 @@ public class HyperBlocks {
     public static final DeferredRegister<Block> REGISTRY
             = DeferredRegister.create(ForgeRegistries.BLOCKS, HYPERDAIMC);
 
-    public static final RegistryObject<DeskBlock> DESK;
     public static final RegistryObject<SoulBlock> SOUL;
+    public static final RegistryObject<DeskBlock> DESK;
+    public static final RegistryObject<MaterializerBlock> MATERIALIZER;
     public static final RegistryObject<FumetsuSkullBlock> FUMETSU_SKULL;
     public static final RegistryObject<FumetsuSkullWallBlock> FUMETSU_WALL_SKULL;
     public static final RegistryObject<FumetsuSkullBlock> FUMETSU_RIGHT;
@@ -36,8 +38,10 @@ public class HyperBlocks {
     public static final RegistryObject<FumetsuSkullWallBlock> FUMETSU_WALL_LEFT;
 
     static {
-        DESK = registerCrafting("desk", () -> new DeskBlock(BlockBehaviour.Properties.of(DeskBlock.MATERIAL).sound(SoundType.BONE_BLOCK).strength(1.5f, 0)));
         SOUL = registerCrafting("soul", () -> new SoulBlock(BlockBehaviour.Properties.of(Material.SAND).sound(SoundType.AMETHYST).strength(0.5f, 600).noOcclusion().lightLevel(state -> 15)), properties -> properties.rarity(Rarity.UNCOMMON));
+
+        DESK = registerCrafting("desk", () -> new DeskBlock(BlockBehaviour.Properties.of(DeskBlock.MATERIAL).sound(SoundType.BONE_BLOCK).strength(1.5f, 0)));
+        MATERIALIZER = registerCrafting("materializer", () -> new MaterializerBlock(BlockBehaviour.Properties.of(MaterializerBlock.MATERIAL).sound(SoundType.BONE_BLOCK).strength(1.5f)));
 
         FUMETSU_LEFT = REGISTRY.register("fumetsu_left_skull", () -> new FumetsuSkullBlock(FumetsuSkullBlock.LEFT, BlockBehaviour.Properties.of(Material.DECORATION).strength(1)));
         FUMETSU_WALL_LEFT = REGISTRY.register("fumetsu_wall_left_skull", () -> new FumetsuSkullWallBlock(FumetsuSkullBlock.LEFT, BlockBehaviour.Properties.of(Material.DECORATION).strength(1).lootFrom(FUMETSU_LEFT)));

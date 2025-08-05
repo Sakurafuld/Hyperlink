@@ -43,7 +43,7 @@ public class Renders {
     private static final Direction[] QUAD_FACES = Arrays.copyOf(Direction.values(), Direction.values().length + 1);
 
     public static Supplier<BakedModel> importSpecialModel(String path) {
-        ResourceLocation identifier = identifier(HYPERDAIMC, "special/" + path);
+        ResourceLocation identifier = identifier("special/" + path);
         HyperSetup.specialModels.add(identifier);
         return () -> Minecraft.getInstance().getModelManager().getModel(identifier);
     }

@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import com.sakurafuld.hyperdaimc.api.content.IScreenVFX;
 import com.sakurafuld.hyperdaimc.content.HyperBlockEntities;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.helper.Calculates;
@@ -35,17 +36,16 @@ import net.minecraftforge.items.ItemStackHandler;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
-    private static final ResourceLocation BACKGROUND = identifier(HYPERDAIMC, "textures/gui/container/desk.png");
+    private static final ResourceLocation BACKGROUND = identifier("textures/gui/container/desk.png");
     private static final Component LOCK = new TranslatableComponent("tooltip.hyperdaimc.desk.lock");
     private static final Component UNLOCK = new TranslatableComponent("tooltip.hyperdaimc.desk.unlock").withStyle(ChatFormatting.GRAY);
     private static final Component MINECRAFT = new TranslatableComponent("tooltip.hyperdaimc.desk.minecrafting");
-    private final Set<IDeskVFX> visualEffects = Sets.newHashSet();
-    private final Set<IDeskVFX> temporaryEffects = Sets.newHashSet();
+    private final Set<IScreenVFX> visualEffects = Sets.newHashSet();
+    private final Set<IScreenVFX> temporaryEffects = Sets.newHashSet();
     private final Set<Integer> vanished = Sets.newHashSet();
     private Data data = Data.EMPTY;
     private boolean visualCrafting = false;
@@ -137,7 +137,7 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
                         } else if (this.canCraftTicks < 33) {
                             this.resultMove = new Vec2(0, -2.5f);
                         } else {
-                            this.resultMove = new Vec2(0, -1.25f);
+                            this.resultMove = new Vec2(0, -1.3125f);
                         }
                     }
 

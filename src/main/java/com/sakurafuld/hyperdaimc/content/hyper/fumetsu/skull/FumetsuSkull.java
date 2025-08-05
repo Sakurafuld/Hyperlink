@@ -38,7 +38,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.*;
+import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.helper.Deets.require;
 
 public class FumetsuSkull extends Entity implements IFumetsu {
     private static final EntityDataAccessor<String> DATA_TYPE = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.STRING);
@@ -383,9 +384,9 @@ public class FumetsuSkull extends Entity implements IFumetsu {
     }
 
     public enum Type {
-        CYAN(identifier(HYPERDAIMC, "textures/entity/fumetsu_skull_cyan.png")),
-        CRIMSON(identifier(HYPERDAIMC, "textures/entity/fumetsu_skull_crimson.png")),
-        CRYSTAL(identifier(HYPERDAIMC, "textures/entity/fumetsu_skull_crystal.png"));
+        CYAN(identifier("textures/entity/fumetsu_skull_cyan.png")),
+        CRIMSON(identifier("textures/entity/fumetsu_skull_crimson.png")),
+        CRYSTAL(identifier("textures/entity/fumetsu_skull_crystal.png"));
 
         private static final Map<String, Type> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(Type::name, type -> type));
 

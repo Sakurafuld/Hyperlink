@@ -128,13 +128,13 @@ public class HyperItems {
     }
 
     public static RegistryObject<Item> registerGashat(String name, BiFunction<String, Item.Properties, ? extends AbstractGashatItem> func) {
-        HyperSetup.specialModels.add(identifier(HYPERDAIMC, "special/" + name));
+        HyperSetup.specialModels.add(identifier("special/" + name));
         return REGISTRY.register(name, () -> func.apply(name, new Item.Properties().tab(TAB_MAIN.get())));
     }
 
     public static RegistryObject<Item> registerMaterial(String base, String suffix, Consumer<Item.Properties> property, boolean scaling, boolean coloring, boolean rotation, boolean particle, int... tint) {
         String name = base + "_" + suffix;
-        HyperSetup.specialModels.add(identifier(HYPERDAIMC, "special/" + name));
+        HyperSetup.specialModels.add(identifier("special/" + name));
         RegistryObject<Item> object = registerCrafting(name, properties -> new MaterialItem(name, Util.make(properties, property), scaling, coloring, rotation, particle, tint));
         MATERIAL.put(name, object);
         return object;
@@ -153,7 +153,7 @@ public class HyperItems {
     }
 
     public static Item getMaterial(String base, String suffix) {
-        return ForgeRegistries.ITEMS.getValue(identifier(HYPERDAIMC, base + "_" + suffix));
+        return ForgeRegistries.ITEMS.getValue(identifier(base + "_" + suffix));
     }
 
     public static Item getEssence(String name) {

@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
 import net.minecraft.client.Minecraft;
@@ -39,7 +39,7 @@ public abstract class BlockStateBaseMixin {
     private void getDestroyProgressChronicle(Player pPlayer, BlockGetter pLevel, BlockPos pPos, CallbackInfoReturnable<Float> cir) {
         this.lastDestroyingPlayer = pPlayer;
         if (pLevel instanceof Level level && ChronicleHandler.isPaused(level, pPos, pPlayer)) {
-            if (!HyperServerConfig.CHRONICLE_PARADOX.get() && ParadoxHandler.hasParadox(pPlayer)) {
+            if (!HyperCommonConfig.CHRONICLE_PARADOX.get() && ParadoxHandler.hasParadox(pPlayer)) {
                 cir.setReturnValue(0.005f);
             } else {
                 cir.setReturnValue(0f);

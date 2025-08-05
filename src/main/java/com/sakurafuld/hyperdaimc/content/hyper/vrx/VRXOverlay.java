@@ -20,12 +20,11 @@ import net.minecraftforge.client.gui.IIngameOverlay;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class VRXOverlay implements IIngameOverlay {
-    private static final ResourceLocation OVERLAY = identifier(HYPERDAIMC, "textures/gui/vrx_overlay.png");
+    private static final ResourceLocation OVERLAY = identifier("textures/gui/vrx_overlay.png");
 
     @Override
     public void render(ForgeIngameGui gui, PoseStack poseStack, float partialTick, int width, int height) {

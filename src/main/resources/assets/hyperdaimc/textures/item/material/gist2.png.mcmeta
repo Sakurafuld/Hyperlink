@@ -65,15 +65,15 @@
       },
       {
         "index": 9,
-        "time": 20
+        "time": 10
       },
       {
         "index": 6,
-        "time": 3
+        "time": 2
       },
       {
         "index": 7,
-        "time": 3
+        "time": 2
       },
       {
         "index": 8,
@@ -87,16 +87,39 @@
         "index": 6,
         "time": 3
       },
-      9,
-      6,
-      7,
-      8,
-      7,
-      6,
       {
-        "index": 9,
-        "time": 40
-      }
+        "index": 7,
+        "time": 2
+      },
+      {
+        "index": 8,
+        "time": 4
+      },
+      {
+        "index": 7,
+        "time": 3
+      },
+      {
+        "index": 6,
+        "time": 3
+      },
+      {
+        "index": 7,
+        "time": 2
+      },
+      {
+        "index": 8,
+        "time": 4
+      },
+      {
+        "index": 7,
+        "time": 3
+      },
+      {
+        "index": 6,
+        "time": 3
+      },
+      9
     ]
   }
 }

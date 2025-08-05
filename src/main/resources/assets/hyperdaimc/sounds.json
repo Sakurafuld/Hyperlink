@@ -124,5 +124,10 @@
     "sounds": [
       "hyperdaimc:soul"
     ]
+  },
+  "materializer_pop": {
+    "sounds": [
+      "hyperdaimc:materializer_pop"
+    ]
   }
 }

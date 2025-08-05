@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.paradox;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
 import net.minecraft.client.Minecraft;
@@ -71,7 +71,7 @@ public abstract class MultiPlayerGameModeMixin {
 
     @Inject(method = "destroyBlock", at = @At("HEAD"))
     private void destroyBlockParadox$HEAD(BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
-        if (!HyperServerConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(this.minecraft.level, pPos, null) && !ChronicleHandler.isPaused(this.minecraft.level, pPos, this.minecraft.player)) {
+        if (!HyperCommonConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(this.minecraft.level, pPos, null) && !ChronicleHandler.isPaused(this.minecraft.level, pPos, this.minecraft.player)) {
             this.playerDestroy = true;
             ParadoxHandler.gashaconPlayer = this.minecraft.player;
             LOG.debug("MultiGameModeDestroyStart");
@@ -80,7 +80,7 @@ public abstract class MultiPlayerGameModeMixin {
 
     @Inject(method = "destroyBlock", at = @At("RETURN"))
     private void destroyBlockParadox$RETURN(BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
-        if (!HyperServerConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(this.minecraft.level, pPos, null) && !ChronicleHandler.isPaused(this.minecraft.level, pPos, this.minecraft.player)) {
+        if (!HyperCommonConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(this.minecraft.level, pPos, null) && !ChronicleHandler.isPaused(this.minecraft.level, pPos, this.minecraft.player)) {
             if (this.playerDestroy) {
                 this.playerDestroy = false;
                 ParadoxHandler.gashaconPlayer = null;
@@ -91,7 +91,7 @@ public abstract class MultiPlayerGameModeMixin {
 
     @Inject(method = "startDestroyBlock", at = @At("HEAD"), cancellable = true)
     private void startDestroyBlockParadox(BlockPos pLoc, Direction pFace, CallbackInfoReturnable<Boolean> cir) {
-        if (HyperServerConfig.CHRONICLE_PARADOX.get()) {
+        if (HyperCommonConfig.CHRONICLE_PARADOX.get()) {
             return;
         }
         if (ParadoxHandler.hasParadox(this.minecraft.player) && ChronicleHandler.isPaused(this.minecraft.level, pLoc, this.minecraft.player)) {
@@ -125,7 +125,7 @@ public abstract class MultiPlayerGameModeMixin {
 
     @Inject(method = "continueDestroyBlock", at = @At("HEAD"), cancellable = true)
     private void continueDestroyBlockParadox(BlockPos pPosBlock, Direction pDirectionFacing, CallbackInfoReturnable<Boolean> cir) {
-        if (HyperServerConfig.CHRONICLE_PARADOX.get()) {
+        if (HyperCommonConfig.CHRONICLE_PARADOX.get()) {
             return;
         }
         if (ParadoxHandler.hasParadox(this.minecraft.player) && ChronicleHandler.isPaused(this.minecraft.level, pPosBlock, this.minecraft.player)) {

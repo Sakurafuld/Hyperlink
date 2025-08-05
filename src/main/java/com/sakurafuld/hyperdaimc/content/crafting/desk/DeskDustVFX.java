@@ -2,6 +2,8 @@ package com.sakurafuld.hyperdaimc.content.crafting.desk;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import com.sakurafuld.hyperdaimc.api.content.IScreenVFX;
+import com.sakurafuld.hyperdaimc.helper.Renders;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
@@ -9,7 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class DeskDustVFX implements IDeskVFX {
+public class DeskDustVFX implements IScreenVFX {
     private final int max;
     private final float rotation;
     private int ticks = 0;
@@ -40,21 +42,23 @@ public class DeskDustVFX implements IDeskVFX {
     }
 
     @Override
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
-        int x = Math.round(Mth.lerp(partialTick, this.oldPosition.x, this.position.x));
-        int y = Math.round(Mth.lerp(partialTick, this.oldPosition.y, this.position.y));
+    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+        int x = Math.round(Mth.lerp(pPartialTick, this.oldPosition.x, this.position.x));
+        int y = Math.round(Mth.lerp(pPartialTick, this.oldPosition.y, this.position.y));
 
         float delta = (float) this.ticks / this.max;
         float deltaO = (float) (this.ticks - 1) / this.max;
 
-        float size = Mth.lerp(partialTick, (1 - deltaO), (1 - delta));
+        float size = Mth.lerp(pPartialTick, (1 - deltaO), (1 - delta));
 
-        poseStack.translate(x, y, 300);
-        poseStack.translate(1, 1, 0);
-        poseStack.scale(size, size, size);
-        poseStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.rotLerp(partialTick, ((this.ticks - 1) % 360f) * this.rotation, (this.ticks % 360f) * this.rotation)));
-        poseStack.translate(-1, -1, 0);
+        Renders.with(pPoseStack, () -> {
+            pPoseStack.translate(x, y, 300);
+            pPoseStack.translate(1, 1, 0);
+            pPoseStack.scale(size, size, size);
+            pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.rotLerp(pPartialTick, ((this.ticks - 1) % 360f) * this.rotation, (this.ticks % 360f) * this.rotation)));
+            pPoseStack.translate(-1, -1, 0);
 
-        Screen.fill(poseStack, 0, 0, 2, 2, 0xFFFFFFFF);
+            Screen.fill(pPoseStack, 0, 0, 2, 2, 0xFFFFFFFF);
+        });
     }
 }

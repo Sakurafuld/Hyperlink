@@ -1,0 +1,40 @@
+{
+  "type": "hyperdaimc:shaped_desk",
+  "pattern": [
+    "SSRRRRRSS",
+    "S RRRRR S",
+    "d  RRR  d",
+    "S       S",
+    "H       H",
+    "S       S",
+    "d  DBD  d",
+    "S  DFD  S",
+    "SSSHHHSSS"
+  ],
+  "key": {
+    "S": {
+      "item": "hyperdaimc:soul"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    },
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "D": {
+      "item": "minecraft:diamond_block"
+    },
+    "B": {
+      "item": "hyperdaimc:bug_star"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "hyperdaimc:materializer"
+  }
+}

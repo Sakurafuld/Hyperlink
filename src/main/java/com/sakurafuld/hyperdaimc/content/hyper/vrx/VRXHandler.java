@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Vector3f;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.MixinLevelTickEvent;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
@@ -122,7 +122,7 @@ public class VRXHandler {
 
     @SubscribeEvent
     public static void clone(PlayerEvent.Clone event) {
-        if (HyperServerConfig.VRX_KEEP.get() && event.getPlayer() instanceof ServerPlayer player) {
+        if (HyperCommonConfig.VRX_KEEP.get() && event.getPlayer() instanceof ServerPlayer player) {
             Player original = event.getOriginal();
             boolean present = original.getCapability(VRXCapability.CAPABILITY).isPresent();
             original.reviveCaps();
@@ -151,14 +151,14 @@ public class VRXHandler {
     @SubscribeEvent
     public static void attachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof LivingEntity) {
-            event.addCapability(identifier(HYPERDAIMC, "vrx"), new VRXCapability());
+            event.addCapability(identifier("vrx"), new VRXCapability());
         }
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void createAndErase(InputEvent.ClickInputEvent event) {
-        if (!HyperServerConfig.ENABLE_VRX.get()) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return;
         }
 
@@ -187,9 +187,11 @@ public class VRXHandler {
                 if (optional.isPresent()) {
                     VRXCapability vrx = optional.orElseThrow(IllegalStateException::new);
                     if (event.isUseItem()) {
-                        HyperConnection.INSTANCE.sendToServer(new ServerboundVRXOpenMenu(Pair.of(Pair.of(null, hit.getEntity().getId()), null)));
-                        cancel = true;
-                        mc.player.playNotifySound(HyperSounds.VRX_OPEN.get(), SoundSource.MASTER, 0.25f, 0.75f);
+                        if (HyperCommonConfig.VRX_PLAYER.get() || !(hit.getEntity() instanceof Player)) {
+                            HyperConnection.INSTANCE.sendToServer(new ServerboundVRXOpenMenu(Pair.of(Pair.of(null, hit.getEntity().getId()), null)));
+                            cancel = true;
+                            mc.player.playNotifySound(HyperSounds.VRX_OPEN.get(), SoundSource.MASTER, 0.25f, 0.75f);
+                        }
                     } else if (event.isAttack() && vrx.erase(mc.player.getUUID())) {
                         HyperConnection.INSTANCE.sendToServer(new ServerboundVRXEraseCapability(hit.getEntity().getId()));
                         cancel = true;
@@ -207,7 +209,7 @@ public class VRXHandler {
     @OnlyIn(Dist.CLIENT)
     public static void createAndErase(ScreenEvent.MouseClickedEvent.Pre event) {
         if (event.getScreen() instanceof AbstractContainerScreen<?> screen && screen.getMenu().getCarried().is(HyperItems.VRX.get()) && Check.INSTANCE.isIn(screen, event.getMouseX(), event.getMouseY())) {
-            if (!HyperServerConfig.ENABLE_VRX.get()) {
+            if (!HyperCommonConfig.ENABLE_VRX.get()) {
                 return;
             }
             LocalPlayer player = Minecraft.getInstance().player;
@@ -232,7 +234,7 @@ public class VRXHandler {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void render(RenderLevelStageEvent event) {
-        if (!HyperServerConfig.ENABLE_VRX.get()) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return;
         }
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
@@ -290,7 +292,7 @@ public class VRXHandler {
 
             ItemStack stack = new ItemStack(HyperItems.VRX.get());
             RenderType type = ItemBlockRenderTypes.getRenderType(stack, true);
-            BakedModel model = mc.getModelManager().getModel(identifier(HYPERDAIMC, "special/vrx"));
+            BakedModel model = mc.getModelManager().getModel(identifier("special/vrx"));
 
             poseStack.translate(0.5, 0.5, 0.5);
             poseStack.translate(edgeOffset(shape, face, Direction.Axis.X), edgeOffset(shape, face, Direction.Axis.Y), edgeOffset(shape, face, Direction.Axis.Z));
@@ -317,7 +319,7 @@ public class VRXHandler {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void render(RenderLivingEvent.Post<LivingEntity, EntityModel<LivingEntity>> event) {
-        if (!HyperServerConfig.ENABLE_VRX.get()) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return;
         }
         Entity entity = event.getEntity();
@@ -345,7 +347,7 @@ public class VRXHandler {
     @OnlyIn(Dist.CLIENT)
     public static void render(ScreenEvent.DrawScreenEvent.Post event) {
         if (event.getScreen() instanceof AbstractContainerScreen<?> screen && screen.getMenu().getCarried().is(HyperItems.VRX.get()) && Check.INSTANCE.isIn(screen, event.getMouseX(), event.getMouseY())) {
-            if (!HyperServerConfig.ENABLE_VRX.get()) {
+            if (!HyperCommonConfig.ENABLE_VRX.get()) {
                 return;
             }
             Minecraft.getInstance().player.getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
@@ -365,7 +367,7 @@ public class VRXHandler {
     }
 
     private static void creation(Level level) {
-        if (!HyperServerConfig.ENABLE_VRX.get()) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return;
         }
 
@@ -400,14 +402,18 @@ public class VRXHandler {
 
     @SubscribeEvent
     public static void creation(LivingEvent.LivingUpdateEvent event) {
-        if (!HyperServerConfig.ENABLE_VRX.get()) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return;
         }
 
         event.getEntityLiving().getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
             List<Runnable> future = Lists.newArrayList();
+            List<VRXCapability.Entry> removal = Lists.newArrayList();
             for (VRXCapability.Entry entry : vrx.getEntries()) {
-
+                if (!HyperCommonConfig.VRX_PLAYER.get() && event.getEntity() instanceof Player player && !player.getUUID().equals(entry.uuid)) {
+                    removal.add(entry);
+                    continue;
+                }
                 List<VRXOne> ones = Lists.newArrayList();
 
                 for (VRXOne one : entry.contents) {
@@ -422,6 +428,7 @@ public class VRXHandler {
             for (Runnable runnable : future) {
                 runnable.run();
             }
+            vrx.getEntries().removeAll(removal);
         });
     }
 

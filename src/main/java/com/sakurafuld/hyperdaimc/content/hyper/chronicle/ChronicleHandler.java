@@ -2,7 +2,6 @@ package com.sakurafuld.hyperdaimc.content.hyper.chronicle;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
@@ -77,7 +76,7 @@ public class ChronicleHandler {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void pauseAndRestart(InputEvent.ClickInputEvent event) {
-        if (!HyperServerConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
             return;
         }
 
@@ -142,7 +141,7 @@ public class ChronicleHandler {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void render(RenderLevelStageEvent event) {
-        if (!HyperServerConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
             return;
         }
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
@@ -212,7 +211,7 @@ public class ChronicleHandler {
 
     @SubscribeEvent
     public static void pause(PlayerInteractEvent.RightClickBlock event) {
-        if (HyperServerConfig.CHRONICLE_INTERACT.get() && isPaused(event.getWorld(), event.getPos(), event.getPlayer())) {
+        if (HyperCommonConfig.CHRONICLE_INTERACT.get() && isPaused(event.getWorld(), event.getPos(), event.getPlayer())) {
             event.setCanceled(true);
             event.getPlayer().swing(event.getHand());
         }
@@ -299,7 +298,7 @@ public class ChronicleHandler {
     }
 
     public static boolean isPaused(Level level, BlockPos pos, @Nullable Entity entity) {
-        if (!HyperServerConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
             return false;
         }
         if (chunkGenerating.get()) {
@@ -309,10 +308,10 @@ public class ChronicleHandler {
         if (side().isClient() && clientForceNonPaused) {
             return false;
         }
-        if (HyperServerConfig.CHRONICLE_PARADOX.get() || ParadoxHandler.isNotParadox(entity)) {
+        if (HyperCommonConfig.CHRONICLE_PARADOX.get() || ParadoxHandler.isNotParadox(entity)) {
             Optional<List<ChronicleSavedData.Entry>> optional = ChronicleSavedData.get(level).getPaused(pos);
             return optional.filter(list -> {
-                if (HyperServerConfig.CHRONICLE_OWNER.get()) {
+                if (HyperCommonConfig.CHRONICLE_OWNER.get()) {
                     return true;
                 } else if (!(entity instanceof Player)) {
 //                    LOG.debug("isPausedNullOrNoPlayer:{}", entity);

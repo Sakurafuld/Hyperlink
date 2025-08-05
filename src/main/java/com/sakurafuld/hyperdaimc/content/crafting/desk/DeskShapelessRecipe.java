@@ -42,18 +42,25 @@ public class DeskShapelessRecipe implements IDeskRecipe {
     private final ItemStack result;
     private final boolean simple;
     private final boolean minecraft;
+    private final boolean hideFromJei;
 
-    public DeskShapelessRecipe(ResourceLocation id, NonNullList<Ingredient> ingredients, ItemStack result, boolean minecraft) {
+    public DeskShapelessRecipe(ResourceLocation id, NonNullList<Ingredient> ingredients, ItemStack result, boolean minecraft, boolean hideFromJei) {
         this.id = id;
         this.result = result;
         this.ingredients = ingredients;
         this.minecraft = minecraft;
         this.simple = ingredients.stream().allMatch(Ingredient::isSimple);
+        this.hideFromJei = hideFromJei;
     }
 
     @Override
     public boolean isMinecraft() {
         return this.minecraft;
+    }
+
+    @Override
+    public boolean showToJei() {
+        return !this.hideFromJei;
     }
 
     @Override
@@ -189,7 +196,8 @@ public class DeskShapelessRecipe implements IDeskRecipe {
 
             ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(recipeJson, "result"));
             boolean minecraft = GsonHelper.getAsBoolean(recipeJson, "minecraft", false);
-            return new DeskShapelessRecipe(recipeLoc, Util.make(NonNullList.create(), list -> list.addAll(ingredients.stream().limit(9 * 9).toList())), result, minecraft);
+            boolean hideFromJei = GsonHelper.getAsBoolean(recipeJson, "hideFromJei", false);
+            return new DeskShapelessRecipe(recipeLoc, Util.make(NonNullList.create(), list -> list.addAll(ingredients.stream().limit(9 * 9).toList())), result, minecraft, hideFromJei);
         }
 
         @Override
@@ -204,7 +212,7 @@ public class DeskShapelessRecipe implements IDeskRecipe {
 
             ingredients.replaceAll(ignored -> Ingredient.fromNetwork(pBuffer));
 
-            return new DeskShapelessRecipe(pRecipeId, ingredients, pBuffer.readItem(), pBuffer.readBoolean());
+            return new DeskShapelessRecipe(pRecipeId, ingredients, pBuffer.readItem(), pBuffer.readBoolean(), pBuffer.readBoolean());
         }
 
         @Override
@@ -217,6 +225,7 @@ public class DeskShapelessRecipe implements IDeskRecipe {
 
             pBuffer.writeItem(pRecipe.result);
             pBuffer.writeBoolean(pRecipe.minecraft);
+            pBuffer.writeBoolean(pRecipe.hideFromJei);
         }
     }
 }

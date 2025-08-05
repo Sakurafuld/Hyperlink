@@ -9,6 +9,7 @@ import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperRecipes;
 import com.sakurafuld.hyperdaimc.content.crafting.desk.DeskMenu;
 import com.sakurafuld.hyperdaimc.content.crafting.desk.DeskScreen;
+import com.sakurafuld.hyperdaimc.content.crafting.desk.IDeskRecipe;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXScreen;
 import com.sakurafuld.hyperdaimc.content.over.materializer.MaterializerMenu;
 import com.sakurafuld.hyperdaimc.content.over.materializer.MaterializerScreen;
@@ -68,7 +69,9 @@ public class HyperJeiPlugin implements IModPlugin {
         this.addFumetsuWither(registration);
         this.addBrewing(registration);
 
-        registration.addRecipes(DeskRecipeCategory.TYPE, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(HyperRecipes.DESK.get()));
+        registration.addRecipes(DeskRecipeCategory.TYPE, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(HyperRecipes.DESK.get()).stream()
+                .filter(IDeskRecipe::showToJei)
+                .toList());
         registration.addRecipes(MaterializerRecipeCategory.TYPE, this.getMaterializerRecipes());
     }
 

@@ -60,7 +60,7 @@ MinecraftForge
 - Just Enough VRX = true
   - V.R.X.のセットアップをJEIから行えるか
 - Seal Hyperlink = true
-  - V.R.X.にHyperlinkのアイテムを設定できるか
+  - V.R.X.にHyperlinkのアイテムを設定できなくするか
 
 ## Fumetsu
 

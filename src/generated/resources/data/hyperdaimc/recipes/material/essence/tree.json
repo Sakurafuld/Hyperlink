@@ -5,7 +5,7 @@
     "#hyperdaimc:essence/tree",
     "#minecraft:logs"
   ],
-  "exclusions": [
+  "exclusion": [
     "minecraft:oak_wood",
     "minecraft:stripped_oak_log",
     "minecraft:stripped_oak_wood",

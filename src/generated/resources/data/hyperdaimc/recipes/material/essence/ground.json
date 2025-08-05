@@ -7,7 +7,7 @@
     "#forge:sand",
     "#forge:gravel"
   ],
-  "exclusions": [
+  "exclusion": [
     "minecraft:moss_block"
   ],
   "result": {

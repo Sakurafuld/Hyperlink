@@ -7,7 +7,7 @@
     "#forge:cobblestone",
     "#forge:sandstone"
   ],
-  "exclusions": [
+  "exclusion": [
     "minecraft:infested_stone",
     "minecraft:infested_cobblestone",
     "minecraft:infested_deepslate",

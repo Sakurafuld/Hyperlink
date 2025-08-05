@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.content.hyper.novel;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.content.AbstractGashatItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 public class NovelItem extends AbstractGashatItem {
 
     public NovelItem(String name, Properties pProperties) {
-        super(name, pProperties, 0xCCCCCC, HyperServerConfig.ENABLE_NOVEL);
+        super(name, pProperties, 0xCCCCCC, HyperCommonConfig.ENABLE_NOVEL);
     }
 
     @Override

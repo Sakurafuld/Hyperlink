@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
 import com.google.common.collect.Lists;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.vrx.ClientboundVRXSyncSave;
 import com.sakurafuld.hyperdaimc.network.vrx.ServerboundVRXSyncSave;
@@ -51,14 +51,14 @@ public class VRXSavedData extends SavedData {
     }
 
     public List<Entry> getEntries() {
-        if (!HyperServerConfig.ENABLE_VRX.get()) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return Collections.emptyList();
         }
         return this.entries;
     }
 
     public List<Entry> getEntries(BlockPos pos) {
-        if (!HyperServerConfig.ENABLE_VRX.get()) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return Collections.emptyList();
         }
 
@@ -66,7 +66,7 @@ public class VRXSavedData extends SavedData {
     }
 
     public void create(UUID uuid, BlockPos pos, Direction face, List<VRXOne> list) {
-        if (!HyperServerConfig.ENABLE_VRX.get()) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return;
         }
         Entry entry = new Entry(uuid, pos, face, list);

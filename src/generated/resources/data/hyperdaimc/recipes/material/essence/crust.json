@@ -1,6 +1,6 @@
 {
   "type": "hyperdaimc:shapeless_desk",
-  "exclusions": [
+  "exclusion": [
     "minecraft:infested_stone",
     "minecraft:infested_cobblestone",
     "minecraft:infested_deepslate",

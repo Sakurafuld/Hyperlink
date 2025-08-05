@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.novel;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
@@ -27,7 +27,7 @@ public abstract class LivingEntityMixin implements IEntityNovel {
 
     @Override
     public void novelize(LivingEntity writer) {
-        if (!HyperServerConfig.ENABLE_NOVEL.get()) {
+        if (!HyperCommonConfig.ENABLE_NOVEL.get()) {
             return;
         }
 
@@ -36,7 +36,7 @@ public abstract class LivingEntityMixin implements IEntityNovel {
 
         ((ILivingEntityMuteki) self).force(true);
 
-        if (!MutekiHandler.muteki(self) || (!HyperServerConfig.MUTEKI_NOVEL.get() && self.getHealth() <= 1)) {
+        if (!MutekiHandler.muteki(self) || (!HyperCommonConfig.MUTEKI_NOVEL.get() && self.getHealth() <= 1)) {
             LOG.debug("completeNovelized");
             this.setNovelized();
         }
@@ -78,7 +78,7 @@ public abstract class LivingEntityMixin implements IEntityNovel {
     private void novelSetHealth() {
         LivingEntity self = (LivingEntity) ((Object) this);
         if (MutekiHandler.muteki(self)) {
-            if (!HyperServerConfig.MUTEKI_NOVEL.get()) {
+            if (!HyperCommonConfig.MUTEKI_NOVEL.get()) {
                 float health = self.getHealth();
                 self.setHealth(health - 1);
                 self.getEntityData().set(DATA_HEALTH_ID, health - 1);

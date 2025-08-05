@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.hyper.muteki;
 
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
@@ -36,7 +36,7 @@ public class MutekiHandler {
 
     public static boolean checkMuteki(LivingEntity entity) {
         ((ILivingEntityMuteki) entity).force(true);
-        boolean muteki = HyperServerConfig.ENABLE_MUTEKI.get() && Check.INSTANCE.isMuteki(entity);
+        boolean muteki = HyperCommonConfig.ENABLE_MUTEKI.get() && Check.INSTANCE.isMuteki(entity);
         ((ILivingEntityMuteki) entity).force(false);
         return muteki;
     }
@@ -86,7 +86,7 @@ public class MutekiHandler {
 
             @Override
             public ICurio.SoundInfo getEquipSound(SlotContext slotContext, ItemStack stack) {
-                if (!HyperServerConfig.ENABLE_MUTEKI.get()) {
+                if (!HyperCommonConfig.ENABLE_MUTEKI.get()) {
                     return ICurioItem.super.getEquipSound(slotContext, stack);
                 }
                 return new ICurio.SoundInfo(HyperSounds.MUTEKI.get(), 1f, 1f);

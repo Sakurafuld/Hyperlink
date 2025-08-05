@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.hyper.fumetsu;
 
 import com.google.common.collect.Lists;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
@@ -469,7 +469,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
 
     @Override
     public boolean muteki() {
-        return HyperServerConfig.ENABLE_MUTEKI.get();
+        return HyperCommonConfig.ENABLE_MUTEKI.get();
     }
 
     @Override
@@ -559,7 +559,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public boolean isAvailableTarget(@Nullable Entity target) {
         if (this != target && target instanceof FumetsuEntity) {
             return false;
-        } else if (target != null && !(target instanceof Player) && Math.sqrt(this.getOrigin().distToCenterSqr(target.position())) > HyperServerConfig.FUMETSU_RANGE.get()) {
+        } else if (target != null && !(target instanceof Player) && Math.sqrt(this.getOrigin().distToCenterSqr(target.position())) > HyperCommonConfig.FUMETSU_RANGE.get()) {
             return false;
         } else if (target instanceof Player player && (player.isCreative() || player.getHealth() <= 0)) {
             return false;
@@ -597,7 +597,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     public boolean hasLineOfSight(Entity pEntity) {
         if (pEntity.level() != this.level()) {
             return false;
-        } else if (HyperServerConfig.FUMETSU_UNDERGROUND.get() || pEntity instanceof Player) {
+        } else if (HyperCommonConfig.FUMETSU_UNDERGROUND.get() || pEntity instanceof Player) {
             return true;
         } else {
             Vec3 from = new Vec3(this.getX(), this.getEyeY(), this.getZ());

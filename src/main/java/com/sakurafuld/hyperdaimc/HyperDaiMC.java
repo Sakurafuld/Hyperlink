@@ -36,7 +36,6 @@ public class HyperDaiMC {
         HyperTabs.REGISTRY.register(bus);
 
         context.registerConfig(ModConfig.Type.COMMON, HyperCommonConfig.SPEC, HYPERDAIMC + "-common.toml");
-        context.registerConfig(ModConfig.Type.SERVER, HyperServerConfig.SPEC, HYPERDAIMC + "-server.toml");
 
         new HyperMekanism(context);
         new HyperTConstruct(context);

@@ -1,12 +1,10 @@
 package com.sakurafuld.hyperdaimc.api.content;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public interface IScreenVFX {
+public interface IScreenVFX extends Renderable {
     boolean tick();
-
-    void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick);
 }

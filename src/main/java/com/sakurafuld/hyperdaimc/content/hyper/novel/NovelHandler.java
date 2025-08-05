@@ -1,7 +1,6 @@
 package com.sakurafuld.hyperdaimc.content.hyper.novel;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
@@ -43,8 +42,8 @@ public class NovelHandler {
         if (!entity.isRemoved() && !novelized(entity)) {
             if (entity instanceof Player player) {
                 return player.getHealth() > 0;
-            } else if (!HyperServerConfig.NOVEL_IGNORE.get().isEmpty()) {
-                return !HyperServerConfig.NOVEL_IGNORE.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
+            } else if (!HyperCommonConfig.NOVEL_IGNORE.get().isEmpty()) {
+                return !HyperCommonConfig.NOVEL_IGNORE.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
             } else {
                 return true;
             }
@@ -54,17 +53,17 @@ public class NovelHandler {
     };
 
     public static boolean novelized(Entity entity) {
-        return HyperServerConfig.ENABLE_NOVEL.get() && ((IEntityNovel) entity).isNovelized() && !(HyperServerConfig.MUTEKI_NOVEL.get() && entity instanceof LivingEntity living && MutekiHandler.muteki(living));
+        return HyperCommonConfig.ENABLE_NOVEL.get() && ((IEntityNovel) entity).isNovelized() && !(HyperCommonConfig.MUTEKI_NOVEL.get() && entity instanceof LivingEntity living && MutekiHandler.muteki(living));
     }
 
     public static boolean special(Entity entity) {
-        return entity instanceof Player || HyperServerConfig.NOVEL_SPECIAL.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
+        return entity instanceof Player || HyperCommonConfig.NOVEL_SPECIAL.get().contains(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString());
     }
 
     @SubscribeEvent(receiveCanceled = true)
     @OnlyIn(Dist.CLIENT)
     public static void novel(InputEvent.InteractionKeyMappingTriggered event) {
-        if (!HyperServerConfig.ENABLE_NOVEL.get()) {
+        if (!HyperCommonConfig.ENABLE_NOVEL.get()) {
             return;
         }
         Minecraft mc = Minecraft.getInstance();
@@ -111,7 +110,7 @@ public class NovelHandler {
     }
 
     public static void novelize(LivingEntity writer, Entity victim, boolean sendToServer) {
-        if (!HyperServerConfig.ENABLE_NOVEL.get()) {
+        if (!HyperCommonConfig.ENABLE_NOVEL.get()) {
             return;
         }
 

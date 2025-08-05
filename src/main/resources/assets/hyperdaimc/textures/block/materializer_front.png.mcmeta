@@ -1,0 +1,146 @@
+{
+  "animation": {
+    "frametime": 1,
+    "frames": [
+      {
+        "index": 0,
+        "time": 60
+      },
+      1,
+      {
+        "index": 2,
+        "time": 2
+      },
+      1,
+      {
+        "index": 0,
+        "time": 30
+      },
+      1,
+      {
+        "index": 2,
+        "time": 2
+      },
+      1,
+      {
+        "index": 0,
+        "time": 6
+      },
+      1,
+      {
+        "index": 2,
+        "time": 2
+      },
+      1,
+      {
+        "index": 0,
+        "time": 60
+      },
+      1,
+      {
+        "index": 2,
+        "time": 2
+      },
+      1,
+      {
+        "index": 3,
+        "time": 30
+      },
+      1,
+      {
+        "index": 2,
+        "time": 2
+      },
+      1,
+      {
+        "index": 0,
+        "time": 20
+      },
+      1,
+      {
+        "index": 2,
+        "time": 2
+      },
+      1,
+      {
+        "index": 4,
+        "time": 30
+      },
+      1,
+      {
+        "index": 2,
+        "time": 2
+      },
+      1,
+      {
+        "index": 0,
+        "time": 30
+      },
+      {
+        "index": 1,
+        "time": 2
+      },
+      {
+        "index": 2,
+        "time": 90
+      },
+      {
+        "index": 1,
+        "time": 30
+      },
+      {
+        "index": 0,
+        "time": 7
+      },
+      1,
+      2,
+      1,
+      {
+        "index": 0,
+        "time": 10
+      },
+      {
+        "index": 1,
+        "time": 2
+      },
+      {
+        "index": 3,
+        "time": 5
+      },
+      {
+        "index": 1,
+        "time": 2
+      },
+      {
+        "index": 4,
+        "time": 10
+      },
+      {
+        "index": 0,
+        "time": 3
+      },
+      1,
+      {
+        "index": 2,
+        "time": 7
+      },
+      {
+        "index": 1,
+        "time": 2
+      },
+      {
+        "index": 0,
+        "time": 10
+      },
+      1,
+      {
+        "index": 2,
+        "time": 5
+      },
+      {
+        "index": 1,
+        "time": 2
+      }
+    ]
+  }
+}

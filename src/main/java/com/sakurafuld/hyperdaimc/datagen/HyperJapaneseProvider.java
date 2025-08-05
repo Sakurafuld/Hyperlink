@@ -157,12 +157,14 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("curios.identifier.maximum", "マキシマム");
 
         this.add("recipe.hyperdaimc.desk", "ゲーマクラフト");
+        this.add("recipe.hyperdaimc.materializer", "マテリアライズ");
 
-//        this.add("information.hyperdaimc.material.0", "右クリックを長押しして消費することで、このアイテムの材料となったアイテムの内、ランダムに一つが材料の総数だけ入手できる (ディスペンサーで使うこともできる)");
         this.add("information.hyperdaimc.fumetsu_wither.0", """
                 %2$s、%3$s、%4$s、%5$sをいい感じに配置し、%1$sを持ちながらシフト右クリックすることで%7$sを召喚することが出来る
                 %7$sは基本的に中立であり、ダメージを受けることが無ければ敵対することはない (そして絶対に敵対してはならない)
-                そのままあなたが、ゲームからログアウトする・ディメンションを移動する・死ぬ、などすれば%7$sは、その場に%6$sを残してこのワールドからいなくなる""");
+                そのままあなたが、ゲームからログアウトする・ディメンションを移動する・死ぬなどすれば、%7$sはその場に%6$sを残してこのワールドからいなくなる""");
+
+        this.add("tooltip.hyperdaimc.materializer.fuel", "使用回数: %s");
 
         this.add("modifier.hyperdaimc.novel", "マイティノベル X");
         this.add("modifier.hyperdaimc.novel.flavor", "なぜ君がぁ、、、！");

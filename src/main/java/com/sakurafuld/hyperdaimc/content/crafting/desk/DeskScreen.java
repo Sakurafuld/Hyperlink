@@ -33,12 +33,11 @@ import net.minecraftforge.items.ItemStackHandler;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
-    private static final ResourceLocation BACKGROUND = identifier(HYPERDAIMC, "textures/gui/container/desk.png");
+    private static final ResourceLocation BACKGROUND = identifier("textures/gui/container/desk.png");
     private static final Component LOCK = Component.translatable("tooltip.hyperdaimc.desk.lock");
     private static final Component UNLOCK = Component.translatable("tooltip.hyperdaimc.desk.unlock").withStyle(ChatFormatting.GRAY);
     private static final Component MINECRAFT = Component.translatable("tooltip.hyperdaimc.desk.minecrafting");
@@ -135,7 +134,7 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
                         } else if (this.canCraftTicks < 33) {
                             this.resultMove = new Vec2(0, -2.5f);
                         } else {
-                            this.resultMove = new Vec2(0, -1.25f);
+                            this.resultMove = new Vec2(0, -1.3125f);
                         }
                     }
 

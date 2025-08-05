@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.content.hyper.chronicle;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.content.AbstractGashatItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ChronicleItem extends AbstractGashatItem {
 
     public ChronicleItem(String name, Properties pProperties) {
-        super(name, pProperties, 0x00FFAA, HyperServerConfig.ENABLE_CHRONICLE);
+        super(name, pProperties, 0x00FFAA, HyperCommonConfig.ENABLE_CHRONICLE);
     }
 
     @Override

@@ -44,21 +44,23 @@ public class DeskTriangleVFX implements IScreenVFX {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        float x = Mth.lerp(partialTick, this.oldPosition.x, this.position.x);
-        float y = Mth.lerp(partialTick, this.oldPosition.y, this.position.y);
+    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        float x = Mth.lerp(pPartialTick, this.oldPosition.x, this.position.x);
+        float y = Mth.lerp(pPartialTick, this.oldPosition.y, this.position.y);
 
         float delta = (float) this.ticks / this.max;
         float deltaO = (float) (this.ticks - 1) / this.max;
 
-        float size = Mth.lerp(partialTick, (1 - deltaO), (1 - delta));
+        float size = Mth.lerp(pPartialTick, (1 - deltaO), (1 - delta));
 
-        graphics.pose().translate(x, y, 300);
-        graphics.pose().scale(size, size, size);
-        graphics.pose().mulPose(Axis.ZP.rotationDegrees(this.rotation * 18 + Mth.rotLerp(partialTick, ((this.ticks - 1) % 360f) * this.rotation, (this.ticks % 360f) * this.rotation)));
+        Renders.with(pGuiGraphics.pose(), () -> {
+            pGuiGraphics.pose().translate(x, y, 400);
+            pGuiGraphics.pose().scale(size, size, 1);
+            pGuiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(this.rotation * 18 + Mth.rotLerp(pPartialTick, ((this.ticks - 1) % 360f) * this.rotation, (this.ticks % 360f) * this.rotation)));
 
-        Renders.hollowTriangle(graphics.pose().last().pose(), Renders.getBuffer(Renders.Type.LIGHTNING_NO_CULL), 4, 2, this.color);
+            Renders.hollowTriangle(pGuiGraphics.pose().last().pose(), Renders.getBuffer(Renders.Type.LIGHTNING_NO_CULL), 4, 2, this.color);
 
-        Renders.endBatch(Renders.Type.LIGHTNING_NO_CULL);
+            Renders.endBatch(Renders.Type.LIGHTNING_NO_CULL);
+        });
     }
 }

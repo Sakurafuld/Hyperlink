@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.hyper.chronicle;
 
 import com.google.common.collect.Lists;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.helper.Boxes;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.chronicle.ClientboundChronicleSyncSave;
@@ -82,28 +82,28 @@ public class ChronicleSavedData extends SavedData {
     }
 
     public List<Entry> getEntries() {
-        if (!HyperServerConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
             return Collections.emptyList();
         }
         return this.entries;
     }
 
     public Optional<List<Entry>> getPaused(BlockPos pos) {
-        if (!HyperServerConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
             return Optional.empty();
         }
         return Optional.ofNullable(this.posMap.get(pos.asLong()));
     }
 
     public Optional<Int2LongOpenHashMap> getPaused(LevelChunkSection section) {
-        if (!HyperServerConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
             return Optional.empty();
         }
         return Optional.ofNullable(this.chunkMap.get(section));
     }
 
     public boolean pause(UUID uuid, BlockPos from, BlockPos to, Consumer<Component> sender) {
-        if (!HyperServerConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
             return false;
         }
 
@@ -113,7 +113,7 @@ public class ChronicleSavedData extends SavedData {
             List<BlockPos> area = BlockPos.betweenClosedStream(from, to)
                     .map(BlockPos::immutable)
                     .toList();
-            if (area.size() <= HyperServerConfig.CHRONICLE_SIZE.get()) {
+            if (area.size() <= HyperCommonConfig.CHRONICLE_SIZE.get()) {
 
                 this.addEntry(entry);
                 this.setDirty();
@@ -126,7 +126,7 @@ public class ChronicleSavedData extends SavedData {
     }
 
     public void restart(UUID uuid, BlockPos pos) {
-        if (!HyperServerConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
             return;
         }
         this.getPaused(pos)

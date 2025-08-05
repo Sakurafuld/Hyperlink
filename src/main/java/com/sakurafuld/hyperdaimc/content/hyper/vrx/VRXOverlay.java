@@ -18,12 +18,11 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class VRXOverlay implements IGuiOverlay {
-    private static final ResourceLocation OVERLAY = identifier(HYPERDAIMC, "textures/gui/vrx_overlay.png");
+    private static final ResourceLocation OVERLAY = identifier("textures/gui/vrx_overlay.png");
 
     @Override
     public void render(ForgeGui gui, GuiGraphics graphics, float partialTick, int width, int height) {

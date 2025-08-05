@@ -1,7 +1,6 @@
 package com.sakurafuld.hyperdaimc.content.hyper.paradox;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.ILootTableParadox;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
@@ -52,12 +51,12 @@ public class ParadoxHandler {
     @SubscribeEvent(receiveCanceled = true)
     @OnlyIn(Dist.CLIENT)
     public static void mazaruUp(InputEvent.InteractionKeyMappingTriggered event) {
-        if (!HyperServerConfig.ENABLE_PARADOX.get()) {
+        if (!HyperCommonConfig.ENABLE_PARADOX.get()) {
             return;
         }
         Minecraft mc = Minecraft.getInstance();
 
-        HitResult hit = mc.player.pick(mc.player.getBlockReach(), 1, HyperServerConfig.PARADOX_HIT_FLUID.get());
+        HitResult hit = mc.player.pick(mc.player.getBlockReach(), 1, HyperCommonConfig.PARADOX_HIT_FLUID.get());
 
 
         if (event.isAttack() && hasParadox(mc.player)
@@ -80,18 +79,18 @@ public class ParadoxHandler {
     }
 
     public static boolean hasParadox(Player player) {
-        return HyperServerConfig.ENABLE_PARADOX.get() && player.getMainHandItem().is(HyperItems.PARADOX.get());
+        return HyperCommonConfig.ENABLE_PARADOX.get() && player.getMainHandItem().is(HyperItems.PARADOX.get());
     }
 
     public static void perfectKnockout(ServerPlayer player) {
-        HitResult hit = player.pick(player.getBlockReach(), 1, HyperServerConfig.PARADOX_HIT_FLUID.get());
+        HitResult hit = player.pick(player.getBlockReach(), 1, HyperCommonConfig.PARADOX_HIT_FLUID.get());
         BlockPos pos;
         if (hit instanceof BlockHitResult result && result.getType() != HitResult.Type.MISS) {
             pos = result.getBlockPos();
         } else {
             return;
         }
-        if (!hasParadox(player) || (HyperServerConfig.CHRONICLE_PARADOX.get() && ChronicleHandler.isPaused(player.level(), pos, player))) {
+        if (!hasParadox(player) || (HyperCommonConfig.CHRONICLE_PARADOX.get() && ChronicleHandler.isPaused(player.level(), pos, player))) {
             return;
         }
 

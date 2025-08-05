@@ -3,6 +3,7 @@ package com.sakurafuld.hyperdaimc.content.crafting.desk;
 import com.mojang.math.Axis;
 import com.sakurafuld.hyperdaimc.api.content.IScreenVFX;
 import com.sakurafuld.hyperdaimc.helper.Calculates;
+import com.sakurafuld.hyperdaimc.helper.Renders;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.Slot;
@@ -87,19 +88,17 @@ public class DeskItemVFX implements IScreenVFX {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        float x = /*this.screen.getGuiLeft() + */Mth.lerp(partialTick, this.oldPosition.x, this.position.x);
-        float y = /*this.screen.getGuiTop() + */Mth.lerp(partialTick, this.oldPosition.y, this.position.y);
-        float rot = Mth.rotLerp(partialTick, this.oldRot, this.rot);
+    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        float x = Mth.lerp(pPartialTick, this.oldPosition.x, this.position.x);
+        float y = Mth.lerp(pPartialTick, this.oldPosition.y, this.position.y);
+        float rot = Mth.rotLerp(pPartialTick, this.oldRot, this.rot);
 
-        graphics.pose().pushPose();
-
-        graphics.pose().translate(x, y, 200);
-        graphics.pose().translate(8, 8, 0);
-        graphics.pose().mulPose(Axis.ZP.rotationDegrees(rot));
-        graphics.pose().translate(-8, -8, 0);
-        graphics.renderFakeItem(this.slot.getItem(), 0, 0);
-
-        graphics.pose().popPose();
+        Renders.with(pGuiGraphics.pose(), () -> {
+            pGuiGraphics.pose().translate(x, y, 200);
+            pGuiGraphics.pose().translate(8, 8, 0);
+            pGuiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(rot));
+            pGuiGraphics.pose().translate(-8, -8, 0);
+            pGuiGraphics.renderFakeItem(this.slot.getItem(), 0, 0);
+        });
     }
 }

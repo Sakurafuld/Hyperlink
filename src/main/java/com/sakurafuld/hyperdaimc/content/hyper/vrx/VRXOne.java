@@ -3,7 +3,7 @@ package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.content.CombinedFluidHandler;
 import com.sakurafuld.hyperdaimc.api.content.ContainedFluidHandlerItem;
 import com.sakurafuld.hyperdaimc.helper.Renders;
@@ -160,7 +160,7 @@ public abstract class VRXOne {
         }
 
         public static VRXOne convert(ItemStack stack) {
-            if (!(HyperServerConfig.VRX_SEAL_HYPERLINK.get() && ForgeRegistries.ITEMS.getKey(stack.getItem()).getNamespace().equals(HYPERDAIMC))) {
+            if (!(HyperCommonConfig.VRX_SEAL_HYPERLINK.get() && ForgeRegistries.ITEMS.getKey(stack.getItem()).getNamespace().equals(HYPERDAIMC))) {
                 if (!stack.isEmpty()) {
                     for (Type type : VALUES) {
                         if (type != EMPTY && type != ITEM) {
@@ -310,7 +310,7 @@ public abstract class VRXOne {
         }
 
         public static VRXJeiWrapper<ItemStack> cast(Object ingredient) {
-            if (ingredient instanceof ItemStack stack && !(HyperServerConfig.VRX_SEAL_HYPERLINK.get() && ForgeRegistries.ITEMS.getKey(stack.getItem()).getNamespace().equals(HYPERDAIMC))) {
+            if (ingredient instanceof ItemStack stack && !(HyperCommonConfig.VRX_SEAL_HYPERLINK.get() && ForgeRegistries.ITEMS.getKey(stack.getItem()).getNamespace().equals(HYPERDAIMC))) {
                 return new VRXJeiWrapper<>(stack.copy()) {
                     @Override
                     public void accept(int containerId, VRXSlot slot) {
@@ -583,7 +583,7 @@ public abstract class VRXOne {
         }
 
         public static VRXJeiWrapper<FluidStack> cast(Object ingredient) {
-            if (ingredient instanceof FluidStack stack && !(HyperServerConfig.VRX_SEAL_HYPERLINK.get() && ForgeRegistries.FLUIDS.getKey(stack.getFluid()).getNamespace().equals(HYPERDAIMC))) {
+            if (ingredient instanceof FluidStack stack && !(HyperCommonConfig.VRX_SEAL_HYPERLINK.get() && ForgeRegistries.FLUIDS.getKey(stack.getFluid()).getNamespace().equals(HYPERDAIMC))) {
                 return new VRXJeiWrapper<>(stack.copy()) {
                     @Override
                     public void accept(int containerId, VRXSlot slot) {
@@ -741,7 +741,7 @@ public abstract class VRXOne {
     }
 
     public static class Energy extends VRXOne {
-        private static final ResourceLocation TEXTURE = identifier(HYPERDAIMC, "textures/gui/energy_slot.png");
+        private static final ResourceLocation TEXTURE = identifier("textures/gui/energy_slot.png");
         private int quantity = 0;
         private boolean collected = false;
 

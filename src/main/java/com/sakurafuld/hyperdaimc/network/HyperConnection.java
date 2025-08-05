@@ -8,6 +8,7 @@ import com.sakurafuld.hyperdaimc.network.desk.ClientboundDeskMinecraft;
 import com.sakurafuld.hyperdaimc.network.desk.ClientboundDeskSyncSave;
 import com.sakurafuld.hyperdaimc.network.desk.ServerboundDeskDoneAnimation;
 import com.sakurafuld.hyperdaimc.network.desk.ServerboundDeskLockRecipe;
+import com.sakurafuld.hyperdaimc.network.materializer.ClientboundMaterializerSyncRecipe;
 import com.sakurafuld.hyperdaimc.network.muteki.ServerboundSpecialGameModeSwitch;
 import com.sakurafuld.hyperdaimc.network.novel.ClientboundNovelize;
 import com.sakurafuld.hyperdaimc.network.novel.ServerboundNovelSound;
@@ -18,13 +19,12 @@ import com.sakurafuld.hyperdaimc.network.vrx.*;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 public class HyperConnection {
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel INSTANCE
-            = NetworkRegistry.newSimpleChannel(identifier(HYPERDAIMC, "network"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
+            = NetworkRegistry.newSimpleChannel(identifier("network"), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 
     public static void initialize() {
         int id = 0;
@@ -59,5 +59,7 @@ public class HyperConnection {
         INSTANCE.registerMessage(id++, ServerboundDeskLockRecipe.class, ServerboundDeskLockRecipe::encode, ServerboundDeskLockRecipe::decode, ServerboundDeskLockRecipe::handle);
 
         INSTANCE.registerMessage(id++, ClientboundChemicalMutation.class, ClientboundChemicalMutation::encode, ClientboundChemicalMutation::decode, ClientboundChemicalMutation::handle);
+
+        INSTANCE.registerMessage(id++, ClientboundMaterializerSyncRecipe.class, ClientboundMaterializerSyncRecipe::encode, ClientboundMaterializerSyncRecipe::decode, ClientboundMaterializerSyncRecipe::handle);
     }
 }

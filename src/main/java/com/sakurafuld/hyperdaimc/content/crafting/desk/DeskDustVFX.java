@@ -2,6 +2,7 @@ package com.sakurafuld.hyperdaimc.content.crafting.desk;
 
 import com.mojang.math.Axis;
 import com.sakurafuld.hyperdaimc.api.content.IScreenVFX;
+import com.sakurafuld.hyperdaimc.helper.Renders;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;
@@ -40,21 +41,23 @@ public class DeskDustVFX implements IScreenVFX {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        int x = Math.round(Mth.lerp(partialTick, this.oldPosition.x, this.position.x));
-        int y = Math.round(Mth.lerp(partialTick, this.oldPosition.y, this.position.y));
+    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        int x = Math.round(Mth.lerp(pPartialTick, this.oldPosition.x, this.position.x));
+        int y = Math.round(Mth.lerp(pPartialTick, this.oldPosition.y, this.position.y));
 
         float delta = (float) this.ticks / this.max;
         float deltaO = (float) (this.ticks - 1) / this.max;
 
-        float size = Mth.lerp(partialTick, (1 - deltaO), (1 - delta));
+        float size = Mth.lerp(pPartialTick, (1 - deltaO), (1 - delta));
 
-        graphics.pose().translate(x, y, 300);
-        graphics.pose().translate(1, 1, 0);
-        graphics.pose().scale(size, size, size);
-        graphics.pose().mulPose(Axis.ZP.rotationDegrees(Mth.rotLerp(partialTick, ((this.ticks - 1) % 360f) * this.rotation, (this.ticks % 360f) * this.rotation)));
-        graphics.pose().translate(-1, -1, 0);
+        Renders.with(pGuiGraphics.pose(), () -> {
+            pGuiGraphics.pose().translate(x, y, 300);
+            pGuiGraphics.pose().translate(1, 1, 0);
+            pGuiGraphics.pose().scale(size, size, size);
+            pGuiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(Mth.rotLerp(pPartialTick, ((this.ticks - 1) % 360f) * this.rotation, (this.ticks % 360f) * this.rotation)));
+            pGuiGraphics.pose().translate(-1, -1, 0);
 
-        graphics.fill(0, 0, 2, 2, 0xFFFFFFFF);
+            pGuiGraphics.fill(0, 0, 2, 2, 0xFFFFFFFF);
+        });
     }
 }

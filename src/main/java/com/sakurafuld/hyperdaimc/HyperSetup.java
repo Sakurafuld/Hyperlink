@@ -58,16 +58,25 @@ public class HyperSetup {
             BrewingRecipeRegistry.addRecipe(new IBrewingRecipe() {
                 @Override
                 public boolean isInput(ItemStack input) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                        return false;
+                    }
                     return input.is(Items.POTION) || input.is(Items.SPLASH_POTION) || input.is(Items.LINGERING_POTION);
                 }
 
                 @Override
                 public boolean isIngredient(ItemStack ingredient) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                        return false;
+                    }
                     return ingredient.is(HyperItems.GOD_SIGIL.get());
                 }
 
                 @Override
                 public ItemStack getOutput(ItemStack input, ItemStack ingredient) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                        return ItemStack.EMPTY;
+                    }
                     return this.isInput(input) && this.isIngredient(ingredient) ? HyperItems.CHEMICAL_MAX.get().getDefaultInstance() : ItemStack.EMPTY;
                 }
             });
@@ -75,16 +84,25 @@ public class HyperSetup {
             BrewingRecipeRegistry.addRecipe(new IBrewingRecipe() {
                 @Override
                 public boolean isInput(ItemStack input) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                        return false;
+                    }
                     return input.is(HyperItems.CHEMICAL_MAX.get());
                 }
 
                 @Override
                 public boolean isIngredient(ItemStack ingredient) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                        return false;
+                    }
                     return ingredient.is(Items.NETHER_STAR);
                 }
 
                 @Override
                 public ItemStack getOutput(ItemStack input, ItemStack ingredient) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                        return ItemStack.EMPTY;
+                    }
                     return this.isInput(input) && this.isIngredient(ingredient) ? HyperBlocks.FUMETSU_SKULL.get().asItem().getDefaultInstance() : ItemStack.EMPTY;
                 }
             });
@@ -113,45 +131,6 @@ public class HyperSetup {
                     }).dispense(pSource, pStack);
                 }
             });
-
-            /*class DispenseMaterialBehavior extends DefaultDispenseItemBehavior {
-
-                @Override
-                protected ItemStack execute(BlockSource pSource, ItemStack pStack) {
-                    List<ItemStack> ingredients = pSource.getLevel().getRecipeManager().getAllRecipesFor(HyperRecipes.DESK.get()).stream()
-                            .filter(recipe -> recipe.getResultItem(pSource.getLevel().registryAccess()).is(pStack.getItem()))
-                            .flatMap(recipe -> recipe.getIngredients().stream())
-                            .flatMap(ingredient -> Arrays.stream(ingredient.getItems()))
-                            .toList();
-
-                    if (ingredients.isEmpty()) {
-                        return super.execute(pSource, pStack);
-                    }
-
-                    Direction facing = pSource.getBlockState().getValue(DispenserBlock.FACING);
-                    Position position = DispenserBlock.getDispensePosition(pSource);
-
-
-                    ItemStack stack = ItemHandlerHelper.copyStackWithSize(ingredients.get(pSource.getLevel().getRandom().nextInt(ingredients.size())), 1);
-                    for (int count = 0; count < ingredients.size(); count++) {
-                        spawnItem(pSource.getLevel(), stack.copy(), 12, facing, position);
-                    }
-
-                    pStack.shrink(1);
-                    return pStack;
-                }
-
-                @Override
-                protected void playSound(BlockSource pSource) {
-                    super.playSound(pSource);
-                    pSource.getLevel().playSound(null, pSource.getPos(), SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 1, 0.4f + pSource.getLevel().getRandom().nextFloat() * 0.4f);
-                }
-            }
-
-            DispenseMaterialBehavior materialBehavior = new DispenseMaterialBehavior();
-            HyperItems.MATERIAL.values().stream()
-                    .map(RegistryObject::get)
-                    .forEach(material -> DispenserBlock.registerBehavior(material, materialBehavior));*/
         });
     }
 
@@ -159,7 +138,6 @@ public class HyperSetup {
     @OnlyIn(Dist.CLIENT)
     public void clientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-//            ItemBlockRenderTypes.setRenderLayer(HyperBlocks.SOUL.get(), RenderType.translucent());
 
             EntityRenderers.register(HyperEntities.FUMETSU.get(), FumetsuEntityRenderer::new);
             EntityRenderers.register(HyperEntities.FUMETSU_SKULL.get(), FumetsuSkullRenderer::new);

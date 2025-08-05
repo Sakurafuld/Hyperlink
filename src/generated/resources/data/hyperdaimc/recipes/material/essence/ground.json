@@ -1,6 +1,6 @@
 {
   "type": "hyperdaimc:shapeless_desk",
-  "exclusions": [
+  "exclusion": [
     "minecraft:moss_block"
   ],
   "result": {

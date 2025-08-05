@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.content.hyper.fumetsu.ai;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -24,6 +24,6 @@ public class FumetsuGenocideTargetGoal<T extends LivingEntity> extends NearestAt
 
     @Override
     protected double getFollowDistance() {
-        return HyperServerConfig.FUMETSU_RANGE.get();
+        return HyperCommonConfig.FUMETSU_RANGE.get();
     }
 }

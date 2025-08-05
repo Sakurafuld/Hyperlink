@@ -65,9 +65,9 @@ public class DeskMenu extends AbstractContainerMenu {
             }
         }
 
-        for (int row = 0; row < 3; ++row) {
-            for (int colunm = 0; colunm < 9; ++colunm) {
-                this.addSlot(new Slot(inventory, colunm + row * 9 + 9, 8 + colunm * 18, 214 + row * 18));
+        for (int column = 0; column < 3; ++column) {
+            for (int row = 0; row < 9; ++row) {
+                this.addSlot(new Slot(inventory, row + column * 9 + 9, 8 + row * 18, 214 + column * 18));
             }
         }
         for (int row = 0; row < 9; ++row) {
@@ -85,7 +85,6 @@ public class DeskMenu extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
-
         Slot slot = this.getSlot(pIndex);
         if (!slot.hasItem()) {
             return ItemStack.EMPTY;
@@ -100,7 +99,7 @@ public class DeskMenu extends AbstractContainerMenu {
             }
         } else if (!this.moveItemStackTo(source, 1, 82, false)) {
             if (pIndex < 109) {
-                if (!this.moveItemStackTo(source, 109, this.slots.size(), false)) {
+                if (!this.moveItemStackTo(source, 109, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
             } else if (!this.moveItemStackTo(source, 82, 109, false)) {

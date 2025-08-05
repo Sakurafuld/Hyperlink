@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class PlayerMixin {
     @Inject(method = "blockActionRestricted", at = @At("HEAD"), cancellable = true)
     private void blockActionRestrictedChronicle(Level pLevel, BlockPos pPos, GameType pGameMode, CallbackInfoReturnable<Boolean> cir) {
-        if (HyperServerConfig.CHRONICLE_INTERACT.get() && ChronicleHandler.isPaused(pLevel, pPos, (Player) ((Object) this))) {
+        if (HyperCommonConfig.CHRONICLE_INTERACT.get() && ChronicleHandler.isPaused(pLevel, pPos, (Player) ((Object) this))) {
             cir.setReturnValue(true);
         }
     }

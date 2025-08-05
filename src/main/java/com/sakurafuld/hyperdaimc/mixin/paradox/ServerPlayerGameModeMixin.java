@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.paradox;
 
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
 import net.minecraft.core.BlockPos;
@@ -67,12 +67,12 @@ public abstract class ServerPlayerGameModeMixin {
 
     @Inject(method = "destroyBlock", at = @At("HEAD"), cancellable = true)
     private void destroyBlockParadox(BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
-        if (!HyperServerConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(this.level, pPos, null) && !ChronicleHandler.isPaused(this.level, pPos, this.player)) {
+        if (!HyperCommonConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(this.level, pPos, null) && !ChronicleHandler.isPaused(this.level, pPos, this.player)) {
             this.playerDestroy = true;
             ParadoxHandler.gashaconPlayer = this.player;
             LOG.debug("ServerGameModeDestroyStart");
         }
-        if (HyperServerConfig.CHRONICLE_PARADOX.get()) {
+        if (HyperCommonConfig.CHRONICLE_PARADOX.get()) {
             return;
         }
         if (ParadoxHandler.hasParadox(this.player) && ChronicleHandler.isPaused(this.level, pPos, this.player)) {
@@ -83,7 +83,7 @@ public abstract class ServerPlayerGameModeMixin {
 
     @Inject(method = "destroyBlock", at = @At("RETURN"))
     private void destroyBlockParadox$RETURN(BlockPos pPos, CallbackInfoReturnable<Boolean> cir) {
-        if (!HyperServerConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(this.level, pPos, null) && !ChronicleHandler.isPaused(this.level, pPos, this.player)) {
+        if (!HyperCommonConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(this.level, pPos, null) && !ChronicleHandler.isPaused(this.level, pPos, this.player)) {
             if (this.playerDestroy) {
                 this.playerDestroy = false;
                 ParadoxHandler.gashaconPlayer = null;
@@ -95,7 +95,7 @@ public abstract class ServerPlayerGameModeMixin {
 
     @Inject(method = "handleBlockBreakAction", at = @At("HEAD"), cancellable = true)
     private void handleBlockBreakActionParadox(BlockPos pPos, ServerboundPlayerActionPacket.Action pAction, Direction pFace, int pMaxBuildHeight, int pSequence, CallbackInfo ci) {
-        if (HyperServerConfig.CHRONICLE_PARADOX.get()) {
+        if (HyperCommonConfig.CHRONICLE_PARADOX.get()) {
             return;
         }
         if (ParadoxHandler.hasParadox(this.player) && ChronicleHandler.isPaused(this.level, pPos, this.player)) {

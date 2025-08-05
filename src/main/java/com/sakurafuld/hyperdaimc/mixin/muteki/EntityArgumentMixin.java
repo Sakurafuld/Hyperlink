@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.mixin.muteki;
 
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.sakurafuld.hyperdaimc.HyperServerConfig;
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.arguments.EntityArgument;
@@ -24,7 +24,7 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 public abstract class EntityArgumentMixin {
     @Inject(method = "getEntity", at = @At("RETURN"), cancellable = true)
     private static void getEntityMuteki(CommandContext<CommandSourceStack> pContext, String pName, CallbackInfoReturnable<Entity> cir) throws CommandSyntaxException {
-        if (HyperServerConfig.MUTEKI_SELECTOR.get()) {
+        if (HyperCommonConfig.MUTEKI_SELECTOR.get()) {
             Entity found = pContext.getArgument(pName, EntitySelector.class).findEntities(pContext.getSource()).stream()
                     .filter(entity -> !(entity instanceof LivingEntity living && MutekiHandler.muteki(living)))
                     .findFirst()
@@ -41,7 +41,7 @@ public abstract class EntityArgumentMixin {
 
     @Inject(method = "getOptionalEntities", at = @At("RETURN"), cancellable = true)
     private static void getOptionalEntitiesMuteki(CommandContext<CommandSourceStack> pContext, String pName, CallbackInfoReturnable<Collection<? extends Entity>> cir) throws CommandSyntaxException {
-        if (!cir.getReturnValue().isEmpty() && HyperServerConfig.MUTEKI_SELECTOR.get()) {
+        if (!cir.getReturnValue().isEmpty() && HyperCommonConfig.MUTEKI_SELECTOR.get()) {
             Collection<Entity> found = cir.getReturnValue().stream()
                     .filter(entity -> !(entity instanceof LivingEntity living && MutekiHandler.muteki(living)))
                     .collect(Collectors.toList());
@@ -57,7 +57,7 @@ public abstract class EntityArgumentMixin {
 
     @Inject(method = "getOptionalPlayers", at = @At("RETURN"), cancellable = true)
     private static void getOptionalPlayersMuteki(CommandContext<CommandSourceStack> pContext, String pName, CallbackInfoReturnable<Collection<ServerPlayer>> cir) throws CommandSyntaxException {
-        if (!cir.getReturnValue().isEmpty() && HyperServerConfig.MUTEKI_SELECTOR.get()) {
+        if (!cir.getReturnValue().isEmpty() && HyperCommonConfig.MUTEKI_SELECTOR.get()) {
             Collection<ServerPlayer> found = cir.getReturnValue().stream()
                     .filter(entity -> !MutekiHandler.muteki(entity))
                     .collect(Collectors.toList());
@@ -73,7 +73,7 @@ public abstract class EntityArgumentMixin {
 
     @Inject(method = "getPlayer", at = @At("RETURN"), cancellable = true)
     private static void getPlayerMuteki(CommandContext<CommandSourceStack> pContext, String pName, CallbackInfoReturnable<ServerPlayer> cir) throws CommandSyntaxException {
-        if (HyperServerConfig.MUTEKI_SELECTOR.get()) {
+        if (HyperCommonConfig.MUTEKI_SELECTOR.get()) {
             ServerPlayer found = pContext.getArgument(pName, EntitySelector.class).findPlayers(pContext.getSource()).stream()
                     .filter(entity -> !MutekiHandler.muteki(entity))
                     .findFirst()
@@ -90,7 +90,7 @@ public abstract class EntityArgumentMixin {
 
     @Inject(method = "getPlayers", at = @At("RETURN"), cancellable = true)
     private static void getPlayersMuteki(CommandContext<CommandSourceStack> pContext, String pName, CallbackInfoReturnable<Collection<ServerPlayer>> cir) throws CommandSyntaxException {
-        if (!cir.getReturnValue().isEmpty() && HyperServerConfig.MUTEKI_SELECTOR.get()) {
+        if (!cir.getReturnValue().isEmpty() && HyperCommonConfig.MUTEKI_SELECTOR.get()) {
             Collection<ServerPlayer> found = cir.getReturnValue().stream()
                     .filter(entity -> !MutekiHandler.muteki(entity))
                     .collect(Collectors.toList());

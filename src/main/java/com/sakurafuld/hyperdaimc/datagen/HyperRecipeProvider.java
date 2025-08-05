@@ -13,7 +13,6 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Consumer;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 public class HyperRecipeProvider extends RecipeProvider {
@@ -25,12 +24,12 @@ public class HyperRecipeProvider extends RecipeProvider {
     protected void buildRecipes(Consumer<FinishedRecipe> pWriter) {
         DeskShapelessRecipeBuilder.essence("ground")
                 .values(ItemTags.DIRT, Tags.Items.SAND, Tags.Items.GRAVEL)
-                .exclusions(Items.MOSS_BLOCK)
+                .exclusion(Items.MOSS_BLOCK)
                 .saveMaterial(pWriter);
         DeskShapelessRecipeBuilder.essence("crust")
                 .values(Tags.Items.STONE, Tags.Items.COBBLESTONE, Tags.Items.SANDSTONE)
-                .exclusions(Items.INFESTED_STONE, Items.INFESTED_COBBLESTONE, Items.INFESTED_DEEPSLATE, Items.POLISHED_ANDESITE, Items.POLISHED_DIORITE, Items.POLISHED_GRANITE, Items.POLISHED_DEEPSLATE)
-                .exclusions(Items.CUT_SANDSTONE, Items.CHISELED_SANDSTONE, Items.SMOOTH_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE)
+                .exclusion(Items.INFESTED_STONE, Items.INFESTED_COBBLESTONE, Items.INFESTED_DEEPSLATE, Items.POLISHED_ANDESITE, Items.POLISHED_DIORITE, Items.POLISHED_GRANITE, Items.POLISHED_DEEPSLATE)
+                .exclusion(Items.CUT_SANDSTONE, Items.CHISELED_SANDSTONE, Items.SMOOTH_SANDSTONE, Items.CUT_RED_SANDSTONE, Items.CHISELED_RED_SANDSTONE, Items.SMOOTH_RED_SANDSTONE)
                 .saveMaterial(pWriter);
         DeskShapelessRecipeBuilder.essence("mineral")
                 .values(Tags.Items.STORAGE_BLOCKS)
@@ -42,7 +41,7 @@ public class HyperRecipeProvider extends RecipeProvider {
                 .saveMaterial(pWriter);
         DeskShapelessRecipeBuilder.essence("tree")
                 .values(ItemTags.LOGS)
-                .exclusions(Items.OAK_WOOD, Items.STRIPPED_OAK_LOG, Items.STRIPPED_OAK_WOOD, Items.SPRUCE_WOOD, Items.STRIPPED_SPRUCE_LOG, Items.STRIPPED_SPRUCE_WOOD, Items.STRIPPED_BIRCH_WOOD, Items.BIRCH_WOOD, Items.STRIPPED_BIRCH_LOG, Items.STRIPPED_BIRCH_WOOD, Items.JUNGLE_WOOD, Items.STRIPPED_JUNGLE_LOG, Items.STRIPPED_JUNGLE_WOOD, Items.ACACIA_WOOD, Items.STRIPPED_ACACIA_LOG, Items.STRIPPED_ACACIA_WOOD, Items.DARK_OAK_WOOD, Items.STRIPPED_DARK_OAK_LOG, Items.STRIPPED_DARK_OAK_WOOD, Items.CRIMSON_HYPHAE, Items.STRIPPED_CRIMSON_STEM, Items.STRIPPED_CRIMSON_HYPHAE, Items.WARPED_HYPHAE, Items.STRIPPED_WARPED_STEM, Items.STRIPPED_WARPED_HYPHAE)
+                .exclusion(Items.OAK_WOOD, Items.STRIPPED_OAK_LOG, Items.STRIPPED_OAK_WOOD, Items.SPRUCE_WOOD, Items.STRIPPED_SPRUCE_LOG, Items.STRIPPED_SPRUCE_WOOD, Items.STRIPPED_BIRCH_WOOD, Items.BIRCH_WOOD, Items.STRIPPED_BIRCH_LOG, Items.STRIPPED_BIRCH_WOOD, Items.JUNGLE_WOOD, Items.STRIPPED_JUNGLE_LOG, Items.STRIPPED_JUNGLE_WOOD, Items.ACACIA_WOOD, Items.STRIPPED_ACACIA_LOG, Items.STRIPPED_ACACIA_WOOD, Items.DARK_OAK_WOOD, Items.STRIPPED_DARK_OAK_LOG, Items.STRIPPED_DARK_OAK_WOOD, Items.CRIMSON_HYPHAE, Items.STRIPPED_CRIMSON_STEM, Items.STRIPPED_CRIMSON_HYPHAE, Items.WARPED_HYPHAE, Items.STRIPPED_WARPED_STEM, Items.STRIPPED_WARPED_HYPHAE)
                 .saveMaterial(pWriter);
         DeskShapelessRecipeBuilder.essence("food")
                 .saveMaterial(pWriter);
@@ -399,10 +398,10 @@ public class HyperRecipeProvider extends RecipeProvider {
                 .values(HyperBlocks.SOUL.get().asItem())
                 .values(HyperBlocks.FUMETSU_LEFT.get().asItem(), HyperBlocks.FUMETSU_SKULL.get().asItem(), HyperBlocks.FUMETSU_RIGHT.get().asItem())
                 .values(HyperItems.BUG_STARS.stream().map(RegistryObject::get).toArray(Item[]::new))
-                .values(ItemTags.create(identifier(HYPERDAIMC, "essences")))
-                .values(ItemTags.create(identifier(HYPERDAIMC, "cores")))
-                .values(ItemTags.create(identifier(HYPERDAIMC, "gists")))
+                .values(ItemTags.create(identifier("essences")))
+                .values(ItemTags.create(identifier("cores")))
+                .values(ItemTags.create(identifier("gists")))
                 .minecraft()
-                .save(pWriter, identifier(HYPERDAIMC, "game_orb"));
+                .save(pWriter, identifier("game_orb"));
     }
 }

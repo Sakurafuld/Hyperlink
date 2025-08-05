@@ -15,6 +15,8 @@ public interface IDeskRecipe extends Recipe<RecipeWrapper> {
 
     boolean isMinecraft();
 
+    boolean showToJei();
+
     @Override
     ItemStack getResultItem(@Nullable RegistryAccess pRegistryAccess);
 }

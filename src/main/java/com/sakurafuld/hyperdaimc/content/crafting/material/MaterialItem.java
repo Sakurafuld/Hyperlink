@@ -10,7 +10,6 @@ import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 
 import java.util.function.Consumer;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
 public class MaterialItem extends Item {
@@ -23,7 +22,7 @@ public class MaterialItem extends Item {
 
     public MaterialItem(String name, Properties pProperties, boolean scaling, boolean coloring, boolean rotation, boolean particle, int... tint) {
         super(pProperties);
-        this.model = identifier(HYPERDAIMC, "special/" + name);
+        this.model = identifier("special/" + name);
         this.scaling = scaling;
         this.coloring = coloring;
         this.rotation = rotation;

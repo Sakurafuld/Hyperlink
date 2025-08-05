@@ -37,8 +37,11 @@ public abstract class AbstractContainerScreenMixin {
 
                     pGuiGraphics.pose().pushPose();
                     pGuiGraphics.pose().translate(x, y, 0);
+                    if (!screen.getMenu().isMinecraft()) {
+                        pGuiGraphics.pose().translate(0, 0, 125);
+                    }
                     pGuiGraphics.pose().translate(pSlot.x + 8, pSlot.y + 8, 0);
-                    pGuiGraphics.pose().scale(size, size, size);
+                    pGuiGraphics.pose().scale(size, size, 1);
                     pGuiGraphics.pose().mulPose(Axis.ZP.rotationDegrees(Mth.rotLerp(partialTick, screen.resultOldRot, screen.resultRot)));
                     pGuiGraphics.pose().translate(-(pSlot.x + 8), -(pSlot.y + 8), 0);
                 }

@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
+    "facing=east": {
+      "model": "hyperdaimc:block/materializer",
+      "y": 90
+    },
+    "facing=north": {
       "model": "hyperdaimc:block/materializer"
+    },
+    "facing=south": {
+      "model": "hyperdaimc:block/materializer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "hyperdaimc:block/materializer",
+      "y": 270
     }
   }
 }

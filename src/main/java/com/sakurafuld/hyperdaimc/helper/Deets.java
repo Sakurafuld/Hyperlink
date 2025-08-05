@@ -4,7 +4,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,24 +37,8 @@ public class Deets {
         return ResourceLocation.fromNamespaceAndPath(nameSpace, path);
     }
 
-    public static ResourceLocation[] identifier(String nameSpace, String... paths) {
-        ResourceLocation[] resourceLocations = new ResourceLocation[paths.length];
-        for (int index = 0; index < paths.length; index++) {
-            resourceLocations[index] = ResourceLocation.fromNamespaceAndPath(nameSpace, paths[index]);
-        }
-        return resourceLocations;
-    }
-
-    public static Act require(ResourceLocation key) {
-        return ForgeRegistries.ITEMS.containsKey(key) ? Act.TRUE : Act.FALSE;
-    }
-
-    public static Act requiredAny(ResourceLocation... keys) {
-        return Arrays.stream(keys).anyMatch(ForgeRegistries.ITEMS::containsKey) ? Act.TRUE : Act.FALSE;
-    }
-
-    public static Act requireAll(ResourceLocation... keys) {
-        return Arrays.stream(keys).allMatch(ForgeRegistries.ITEMS::containsKey) ? Act.TRUE : Act.FALSE;
+    public static ResourceLocation identifier(String path) {
+        return identifier(HYPERDAIMC, path);
     }
 
     public static LogicalSide side() {

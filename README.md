@@ -53,7 +53,7 @@ MinecraftForge
 
 - Enable VRX = true
   - V.R.X.を機能させるのか
-- Keep VRX = false
+- Keep VRX = true
   - 自身を対象としたV.R.X.が死亡後も保たれるか
 - Create for others = false
   - 他のプレイヤーへV.R.X.を設定できるか

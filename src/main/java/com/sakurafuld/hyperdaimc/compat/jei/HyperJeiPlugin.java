@@ -11,6 +11,7 @@ import com.sakurafuld.hyperdaimc.content.crafting.desk.DeskMenu;
 import com.sakurafuld.hyperdaimc.content.crafting.desk.DeskScreen;
 import com.sakurafuld.hyperdaimc.content.crafting.desk.IDeskRecipe;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXScreen;
+import com.sakurafuld.hyperdaimc.content.over.materializer.MaterializerHandler;
 import com.sakurafuld.hyperdaimc.content.over.materializer.MaterializerMenu;
 import com.sakurafuld.hyperdaimc.content.over.materializer.MaterializerScreen;
 import com.sakurafuld.hyperdaimc.helper.Calculates;
@@ -72,7 +73,7 @@ public class HyperJeiPlugin implements IModPlugin {
         registration.addRecipes(DeskRecipeCategory.TYPE, Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(HyperRecipes.DESK.get()).stream()
                 .filter(IDeskRecipe::showToJei)
                 .toList());
-        registration.addRecipes(MaterializerRecipeCategory.TYPE, this.getMaterializerRecipes());
+        registration.addRecipes(MaterializerRecipeCategory.TYPE, MaterializerHandler.loadRecipe(Minecraft.getInstance().level));
     }
 
     @Override
@@ -150,7 +151,7 @@ public class HyperJeiPlugin implements IModPlugin {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private List<MaterializerRecipe> getMaterializerRecipes() {
+    private List<MaterializerHandler.Process> getMaterializerRecipes() {
         Set<Recipe<?>> searching = Sets.newHashSet();
         Object2ObjectOpenHashMap<ItemStack, List<Ingredient.Value>> recipes = new Object2ObjectOpenHashMap<>();
         class Caster {
@@ -190,7 +191,7 @@ public class HyperJeiPlugin implements IModPlugin {
                     recipes.put(result, ingredients);
                 });
 
-        List<MaterializerRecipe> materializerRecipes = Lists.newArrayList();
+        List<MaterializerHandler.Process> materializerRecipes = Lists.newArrayList();
         for (Object2ObjectMap.Entry<ItemStack, List<Ingredient.Value>> entry : recipes.object2ObjectEntrySet()) {
             List<ItemStack> list = Lists.newArrayList();
             entry.getValue().stream()
@@ -221,7 +222,7 @@ public class HyperJeiPlugin implements IModPlugin {
                     });
 
             if (!list.isEmpty()) {
-                materializerRecipes.add(new MaterializerRecipe(entry.getKey(), list));
+                materializerRecipes.add(new MaterializerHandler.Process(entry.getKey(), list));
             }
         }
 

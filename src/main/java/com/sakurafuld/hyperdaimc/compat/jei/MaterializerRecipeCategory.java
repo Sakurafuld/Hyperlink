@@ -31,9 +31,9 @@ import java.util.Set;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 
-public class MaterializerRecipeCategory implements IRecipeCategory<MaterializerRecipe> {
+public class MaterializerRecipeCategory implements IRecipeCategory<MaterializerHandler.Process> {
     public static final ResourceLocation ID = identifier("materializer");
-    public static final RecipeType<MaterializerRecipe> TYPE = new RecipeType<>(ID, MaterializerRecipe.class);
+    public static final RecipeType<MaterializerHandler.Process> TYPE = new RecipeType<>(ID, MaterializerHandler.Process.class);
     private static final Component TITLE = new TranslatableComponent("recipe.hyperdaimc.materializer");
 
     private final IDrawable background;
@@ -70,29 +70,29 @@ public class MaterializerRecipeCategory implements IRecipeCategory<MaterializerR
 
     @Override
     @SuppressWarnings("removal")
-    public Class<? extends MaterializerRecipe> getRecipeClass() {
-        return MaterializerRecipe.class;
+    public Class<? extends MaterializerHandler.Process> getRecipeClass() {
+        return MaterializerHandler.Process.class;
     }
 
     @Override
-    public RecipeType<MaterializerRecipe> getRecipeType() {
+    public RecipeType<MaterializerHandler.Process> getRecipeType() {
         return TYPE;
     }
 
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void draw(MaterializerRecipe recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
+    public void draw(MaterializerHandler.Process recipe, IRecipeSlotsView recipeSlotsView, PoseStack stack, double mouseX, double mouseY) {
         int color = (0xFF << 24) | Writes.gameOver("A").getSiblings().get(0).getStyle().getColor().getValue();
         GuiComponent.fill(stack, 1, 21, 153, 23, color);
         this.arrow.draw(stack, 35, 40);
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, MaterializerRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 5, 32).addItemStack(recipe.catalyst());
+    public void setRecipe(IRecipeLayoutBuilder builder, MaterializerHandler.Process recipe, IFocusGroup focuses) {
+        builder.addSlot(RecipeIngredientRole.INPUT, 5, 32).addItemStack(recipe.result());
         IRecipeSlotBuilder result = builder.addSlot(RecipeIngredientRole.OUTPUT, 137, 32);
-        result.addIngredients(VanillaTypes.ITEM_STACK, recipe.results());
+        result.addIngredients(VanillaTypes.ITEM_STACK, recipe.ingredients());
         IRecipeSlotBuilder fuel = builder.addSlot(RecipeIngredientRole.CATALYST, 80 - 11, 17 - 16);
         Set<Item> fuelItems = Sets.newHashSet();
         MaterializerHandler.Fuel.ITEMS.object2IntEntrySet().stream()

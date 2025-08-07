@@ -130,7 +130,7 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.vrx.player", "現在のV.R.X.の内容");
         this.add("tooltip.hyperdaimc.vrx.energy", "底なしのエネルギー");
         this.add("tooltip.hyperdaimc.vrx.energy.description", "ForgeEnergy, RedstoneFlux, Jouleなど");
-        this.add("tooltip.hyperdaimc.desk.minecrafting", "マインでクラフトだ！");
+        this.add("tooltip.hyperdaimc.desk.minecrafting", "マインしてクラフトだ！");
         this.add("tooltip.hyperdaimc.desk.lock", "クリックでレシピをロック");
         this.add("tooltip.hyperdaimc.desk.unlock", "シフトクリックでレシピをクリア");
         this.add("tooltip.hyperdaimc.god_sigil", "神の恵みを受け取れぇ！");

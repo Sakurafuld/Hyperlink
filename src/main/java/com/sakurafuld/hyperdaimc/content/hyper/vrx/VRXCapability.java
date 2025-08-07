@@ -23,7 +23,7 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 
 @Mod.EventBusSubscriber(modid = HYPERDAIMC, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class VRXCapability implements ICapabilitySerializable<CompoundTag> {
-    public static Capability<VRXCapability> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+    public static final Capability<VRXCapability> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
     });
     private final LazyOptional<VRXCapability> optional = LazyOptional.of(() -> this);
 

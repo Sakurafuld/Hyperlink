@@ -57,6 +57,7 @@
     "gameorb.ItemEntityRendererMixin",
     "materializer.AbstractContainerScreenMixin",
     "muteki.GameModeSwitchScreenMixin",
+    "muteki.KeyboardHandlerMixin",
     "novel.ClientLevelMixin",
     "paradox.ClientLevelMixin",
     "paradox.MinecraftMixin",

@@ -23,7 +23,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -171,7 +170,7 @@ public class MaterializerHandler {
 
         @SubscribeEvent
         public static void config(ModConfigEvent event) {
-            if (event.getConfig().getModId().equals(HYPERDAIMC) && event.getConfig().getType() == ModConfig.Type.COMMON) {
+            if (HyperCommonConfig.SPEC == event.getConfig().getSpec()) {
                 ITEMS.clear();
                 TAGS.clear();
                 HyperCommonConfig.MATERIALIZER_FUEL.get().stream()

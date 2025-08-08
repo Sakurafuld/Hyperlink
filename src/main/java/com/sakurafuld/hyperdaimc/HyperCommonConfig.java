@@ -142,7 +142,7 @@ public class HyperCommonConfig {
                                 "Default: true")
                         .define("Enable VRX", true);
                 VRX_KEEP = builder
-                        .comment("Keep VRX after death",
+                        .comment("Keep VRX on yourself after death",
                                 "Default: true")
                         .define("Keep VRX", true);
                 VRX_PLAYER = builder
@@ -215,7 +215,7 @@ public class HyperCommonConfig {
                         });
                 MATERIALIZER_RECIPE_BLACKLIST = builder
                         .comment("Specify recipes to ignore when searching recipes")
-                        .defineList("Recipe blacklist", List.of(), object -> object instanceof String string && ResourceLocation.isValidResourceLocation(string));
+                        .defineList("Recipe blacklist", List.of("hyperdaimc:game_orb", "hyperdaimc:hyper/muteki", "hyperdaimc:hyper/novel", "hyperdaimc:hyper/chronicle", "hyperdaimc:hyper/paradox", "hyperdaimc:hyper/vrx"), object -> object instanceof String string && ResourceLocation.isValidResourceLocation(string));
                 MATERIALIZER_TAG_BLACKLIST = builder
                         .comment("Specify tags to ignore when searching recipes")
                         .defineList("Tag blacklist", List.of("forge:ingots", "forge:gems", "forge:storage_blocks", "forge:nuggets", "hyperdaimc:essences", "hyperdaimc:cores", "hyperdaimc:gists", "tconstruct:anvil_metal"), object -> object instanceof String string && ResourceLocation.isValidResourceLocation(string));

@@ -3,7 +3,7 @@ package com.sakurafuld.hyperdaimc.content.over.materializer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.api.content.MaterializerRecipeLoadEvent;
+import com.sakurafuld.hyperdaimc.api.content.MaterializerRecipeEvent;
 import com.sakurafuld.hyperdaimc.mixin.materializer.Ingredient$TagValueAccessor;
 import com.sakurafuld.hyperdaimc.mixin.materializer.IngredientAccessor;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -67,7 +67,7 @@ public class MaterializerHandler {
 
     public static List<Process> loadRecipe(Level level) {
         List<Process> processes = Lists.newArrayList();
-        Set<Recipe<?>> searching = Sets.newHashSet();
+        Set<Recipe<?>> searched = Sets.newHashSet();
 
         class Caster {
             @SuppressWarnings("unchecked")
@@ -82,9 +82,11 @@ public class MaterializerHandler {
                 .filter(Registry.RECIPE_TYPE::containsKey)
                 .map(Registry.RECIPE_TYPE::get)
                 .map(type -> level.getRecipeManager().getAllRecipesFor(Caster.cast(type)))
-                .forEach(searching::addAll);
+                .forEach(searched::addAll);
 
-        searching.stream()
+        MinecraftForge.EVENT_BUS.post(new MaterializerRecipeEvent.Load(level, searched));
+
+        searched.stream()
                 .filter(recipe -> !HyperCommonConfig.MATERIALIZER_RECIPE_BLACKLIST.get().contains(recipe.getId().toString()))
                 .forEach(recipe -> {
                     ItemStack result = recipe.getResultItem();
@@ -101,17 +103,20 @@ public class MaterializerHandler {
                             .map(ItemStack::copy)
                             .forEach(ingredient -> addOrStack(ingredients, ingredient));
 
-                    MinecraftForge.EVENT_BUS.post(new MaterializerRecipeLoadEvent(level, recipe, ingredients));
+                    MaterializerRecipeEvent.Add event = new MaterializerRecipeEvent.Add(level, recipe, ingredients);
+                    MinecraftForge.EVENT_BUS.post(event);
 
-                    for (Process process : processes) {
-                        if (result.getCount() == process.result().getCount() && ItemHandlerHelper.canItemStacksStack(result, process.result())) {
-                            ingredients.forEach(ingredient -> addOrStack(process.ingredients(), ingredient));
-                            return;
+                    if (!event.isCanceled()) {
+                        for (Process process : processes) {
+                            if (result.getCount() == process.result().getCount() && ItemHandlerHelper.canItemStacksStack(result, process.result())) {
+                                ingredients.forEach(ingredient -> addOrStack(process.ingredients(), ingredient));
+                                return;
+                            }
                         }
-                    }
 
-                    if (!ingredients.isEmpty()) {
-                        processes.add(new Process(result.copy(), ingredients));
+                        if (!ingredients.isEmpty()) {
+                            processes.add(new Process(result.copy(), ingredients));
+                        }
                     }
                 });
 

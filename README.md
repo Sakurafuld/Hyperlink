@@ -85,7 +85,7 @@ MinecraftForge
   - Z-MAX マテリアライザーが材料を遡るレシピタイプのリスト
 - Materializer fuels = [ "hyperdaimc:god_sigil=64" ]
   - Z-MAX マテリアライザーの燃料として使えるアイテムとその使用回数のリスト
-- Recipe blacklist = [ ]
+- Recipe blacklist = [ "hyperdaimc:game_orb", "hyperdaimc:hyper/muteki", "hyperdaimc:hyper/novel", "hyperdaimc:hyper/chronicle", "hyperdaimc:hyper/paradox", "hyperdaimc:hyper/vrx" ]
   - 材料を遡る時に無視する個別のレシピのリスト
 - Tag blacklist = [ "forge:ingots", "forge:gems", "forge:storage_blocks", "forge:nuggets", "hyperdaimc:essences", "hyperdaimc:cores", "hyperdaimc:gists", "tconstruct:anvil_metal" ]
   - 材料を遡る時に無視するアイテムタグのリスト

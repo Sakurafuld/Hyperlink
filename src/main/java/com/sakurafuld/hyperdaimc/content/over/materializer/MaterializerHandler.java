@@ -104,7 +104,7 @@ public class MaterializerHandler {
             MaterializerRecipeEvent.Add event = new MaterializerRecipeEvent.Add(level, recipe, ingredients);
             MinecraftForge.EVENT_BUS.post(event);
 
-            if (!event.isCanceled()) {
+            if (!event.isCanceled() && !ingredients.isEmpty()) {
                 for (Process process : processes) {
                     if (result.getCount() == process.result().getCount() && ItemHandlerHelper.canItemStacksStack(result, process.result())) {
                         ingredients.forEach(ingredient -> addOrStack(process.ingredients(), ingredient));
@@ -112,9 +112,7 @@ public class MaterializerHandler {
                     }
                 }
 
-                if (!ingredients.isEmpty()) {
-                    processes.add(new Process(result.copy(), ingredients));
-                }
+                processes.add(new Process(result.copy(), ingredients));
             }
         });
 

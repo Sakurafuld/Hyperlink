@@ -39,7 +39,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -359,21 +358,17 @@ public class VRXHandler {
 
     @SubscribeEvent
     public static void creation(MixinLevelTickEvent event) {
-        creation(event.getLevel());
-    }
-
-    private static void creation(Level level) {
         if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return;
         }
 
-        VRXSavedData data = VRXSavedData.get(level);
+        VRXSavedData data = VRXSavedData.get(event.getLevel());
         List<Runnable> future = Lists.newArrayList();
         for (VRXSavedData.Entry entry : Lists.newArrayList(data.getEntries())) {
-            if (!level.hasChunkAt(entry.pos)) {
+            if (!event.getLevel().isLoaded(entry.pos)) {
                 continue;
             }
-            BlockEntity blockEntity = level.getBlockEntity(entry.pos);
+            BlockEntity blockEntity = event.getLevel().getBlockEntity(entry.pos);
             if (blockEntity != null) {
 
                 List<VRXOne> ones = Lists.newArrayList();

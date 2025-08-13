@@ -130,7 +130,7 @@ public class FumetsuSkull extends Entity implements IFumetsu {
 
     @Override
     public void fumetsuTick() {
-        if (this.tickCount > this.getAge() || !this.level().hasChunkAt(this.blockPosition()) || this.getOwner() == null || this.getOwner().isRemoved()) {
+        if (this.tickCount > this.getAge() || !this.level().isLoaded(this.blockPosition()) || this.getOwner() == null || this.getOwner().isRemoved()) {
             ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
             return;
         }

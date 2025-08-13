@@ -2,6 +2,7 @@ package com.sakurafuld.hyperdaimc.helper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
 public class Boxes {
@@ -26,5 +27,15 @@ public class Boxes {
         double maxY = Mth.lerp(delta, aa.maxY, bb.maxY);
         double maxZ = Mth.lerp(delta, aa.maxZ, bb.maxZ);
         return new AABB(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
+    public static BlockPos clamp(Level level, BlockPos pos) {
+        if (pos.getY() >= level.getMaxBuildHeight()) {
+            return new BlockPos(pos.getX(), level.getMaxBuildHeight() - 1, pos.getZ());
+        } else if (level.getMinBuildHeight() > pos.getY()) {
+            return new BlockPos(pos.getX(), level.getMinBuildHeight(), pos.getZ());
+        } else {
+            return pos;
+        }
     }
 }

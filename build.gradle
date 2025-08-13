@@ -187,16 +187,14 @@ dependencies {
 
     implementation fg.deobf("curse.maven:lendercataclysm-551586:6501448")
 
-    compileOnly fg.deobf("curse.maven:salmons-genesis-reincarnation-898734:5567527")
-
     implementation fg.deobf("slimeknights.tconstruct:TConstruct:${minecraft_version}-${tinkers_build}")
-    implementation fg.deobf("curse.maven:ticex-tinkers-construct-ex-1242469:6794248")
+    implementation fg.deobf("curse.maven:ticex-tinkers-construct-ex-1242469:6866978")
 
-    implementation fg.deobf("curse.maven:slashblade-resharped-1022428:6762159")
+    implementation fg.deobf("curse.maven:slashblade-resharped-1022428:6845813")
 
     implementation fg.deobf("curse.maven:re-avaritia-623969:6418092")
 
-    implementation fg.deobf("curse.maven:draconic-evolution-223565:6065044")
+    implementation fg.deobf("curse.maven:draconic-evolution-223565:6793843")
 
     implementation fg.deobf("curse.maven:botania-225643:6366547")
     implementation fg.deobf("curse.maven:extrabotany-reburn-1271869:6577564")
@@ -204,16 +202,6 @@ dependencies {
     compileOnly fg.deobf("curse.maven:pneumaticcraft-repressurized-281849:6142963")
 
     implementation fg.deobf("curse.maven:ice-and-fire-dragons-264231:5633453")
-
-    compileOnly fg.deobf("curse.maven:time-stop-clock-mod-690991:4733372")
-
-    compileOnly fg.deobf("curse.maven:vll-r-mystery-942507:4960052")
-
-    compileOnly fg.deobf("curse.maven:legendary-monsters-944035:6484028")
-
-    compileOnly fg.deobf("curse.maven:eeeabs-mobs-921600:6095880")
-
-    compileOnly fg.deobf("curse.maven:super-hyper-716097:5992813")
 
     implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6654541")
 

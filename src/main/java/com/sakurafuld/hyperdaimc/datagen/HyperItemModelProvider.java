@@ -23,16 +23,14 @@ public class HyperItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         for (Object2ObjectMap.Entry<String, RegistryObject<Item>> entry : HyperItems.MATERIAL.object2ObjectEntrySet()) {
             if (entry.getValue().get() instanceof MaterialItem material) {
-                ItemModelBuilder builder = this.getBuilder("special/" + entry.getKey())
-                        .parent(new ModelFile.UncheckedModelFile("item/generated"));
-
-
                 String suffix = entry.getKey().substring(entry.getKey().lastIndexOf('_') + 1);
 
                 this.getBuilder(entry.getKey())
                         .parent(new ModelFile.UncheckedModelFile("builtin/entity"))
                         .guiLight(BlockModel.GuiLight.FRONT).texture("particle", this.modLoc("item/material/" + suffix + 0));
 
+                ItemModelBuilder builder = this.getBuilder("special/" + entry.getKey())
+                        .parent(new ModelFile.UncheckedModelFile("item/generated"));
                 for (int index = 0; index < material.tint.length; index++) {
                     builder.texture("layer" + index, this.modLoc("item/material/" + suffix + index));
                 }

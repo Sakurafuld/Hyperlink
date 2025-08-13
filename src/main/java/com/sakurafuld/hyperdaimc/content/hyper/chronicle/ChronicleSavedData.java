@@ -107,6 +107,9 @@ public class ChronicleSavedData extends SavedData {
             return false;
         }
 
+        from = Boxes.clamp(this.level, from);
+        to = Boxes.clamp(this.level, to);
+
         Entry entry = new Entry(uuid, from, to);
         if (!this.entries.contains(entry)) {
 

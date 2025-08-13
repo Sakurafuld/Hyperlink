@@ -218,13 +218,6 @@ public class ChronicleHandler {
         }
     }
 
-    //    @SubscribeEvent
-//    public static void pause(PlayerEvent.BreakSpeed event) {
-//        if(isPaused(event.getPlayer().getLevel(), event.getPos(), event.getPlayer()))  {
-//            LOG.debug("ChronicleBreakSpeed");
-//            event.setCanceled(true);
-//        }
-//    }
     @SubscribeEvent
     public static void pause(BlockEvent.BreakEvent event) {
         if (event.getLevel() instanceof Level level && isPaused(level, event.getPos(), event.getPlayer())) {
@@ -259,27 +252,6 @@ public class ChronicleHandler {
         }
     }
 
-    //    @SubscribeEvent
-//    @SuppressWarnings("all")
-//    public static void pause(BlockEvent.BlockToolInteractEvent event) {
-//        if(event.getWorld() instanceof Level level && isPaused(level, event.getPos(), event.getPlayer())) {
-//            event.setCanceled(true);
-//        }
-//    }
-//    @SubscribeEvent(priority = EventPriority.LOWEST)
-//    public static void pause(BlockEvent.BlockToolModificationEvent event) {
-//        if(event.getWorld() instanceof Level level && !event.getFinalState().is(event.getState().getBlock()) && isPaused(level, event.getPos(), event.getPlayer())) {
-//            event.setFinalState(null);
-//        }
-//    }
-//    @SubscribeEvent
-//    public static void pause(ExplosionEvent.Detonate event) {
-//        for(BlockPos pos : Lists.newArrayList(event.getAffectedBlocks())) {
-//            if(isPaused(event.getWorld(), pos, null)) {
-//                event.getAffectedBlocks().remove(pos);
-//            }
-//        }
-//    }
     @SubscribeEvent
     public static void pause(PistonEvent.Pre event) {
         if (event.getLevel() instanceof Level level) {
@@ -303,7 +275,6 @@ public class ChronicleHandler {
             return false;
         }
         if (chunkGenerating.get()) {
-//            LOG.debug("isNotPausedChunkGenerating");
             return false;
         }
         if (level.isClientSide() && clientForceNonPaused) {
@@ -313,18 +284,11 @@ public class ChronicleHandler {
             Optional<List<ChronicleSavedData.Entry>> optional = ChronicleSavedData.get(level).getPaused(pos);
             return optional.filter(list -> {
                 if (HyperCommonConfig.CHRONICLE_OWNER.get()) {
-//                    LOG.debug("isPausedConfigOwner");
                     return true;
                 } else if (!(entity instanceof Player)) {
-//                    LOG.debug("isPausedNullOrNoPlayer:{}", entity);
                     return true;
                 }
-                if (!list.stream().allMatch(entry -> entry.uuid.equals(entity.getUUID()))) {
-//                    LOG.debug("isPausedNoOwner");
-                    return true;
-                }
-//                LOG.debug("isNotPaused");
-                return false;
+                return !list.stream().allMatch(entry -> entry.uuid.equals(entity.getUUID()));
             }).isPresent();
         } else {
             return false;
@@ -337,10 +301,10 @@ public class ChronicleHandler {
 
         if (mc.hitResult == null || mc.hitResult.getType() == HitResult.Type.MISS) {
             Vec3 view = mc.player.getViewVector(1).multiply(4, 4, 4);
-            return BlockPos.containing(mc.player.getEyePosition().add(view));
+            return Boxes.clamp(mc.level, BlockPos.containing(mc.player.getEyePosition().add(view)));
         } else if (mc.hitResult instanceof BlockHitResult hit) {
             if (mc.player.isShiftKeyDown() != HyperCommonConfig.CHRONICLE_INVERT_SHIFT.get()) {
-                return hit.getBlockPos().immutable().relative(hit.getDirection());
+                return Boxes.clamp(mc.level, hit.getBlockPos().immutable().relative(hit.getDirection()));
             } else {
                 return hit.getBlockPos().immutable();
             }

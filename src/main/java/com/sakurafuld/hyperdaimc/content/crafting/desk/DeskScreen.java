@@ -16,6 +16,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -64,6 +65,10 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
 
     @Override
     protected void containerTick() {
+        if (hasControlDown() && hasAltDown()) {
+            this.clear();
+            this.data = Data.EMPTY;
+        }
         Slot result = this.getMenu().getSlot(0);
         if (!result.hasItem()) {
             this.clear();
@@ -175,6 +180,7 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
         this.clearItemVFX();
         this.vanished.clear();
         this.visualCrafting = false;
+        this.standby = 0;
         this.getMenu().canCraft = false;
         HyperConnection.INSTANCE.sendToServer(new ServerboundDeskDoneAnimation(this.getMenu().containerId, false));
     }
@@ -274,6 +280,8 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
             tooltip.add(UNLOCK);
 
             pGuiGraphics.renderTooltip(this.font, tooltip, Optional.empty(), pX, pY);
+        } else if (this.isHovering(0, 0, this.font.width(I18n.get("block.hyperdaimc.desk")), this.font.lineHeight, pX, pY)) {
+
         } else {
             super.renderTooltip(pGuiGraphics, pX, pY);
         }

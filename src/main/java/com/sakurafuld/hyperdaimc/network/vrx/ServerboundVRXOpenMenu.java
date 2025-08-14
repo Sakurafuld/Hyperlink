@@ -2,6 +2,7 @@ package com.sakurafuld.hyperdaimc.network.vrx;
 
 import com.mojang.datafixers.util.Pair;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
+import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXCapability;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXMenu;
@@ -41,47 +42,49 @@ public class ServerboundVRXOpenMenu {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
-            double reach = Math.max(player.getReachDistance(), player.getAttackRange());
-            Pair<Pair<BlockPos, Integer>, Direction> pair = null;
-            Component name = null;
+            if (player.getMainHandItem().is(HyperItems.VRX.get()) && !player.isShiftKeyDown()) {
+                double reach = Math.max(player.getReachDistance(), player.getAttackRange());
+                Pair<Pair<BlockPos, Integer>, Direction> pair = null;
+                Component name = null;
 
-            if (this.block) {
-                if (player.pick(reach, 1, false) instanceof BlockHitResult hit && hit.getType() != HitResult.Type.MISS) {
-                    BlockState state = player.getLevel().getBlockState(hit.getBlockPos());
-                    if (state.hasBlockEntity()) {
-                        pair = Pair.of(Pair.of(hit.getBlockPos(), null), hit.getDirection());
-                        name = state.getBlock().getName();
+                if (this.block) {
+                    if (player.pick(reach, 1, false) instanceof BlockHitResult hit && hit.getType() != HitResult.Type.MISS) {
+                        BlockState state = player.getLevel().getBlockState(hit.getBlockPos());
+                        if (state.hasBlockEntity()) {
+                            pair = Pair.of(Pair.of(hit.getBlockPos(), null), hit.getDirection());
+                            name = state.getBlock().getName();
+                        }
+                    }
+                } else {
+                    Vec3 start = player.getEyePosition();
+                    Vec3 vector = player.getViewVector(1).scale(reach);
+                    Vec3 end = start.add(vector);
+                    AABB aabb = player.getBoundingBox().expandTowards(vector).inflate(1);
+                    EntityHitResult hit = ProjectileUtil.getEntityHitResult(player, start, end, aabb, entity -> !entity.isSpectator() && entity.isPickable(), reach * reach);
+                    if (hit != null && hit.getType() != HitResult.Type.MISS && (HyperCommonConfig.VRX_PLAYER.get() || !(hit.getEntity() instanceof Player)) && hit.getEntity().getCapability(VRXCapability.TOKEN).isPresent()) {
+                        pair = Pair.of(Pair.of(null, hit.getEntity().getId()), null);
+                        name = hit.getEntity().getDisplayName();
                     }
                 }
-            } else {
-                Vec3 start = player.getEyePosition();
-                Vec3 vector = player.getViewVector(1).scale(reach);
-                Vec3 end = start.add(vector);
-                AABB aabb = player.getBoundingBox().expandTowards(vector).inflate(1);
-                EntityHitResult hit = ProjectileUtil.getEntityHitResult(player, start, end, aabb, entity -> !entity.isSpectator() && entity.isPickable(), reach * reach);
-                if (hit != null && hit.getType() != HitResult.Type.MISS && (HyperCommonConfig.VRX_PLAYER.get() || !(hit.getEntity() instanceof Player)) && hit.getEntity().getCapability(VRXCapability.TOKEN).isPresent()) {
-                    pair = Pair.of(Pair.of(null, hit.getEntity().getId()), null);
-                    name = hit.getEntity().getDisplayName();
+
+                if (pair != null) {
+
+                    Component finalName = name;
+                    Pair<Pair<BlockPos, Integer>, Direction> finalPair = pair;
+                    NetworkHooks.openGui(player, new MenuProvider() {
+                        @Override
+                        public Component getDisplayName() {
+                            return finalName;
+                        }
+
+                        @Override
+                        public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
+                            return new VRXMenu(pContainerId, pPlayerInventory, finalPair);
+                        }
+                    }, buf -> VRXMenu.parse(buf, finalPair));
+
+                    player.playNotifySound(HyperSounds.VRX_OPEN.get(), SoundSource.PLAYERS, 0.5f, 0.75f);
                 }
-            }
-
-            if (pair != null) {
-
-                Component finalName = name;
-                Pair<Pair<BlockPos, Integer>, Direction> finalPair = pair;
-                NetworkHooks.openGui(player, new MenuProvider() {
-                    @Override
-                    public Component getDisplayName() {
-                        return finalName;
-                    }
-
-                    @Override
-                    public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-                        return new VRXMenu(pContainerId, pPlayerInventory, finalPair);
-                    }
-                }, buf -> VRXMenu.parse(buf, finalPair));
-
-                player.playNotifySound(HyperSounds.VRX_OPEN.get(), SoundSource.PLAYERS, 0.5f, 0.75f);
             }
         });
         ctx.get().setPacketHandled(true);

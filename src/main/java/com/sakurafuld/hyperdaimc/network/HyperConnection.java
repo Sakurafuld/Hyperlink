@@ -51,7 +51,6 @@ public class HyperConnection {
         INSTANCE.registerMessage(id++, ClientboundVRXSetTooltip.class, ClientboundVRXSetTooltip::encode, ClientboundVRXSetTooltip::decode, ClientboundVRXSetTooltip::handle);
         INSTANCE.registerMessage(id++, ServerboundVRXCloseMenu.class, ServerboundVRXCloseMenu::encode, ServerboundVRXCloseMenu::decode, ServerboundVRXCloseMenu::handle);
         INSTANCE.registerMessage(id++, ServerboundVRXScrollMenu.class, ServerboundVRXScrollMenu::encode, ServerboundVRXScrollMenu::decode, ServerboundVRXScrollMenu::handle);
-        INSTANCE.registerMessage(id++, ServerboundVRXSound.class, ServerboundVRXSound::encode, ServerboundVRXSound::decode, ServerboundVRXSound::handle);
         INSTANCE.registerMessage(id++, ServerboundVRXSetJeiGhost.class, ServerboundVRXSetJeiGhost::encode, ServerboundVRXSetJeiGhost::decode, ServerboundVRXSetJeiGhost::handle);
         INSTANCE.registerMessage(id++, ServerboundVRXOpenMenu.class, ServerboundVRXOpenMenu::encode, ServerboundVRXOpenMenu::decode, ServerboundVRXOpenMenu::handle);
         INSTANCE.registerMessage(id++, ServerboundVRXErase.class, ServerboundVRXErase::encode, ServerboundVRXErase::decode, ServerboundVRXErase::handle);

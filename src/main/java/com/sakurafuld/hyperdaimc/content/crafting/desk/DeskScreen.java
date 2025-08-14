@@ -41,9 +41,11 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 @OnlyIn(Dist.CLIENT)
 public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
     private static final ResourceLocation BACKGROUND = identifier("textures/gui/container/desk.png");
+    private static final Component MINECRAFT = new TranslatableComponent("tooltip.hyperdaimc.desk.minecrafting");
     private static final Component LOCK = new TranslatableComponent("tooltip.hyperdaimc.desk.lock");
     private static final Component UNLOCK = new TranslatableComponent("tooltip.hyperdaimc.desk.unlock").withStyle(ChatFormatting.GRAY);
-    private static final Component MINECRAFT = new TranslatableComponent("tooltip.hyperdaimc.desk.minecrafting");
+    private static final Component ANIMATION = new TranslatableComponent("tooltip.hyperdaimc.desk.animation").withStyle(ChatFormatting.GRAY);
+
     private final Set<IScreenVFX> visualEffects = Sets.newHashSet();
     private final Set<IScreenVFX> temporaryEffects = Sets.newHashSet();
     private final Set<Integer> vanished = Sets.newHashSet();
@@ -67,6 +69,10 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
 
     @Override
     protected void containerTick() {
+        if (hasControlDown() && hasAltDown()) {
+            this.clear();
+            this.data = Data.EMPTY;
+        }
         Slot result = this.getMenu().getSlot(0);
         if (!result.hasItem()) {
             this.clear();
@@ -178,6 +184,7 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
         this.clearItemVFX();
         this.vanished.clear();
         this.visualCrafting = false;
+        this.standby = 0;
         this.getMenu().canCraft = false;
         HyperConnection.INSTANCE.sendToServer(new ServerboundDeskDoneAnimation(this.getMenu().containerId, false));
     }
@@ -278,6 +285,8 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
 
             tooltip.add(LOCK.copy().withStyle(tooltip.isEmpty() ? ChatFormatting.WHITE : ChatFormatting.GRAY));
             tooltip.add(UNLOCK);
+            tooltip.add(ANIMATION);
+
             this.renderTooltip(pPoseStack, tooltip, Optional.empty(), pX, pY);
         } else {
             super.renderTooltip(pPoseStack, pX, pY);

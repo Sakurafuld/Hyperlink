@@ -27,7 +27,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
@@ -39,7 +38,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
 
 public class FumetsuSkull extends Entity implements IFumetsu {
     private static final EntityDataAccessor<String> DATA_TYPE = SynchedEntityData.defineId(FumetsuSkull.class, EntityDataSerializers.STRING);
@@ -129,7 +127,7 @@ public class FumetsuSkull extends Entity implements IFumetsu {
 
     @Override
     public void fumetsuTick() {
-        if (this.tickCount > this.getAge() || !this.getLevel().hasChunkAt(this.blockPosition()) || this.getOwner() == null || this.getOwner().isRemoved()) {
+        if (this.tickCount > this.getAge() || !this.getLevel().isLoaded(this.blockPosition()) || this.getOwner() == null || this.getOwner().isRemoved()) {
             ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
             return;
         }
@@ -287,7 +285,7 @@ public class FumetsuSkull extends Entity implements IFumetsu {
     protected void onHitEntity(EntityHitResult pResult) {
         FumetsuEntity fumetsu = this.getOwner();
         if (fumetsu != null && fumetsu.isAvailableTarget(pResult.getEntity())) {
-            require(LogicalSide.SERVER).run(() -> {
+            if (!this.getLevel().isClientSide()) {
                 if (this.getLevel() instanceof ServerLevel serverLevel) {
                     NovelHandler.playSound(serverLevel, pResult.getEntity().position());
                 }
@@ -308,9 +306,9 @@ public class FumetsuSkull extends Entity implements IFumetsu {
                             NovelHandler.novelize(fumetsu, living, false);
                         }
                     }
-                    HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(this.getLevel()::dimension), new ClientboundNovelize(fumetsu.getId(), entity.getId(), page));
+                    HyperConnection.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new ClientboundNovelize(fumetsu.getId(), entity.getId(), page));
                 });
-            });
+            }
 
             ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
         }

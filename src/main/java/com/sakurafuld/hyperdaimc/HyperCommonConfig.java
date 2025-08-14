@@ -14,11 +14,13 @@ public class HyperCommonConfig {
     public static final ForgeConfigSpec.BooleanValue MUTEKI_SELECTOR;
 
     public static final ForgeConfigSpec.BooleanValue ENABLE_NOVEL;
+    public static final ForgeConfigSpec.BooleanValue NOVEL_VULNERABILIZATION;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> NOVEL_IGNORE;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> NOVEL_SPECIAL;
     public static final ForgeConfigSpec.BooleanValue NOVEL_INVERT_SHIFT;
 
     public static final ForgeConfigSpec.BooleanValue ENABLE_CHRONICLE;
+    public static final ForgeConfigSpec.BooleanValue CHRONICLE_VULNERABILIZATION;
     public static final ForgeConfigSpec.BooleanValue CHRONICLE_PARADOX;
     public static final ForgeConfigSpec.BooleanValue CHRONICLE_OWNER;
     public static final ForgeConfigSpec.BooleanValue CHRONICLE_INTERACT;
@@ -30,6 +32,7 @@ public class HyperCommonConfig {
     public static final ForgeConfigSpec.BooleanValue PARADOX_INVERT_SHIFT;
 
     public static final ForgeConfigSpec.BooleanValue ENABLE_VRX;
+    public static final ForgeConfigSpec.BooleanValue VRX_VULNERABILIZATION;
     public static final ForgeConfigSpec.BooleanValue VRX_KEEP;
     public static final ForgeConfigSpec.BooleanValue VRX_PLAYER;
     public static final ForgeConfigSpec.BooleanValue VRX_JEI;
@@ -77,6 +80,10 @@ public class HyperCommonConfig {
                         .comment("Enable behavior of Novel",
                                 "Default: true")
                         .define("Enable Novel", true);
+                NOVEL_VULNERABILIZATION = builder
+                        .comment("Enable vulnerability of Novel",
+                                "Default: false")
+                        .define("Novel vulnerabilization", false);
                 NOVEL_IGNORE = builder
                         .comment("Specific entities that ignore Novelize")
                         .defineList("Ignore entities", Lists.newArrayList("minecraft:item", "minecraft:experience_orb", "hyperdaimc:fumetsu_skull", "hyperdaimc:fumetsu_storm", "hyperdaimc:fumetsu_storm_skull"),
@@ -97,6 +104,10 @@ public class HyperCommonConfig {
                         .comment("Enable behavior of Chronicle",
                                 "Default: true")
                         .define("Enable Chronicle", true);
+                CHRONICLE_VULNERABILIZATION = builder
+                        .comment("Enable vulnerability of Chronicle",
+                                "Default: false")
+                        .define("Chronicle vulnerabilization", false);
                 CHRONICLE_PARADOX = builder
                         .comment("Paradox may not Perfect Knockout Chronicle",
                                 "Default: false")
@@ -141,6 +152,10 @@ public class HyperCommonConfig {
                         .comment("Enable behavior of VRX",
                                 "Default: true")
                         .define("Enable VRX", true);
+                VRX_VULNERABILIZATION = builder
+                        .comment("Enable vulnerability of VRX",
+                                "Default: false")
+                        .define("VRX vulnerabilization", false);
                 VRX_KEEP = builder
                         .comment("Keep VRX on yourself after death",
                                 "Default: true")

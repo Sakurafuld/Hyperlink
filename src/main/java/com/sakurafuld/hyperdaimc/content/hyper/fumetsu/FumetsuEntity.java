@@ -351,8 +351,8 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
                 this.setYHeadRot(this.getYRot());
                 this.setYBodyRot(this.getYRot());
                 this.setXRot(Mth.rotateIfNecessary(this.getXRot(), Math.min(35, (float) Math.toDegrees(-Mth.atan2(dy, distance))), 2));
-                if (this.getLevel().getGameTime() % 100 == 0) {
-                    NovelHandler.novelize(this, target, false);
+                if (!this.getLevel().isClientSide() && this.getLevel().getGameTime() % 100 == 0) {
+                    NovelHandler.novelize(this, target, true);
                 }
             } else {
                 this.setDeltaMovement(this.getDeltaMovement().multiply(1, 0.6, 1));
@@ -385,26 +385,26 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         } else {
             Vec3 centerHead = new Vec3(this.getHeadX(0), this.getHeadY(0), this.getHeadZ(0));
 
+            if (target != null) {
+                double dx = target.getX() - this.getX();
+                double dz = target.getZ() - this.getZ();
+
+                this.setXRot(Mth.rotateIfNecessary(this.getXRot(), -40, 2));
+                this.setYRot(Mth.rotateIfNecessary(this.getYRot(), (float) Math.toDegrees(-Mth.atan2(dx, dz)), 2));
+                this.setYHeadRot(this.getYRot());
+                this.setYBodyRot(this.getYRot());
+            }
+
             for (int head = 0; head < 2; ++head) {
                 this.yRotOHeads[head] = this.yRotHeads[head];
                 this.xRotOHeads[head] = this.xRotHeads[head];
 
                 if (target != null) {
-                    double dx = target.getX() - this.getX();
-                    double dz = target.getZ() - this.getZ();
-
-                    this.setXRot(Mth.rotateIfNecessary(this.getXRot(), -40, 2));
-                    this.setYRot(Mth.rotateIfNecessary(this.getYRot(), (float) Math.toDegrees(-Mth.atan2(dx, dz)), 2));
-                    this.setYHeadRot(this.getYRot());
-                    this.setYBodyRot(this.getYRot());
-
-
                     Vec3 sideHead = new Vec3(this.getHeadX(head + 1), this.getHeadY(head + 1), this.getHeadZ(head + 1));
                     Vec3 vec = sideHead.subtract(centerHead);
 
                     this.xRotHeads[head] = Mth.rotateIfNecessary(this.xRotHeads[head], (float) Math.toDegrees(-Mth.atan2(vec.y(), vec.horizontalDistance())), 2);
                     this.yRotHeads[head] = Mth.rotateIfNecessary(this.yRotHeads[head], (float) Math.toDegrees(-Mth.atan2(vec.x(), vec.z())), 2);
-
                 }
             }
         }
@@ -680,7 +680,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         } else {
             float yRot = (float) Math.toRadians(this.yBodyRot + (180 * (head - 1)));
             float offset = Mth.cos(yRot);
-            return this.getX() + offset * 1.3;
+            return this.getX() + offset * -1.3;
         }
     }
 
@@ -694,7 +694,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         } else {
             float yRot = (float) Math.toRadians(this.yBodyRot + (180 * (head - 1)));
             float offset = Mth.sin(yRot);
-            return this.getZ() + offset * 1.3;
+            return this.getZ() + offset * -1.3;
         }
     }
 

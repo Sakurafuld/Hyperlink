@@ -76,14 +76,16 @@ public class HyperEnglishProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.vrx.player", "Current V.R.X. contents");
         this.add("tooltip.hyperdaimc.vrx.energy", "Infinite Energy");
         this.add("tooltip.hyperdaimc.vrx.energy.description", "ForgeEnergy, RedstoneFlux, Joule and more");
+        this.add("tooltip.hyperdaimc.desk.minecrafting", "Mine to craft!");
         this.add("tooltip.hyperdaimc.desk.lock", "Click to lock the current recipe");
         this.add("tooltip.hyperdaimc.desk.unlock", "Shift-click to clear the recipe");
-        this.add("tooltip.hyperdaimc.desk.minecrafting", "Mine to craft!");
+        this.add("tooltip.hyperdaimc.desk.animation", "Hold down Ctrl+Alt to disable animation");
         this.add("tooltip.hyperdaimc.god_sigil", "God loves you");
         this.add("tooltip.hyperdaimc.chemical_max", "Throw at the zombies!");
 
         this.add("container.hyperdaimc.vrx.face", "Direction: %s");
 
+        this.add("chat.hyperdaimc.chronicle.conflict", "Selection already exists");
         this.add("chat.hyperdaimc.chronicle.too_large", "Selection is too large");
 
         this.add("death.attack.novel.0", "%s was gone");

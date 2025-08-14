@@ -1,42 +1,52 @@
 package com.sakurafuld.hyperdaimc.network.novel;
 
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
+import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.Comparator;
 import java.util.function.Supplier;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 
 public class ServerboundNovelize {
-    private final int attacker;
-    private final int victim;
-
-    public ServerboundNovelize(int writer, int victim) {
-        this.attacker = writer;
-        this.victim = victim;
-    }
-
     public static void encode(ServerboundNovelize msg, FriendlyByteBuf buf) {
-        buf.writeVarInt(msg.attacker);
-        buf.writeVarInt(msg.victim);
     }
 
     public static ServerboundNovelize decode(FriendlyByteBuf buf) {
-        return new ServerboundNovelize(buf.readVarInt(), buf.readVarInt());
+        return new ServerboundNovelize();
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             LOG.debug("handleNovelize");
-            Level level = ctx.get().getSender().getLevel();
-            Entity attacker = level.getEntity(this.attacker);
-            Entity victim = level.getEntity(this.victim);
-            if (attacker instanceof LivingEntity living && victim != null)
-                NovelHandler.novelize(living, victim, false);
+            ServerPlayer player = ctx.get().getSender();
+            ServerLevel level = player.getLevel();
+
+            if (player.getMainHandItem().is(HyperItems.NOVEL.get())) {
+                double reach = Math.max(player.getReachDistance(), player.getAttackRange());
+                Vec3 view = player.getViewVector(1);
+                Vec3 vector = view.scale(reach);
+                Vec3 eye = player.getEyePosition();
+                if (player.isShiftKeyDown() != HyperCommonConfig.NOVEL_INVERT_SHIFT.get()) {
+                    NovelHandler.rayTraceEntities(player, eye, eye.add(vector), player.getBoundingBox().expandTowards(vector).inflate(1), 0).stream()
+                            .min(Comparator.comparingDouble(entity -> entity.position().distanceToSqr(eye)))
+                            .ifPresent(entity -> {
+                                NovelHandler.novelize(player, entity, true);
+                                NovelHandler.playSound(level, entity.position());
+                            });
+                } else {
+                    NovelHandler.rayTraceEntities(player, eye, eye.add(vector), player.getBoundingBox().expandTowards(vector).inflate(1), 0.75f).stream()
+                            .peek(entity -> NovelHandler.novelize(player, entity, true))
+                            .min(Comparator.comparingDouble(player::distanceTo))
+                            .ifPresent(entity -> NovelHandler.playSound(level, entity.position()));
+                }
+            }
         });
         ctx.get().setPacketHandled(true);
     }

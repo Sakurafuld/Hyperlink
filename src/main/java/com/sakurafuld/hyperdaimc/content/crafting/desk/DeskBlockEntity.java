@@ -4,8 +4,6 @@ import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.api.content.IOItemHandler;
 import com.sakurafuld.hyperdaimc.content.HyperBlockEntities;
 import com.sakurafuld.hyperdaimc.content.HyperRecipes;
-import com.sakurafuld.hyperdaimc.network.HyperConnection;
-import com.sakurafuld.hyperdaimc.network.desk.ClientboundDeskMinecraft;
 import it.unimi.dsi.fastutil.ints.IntAVLTreeSet;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -37,7 +35,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -157,7 +154,6 @@ public class DeskBlockEntity extends BlockEntity implements MenuProvider {
     public void dropOrMinecraft() {
         if (this.getLevel() instanceof ServerLevel serverLevel) {
             if (this.minecraft) {
-                DeskSavedData savedData = DeskSavedData.get(serverLevel);
                 List<ItemStack> ingredients = Lists.newArrayList();
                 for (int index = 0; index < this.inventory.getSlots(); index++) {
                     ItemStack ingredient = this.inventory.getStackInSlot(index);
@@ -165,8 +161,8 @@ public class DeskBlockEntity extends BlockEntity implements MenuProvider {
                         ingredients.add(ingredient);
                     }
                 }
-                DeskSavedData.Entry entry = savedData.add(this.getBlockPos(), ingredients, this.result.getStackInSlot(0));
-                HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(serverLevel::dimension), new ClientboundDeskMinecraft(entry));
+
+                DeskHandler.minecraftAt(serverLevel, this.getBlockPos(), ingredients, this.result.getStackInSlot(0));
                 this.consumeRecipe();
             }
 

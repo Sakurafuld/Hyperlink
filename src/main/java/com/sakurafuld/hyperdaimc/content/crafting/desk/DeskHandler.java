@@ -2,10 +2,14 @@ package com.sakurafuld.hyperdaimc.content.crafting.desk;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
+import com.sakurafuld.hyperdaimc.api.content.AbstractGashatItem;
 import com.sakurafuld.hyperdaimc.api.mixin.MixinLevelTickEvent;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.crafting.gameorb.GameOrbRenderer;
+import com.sakurafuld.hyperdaimc.content.crafting.material.MaterialItem;
 import com.sakurafuld.hyperdaimc.helper.Renders;
+import com.sakurafuld.hyperdaimc.network.HyperConnection;
+import com.sakurafuld.hyperdaimc.network.desk.ClientboundDeskMinecraft;
 import net.minecraft.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
@@ -15,8 +19,11 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,7 +32,9 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 
+import java.util.List;
 import java.util.Random;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
@@ -50,11 +59,7 @@ public class DeskHandler {
 
     @SubscribeEvent
     public static void minecrafting(MixinLevelTickEvent event) {
-        minecrafting(event.getLevel());
-    }
-
-    private static void minecrafting(Level level) {
-        DeskSavedData.get(level).getEntries().removeIf(entry -> !entry.tick(level));
+        DeskSavedData.get(event.getLevel()).getEntries().removeIf(entry -> !entry.tick(event.getLevel()));
     }
 
     @SubscribeEvent
@@ -88,7 +93,11 @@ public class DeskHandler {
                         poseStack.mulPose(Vector3f.YP.rotationDegrees(yRot));
                         poseStack.mulPose(Vector3f.XN.rotationDegrees(xRot));
 
-//                        poseStack.translate(0, -0.0625, 0);
+                        float transY = model.getTransforms().getTransform(ItemTransforms.TransformType.GROUND).translation.y()
+                                + (shouldTweakTranslationAsGenerated(entry.result.getItem()) ? 0.125f : 0);
+
+                        poseStack.translate(0, -transY * size, 0);
+
                         mc.getItemRenderer().render(entry.result, ItemTransforms.TransformType.GROUND, false, poseStack, Renders.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, model);
                     });
 
@@ -124,6 +133,9 @@ public class DeskHandler {
                     float xRot = Mth.rotLerp(event.getPartialTick(), one.oldRot.x(), one.rot.x());
                     BakedModel model = mc.getItemRenderer().getModel(one.stack, mc.level, null, 0);
 
+                    float transY = model.getTransforms().getTransform(ItemTransforms.TransformType.GROUND).translation.y()
+                            + (shouldTweakTranslationAsGenerated(one.stack.getItem()) ? 0.125f : 0);
+
                     poseStack.translate(x, y, z);
                     if (one.stack.is(HyperItems.GAME_ORB.get())) {
                         Vec3 vec = camera.getPosition().subtract(x, y, z);
@@ -132,19 +144,23 @@ public class DeskHandler {
                             poseStack.mulPose(Vector3f.YP.rotationDegrees((float) Math.toDegrees(Mth.atan2(vec.x(), vec.z()))));
                             poseStack.mulPose(Vector3f.XN.rotationDegrees((float) Math.toDegrees(Mth.atan2(vec.y(), vec.horizontalDistance()))));
                             poseStack.translate(-0.5, -0.5, -0.5);
+                            poseStack.translate(0, -transY, 0);
 
                             GameOrbRenderer.renderHalo(poseStack, ItemRenderer.getFoilBuffer(Renders.bufferSource(), Sheets.translucentCullBlockSheet(), true, one.stack.hasFoil()), ItemTransforms.TransformType.GROUND, LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY);
                         });
                     }
 
-                    poseStack.pushPose();
-                    poseStack.scale(0.85f, 0.85f, 0.85f);
-                    poseStack.mulPose(Vector3f.ZP.rotationDegrees(zRot));
-                    poseStack.mulPose(Vector3f.YP.rotationDegrees(yRot));
-                    poseStack.mulPose(Vector3f.XP.rotationDegrees(xRot));
+                    Renders.with(poseStack, () -> {
+                        poseStack.scale(0.85f, 0.85f, 0.85f);
+                        poseStack.mulPose(Vector3f.ZP.rotationDegrees(zRot));
+                        poseStack.mulPose(Vector3f.YP.rotationDegrees(yRot));
+                        poseStack.mulPose(Vector3f.XP.rotationDegrees(xRot));
 
-                    mc.getItemRenderer().render(one.stack, ItemTransforms.TransformType.GROUND, false, poseStack, Renders.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, model);
-                    poseStack.popPose();
+                        poseStack.translate(0, -transY, 0);
+
+                        mc.getItemRenderer().render(one.stack, ItemTransforms.TransformType.GROUND, false, poseStack, Renders.bufferSource(), LightTexture.FULL_BRIGHT, OverlayTexture.NO_OVERLAY, model);
+                    });
+
                     poseStack.mulPose(Vector3f.ZP.rotationDegrees(zRot));
                     poseStack.mulPose(Vector3f.YP.rotationDegrees(yRot));
                     poseStack.mulPose(Vector3f.XP.rotationDegrees(xRot));
@@ -153,7 +169,6 @@ public class DeskHandler {
                         float triZRot = (one.ticks % 360f) * 6f;
 
                         Renders.with(poseStack, () -> {
-                            poseStack.translate(0, 0.0625, 0);
                             poseStack.mulPose(Vector3f.ZP.rotationDegrees(triZRot));
                             poseStack.mulPose(Vector3f.XP.rotationDegrees(triXRot));
 
@@ -161,7 +176,6 @@ public class DeskHandler {
                         });
 
                         Renders.with(poseStack, () -> {
-                            poseStack.translate(0, 0.0625, 0);
                             poseStack.mulPose(Vector3f.ZN.rotationDegrees(triZRot));
                             poseStack.mulPose(Vector3f.XP.rotationDegrees(triXRot + 90));
 
@@ -204,7 +218,6 @@ public class DeskHandler {
                             poseStack.mulPose(Vector3f.YP.rotationDegrees(yRot));
                             poseStack.mulPose(Vector3f.XP.rotationDegrees(xRot + 90));
 
-
                             Renders.hollowTriangle(poseStack.last().pose(), Renders.getBuffer(Renders.Type.LIGHTNING_NO_CULL), 1, 0.2f, ((int) (entry.fxAlpha * 255) << 24) | color);
                         });
                     }
@@ -213,5 +226,16 @@ public class DeskHandler {
                 });
             }
         }));
+    }
+
+    private static boolean shouldTweakTranslationAsGenerated(Item item) {
+        return item instanceof MaterialItem || item instanceof AbstractGashatItem;
+    }
+
+    public static void minecraftAt(Level level, BlockPos pos, List<ItemStack> ingredients, ItemStack result) {
+        if (!level.isClientSide()) {
+            DeskSavedData.Entry entry = DeskSavedData.get(level).add(pos, ingredients, result);
+            HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new ClientboundDeskMinecraft(entry));
+        }
     }
 }

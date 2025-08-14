@@ -2,6 +2,8 @@ package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
 import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
+import com.sakurafuld.hyperdaimc.network.HyperConnection;
+import com.sakurafuld.hyperdaimc.network.vrx.ClientboundVRXSyncCapability;
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -11,6 +13,7 @@ import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +26,7 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 
 @Mod.EventBusSubscriber(modid = HYPERDAIMC, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class VRXCapability implements ICapabilitySerializable<CompoundTag> {
-    public static final Capability<VRXCapability> CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+    public static final Capability<VRXCapability> TOKEN = CapabilityManager.get(new CapabilityToken<>() {
     });
     private final LazyOptional<VRXCapability> optional = LazyOptional.of(() -> this);
 
@@ -51,16 +54,16 @@ public class VRXCapability implements ICapabilitySerializable<CompoundTag> {
         this.entries.add(entry);
     }
 
-    public boolean erase(UUID uuid) {
-        boolean erased = false;
-        for (Entry entry : Lists.newArrayList(this.entries)) {
-            if (entry.uuid.equals(uuid)) {
-                this.entries.remove(entry);
-                erased = true;
-            }
-        }
+    public void erase(UUID uuid) {
+        this.entries.removeIf(entry -> entry.uuid.equals(uuid));
+    }
 
-        return erased;
+    public boolean check(UUID uuid) {
+        return this.entries.stream().anyMatch(entry -> entry.uuid.equals(uuid));
+    }
+
+    public void sync2Client(int entity, PacketDistributor.PacketTarget target) {
+        HyperConnection.INSTANCE.send(target, new ClientboundVRXSyncCapability(entity, this.serializeNBT()));
     }
 
     public static class Entry {
@@ -69,7 +72,7 @@ public class VRXCapability implements ICapabilitySerializable<CompoundTag> {
         public final Direction face;
         public final List<VRXOne> contents;
 
-        public Entry(UUID uuid, @Nullable Direction face, List<VRXOne> contents) {
+        private Entry(UUID uuid, @Nullable Direction face, List<VRXOne> contents) {
             this.uuid = uuid;
             this.face = face;
             this.contents = contents;
@@ -138,7 +141,7 @@ public class VRXCapability implements ICapabilitySerializable<CompoundTag> {
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap == CAPABILITY ? this.optional.cast() : LazyOptional.empty();
+        return cap == TOKEN ? this.optional.cast() : LazyOptional.empty();
     }
 
     @Override

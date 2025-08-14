@@ -55,11 +55,9 @@ public class VRXOverlay implements IIngameOverlay {
                 }
             }
         } else if (mc.hitResult instanceof EntityHitResult hit) {
-            hit.getEntity().getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
+            hit.getEntity().getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
                 if (!vrx.getEntries().isEmpty()) {
-                    vrx.getEntries().forEach(entry -> {
-                        ones.addAll(entry.contents);
-                    });
+                    vrx.getEntries().forEach(entry -> ones.addAll(entry.contents));
                 }
             });
         }

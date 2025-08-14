@@ -23,10 +23,7 @@ public class HyperMixin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.contains(TINKERSCONSTRUCT) && !require(TINKERSCONSTRUCT).ready()) {
-            return false;
-        }
-        return true;
+        return !mixinClassName.contains(TINKERSCONSTRUCT) || require(TINKERSCONSTRUCT).ready();
     }
 
     @Override

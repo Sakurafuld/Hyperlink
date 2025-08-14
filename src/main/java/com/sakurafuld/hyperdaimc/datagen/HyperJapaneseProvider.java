@@ -133,11 +133,13 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.desk.minecrafting", "マインしてクラフトだ！");
         this.add("tooltip.hyperdaimc.desk.lock", "クリックでレシピをロック");
         this.add("tooltip.hyperdaimc.desk.unlock", "シフトクリックでレシピをクリア");
+        this.add("tooltip.hyperdaimc.desk.animation", "Ctrl+Altを押している間はアニメーションが再生されません");
         this.add("tooltip.hyperdaimc.god_sigil", "神の恵みを受け取れぇ！");
         this.add("tooltip.hyperdaimc.chemical_max", "ゾンビに投げよう");
 
         this.add("container.hyperdaimc.vrx.face", "方向: %s");
 
+        this.add("chat.hyperdaimc.chronicle.conflict", "選択範囲は既に存在しています");
         this.add("chat.hyperdaimc.chronicle.too_large", "選択範囲が大きすぎます");
 
         this.add("death.attack.novel.0", "%sは無くなった");

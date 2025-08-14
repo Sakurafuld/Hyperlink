@@ -11,6 +11,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 import static com.sakurafuld.hyperdaimc.helper.Deets.require;
 
 public class ClientboundChronicleSyncSave {
@@ -35,6 +36,7 @@ public class ClientboundChronicleSyncSave {
 
     @OnlyIn(Dist.CLIENT)
     private void handle() {
+        LOG.debug("handleSyncChronicle");
         ChronicleSavedData.get(Minecraft.getInstance().level).load(this.tag);
     }
 }

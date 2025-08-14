@@ -4,10 +4,12 @@ import com.mojang.datafixers.util.Pair;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.content.AbstractGashatItem;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
+import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
@@ -98,6 +100,8 @@ public class VRXItem extends AbstractGashatItem {
                     return new VRXMenu(pContainerId, pPlayerInventory, Pair.of(Pair.of(null, player.getId()), null));
                 }
             }, buf -> VRXMenu.parse(buf, Pair.of(Pair.of(null, player.getId()), null)));
+
+            player.playNotifySound(HyperSounds.VRX_OPEN.get(), SoundSource.PLAYERS, 0.5f, 0.75f);
         }
 
         return new ItemStack(HyperItems.VRX.get());

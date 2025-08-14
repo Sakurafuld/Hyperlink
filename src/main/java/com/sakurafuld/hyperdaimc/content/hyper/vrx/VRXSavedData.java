@@ -77,15 +77,7 @@ public class VRXSavedData extends SavedData {
         }
 
         this.entries.add(entry);
-
-        Entry finalEntry = entry;
-        this.map.compute(pos.asLong(), (p, e) -> {
-            if (e == null) {
-                e = Lists.newArrayList();
-            }
-            e.add(finalEntry);
-            return e;
-        });
+        this.map.computeIfAbsent(pos.asLong(), p -> Lists.newArrayList()).add(entry);
         this.setDirty();
     }
 
@@ -154,13 +146,7 @@ public class VRXSavedData extends SavedData {
                 .map(Entry::load)
                 .forEach(entry -> {
                     this.entries.add(entry);
-                    this.map.compute(entry.pos.asLong(), (p, e) -> {
-                        if (e == null) {
-                            e = Lists.newArrayList();
-                        }
-                        e.add(entry);
-                        return e;
-                    });
+                    this.map.computeIfAbsent(entry.pos.asLong(), p -> Lists.newArrayList()).add(entry);
                 });
     }
 

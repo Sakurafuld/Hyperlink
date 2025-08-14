@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.vrx.ClientboundVRXSyncSave;
-import com.sakurafuld.hyperdaimc.network.vrx.ServerboundVRXSyncSave;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.Util;
@@ -15,17 +14,12 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.function.Supplier;
+import java.util.*;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 
@@ -95,7 +89,15 @@ public class VRXSavedData extends SavedData {
         this.setDirty();
     }
 
-    public boolean erase(UUID uuid, BlockPos pos, Direction face) {
+    public boolean check(UUID uuid, BlockPos pos, Direction face) {
+        if (this.entries.contains(new Entry(uuid, pos, face, Collections.emptyList()))) {
+            return true;
+        } else {
+            return this.entries.stream().anyMatch(entry -> entry.uuid.equals(uuid) && entry.pos.equals(pos));
+        }
+    }
+
+    public void erase(UUID uuid, BlockPos pos, Direction face) {
         Entry entry = new Entry(uuid, pos, face, Collections.emptyList());
         boolean erased = this.entries.remove(entry);
         if (erased) {
@@ -104,9 +106,10 @@ public class VRXSavedData extends SavedData {
                 return e;
             });
         } else {
-            for (Entry entry1 : Lists.newArrayList(this.entries)) {
+            for (Iterator<Entry> iterator = this.entries.iterator(); iterator.hasNext(); ) {
+                Entry entry1 = iterator.next();
                 if (entry1.uuid.equals(uuid) && entry1.pos.equals(pos)) {
-                    this.entries.remove(entry1);
+                    iterator.remove();
                     this.map.computeIfPresent(entry1.pos.asLong(), (p, e) -> {
                         e.remove(entry1);
                         return e;
@@ -119,7 +122,6 @@ public class VRXSavedData extends SavedData {
         if (erased) {
             this.setDirty();
         }
-        return erased;
     }
 
     public void erase(Entry entry) {
@@ -130,16 +132,8 @@ public class VRXSavedData extends SavedData {
         });
     }
 
-    public void sync2Client(ServerPlayer player) {
-        HyperConnection.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new ClientboundVRXSyncSave(this.save(new CompoundTag())));
-    }
-
-    public void sync2Client(Supplier<ResourceKey<Level>> dimension) {
-        HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(dimension), new ClientboundVRXSyncSave(this.save(new CompoundTag())));
-    }
-
-    public void sync2Server() {
-        HyperConnection.INSTANCE.sendToServer(new ServerboundVRXSyncSave(this.save(new CompoundTag())));
+    public void sync2Client(PacketDistributor.PacketTarget target) {
+        HyperConnection.INSTANCE.send(target, new ClientboundVRXSyncSave(this.save(new CompoundTag())));
     }
 
     @Override
@@ -182,7 +176,7 @@ public class VRXSavedData extends SavedData {
         public final float yRot;
         //.
 
-        public Entry(UUID uuid, BlockPos pos, @Nullable Direction face, List<VRXOne> contents) {
+        private Entry(UUID uuid, BlockPos pos, @Nullable Direction face, List<VRXOne> contents) {
             this.uuid = uuid;
             this.pos = pos;
             this.face = face;

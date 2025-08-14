@@ -8,12 +8,14 @@ import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
 import com.sakurafuld.hyperdaimc.helper.Boxes;
 import com.sakurafuld.hyperdaimc.helper.Renders;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
-import com.sakurafuld.hyperdaimc.network.chronicle.ServerboundChronicleSound;
+import com.sakurafuld.hyperdaimc.network.chronicle.ServerboundChroniclePause;
+import com.sakurafuld.hyperdaimc.network.chronicle.ServerboundChronicleRestart;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Unit;
@@ -38,6 +40,7 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.PistonEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
@@ -63,20 +66,20 @@ public class ChronicleHandler {
     @SubscribeEvent
     public static void logIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            ChronicleSavedData.get(player.level()).sync2Client(player);
+            ChronicleSavedData.get(player.level()).sync2Client(PacketDistributor.PLAYER.with(() -> player));
         }
     }
 
     @SubscribeEvent
     public static void changeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            ChronicleSavedData.get(player.level()).sync2Client(player);
+            ChronicleSavedData.get(player.level()).sync2Client(PacketDistributor.PLAYER.with(() -> player));
         }
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void pauseAndRestart(InputEvent.InteractionKeyMappingTriggered event) {
+    public static void pauseOrRestart(InputEvent.InteractionKeyMappingTriggered event) {
         if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
             return;
         }
@@ -96,19 +99,17 @@ public class ChronicleHandler {
                 if (selected == null) {
                     selected = cursor;
                     mc.level.playSound(mc.player, selected, HyperSounds.CHRONICLE_SELECT.get(), SoundSource.PLAYERS, 1, 2);
-                } else if (data.pause(mc.player.getUUID(), selected, cursor, error -> mc.player.displayClientMessage(error, false))) {
-                    data.sync2Server();
+                } else if (data.check(mc.player.getUUID(), selected, cursor, error -> mc.player.displayClientMessage(error, false))) {
+                    HyperConnection.INSTANCE.sendToServer(new ServerboundChroniclePause(selected, cursor));
                     selected = null;
-                    HyperConnection.INSTANCE.sendToServer(new ServerboundChronicleSound(Vec3.atCenterOf(cursor), false));
                 }
             } else if (event.isAttack()) {
                 if (selected != null) {
                     event.setCanceled(true);
                     selected = null;
                     lastRestart = Util.getMillis();
-                    HyperConnection.INSTANCE.sendToServer(new ServerboundChronicleSound(Vec3.atCenterOf(cursor), true));
+                    mc.level.playSound(mc.player, cursor, HyperSounds.CHRONICLE_RESTART.get(), SoundSource.PLAYERS, 1, 1);
                 } else if (Util.getMillis() - lastRestart > 200) {
-
                     BlockPos target;
 
                     Vec3 eye = mc.player.getEyePosition();
@@ -129,10 +130,8 @@ public class ChronicleHandler {
 
                     if (target != Boxes.INVALID) {
                         event.setCanceled(true);
-                        data.restart(mc.player.getUUID(), target);
-                        data.sync2Server();
+                        HyperConnection.INSTANCE.sendToServer(new ServerboundChronicleRestart(target));
                         lastRestart = Util.getMillis();
-                        HyperConnection.INSTANCE.sendToServer(new ServerboundChronicleSound(Vec3.atCenterOf(cursor), true));
                     }
                 }
             }
@@ -310,6 +309,14 @@ public class ChronicleHandler {
             }
         } else {
             return BlockPos.containing(mc.hitResult.getLocation());
+        }
+    }
+
+    public static void playSound(ServerLevel level, Vec3 position, boolean pause) {
+        if (pause) {
+            level.playSound(null, position.x(), position.y(), position.z(), HyperSounds.CHRONICLE_PAUSE.get(), SoundSource.PLAYERS, 1, 1);
+        } else {
+            level.playSound(null, position.x(), position.y(), position.z(), HyperSounds.CHRONICLE_RESTART.get(), SoundSource.PLAYERS, 1, 1);
         }
     }
 }

@@ -3,7 +3,6 @@ package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.mixin.MixinLevelTickEvent;
@@ -12,10 +11,9 @@ import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.helper.Boxes;
 import com.sakurafuld.hyperdaimc.helper.Renders;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
-import com.sakurafuld.hyperdaimc.network.vrx.ClientboundVRXSyncCapability;
-import com.sakurafuld.hyperdaimc.network.vrx.ServerboundVRXEraseCapability;
+import com.sakurafuld.hyperdaimc.network.vrx.ServerboundVRXErase;
+import com.sakurafuld.hyperdaimc.network.vrx.ServerboundVRXMyself;
 import com.sakurafuld.hyperdaimc.network.vrx.ServerboundVRXOpenMenu;
-import com.sakurafuld.hyperdaimc.network.vrx.ServerboundVRXSound;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -91,29 +89,23 @@ public class VRXHandler {
     @SubscribeEvent
     public static void logIn(PlayerEvent.PlayerLoggedInEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            VRXSavedData.get(player.level()).sync2Client(player);
-            player.getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
-                HyperConnection.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new ClientboundVRXSyncCapability(player.getId(), vrx.serializeNBT()));
-            });
+            VRXSavedData.get(player.level()).sync2Client(PacketDistributor.PLAYER.with(() -> player));
+            player.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> vrx.sync2Client(player.getId(), PacketDistributor.PLAYER.with(() -> player)));
         }
     }
 
     @SubscribeEvent
     public static void changeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            VRXSavedData.get(player.level()).sync2Client(player);
-            player.getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
-                HyperConnection.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new ClientboundVRXSyncCapability(player.getId(), vrx.serializeNBT()));
-            });
+            VRXSavedData.get(player.level()).sync2Client(PacketDistributor.PLAYER.with(() -> player));
+            player.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> vrx.sync2Client(player.getId(), PacketDistributor.PLAYER.with(() -> player)));
         }
     }
 
     @SubscribeEvent
     public static void track(PlayerEvent.StartTracking event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            event.getTarget().getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
-                HyperConnection.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new ClientboundVRXSyncCapability(event.getTarget().getId(), vrx.serializeNBT()));
-            });
+            event.getTarget().getCapability(VRXCapability.TOKEN).ifPresent(vrx -> vrx.sync2Client(event.getTarget().getId(), PacketDistributor.PLAYER.with(() -> player)));
         }
     }
 
@@ -121,9 +113,9 @@ public class VRXHandler {
     public static void clone(PlayerEvent.Clone event) {
         if (HyperCommonConfig.VRX_KEEP.get() && event.getEntity() instanceof ServerPlayer player) {
             Player original = event.getOriginal();
-            boolean present = original.getCapability(VRXCapability.CAPABILITY).isPresent();
+            boolean present = original.getCapability(VRXCapability.TOKEN).isPresent();
             original.reviveCaps();
-            original.getCapability(VRXCapability.CAPABILITY).ifPresent(old -> player.getCapability(VRXCapability.CAPABILITY).ifPresent(current -> {
+            original.getCapability(VRXCapability.TOKEN).ifPresent(old -> player.getCapability(VRXCapability.TOKEN).ifPresent(current -> {
                 CompoundTag tag = old.serializeNBT();
                 current.deserializeNBT(tag);
                 LOG.debug("cloned!");
@@ -138,10 +130,7 @@ public class VRXHandler {
     @SubscribeEvent
     public static void respawn(PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
-            player.getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
-                HyperConnection.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new ClientboundVRXSyncCapability(player.getId(), vrx.serializeNBT()));
-                LOG.debug("respawned!");
-            });
+            player.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> vrx.sync2Client(player.getId(), PacketDistributor.PLAYER.with(() -> player)));
         }
     }
 
@@ -154,7 +143,7 @@ public class VRXHandler {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void createAndErase(InputEvent.InteractionKeyMappingTriggered event) {
+    public static void createOrErase(InputEvent.InteractionKeyMappingTriggered event) {
         if (!HyperCommonConfig.ENABLE_VRX.get()) {
             return;
         }
@@ -166,32 +155,29 @@ public class VRXHandler {
             if (mc.hitResult instanceof BlockHitResult hit) {
                 if (mc.level.getBlockState(hit.getBlockPos()).hasBlockEntity()) {
                     if (event.isUseItem()) {
-                        HyperConnection.INSTANCE.sendToServer(new ServerboundVRXOpenMenu(Pair.of(Pair.of(hit.getBlockPos(), null), hit.getDirection())));
                         cancel = true;
-                        mc.player.playSound(HyperSounds.VRX_OPEN.get(), 0.25f, 0.75f);
+                        HyperConnection.INSTANCE.sendToServer(new ServerboundVRXOpenMenu(true));
                     } else if (event.isAttack() && Util.getMillis() - lastErased > 100) {
                         VRXSavedData data = VRXSavedData.get(mc.level);
-                        if (data.erase(mc.player.getUUID(), hit.getBlockPos(), hit.getDirection())) {
-                            data.sync2Server();
+                        if (data.check(mc.player.getUUID(), hit.getBlockPos(), hit.getDirection())) {
                             cancel = true;
                             lastErased = Util.getMillis();
-                            HyperConnection.INSTANCE.sendToServer(new ServerboundVRXSound(Vec3.atCenterOf(hit.getBlockPos()), false));
+                            HyperConnection.INSTANCE.sendToServer(new ServerboundVRXErase(true));
                         }
                     }
                 }
             } else if (mc.hitResult instanceof EntityHitResult hit) {
-                LazyOptional<VRXCapability> optional = hit.getEntity().getCapability(VRXCapability.CAPABILITY);
+                LazyOptional<VRXCapability> optional = hit.getEntity().getCapability(VRXCapability.TOKEN);
                 if (optional.isPresent()) {
                     VRXCapability vrx = optional.orElseThrow(IllegalStateException::new);
                     if (event.isUseItem()) {
                         if (HyperCommonConfig.VRX_PLAYER.get() || !(hit.getEntity() instanceof Player)) {
-                            HyperConnection.INSTANCE.sendToServer(new ServerboundVRXOpenMenu(Pair.of(Pair.of(null, hit.getEntity().getId()), null)));
                             cancel = true;
-                            mc.player.playSound(HyperSounds.VRX_OPEN.get(), 0.25f, 0.75f);
+                            HyperConnection.INSTANCE.sendToServer(new ServerboundVRXOpenMenu(false));
                         }
-                    } else if (event.isAttack() && vrx.erase(mc.player.getUUID())) {
-                        HyperConnection.INSTANCE.sendToServer(new ServerboundVRXEraseCapability(hit.getEntity().getId()));
+                    } else if (event.isAttack() && vrx.check(mc.player.getUUID())) {
                         cancel = true;
+                        HyperConnection.INSTANCE.sendToServer(new ServerboundVRXErase(false));
                     }
                 }
             }
@@ -204,26 +190,24 @@ public class VRXHandler {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void createAndErase(ScreenEvent.MouseButtonPressed.Pre event) {
+    public static void createOrErase(ScreenEvent.MouseButtonPressed.Pre event) {
         if (event.getScreen() instanceof AbstractContainerScreen<?> screen && screen.getMenu().getCarried().is(HyperItems.VRX.get()) && Check.INSTANCE.isIn(screen, event.getMouseX(), event.getMouseY())) {
             if (!HyperCommonConfig.ENABLE_VRX.get()) {
                 return;
             }
+
             LocalPlayer player = Minecraft.getInstance().player;
-            if (event.getButton() == 0) {
-                LazyOptional<VRXCapability> optional = player.getCapability(VRXCapability.CAPABILITY);
-                if (optional.isPresent()) {
-                    VRXCapability vrx = optional.orElseThrow(IllegalStateException::new);
-                    if (vrx.erase(player.getUUID())) {
-                        player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.25f, 1);
-                        HyperConnection.INSTANCE.sendToServer(new ServerboundVRXEraseCapability(player.getId()));
-                        event.setCanceled(true);
-                    }
-                }
-            } else if (event.getButton() == 1) {
-                player.playSound(HyperSounds.VRX_OPEN.get(), 0.25f, 0.75f);
-                HyperConnection.INSTANCE.sendToServer(new ServerboundVRXOpenMenu(Pair.of(Pair.of(null, player.getId()), null)));
+            if (event.getButton() == 1) {
                 event.setCanceled(true);
+                HyperConnection.INSTANCE.sendToServer(new ServerboundVRXMyself(true));
+                player.playSound(SoundEvents.UI_BUTTON_CLICK.get(), 0.25f, 1);
+            } else if (event.getButton() == 0) {
+                player.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
+                    if (vrx.check(player.getUUID())) {
+                        event.setCanceled(true);
+                        HyperConnection.INSTANCE.sendToServer(new ServerboundVRXMyself(false));
+                    }
+                });
             }
         }
     }
@@ -317,7 +301,7 @@ public class VRXHandler {
             return;
         }
         Entity entity = event.getEntity();
-        entity.getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
+        entity.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
             Minecraft mc = Minecraft.getInstance();
 
             boolean exe = mc.player.getMainHandItem().is(HyperItems.VRX.get()) || mc.player.getOffhandItem().is(HyperItems.VRX.get());
@@ -345,7 +329,7 @@ public class VRXHandler {
                 return;
             }
             Minecraft mc = Minecraft.getInstance();
-            mc.player.getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
+            mc.player.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
                 List<VRXOne> ones = vrx.getEntries().isEmpty() ? Collections.emptyList()
                         : vrx.getEntries().stream()
                         .flatMap(entry -> entry.contents.stream())
@@ -397,7 +381,7 @@ public class VRXHandler {
             return;
         }
 
-        event.getEntity().getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
+        event.getEntity().getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
             List<Runnable> future = Lists.newArrayList();
             List<VRXCapability.Entry> removal = Lists.newArrayList();
             for (VRXCapability.Entry entry : vrx.getEntries()) {

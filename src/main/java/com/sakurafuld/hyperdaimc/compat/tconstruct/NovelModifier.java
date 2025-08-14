@@ -2,17 +2,12 @@ package com.sakurafuld.hyperdaimc.compat.tconstruct;
 
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
 import com.sakurafuld.hyperdaimc.helper.Writes;
-import com.sakurafuld.hyperdaimc.network.HyperConnection;
-import com.sakurafuld.hyperdaimc.network.novel.ClientboundNovelize;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.phys.EntityHitResult;
-import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import slimeknights.tconstruct.common.TinkerTags;
@@ -26,8 +21,6 @@ import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
 import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
 import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
 import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
-
-import static com.sakurafuld.hyperdaimc.helper.Deets.*;
 
 public class NovelModifier extends NoLevelsModifier implements MeleeHitModifierHook, ProjectileHitModifierHook {
     @Override
@@ -47,40 +40,29 @@ public class NovelModifier extends NoLevelsModifier implements MeleeHitModifierH
 
     @Override
     public float beforeMeleeHit(@NotNull IToolStackView tool, @NotNull ModifierEntry modifier, @NotNull ToolAttackContext context, float damage, float baseKnockback, float knockback) {
-        require(LogicalSide.SERVER).run(() -> {
+        if (context.getLevel() instanceof ServerLevel serverLevel) {
+            LivingEntity attacker = context.getAttacker();
             if (tool.hasTag(TinkerTags.Items.MELEE_PRIMARY)) {
-                LivingEntity attacker = context.getAttacker();
                 Entity target = context.getTarget();
                 if (NovelHandler.PREDICATE.test(target)) {
-                    NovelHandler.novelize(attacker, target, false);
-                    HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(attacker.level()::dimension), new ClientboundNovelize(attacker.getId(), target.getId(), 1));
-                    if (attacker.level() instanceof ServerLevel serverLevel) {
-                        NovelHandler.playSound(serverLevel, target.position());
-                    }
+                    NovelHandler.novelize(attacker, target, true);
+                    NovelHandler.playSound(serverLevel, target.position());
                 }
             }
-        });
-
-//        ComparableVersion v = new ComparableVersion(FMLLoader.getLoadingModList().getModFileById(TICEX).getMods().get(0).getVersion().getQualifier());
-        LOG.debug("novele:{}", FMLLoader.getLoadingModList().getModFileById(HYPERDAIMC).getMods().get(0).getVersion().getQualifier());
+        }
 
         return MeleeHitModifierHook.super.beforeMeleeHit(tool, modifier, context, damage, baseKnockback, knockback);
     }
 
     @Override
     public boolean onProjectileHitEntity(@NotNull ModifierNBT modifiers, @NotNull ModDataNBT persistentData, @NotNull ModifierEntry modifier, @NotNull Projectile projectile, @NotNull EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
-        require(LogicalSide.SERVER).run(() -> {
-            if (attacker != null) {
-                Entity entity = hit.getEntity();
-                if (!NovelHandler.novelized(entity)) {
-                    NovelHandler.novelize(attacker, entity, false);
-                    HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(attacker.level()::dimension), new ClientboundNovelize(attacker.getId(), entity.getId(), 1));
-                    if (attacker.level() instanceof ServerLevel serverLevel) {
-                        NovelHandler.playSound(serverLevel, entity.position());
-                    }
-                }
+        if (attacker != null && attacker.level() instanceof ServerLevel serverLevel) {
+            Entity entity = hit.getEntity();
+            if (NovelHandler.PREDICATE.test(entity)) {
+                NovelHandler.novelize(attacker, entity, true);
+                NovelHandler.playSound(serverLevel, entity.position());
             }
-        });
+        }
 
         return ProjectileHitModifierHook.super.onProjectileHitEntity(modifiers, persistentData, modifier, projectile, hit, attacker, target);
     }

@@ -7,7 +7,6 @@ import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.novel.ClientboundNovelize;
-import com.sakurafuld.hyperdaimc.network.novel.ServerboundNovelSound;
 import com.sakurafuld.hyperdaimc.network.novel.ServerboundNovelize;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.level.ServerLevel;
@@ -66,33 +65,27 @@ public class NovelHandler {
         if (!HyperCommonConfig.ENABLE_NOVEL.get()) {
             return;
         }
+
         Minecraft mc = Minecraft.getInstance();
         if (event.isAttack() && mc.player.getMainHandItem().is(HyperItems.NOVEL.get())) {
-            Vec3 view = mc.player.getViewVector(1);
-            Vec3 eye = mc.player.getEyePosition();
             double reach = Math.max(mc.gameMode.getPickRange(), mc.player.getEntityReach());
-            if (mc.player.isShiftKeyDown() != HyperCommonConfig.NOVEL_INVERT_SHIFT.get()) {
-
-                List<Entity> entities = rayTraceEntities(mc.player, eye, eye.add(view.x() * reach, view.y() * reach, view.z() * reach), mc.player.getBoundingBox().expandTowards(view.scale(reach)).inflate(1), 0);
+            Vec3 view = mc.player.getViewVector(1);
+            Vec3 vector = view.scale(reach);
+            Vec3 eye = mc.player.getEyePosition().subtract(view);
+            if (mc.player.isShiftKeyDown() == HyperCommonConfig.NOVEL_INVERT_SHIFT.get()) {
+                List<Entity> entities = rayTraceEntities(mc.player, eye, eye.add(vector), mc.player.getBoundingBox().expandTowards(vector).inflate(1), 0.75f);
+                if (!entities.isEmpty()) {
+                    event.setCanceled(true);
+                    HyperConnection.INSTANCE.sendToServer(new ServerboundNovelize());
+                }
+            } else {
+                List<Entity> entities = rayTraceEntities(mc.player, eye, eye.add(vector), mc.player.getBoundingBox().expandTowards(vector).inflate(1), 0);
                 Optional<Entity> optional = entities.stream()
                         .min(Comparator.comparingDouble(entity -> entity.position().distanceToSqr(eye)));
 
                 if (optional.isPresent()) {
                     event.setCanceled(true);
-                    Entity entity = optional.get();
-                    novelize(mc.player, entity, true);
-                    HyperConnection.INSTANCE.sendToServer(new ServerboundNovelSound(entity.position()));
-                }
-            } else {
-                List<Entity> entities = rayTraceEntities(mc.player, eye.subtract(view.x(), view.y(), view.z()), eye.add(view.x() * reach, view.y() * reach, view.z() * reach), mc.player.getBoundingBox().expandTowards(view.scale(reach)).inflate(1), 0.75f);
-                if (!entities.isEmpty()) {
-                    event.setCanceled(true);
-                    entities.forEach(entity ->
-                            novelize(mc.player, entity, true));
-                    entities.stream()
-                            .min(Comparator.comparingDouble(entity -> mc.player.distanceTo(entity)))
-                            .ifPresent(entity ->
-                                    HyperConnection.INSTANCE.sendToServer(new ServerboundNovelSound(entity.position())));
+                    HyperConnection.INSTANCE.sendToServer(new ServerboundNovelize());
                 }
             }
         }
@@ -103,24 +96,26 @@ public class NovelHandler {
         if (event.getSource().getDirectEntity() instanceof LivingEntity writer && writer.level() instanceof ServerLevel level && writer.getMainHandItem().is(HyperItems.NOVEL.get())) {
             LOG.debug("HurtNovelize");
             event.setCanceled(true);
-            NovelHandler.novelize(writer, event.getEntity(), false);
+            NovelHandler.novelize(writer, event.getEntity(), true);
             NovelHandler.playSound(level, event.getEntity().position());
-            HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new ClientboundNovelize(writer.getId(), event.getEntity().getId(), 1));
         }
     }
 
-    public static void novelize(LivingEntity writer, Entity victim, boolean sendToServer) {
+    public static void novelize(LivingEntity writer, Entity victim, boolean send) {
         if (!HyperCommonConfig.ENABLE_NOVEL.get()) {
             return;
         }
 
-        if (victim instanceof PartEntity<?> part) {
-            novelize(writer, part.getParent(), sendToServer);
-        }
-        ((IEntityNovel) victim).novelize(writer);
+        if (!writer.level().isClientSide()) {
+            if (victim instanceof PartEntity<?> part) {
+                novelize(writer, part.getParent(), send);
+            }
 
-        if (sendToServer) {
-            HyperConnection.INSTANCE.sendToServer(new ServerboundNovelize(writer.getId(), victim.getId()));
+            ((IEntityNovel) victim).novelize(writer);
+
+            if (send) {
+                HyperConnection.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> victim), new ClientboundNovelize(writer.getId(), victim.getId(), 1));
+            }
         }
     }
 
@@ -128,7 +123,7 @@ public class NovelHandler {
         List<Entity> entities = new ArrayList<>();
 
         for (Entity entity : owner.level().getEntities(owner, area, PREDICATE)) {
-            AABB aabb = entity.getBoundingBox().inflate(adjust);
+            AABB aabb = entity.getBoundingBox().inflate(entity.getPickRadius()).inflate(adjust);
             Optional<Vec3> optional = aabb.clip(start, end);
             optional.ifPresent(hit -> entities.add(entity));
         }

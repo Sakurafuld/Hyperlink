@@ -41,7 +41,7 @@ public class ClientboundVRXSyncCapability {
     private void handle() {
         Entity entity = Minecraft.getInstance().level.getEntity(this.entity);
         if (entity != null) {
-            entity.getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> vrx.deserializeNBT(this.tag));
+            entity.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> vrx.deserializeNBT(this.tag));
         }
     }
 }

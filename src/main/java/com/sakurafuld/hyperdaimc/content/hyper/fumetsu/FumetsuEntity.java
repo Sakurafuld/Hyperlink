@@ -353,8 +353,8 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
                 this.setYHeadRot(this.getYRot());
                 this.setYBodyRot(this.getYRot());
                 this.setXRot(Mth.rotateIfNecessary(this.getXRot(), Math.min(35, (float) Math.toDegrees(-Mth.atan2(dy, distance))), 2));
-                if (this.level().getGameTime() % 100 == 0) {
-                    NovelHandler.novelize(this, target, false);
+                if (!this.level().isClientSide() && this.level().getGameTime() % 100 == 0) {
+                    NovelHandler.novelize(this, target, true);
                 }
             } else {
                 this.setDeltaMovement(this.getDeltaMovement().multiply(1, 0.6, 1));

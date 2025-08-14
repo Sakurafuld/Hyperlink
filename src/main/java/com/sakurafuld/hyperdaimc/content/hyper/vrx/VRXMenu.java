@@ -6,7 +6,6 @@ import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.HyperMenus;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.vrx.ClientboundVRXSetTooltip;
-import com.sakurafuld.hyperdaimc.network.vrx.ClientboundVRXSyncCapability;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -143,14 +142,14 @@ public class VRXMenu extends AbstractContainerMenu {
                 if (block != null) {
                     VRXSavedData data = VRXSavedData.get(player.level());
                     data.create(player.getUUID(), block.getBlockPos(), this.face, list);
-                    data.sync2Client(player.level()::dimension);
+                    data.sync2Client(PacketDistributor.DIMENSION.with(player.level()::dimension));
                     VRXHandler.playSound(player.serverLevel(), Vec3.atCenterOf(block.getBlockPos()), true);
                 }
             }, entity -> {
                 if (entity != null) {
-                    entity.getCapability(VRXCapability.CAPABILITY).ifPresent(vrx -> {
+                    entity.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
                         vrx.create(player.getUUID(), this.face, list);
-                        HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(player.level()::dimension), new ClientboundVRXSyncCapability(entity.getId(), vrx.serializeNBT()));
+                        vrx.sync2Client(entity.getId(), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
                         VRXHandler.playSound(player.serverLevel(), entity.position(), true);
                     });
                 }

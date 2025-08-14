@@ -94,7 +94,6 @@ public class DeskHandler {
 
                         float transY = model.getTransforms().getTransform(ItemDisplayContext.GROUND).translation.y()
                                 + (shouldTweakTranslationAsGenerated(entry.result.getItem()) ? 0.125f : 0);
-                        ;
 
                         poseStack.translate(0, -transY * size, 0);
 

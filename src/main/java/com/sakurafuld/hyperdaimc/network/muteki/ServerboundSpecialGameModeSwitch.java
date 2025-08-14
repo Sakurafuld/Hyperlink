@@ -25,9 +25,11 @@ public class ServerboundSpecialGameModeSwitch {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             ServerPlayer player = ctx.get().getSender();
-            MutekiHandler.specialGameModeSwitch = true;
-            player.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), this.command);
-            MutekiHandler.specialGameModeSwitch = false;
+            if (MutekiHandler.muteki(player)) {
+                MutekiHandler.specialGameModeSwitch = true;
+                player.getServer().getCommands().performPrefixedCommand(player.createCommandSourceStack(), this.command);
+                MutekiHandler.specialGameModeSwitch = false;
+            }
         });
         ctx.get().setPacketHandled(true);
     }

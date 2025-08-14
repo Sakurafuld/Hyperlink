@@ -16,7 +16,6 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -39,9 +38,12 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
 @OnlyIn(Dist.CLIENT)
 public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
     private static final ResourceLocation BACKGROUND = identifier("textures/gui/container/desk.png");
+    private static final Component MINECRAFT = Component.translatable("tooltip.hyperdaimc.desk.minecrafting");
     private static final Component LOCK = Component.translatable("tooltip.hyperdaimc.desk.lock");
     private static final Component UNLOCK = Component.translatable("tooltip.hyperdaimc.desk.unlock").withStyle(ChatFormatting.GRAY);
-    private static final Component MINECRAFT = Component.translatable("tooltip.hyperdaimc.desk.minecrafting");
+    private static final Component ANIMATION = Component.translatable("tooltip.hyperdaimc.desk.animation").withStyle(ChatFormatting.GRAY);
+
+
     private final Set<IScreenVFX> visualEffects = Sets.newHashSet();
     private final Set<IScreenVFX> temporaryEffects = Sets.newHashSet();
     private final Set<Integer> vanished = Sets.newHashSet();
@@ -278,10 +280,9 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
 
             tooltip.add(LOCK.copy().withStyle(tooltip.isEmpty() ? ChatFormatting.WHITE : ChatFormatting.GRAY));
             tooltip.add(UNLOCK);
+            tooltip.add(ANIMATION);
 
             pGuiGraphics.renderTooltip(this.font, tooltip, Optional.empty(), pX, pY);
-        } else if (this.isHovering(0, 0, this.font.width(I18n.get("block.hyperdaimc.desk")), this.font.lineHeight, pX, pY)) {
-
         } else {
             super.renderTooltip(pGuiGraphics, pX, pY);
         }

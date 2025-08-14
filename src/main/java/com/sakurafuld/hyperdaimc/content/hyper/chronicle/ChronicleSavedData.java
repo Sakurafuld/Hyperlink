@@ -69,14 +69,17 @@ public class ChronicleSavedData extends SavedData {
     private void removeEntry(Entry entry) {
         LOG.debug("removeEntry");
         this.entries.remove(entry);
-        this.posMap.values().removeIf(list -> list.remove(entry));
+        this.posMap.values().removeIf(list -> {
+            list.remove(entry);
+            return list.isEmpty();
+        });
 
         BlockPos.betweenClosedStream(entry.from, entry.to)
                 .forEach(pos -> {
                     LevelChunkSection section = this.level.getChunkAt(pos).getSection(this.level.getSectionIndex(pos.getY()));
-                    Int2LongOpenHashMap m = this.sectionMap.computeIfAbsent(section, s -> new Int2LongOpenHashMap());
-                    m.remove((pos.getX() & 0xF) << 8 | (pos.getY() & 0xF) << 4 | pos.getZ() & 0xF);
-                    if (m.isEmpty()) {
+                    Int2LongOpenHashMap map = this.sectionMap.computeIfAbsent(section, s -> new Int2LongOpenHashMap());
+                    map.remove((pos.getX() & 0xF) << 8 | (pos.getY() & 0xF) << 4 | pos.getZ() & 0xF);
+                    if (map.isEmpty()) {
                         this.sectionMap.remove(section);
                     }
                 });

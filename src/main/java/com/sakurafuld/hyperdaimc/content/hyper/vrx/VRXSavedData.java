@@ -6,7 +6,6 @@ import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.vrx.ClientboundVRXSyncSave;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -17,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.network.PacketDistributor;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -59,26 +59,53 @@ public class VRXSavedData extends SavedData {
         return this.map.getOrDefault(pos.asLong(), Collections.emptyList());
     }
 
-    public void create(UUID uuid, BlockPos pos, Direction face, List<VRXOne> list) {
+    public boolean create(UUID uuid, BlockPos pos, EnumMap<Direction, List<VRXOne>> map, List<VRXOne> nulls) {
         if (!HyperCommonConfig.ENABLE_VRX.get()) {
-            return;
-        }
-        Entry entry = new Entry(uuid, pos, face, list);
-        int index = this.entries.indexOf(entry);
-        if (index >= 0) {
-            Entry old = this.entries.get(index);
-            this.entries.remove(index);
-            Entry finalEntry = entry;
-            this.map.computeIfPresent(pos.asLong(), (p, e) -> {
-                e.remove(finalEntry);
-                return e;
-            });
-            entry = new Entry(uuid, pos, face, Util.make(Lists.newArrayList(old.contents), contents -> contents.addAll(list)));
+            return false;
         }
 
-        this.entries.add(entry);
-        this.map.computeIfAbsent(pos.asLong(), p -> Lists.newArrayList()).add(entry);
+        this.entries.removeIf(entry -> entry.uuid.equals(uuid) && entry.pos.equals(pos));
+        this.map.computeIfPresent(pos.asLong(), (p, l) -> {
+            l.removeIf(e -> e.uuid.equals(uuid));
+            return l;
+        });
+
+        MutableBoolean success = new MutableBoolean(false);
+        map.forEach((face, ones) -> {
+            if (this.addEntry(uuid, pos, face, ones)) {
+                success.setTrue();
+            }
+        });
+
+        if (this.addEntry(uuid, pos, null, nulls)) {
+            success.setTrue();
+        }
+
         this.setDirty();
+        return success.booleanValue();
+    }
+
+    private boolean addEntry(UUID uuid, BlockPos pos, @Nullable Direction face, List<VRXOne> ones) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
+            return false;
+        }
+
+        if (!ones.isEmpty()) {
+            Entry entry = new Entry(uuid, pos, face, ones);
+            if (this.entries.remove(entry)) {
+                this.map.computeIfPresent(pos.asLong(), (p, e) -> {
+                    e.remove(entry);
+                    return e;
+                });
+            }
+
+            this.entries.add(entry);
+            this.map.computeIfAbsent(pos.asLong(), p -> Lists.newArrayList()).add(entry);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean check(UUID uuid, BlockPos pos, Direction face) {
@@ -91,27 +118,47 @@ public class VRXSavedData extends SavedData {
 
     public void erase(UUID uuid, BlockPos pos, Direction face) {
         Entry entry = new Entry(uuid, pos, face, Collections.emptyList());
-        boolean erased = this.entries.remove(entry);
-        if (erased) {
+        MutableBoolean erased = new MutableBoolean(this.entries.remove(entry));
+        if (erased.booleanValue()) {
             this.map.computeIfPresent(pos.asLong(), (p, e) -> {
                 e.remove(entry);
                 return e;
             });
         } else {
-            for (Iterator<Entry> iterator = this.entries.iterator(); iterator.hasNext(); ) {
-                Entry entry1 = iterator.next();
-                if (entry1.uuid.equals(uuid) && entry1.pos.equals(pos)) {
-                    iterator.remove();
-                    this.map.computeIfPresent(entry1.pos.asLong(), (p, e) -> {
-                        e.remove(entry1);
-                        return e;
-                    });
-                    erased = true;
+            MutableBoolean same = new MutableBoolean(false);
+            this.entries.removeIf(next -> {
+                if (next.uuid.equals(uuid) && next.pos.equals(pos)) {
+                    same.setTrue();
+                    if (next.face == null) {
+                        this.map.computeIfPresent(next.pos.asLong(), (p, e) -> {
+                            e.remove(next);
+                            return e;
+                        });
+                        erased.setTrue();
+                        return true;
+                    }
                 }
+
+                return false;
+            });
+
+            if (!erased.booleanValue() && same.booleanValue()) {
+                this.entries.removeIf(next -> {
+                    if (next.uuid.equals(uuid) && next.pos.equals(pos)) {
+                        this.map.computeIfPresent(next.pos.asLong(), (p, e) -> {
+                            e.remove(next);
+                            return e;
+                        });
+                        erased.setTrue();
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
             }
         }
 
-        if (erased) {
+        if (erased.booleanValue()) {
             this.setDirty();
         }
     }

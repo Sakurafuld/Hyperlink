@@ -2,6 +2,7 @@ package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
@@ -199,15 +200,16 @@ public class VRXHandler {
             }
 
             LocalPlayer player = Minecraft.getInstance().player;
-            if (event.getButton() == 1) {
+            if (event.getButton() == InputConstants.MOUSE_BUTTON_RIGHT) {
                 event.setCanceled(true);
                 HyperConnection.INSTANCE.sendToServer(new ServerboundVRXMyself(true));
                 player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.25f, 1);
-            } else if (event.getButton() == 0) {
+            } else if (event.getButton() == InputConstants.MOUSE_BUTTON_LEFT) {
                 player.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
                     if (vrx.check(player.getUUID())) {
                         event.setCanceled(true);
                         HyperConnection.INSTANCE.sendToServer(new ServerboundVRXMyself(false));
+                        player.playSound(SoundEvents.UI_BUTTON_CLICK, 0.25f, 1);
                     }
                 });
             }
@@ -233,6 +235,7 @@ public class VRXHandler {
         Set<BlockPos> posSet = Sets.newHashSet();
         if (mc.player.getMainHandItem().is(HyperItems.VRX.get()) || mc.player.getOffhandItem().is(HyperItems.VRX.get())) {
             entries.stream()
+                    .filter(entry -> entry.pos.distSqr(mc.player.blockPosition()) <= mc.gameRenderer.getRenderDistance() * mc.gameRenderer.getRenderDistance())
                     .sorted(Comparator.comparingInt(entry -> entry.uuid.equals(mc.player.getUUID()) ? -1 : 1))
                     .forEach(entry -> Renders.with(poseStack, () -> {
                         boolean mine = entry.uuid.equals(mc.player.getUUID());
@@ -308,6 +311,9 @@ public class VRXHandler {
         Entity entity = event.getEntity();
         entity.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
             Minecraft mc = Minecraft.getInstance();
+            if (mc.player.distanceTo(entity) > mc.gameRenderer.getRenderDistance()) {
+                return;
+            }
 
             boolean exe = mc.player.getMainHandItem().is(HyperItems.VRX.get()) || mc.player.getOffhandItem().is(HyperItems.VRX.get());
             exe |= entity == mc.player && mc.player.containerMenu.getCarried().is(HyperItems.VRX.get());

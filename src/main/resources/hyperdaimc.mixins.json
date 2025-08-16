@@ -9,6 +9,7 @@
     "chronicle.BlockStateBaseMixin",
     "chronicle.BlockStateMixin",
     "chronicle.BucketItemMixin",
+    "chronicle.CakeBlockMixin",
     "chronicle.ChunkAccessMixin",
     "chronicle.ChunkStatusMixin",
     "chronicle.EntityMixin",

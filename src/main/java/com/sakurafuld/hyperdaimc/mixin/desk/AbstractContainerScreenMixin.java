@@ -45,6 +45,9 @@ public abstract class AbstractContainerScreenMixin {
                     this.temporaryPose = RenderSystem.getModelViewStack();
                     this.temporaryPose.pushPose();
                     this.temporaryPose.translate(x, y, 0);
+                    if (!screen.getMenu().isMinecraft()) {
+                        this.temporaryPose.translate(0, 0, 125);
+                    }
                     this.temporaryPose.translate(pSlot.x + 8, pSlot.y + 8, 0);
                     this.temporaryPose.scale(size, size, 1);
                     this.temporaryPose.mulPose(Vector3f.ZP.rotationDegrees(Mth.rotLerp(partialTick, screen.resultOldRot, screen.resultRot)));

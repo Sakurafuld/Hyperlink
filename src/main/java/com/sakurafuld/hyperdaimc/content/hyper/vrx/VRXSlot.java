@@ -2,16 +2,25 @@ package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class VRXSlot extends SlotItemHandler {
-    private VRXOne one = VRXOne.EMPTY;
+    private final VRXMenu menu;
+    private VRXOne one;
 
-    public VRXSlot(ItemStackHandler itemHandler, int index, int xPosition, int yPosition) {
+    public VRXSlot(ItemStackHandler itemHandler, int index, int xPosition, int yPosition, VRXMenu menu, VRXOne one) {
         super(itemHandler, index, xPosition, yPosition);
+        this.menu = menu;
+        this.one = one;
+    }
+
+    @Override
+    public void setChanged() {
+        this.menu.onVRXChanged(((Slot) this).index);
     }
 
     @Override
@@ -24,21 +33,21 @@ public class VRXSlot extends SlotItemHandler {
         return false;
     }
 
-    public void clicked(VRXMenu menu, int button, ClickType type) {
-        if (!menu.getCarried().isEmpty()) {
-            VRXOne one = VRXOne.Type.convert(menu.getCarried());
-            one.stackSlot(menu, this, button, type);
+    public void clicked(int button, ClickType type) {
+        if (!this.menu.getCarried().isEmpty()) {
+            VRXOne one = VRXOne.Type.convert(this.menu.getCarried());
+            one.stackSlot(this.menu, this, button, type);
         } else if (!this.isEmpty()) {
-            this.getOne().stackSlot(menu, this, button, type);
+            this.getOne().stackSlot(this.menu, this, button, type);
         }
     }
 
-    public boolean scrolled(VRXMenu menu, double delta, boolean shiftDown) {
-        if (!menu.getCarried().isEmpty()) {
-            VRXOne one = VRXOne.Type.convert(menu.getCarried());
-            return one.scrollSlot(menu, this, delta, shiftDown);
+    public boolean scrolled(double delta, boolean shiftDown) {
+        if (!this.menu.getCarried().isEmpty()) {
+            VRXOne one = VRXOne.Type.convert(this.menu.getCarried());
+            return one.scrollSlot(this.menu, this, delta, shiftDown);
         } else if (!this.isEmpty()) {
-            return this.getOne().scrollSlot(menu, this, delta, shiftDown);
+            return this.getOne().scrollSlot(this.menu, this, delta, shiftDown);
         } else {
             return false;
         }
@@ -50,6 +59,7 @@ public class VRXSlot extends SlotItemHandler {
 
     public void setOne(VRXOne one) {
         this.one = one;
+        this.setChanged();
     }
 
     public boolean isEmpty() {
@@ -74,6 +84,7 @@ public class VRXSlot extends SlotItemHandler {
 
     @Override
     public void set(@NotNull ItemStack stack) {
+        this.setChanged();
     }
 
     @Override

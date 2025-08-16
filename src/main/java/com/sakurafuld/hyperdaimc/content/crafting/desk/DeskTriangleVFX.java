@@ -54,7 +54,7 @@ public class DeskTriangleVFX implements IScreenVFX {
         float size = Mth.lerp(pPartialTick, (1 - deltaO), (1 - delta));
 
         Renders.with(pPoseStack, () -> {
-            pPoseStack.translate(x, y, 300);
+            pPoseStack.translate(x, y, 400);
             pPoseStack.scale(size, size, size);
             pPoseStack.mulPose(Vector3f.ZP.rotationDegrees(this.rotation * 18 + Mth.rotLerp(pPartialTick, ((this.ticks - 1) % 360f) * this.rotation, (this.ticks % 360f) * this.rotation)));
 

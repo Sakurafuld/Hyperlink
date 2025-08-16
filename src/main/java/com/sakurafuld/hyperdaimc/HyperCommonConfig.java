@@ -9,6 +9,8 @@ import java.util.List;
 public class HyperCommonConfig {
     public static final ForgeConfigSpec SPEC;
 
+    public static final ForgeConfigSpec.BooleanValue CONFIG_WARNING;
+
     public static final ForgeConfigSpec.BooleanValue ENABLE_MUTEKI;
     public static final ForgeConfigSpec.BooleanValue MUTEKI_NOVEL;
     public static final ForgeConfigSpec.BooleanValue MUTEKI_SELECTOR;
@@ -57,6 +59,10 @@ public class HyperCommonConfig {
 
         builder.push("Hyperlink");
         {
+            CONFIG_WARNING = builder
+                    .comment("When logging in, warn that server config has been integrated into common config in version 2.0",
+                            "Default: true")
+                    .define("Config warning", true);
             builder.push("Muteki");
             {
                 ENABLE_MUTEKI = builder

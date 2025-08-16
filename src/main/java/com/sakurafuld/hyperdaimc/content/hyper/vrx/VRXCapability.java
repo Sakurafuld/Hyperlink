@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.vrx.ClientboundVRXSyncCapability;
-import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -14,13 +13,11 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.PacketDistributor;
+import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 
@@ -40,18 +37,40 @@ public class VRXCapability implements ICapabilitySerializable<CompoundTag> {
         return this.entries;
     }
 
-    public void create(UUID uuid, Direction face, List<VRXOne> list) {
+    public boolean create(UUID uuid, EnumMap<Direction, List<VRXOne>> map, List<VRXOne> nulls) {
         if (!HyperCommonConfig.ENABLE_VRX.get()) {
-            return;
+            return false;
         }
-        Entry entry = new Entry(uuid, face, list);
-        int index = this.entries.indexOf(entry);
-        if (index >= 0) {
-            Entry old = this.entries.get(index);
-            this.entries.remove(index);
-            entry = new Entry(uuid, face, Util.make(Lists.newArrayList(old.contents), contents -> contents.addAll(list)));
+
+        this.entries.removeIf(entry -> entry.uuid.equals(uuid));
+
+        MutableBoolean success = new MutableBoolean(false);
+        map.forEach((face, ones) -> {
+            if (this.addEntry(uuid, face, ones)) {
+                success.setTrue();
+            }
+        });
+
+        if (this.addEntry(uuid, null, nulls)) {
+            success.setTrue();
         }
-        this.entries.add(entry);
+        return success.booleanValue();
+    }
+
+    private boolean addEntry(UUID uuid, Direction face, List<VRXOne> ones) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) {
+            return false;
+        }
+
+        if (!ones.isEmpty()) {
+            Entry entry = new Entry(uuid, face, ones);
+            this.entries.remove(entry);
+            this.entries.add(entry);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void erase(UUID uuid) {

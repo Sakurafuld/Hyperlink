@@ -122,7 +122,7 @@
   "tooltip.hyperdaimc.vrx": "\u5929\u5730\u5275\u9020\u30B2\u30C3\u30C8\u30E1\u30A4\u30AF\uFF01",
   "tooltip.hyperdaimc.vrx.energy": "\u5E95\u306A\u3057\u306E\u30A8\u30CD\u30EB\u30AE\u30FC",
   "tooltip.hyperdaimc.vrx.energy.description": "ForgeEnergy, RedstoneFlux, Joule\u306A\u3069",
-  "tooltip.hyperdaimc.vrx.face": "%s\u65B9\u5411\u306E\u5185\u5BB9",
+  "tooltip.hyperdaimc.vrx.face": "%s\u65B9\u5411\u304B\u3089\u306E%s\u306E\u5185\u5BB9\u78BA\u8A8D",
   "tooltip.hyperdaimc.vrx.face.empty": " -\u7121\u3044\u3088\u3046\u3067\u3059",
   "tooltip.hyperdaimc.vrx.indexes": "%3$s %1$s / %2$s %4$s",
   "tooltip.hyperdaimc.vrx.left": "\u2190\u5DE6\u30AF\u30EA\u30C3\u30AF",

@@ -122,7 +122,7 @@ public class VRXScreen extends AbstractContainerScreen<VRXMenu> {
             ChatFormatting right = index < size ? ChatFormatting.GRAY : ChatFormatting.WHITE;
             pGuiGraphics.renderTooltip(this.font, Collections.singletonList(Component.translatable("tooltip.hyperdaimc.vrx.indexes", index, size, Component.translatable("tooltip.hyperdaimc.vrx.left").withStyle(left), Component.translatable("tooltip.hyperdaimc.vrx.right").withStyle(right)).withStyle(ChatFormatting.GRAY)), Optional.empty(), pX, pY);
         } else if (this.isHoveringFaceButton(pX, pY)) {
-            pGuiGraphics.renderTooltip(this.font, Collections.singletonList(Component.translatable("tooltip.hyperdaimc.vrx.face", this.getFaceName()).withStyle(ChatFormatting.GRAY)), this.getMenu().getTooltip(), pX, pY);
+            pGuiGraphics.renderTooltip(this.font, Collections.singletonList(Component.translatable("tooltip.hyperdaimc.vrx.face", this.getFaceName(), this.title).withStyle(ChatFormatting.GRAY)), this.getMenu().getTooltip(), pX, pY);
         } else {
             super.renderTooltip(pGuiGraphics, pX, pY);
         }

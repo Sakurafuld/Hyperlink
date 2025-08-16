@@ -122,7 +122,7 @@
   "tooltip.hyperdaimc.vrx": "天地創造ゲットメイク！",
   "tooltip.hyperdaimc.vrx.energy": "底なしのエネルギー",
   "tooltip.hyperdaimc.vrx.energy.description": "ForgeEnergy, RedstoneFlux, Jouleなど",
-  "tooltip.hyperdaimc.vrx.face": "%s方向の内容",
+  "tooltip.hyperdaimc.vrx.face": "%s方向からの%sの内容確認",
   "tooltip.hyperdaimc.vrx.face.empty": " -無いようです",
   "tooltip.hyperdaimc.vrx.indexes": "%3$s %1$s / %2$s %4$s",
   "tooltip.hyperdaimc.vrx.left": "←左クリック",

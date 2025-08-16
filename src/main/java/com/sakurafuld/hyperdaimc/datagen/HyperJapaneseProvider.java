@@ -119,7 +119,7 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.chronicle", "時は今こそ極まれり！");
         this.add("tooltip.hyperdaimc.paradox", "交差する強さ連鎖！");
         this.add("tooltip.hyperdaimc.vrx", "天地創造ゲットメイク！");
-        this.add("tooltip.hyperdaimc.vrx.face", "%s方向の内容");
+        this.add("tooltip.hyperdaimc.vrx.face", "%s方向からの%sの内容確認");
         this.add("tooltip.hyperdaimc.vrx.face.empty", " -無いようです");
         this.add("tooltip.hyperdaimc.vrx.indexes", "%3$s %1$s / %2$s %4$s");
         this.add("tooltip.hyperdaimc.vrx.left", "←左クリック");

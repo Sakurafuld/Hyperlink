@@ -65,7 +65,7 @@ public class HyperEnglishProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.chronicle", "Rider Chronicle");
         this.add("tooltip.hyperdaimc.paradox", "Perfect Knockout");
         this.add("tooltip.hyperdaimc.vrx", "Creator VRX");
-        this.add("tooltip.hyperdaimc.vrx.face", "Contents in %s");
+        this.add("tooltip.hyperdaimc.vrx.face", "Contents in %s of %s");
         this.add("tooltip.hyperdaimc.vrx.face.empty", " -Empty");
         this.add("tooltip.hyperdaimc.vrx.indexes", "%3$s %1$s / %2$s %4$s");
         this.add("tooltip.hyperdaimc.vrx.left", "←LMB");

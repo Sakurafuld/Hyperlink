@@ -5,6 +5,9 @@ MinecraftForge
 
 # ↓Config(すべて1.20.1でのデフォルトの値)
 
+- Config warning = true
+  - バージョン2.0でコンフィグファイルが統合されたことをログイン時に警告するか
+
 ## Muteki
 
 - Enable Muteki = true

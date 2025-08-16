@@ -8,6 +8,7 @@
   "block.hyperdaimc.soul": "Born Soul",
   "chat.hyperdaimc.chronicle.conflict": "Selection already exists",
   "chat.hyperdaimc.chronicle.too_large": "Selection is too large",
+  "chat.hyperdaimc.config_warning": "In version 2.0, the hyperdaimc-server.toml config file has been integrated into hyperdaimc-common.toml\nThis warning can be disabled in hyperdaimc-common.toml",
   "container.hyperdaimc.vrx.face": "Direction: %s",
   "curios.identifier.maximum": "Maximum",
   "death.attack.novel.0": "%s was gone",
@@ -123,5 +124,8 @@
   "tooltip.hyperdaimc.vrx.energy.description": "ForgeEnergy, RedstoneFlux, Joule and more",
   "tooltip.hyperdaimc.vrx.face": "Contents in %s",
   "tooltip.hyperdaimc.vrx.face.empty": " -Empty",
-  "tooltip.hyperdaimc.vrx.player": "Current V.R.X. contents"
+  "tooltip.hyperdaimc.vrx.indexes": "%3$s %1$s / %2$s %4$s",
+  "tooltip.hyperdaimc.vrx.left": "←LMB",
+  "tooltip.hyperdaimc.vrx.player": "Current V.R.X. contents",
+  "tooltip.hyperdaimc.vrx.right": "RMB→"
 }

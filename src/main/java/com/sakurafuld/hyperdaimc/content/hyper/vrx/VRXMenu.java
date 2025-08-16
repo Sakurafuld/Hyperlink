@@ -1,6 +1,8 @@
 package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.datafixers.util.Pair;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.HyperMenus;
@@ -8,8 +10,10 @@ import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.vrx.ClientboundVRXSetTooltip;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
@@ -27,9 +31,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -37,8 +39,9 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 
 public class VRXMenu extends AbstractContainerMenu {
     public final Pair<BlockPos, Integer> provider;
-    @Nullable
-    public Direction face;
+    public final List<Pair<NonNullList<VRXOne>, Direction>> indexes = Lists.newArrayList();
+    public int index = 0;
+    private final Pair<EnumMap<Direction, List<VRXOne>>, List<VRXOne>> existed;
 
     private boolean first = true;
     private final List<Direction> available;
@@ -52,25 +55,62 @@ public class VRXMenu extends AbstractContainerMenu {
 
     public VRXMenu(int pContainerId, Inventory inventory, Pair<Pair<BlockPos, Integer>, Direction> pair) {
         super(HyperMenus.VRX.get(), pContainerId);
-        LOG.debug("Open:{}", pair);
         this.provider = pair.getFirst();
-        this.face = pair.getSecond();
+
+        @Nullable Direction face = pair.getSecond();
 
         List<Direction> available = Lists.newArrayList(Direction.values());
         available.add(null);
-        CapabilityProvider<?> provider = this.execute(inventory.player.level(), block -> block, entity -> entity);
-        available.removeIf(face -> !VRXOne.Type.check(provider, face));
-        this.available = available;
 
-        if (!this.available.isEmpty() && !this.available.contains(this.face)) {
-            this.face = this.available.get(0);
+        Player player = inventory.player;
+
+        CapabilityProvider<?> provider = this.execute(player.level(), block -> block, entity -> entity);
+        available.removeIf(direction -> !VRXOne.Type.check(provider, direction));
+        this.available = available;
+        if (!this.available.isEmpty() && !this.available.contains(face)) {
+            face = this.available.get(0);
         }
+
+        Pair<TreeMap<Direction, List<VRXOne>>, List<VRXOne>> existing = this.getExistingVRX(player);
+        TreeMap<Direction, List<VRXOne>> map = existing.getFirst();
+        List<VRXOne> nulls = existing.getSecond();
+        this.existed = Pair.of(map.isEmpty() ? Maps.newEnumMap(Direction.class) : Maps.newEnumMap(map), Lists.newArrayList(nulls));
+
+        List<VRXOne> first = null;
+        if (face == null && !nulls.isEmpty()) {
+            first = nulls;
+        } else if (face != null && map.containsKey(face)) {
+            first = map.remove(face);
+        }
+
+        LOG.debug("openVRX2");
+
+        try {
+            if (first == null) {
+                this.indexes.add(Pair.of(NonNullList.withSize(27, VRXOne.EMPTY), face));
+            } else {
+                this.addIndex(first, face);
+            }
+        } catch (Throwable t) {
+            LOG.debug("openVRXErr:{}", Arrays.toString(t.getStackTrace()));
+        }
+
+
+        LOG.debug("openVRX3");
+
+        map.forEach((direction, ones) -> this.addIndex(ones, direction));
+        if (face != null) {
+            this.addIndex(nulls, null);
+        }
+
+        LOG.debug("openVRX4");
 
         ItemStackHandler handler = new ItemStackHandler(27);
 
+        int vrxSlot = 0;
         for (int row = 0; row < 3; ++row) {
             for (int colunm = 0; colunm < 9; ++colunm) {
-                this.addSlot(new VRXSlot(handler, colunm + row * 9, 8 + colunm * 18, 18 + row * 18));
+                this.addSlot(new VRXSlot(handler, colunm + row * 9, 8 + colunm * 18, 18 + row * 18, this, this.getCurrentOnes().get(vrxSlot++)));
             }
         }
 
@@ -130,38 +170,43 @@ public class VRXMenu extends AbstractContainerMenu {
 
     // Prevent Jei Error.
     public void closedByKey(ServerPlayer player) {
-        List<VRXOne> list = Lists.newArrayList();
-        for (int index = 0; index < 27; index++) {
-            if (this.getSlot(index) instanceof VRXSlot slot && !slot.isEmpty()) {
-                list.add(slot.getOne());
+        EnumMap<Direction, List<VRXOne>> map = Maps.newEnumMap(Direction.class);
+        List<VRXOne> nulls = Lists.newArrayList();
+        this.indexes.forEach(pair -> {
+            List<VRXOne> excluded = pair.getFirst().stream().filter(one -> !one.isEmpty()).toList();
+            if (!excluded.isEmpty()) {
+                if (pair.getSecond() == null) {
+                    nulls.addAll(excluded);
+                } else {
+                    map.computeIfAbsent(pair.getSecond(), face -> Lists.newArrayList()).addAll(excluded);
+                }
             }
-        }
-        if (!list.isEmpty()) {
+        });
 
-            this.execute(player.level(), block -> {
-                if (block != null) {
-                    VRXSavedData data = VRXSavedData.get(player.level());
-                    data.create(player.getUUID(), block.getBlockPos(), this.face, list);
-                    data.sync2Client(PacketDistributor.DIMENSION.with(player.level()::dimension));
-                    VRXHandler.playSound(player.serverLevel(), Vec3.atCenterOf(block.getBlockPos()), true);
-                }
-            }, entity -> {
-                if (entity != null) {
-                    entity.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
-                        vrx.create(player.getUUID(), this.face, list);
-                        vrx.sync2Client(entity.getId(), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
-                        VRXHandler.playSound(player.serverLevel(), entity.position(), true);
-                    });
-                }
-            });
-        }
+        boolean different = !this.existed.equals(Pair.of(map, nulls));
+
+        this.execute(player.level(), block -> {
+            VRXSavedData data = VRXSavedData.get(player.level());
+            data.create(player.getUUID(), block.getBlockPos(), map, nulls);
+            data.sync2Client(PacketDistributor.DIMENSION.with(player.level()::dimension));
+            if (different) {
+                VRXHandler.playSound(player.serverLevel(), Vec3.atCenterOf(block.getBlockPos()), !map.isEmpty() || !nulls.isEmpty());
+            }
+        }, entity -> entity.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
+            vrx.create(player.getUUID(), map, nulls);
+            vrx.sync2Client(entity.getId(), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
+            if (different) {
+                VRXHandler.playSound(player.serverLevel(), entity.position(), !map.isEmpty() || !nulls.isEmpty());
+            }
+        }));
+
         player.swing(InteractionHand.MAIN_HAND);
     }
 
     @Override
     public void clicked(int pSlotId, int pButton, ClickType pClickType, Player pPlayer) {
         if (pSlotId >= 0 && this.getSlot(pSlotId) instanceof VRXSlot slot) {
-            slot.clicked(this, pButton, pClickType);
+            slot.clicked(pButton, pClickType);
         } else {
             super.clicked(pSlotId, pButton, pClickType, pPlayer);
         }
@@ -169,17 +214,38 @@ public class VRXMenu extends AbstractContainerMenu {
 
     @Override
     public boolean clickMenuButton(Player pPlayer, int pId) {
-        if (!this.available.isEmpty()) {
-            int ordinal = this.available.indexOf(this.face);
-            ordinal = (ordinal + (pId == 0 ? 1 : -1)) % this.available.size();
-            this.face = this.available.get(ordinal < 0 ? this.available.size() + ordinal : ordinal);
+        boolean face = ((pId >> 1) & 1) == 0;
+        if (face) {
+            if (!this.available.isEmpty()) {
+                int ordinal = this.available.indexOf(this.getCurrentFace());
+                ordinal = (ordinal + ((pId & 1) == InputConstants.MOUSE_BUTTON_LEFT ? 1 : -1)) % this.available.size();
+                this.indexes.set(this.index, Pair.of(this.getCurrentOnes(), this.available.get(ordinal < 0 ? this.available.size() + ordinal : ordinal)));
 
-            this.updateTooltip(pPlayer);
+                this.updateTooltip(pPlayer);
 
-            return true;
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            return false;
+            if ((pId & 1) == InputConstants.MOUSE_BUTTON_LEFT) {
+                if (this.index > 0) {
+                    this.changeIndex(this.index - 1);
+                    return true;
+                }
+            } else {
+                int max = this.indexes.size() - 1;
+                if (this.index >= max) {
+                    this.index = max;
+                    this.indexes.add(Pair.of(NonNullList.withSize(27, VRXOne.EMPTY), this.indexes.get(max).getSecond()));
+                }
+
+                this.changeIndex(this.index + 1);
+                return true;
+            }
         }
+
+        return false;
     }
 
     @Override
@@ -218,13 +284,9 @@ public class VRXMenu extends AbstractContainerMenu {
             if (player instanceof ServerPlayer serverPlayer) {
                 List<VRXOne> list = Lists.newArrayList();
                 this.execute(player.level(), block -> {
-                    if (block != null) {
-                        list.addAll(VRXOne.Type.collect(block, this.face));
-                    }
+                    list.addAll(VRXOne.Type.collect(block, this.getCurrentFace()));
                 }, entity -> {
-                    if (entity != null) {
-                        list.addAll(VRXOne.Type.collect(entity, this.face));
-                    }
+                    list.addAll(VRXOne.Type.collect(entity, this.getCurrentFace()));
                 });
 
                 HyperConnection.INSTANCE.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new ClientboundVRXSetTooltip(this.containerId, list));
@@ -252,11 +314,85 @@ public class VRXMenu extends AbstractContainerMenu {
 
     public void execute(Level level, Consumer<BlockEntity> blockConsumer, Consumer<Entity> entityConsumer) {
         this.execute(level, block -> {
-            blockConsumer.accept(block);
+            if (block != null) {
+                blockConsumer.accept(block);
+            }
             return null;
         }, entity -> {
-            entityConsumer.accept(entity);
+            if (entity != null) {
+                entityConsumer.accept(entity);
+            }
             return null;
         });
+    }
+
+    private Pair<TreeMap<Direction, List<VRXOne>>, List<VRXOne>> getExistingVRX(Player player) {
+        TreeMap<Direction, List<VRXOne>> map = new TreeMap<>();
+        List<VRXOne> nulls = NonNullList.create();
+        this.execute(player.level(), block -> {
+            VRXSavedData data = VRXSavedData.get(player.level());
+            data.getEntries(block.getBlockPos()).forEach(entry -> {
+                if (player.getUUID().equals(entry.uuid)) {
+                    LOG.debug("openVRXBlock-face:{},contents:{}", entry.face, entry.contents);
+                    if (entry.face == null) {
+                        nulls.addAll(entry.contents);
+                    } else {
+                        map.computeIfAbsent(entry.face, d -> Lists.newArrayList()).addAll(entry.contents);
+                    }
+                }
+            });
+        }, entity -> entity.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> vrx.getEntries().forEach(entry -> {
+            if (player.getUUID().equals(entry.uuid)) {
+                if (entry.face == null) {
+                    nulls.addAll(entry.contents);
+                } else {
+                    map.computeIfAbsent(entry.face, d -> Lists.newArrayList()).addAll(entry.contents);
+                }
+            }
+        })));
+
+        return Pair.of(map, nulls);
+    }
+
+    private void addIndex(List<VRXOne> ones, @Nullable Direction face) {
+        if (!ones.isEmpty()) {
+            NonNullList<VRXOne> list = NonNullList.withSize(27, VRXOne.EMPTY);
+            int at = 0;
+            for (VRXOne one : ones) {
+                list.set(at, one);
+                if (at >= 26) {
+                    at = 0;
+                    this.indexes.add(Pair.of(list, face));
+                    list = NonNullList.withSize(27, VRXOne.EMPTY);
+                } else {
+                    at++;
+                }
+            }
+
+            if (list.stream().anyMatch(one -> !one.isEmpty())) {
+                this.indexes.add(Pair.of(list, face));
+            }
+        }
+    }
+
+    private void changeIndex(int index) {
+        this.index = Mth.clamp(0, index, this.indexes.size() - 1);
+        for (int slot = 0; slot < 27; slot++) {
+            if (this.getSlot(slot) instanceof VRXSlot vrx) {
+                vrx.setOne(this.getCurrentOnes().get(slot));
+            }
+        }
+    }
+
+    private NonNullList<VRXOne> getCurrentOnes() {
+        return this.indexes.get(this.index).getFirst();
+    }
+
+    public Direction getCurrentFace() {
+        return this.indexes.get(this.index).getSecond();
+    }
+
+    public void onVRXChanged(int slot) {
+        this.getCurrentOnes().set(slot, ((VRXSlot) this.getSlot(slot)).getOne());
     }
 }

@@ -121,6 +121,9 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.vrx", "天地創造ゲットメイク！");
         this.add("tooltip.hyperdaimc.vrx.face", "%s方向の内容");
         this.add("tooltip.hyperdaimc.vrx.face.empty", " -無いようです");
+        this.add("tooltip.hyperdaimc.vrx.indexes", "%3$s %1$s / %2$s %4$s");
+        this.add("tooltip.hyperdaimc.vrx.left", "←左クリック");
+        this.add("tooltip.hyperdaimc.vrx.right", "右クリック→");
         this.add("tooltip.hyperdaimc.face.null", "なし");
         this.add("tooltip.hyperdaimc.face.down", "下");
         this.add("tooltip.hyperdaimc.face.up", "上");
@@ -140,6 +143,7 @@ public class HyperJapaneseProvider extends LanguageProvider {
 
         this.add("container.hyperdaimc.vrx.face", "方向: %s");
 
+        this.add("chat.hyperdaimc.config_warning", "バージョン2.0になり、hyperdaimc-server.tomlコンフィグファイルはhyperdaimc-common.tomlに統合されました\nこの警告はhyperdaimc-common.toml内で無効化することができます");
         this.add("chat.hyperdaimc.chronicle.conflict", "選択範囲は既に存在しています");
         this.add("chat.hyperdaimc.chronicle.too_large", "選択範囲が大きすぎます");
 

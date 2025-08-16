@@ -34,7 +34,7 @@ public class ServerboundVRXScrollMenu {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             if (ctx.get().getSender().containerMenu instanceof VRXMenu menu && menu.containerId == this.id && menu.getSlot(this.index) instanceof VRXSlot slot) {
-                slot.scrolled(menu, this.delta, this.shiftDown);
+                slot.scrolled(this.delta, this.shiftDown);
             }
         });
         ctx.get().setPacketHandled(true);

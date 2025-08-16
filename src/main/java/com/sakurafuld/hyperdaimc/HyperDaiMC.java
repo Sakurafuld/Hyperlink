@@ -3,6 +3,10 @@ package com.sakurafuld.hyperdaimc;
 import com.sakurafuld.hyperdaimc.compat.mekanism.HyperMekanism;
 import com.sakurafuld.hyperdaimc.compat.tconstruct.HyperTConstruct;
 import com.sakurafuld.hyperdaimc.content.*;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -23,6 +27,7 @@ public class HyperDaiMC {
         IEventBus bus = context.getModEventBus();
 
         bus.register(new HyperSetup());
+        MinecraftForge.EVENT_BUS.addListener(this::loggedIn);
 
         HyperBlockEntities.REGISTRY.register(bus);
         HyperBlocks.REGISTRY.register(bus);
@@ -39,5 +44,12 @@ public class HyperDaiMC {
 
         new HyperMekanism(context);
         new HyperTConstruct(context);
+    }
+
+    private void loggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (HyperCommonConfig.CONFIG_WARNING.get()) {
+            event.getEntity().displayClientMessage(Component.literal("[Hyperlink]").withStyle(ChatFormatting.AQUA), false);
+            event.getEntity().displayClientMessage(Component.translatable("chat.hyperdaimc.config_warning").withStyle(ChatFormatting.YELLOW), false);
+        }
     }
 }

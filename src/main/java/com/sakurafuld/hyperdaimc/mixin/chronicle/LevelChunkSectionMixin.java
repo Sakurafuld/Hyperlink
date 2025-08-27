@@ -42,7 +42,7 @@ public abstract class LevelChunkSectionMixin implements ILevelChunkSectionChroni
     }
 
     @Override
-    public void setChunk(ChunkAccess chunk) {
+    public void chronicleSetChunk(ChunkAccess chunk) {
         this.chunk = chunk;
     }
 }

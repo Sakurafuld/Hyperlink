@@ -109,23 +109,17 @@ public class ChronicleHandler {
                     lastRestart = Util.getMillis();
                     mc.level.playSound(mc.player, cursor, HyperSounds.CHRONICLE_RESTART.get(), SoundSource.PLAYERS, 1, 1);
                 } else if (Util.getMillis() - lastRestart > 200) {
-                    BlockPos target;
-
                     Vec3 eye = mc.player.getEyePosition();
-                    Vec3 view = eye.add(mc.player.getViewVector(1).multiply(4, 4, 4));
+                    double reach = Math.max(mc.gameMode.getPickRange(), mc.player.getAttackRange());
+                    Vec3 view = eye.add(mc.player.getViewVector(1).scale(reach));
 
-                    target = BlockGetter.traverseBlocks(eye, view, Unit.INSTANCE, (unit, current) -> {
+                    BlockPos target = BlockGetter.traverseBlocks(eye, view, Unit.INSTANCE, (unit, current) -> {
                         Optional<List<ChronicleSavedData.Entry>> list = data.getPaused(current);
+                        if (list.isEmpty() && !mc.level.isEmptyBlock(current)) {
+                            return Boxes.INVALID;
+                        }
                         return list.isPresent() && list.get().stream().anyMatch(entry -> entry.uuid.equals(mc.player.getUUID())) ? current : null;
                     }, unit -> Boxes.INVALID);
-
-                    if (target == Boxes.INVALID) {
-                        if (mc.hitResult instanceof BlockHitResult result && result.getType() != HitResult.Type.MISS) {
-
-                            Optional<List<ChronicleSavedData.Entry>> list = data.getPaused(result.getBlockPos());
-                            target = list.isPresent() && list.get().stream().anyMatch(entry -> entry.uuid.equals(mc.player.getUUID())) ? result.getBlockPos() : Boxes.INVALID;
-                        }
-                    }
 
                     if (target != Boxes.INVALID) {
                         event.setCanceled(true);
@@ -143,7 +137,7 @@ public class ChronicleHandler {
         if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
             return;
         }
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
             return;
         }
 

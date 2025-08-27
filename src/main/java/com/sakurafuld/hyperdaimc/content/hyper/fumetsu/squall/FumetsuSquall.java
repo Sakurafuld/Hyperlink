@@ -57,7 +57,7 @@ public class FumetsuSquall extends FumetsuSkull {
                     FumetsuSkull skull = new FumetsuSkull(HyperEntities.FUMETSU_SKULL.get(), this.getLevel());
                     skull.setup(this.random.nextBoolean() ? Type.CRIMSON : Type.CYAN, this.getOwner(), center, vector.subtract(center), 1.75f);
 
-                    ((IServerLevelFumetsu) serverLevel).spawn(skull);
+                    ((IServerLevelFumetsu) serverLevel).fumetsuSpawn(skull);
                 }
 
                 serverLevel.playSound(null, center.x(), center.y(), center.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 0.25f, 3 + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);

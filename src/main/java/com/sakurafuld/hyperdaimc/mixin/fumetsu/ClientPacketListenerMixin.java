@@ -78,11 +78,11 @@ public abstract class ClientPacketListenerMixin {
 
     @Inject(method = "handleRemoveEntities", at = @At("HEAD"))
     private void handleRemoveEntitiesFumetsu$HEAD(ClientboundRemoveEntitiesPacket pPacket, CallbackInfo ci) {
-        FumetsuHandler.clientSpecialRemove = true;
+        FumetsuHandler.specialRemove.set(true);
     }
 
     @Inject(method = "handleRemoveEntities", at = @At("RETURN"))
     private void handleRemoveEntitiesFumetsu$RETURN(ClientboundRemoveEntitiesPacket pPacket, CallbackInfo ci) {
-        FumetsuHandler.clientSpecialRemove = false;
+        FumetsuHandler.specialRemove.set(false);
     }
 }

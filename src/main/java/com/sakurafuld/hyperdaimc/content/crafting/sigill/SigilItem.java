@@ -4,7 +4,7 @@ import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.HyperBlocks;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
-import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuItem;
+import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -79,14 +79,14 @@ public class SigilItem extends Item {
                     }
                 }
 
-                FumetsuItem.spawn = true;
+                FumetsuHandler.spawn.set(true);
 
                 FumetsuEntity fumetsu = HyperEntities.FUMETSU.get().create(level);
                 BlockPos center = match.getBlock(1, 2, 0).getPos();
                 fumetsu.moveTo(center.getX() + 0.5, center.getY() + 0.25, center.getZ() + 0.5, match.getForwards().getAxis() == Direction.Axis.X ? 0 : 90, 0);
                 fumetsu.yBodyRot = match.getForwards().getAxis() == Direction.Axis.X ? 0 : 90;
 
-                FumetsuItem.spawn = false;
+                FumetsuHandler.spawn.set(false);
 
                 for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, fumetsu.getBoundingBox().inflate(50))) {
                     CriteriaTriggers.SUMMONED_ENTITY.trigger(player, fumetsu);

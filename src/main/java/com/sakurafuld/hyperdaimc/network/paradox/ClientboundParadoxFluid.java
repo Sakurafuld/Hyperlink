@@ -31,13 +31,13 @@ public class ClientboundParadoxFluid {
     }
 
     public static void encode(ClientboundParadoxFluid msg, FriendlyByteBuf buf) {
-        LOG.info("encodeUpdateParadox");
+        LOG.debug("encodeUpdateParadox");
         buf.writeBlockPos(msg.pos);
         buf.writeVarInt(Block.getId(msg.state));
     }
 
     public static ClientboundParadoxFluid decode(FriendlyByteBuf buf) {
-        LOG.info("decodeUpdateParadox");
+        LOG.debug("decodeUpdateParadox");
         return new ClientboundParadoxFluid(buf.readBlockPos(), Block.stateById(buf.readVarInt()));
     }
 
@@ -48,7 +48,7 @@ public class ClientboundParadoxFluid {
 
     @OnlyIn(Dist.CLIENT)
     private void handle() {
-        LOG.info("handleUpdateParadox");
+        LOG.debug("handleUpdateParadox");
         this.destroyParticle(this.pos, this.state);
     }
 

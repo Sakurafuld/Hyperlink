@@ -35,9 +35,9 @@ public class MutekiHandler {
     }
 
     public static boolean checkMuteki(LivingEntity entity) {
-        ((ILivingEntityMuteki) entity).force(true);
+        ((ILivingEntityMuteki) entity).mutekiForce(true);
         boolean muteki = HyperCommonConfig.ENABLE_MUTEKI.get() && Check.INSTANCE.isMuteki(entity);
-        ((ILivingEntityMuteki) entity).force(false);
+        ((ILivingEntityMuteki) entity).mutekiForce(false);
         return muteki;
     }
 

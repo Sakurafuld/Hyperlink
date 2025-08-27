@@ -38,17 +38,17 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
     }
 
     @Override
-    public void force(boolean force) {
+    public void mutekiForce(boolean force) {
         this.forced = force;
     }
 
     @Override
-    public boolean forced() {
+    public boolean mutekiForced() {
         return this.forced;
     }
 
     @Override
-    public float lastHealth() {
+    public float mutekiLastHealth() {
         return this.lastHealth;
     }
 
@@ -59,12 +59,12 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
             this.muteki = MutekiHandler.checkMuteki((LivingEntity) ((Object) this));
         }
 
-        this.force(true);
+        this.mutekiForce(true);
         float health = this.getHealth();
         if (health > 0) {
             this.lastHealth = health;
         }
-        this.force(false);
+        this.mutekiForce(false);
     }
 
     @Inject(method = "die", at = @At("HEAD"), cancellable = true)
@@ -79,8 +79,8 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
     @Inject(method = "readAdditionalSaveData", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V"))
     private void readAdditionalSaveDataMuteki(CompoundTag pCompound, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) ((Object) this);
-        this.force(true);
+        this.mutekiForce(true);
         self.getEntityData().set(DATA_HEALTH_ID, pCompound.getFloat("Health"));
-        this.force(false);
+        this.mutekiForce(false);
     }
 }

@@ -97,7 +97,7 @@ public class FumetsuStormGoal extends Goal {
                     skull.moveTo(skull.getX(), skull.getY(), skull.getZ(), this.fumetsu.getYHeadRot(), -50);
                     skull.setDeltaMovement(skull.getPoweredRotVec());
 
-                    ((IServerLevelFumetsu) serverLevel).spawn(skull);
+                    ((IServerLevelFumetsu) serverLevel).fumetsuSpawn(skull);
                     this.shoot(centerHead, 1);
                     this.shoot(centerHead, 2);
                     serverLevel.playSound(null, centerHead.x(), centerHead.y(), centerHead.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 2, 1 + (this.fumetsu.getRandom().nextFloat() - this.fumetsu.getRandom().nextFloat()) * 0.2f);
@@ -116,7 +116,7 @@ public class FumetsuStormGoal extends Goal {
             FumetsuStormSkull skull = new FumetsuStormSkull(HyperEntities.FUMETSU_STORM_SKULL.get(), this.fumetsu.getLevel());
             skull.setup(head == 1 ? FumetsuSkull.Type.CRIMSON : FumetsuSkull.Type.CYAN, this.fumetsu, sideHead, vec, 1);
 
-            ((IServerLevelFumetsu) serverLevel).spawn(skull);
+            ((IServerLevelFumetsu) serverLevel).fumetsuSpawn(skull);
             serverLevel.playSound(null, centerHead.x(), centerHead.y(), centerHead.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 2, 1 + (this.fumetsu.getRandom().nextFloat() - this.fumetsu.getRandom().nextFloat()) * 0.2f);
         }
     }

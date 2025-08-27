@@ -63,7 +63,7 @@ public class FumetsuAttackGoal extends Goal {
                 FumetsuSquall squall = new FumetsuSquall(HyperEntities.FUMETSU_SQUALL.get(), this.fumetsu.getLevel());
                 squall.setup(this.fumetsu, start, this.fumetsu.getViewVector(1), 0.75f);
 
-                ((IServerLevelFumetsu) serverLevel).spawn(squall);
+                ((IServerLevelFumetsu) serverLevel).fumetsuSpawn(squall);
                 serverLevel.playSound(null, start.x(), start.y(), start.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 2, 1 + (this.fumetsu.getRandom().nextFloat() - this.fumetsu.getRandom().nextFloat()) * 0.2f);
             }
         }, 10));

@@ -25,9 +25,7 @@ public abstract class ChunkAccessMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void contractorChronicle(ChunkPos pChunkPos, UpgradeData pUpgradeData, LevelHeightAccessor pLevelHeightAccessor, Registry<Biome> pBiomeRegistry, long pInhabitedTime, LevelChunkSection[] pSections, BlendingData pBlendingData, CallbackInfo ci) {
         for (LevelChunkSection section : this.sections) {
-            if (section instanceof ILevelChunkSectionChronicle chronicle) {
-                chronicle.setChunk((ChunkAccess) ((Object) this));
-            }
+            ((ILevelChunkSectionChronicle) section).chronicleSetChunk((ChunkAccess) ((Object) this));
         }
     }
 }

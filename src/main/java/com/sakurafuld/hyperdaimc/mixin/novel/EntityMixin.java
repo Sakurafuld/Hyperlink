@@ -1,6 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.novel;
 
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
+import com.sakurafuld.hyperdaimc.api.mixin.IEntityFumetsu;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
@@ -29,7 +30,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
-import static com.sakurafuld.hyperdaimc.helper.Deets.side;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin extends CapabilityProvider<Entity> implements IEntityNovel {
@@ -76,6 +76,9 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
         }
 
         this.getPassengers().forEach(Entity::stopRiding);
+        if ((Object) this instanceof IFumetsu fumetsu) {
+            ((IEntityFumetsu) fumetsu).fumetsuExtinction(this.removalReason);
+        }
         this.levelCallback.onRemove(this.removalReason);
 
         if (this.removalReason == Entity.RemovalReason.KILLED) {
@@ -118,7 +121,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     @SuppressWarnings("all")
     private void removeNovel(Entity.RemovalReason pReason, CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
-        if (side().isClient() && FumetsuHandler.clientSpecialRemove) {
+        if (FumetsuHandler.specialRemove.get()) {
             return;
         }
         if (self instanceof Player) {
@@ -133,7 +136,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     @SuppressWarnings("all")
     private void setRemovedNovel(Entity.RemovalReason pReason, CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
-        if (side().isClient() && FumetsuHandler.clientSpecialRemove) {
+        if (FumetsuHandler.specialRemove.get()) {
             return;
         }
         if (self instanceof Player) {
@@ -151,7 +154,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
         if (self instanceof Player) {
             return;
         }
-        if (self instanceof LivingEntity living && ((ILivingEntityMuteki) living).forced()) {
+        if (self instanceof LivingEntity living && ((ILivingEntityMuteki) living).mutekiForced()) {
             return;
         }
         if (this.removalReason != null && this.removalReason.shouldDestroy() && (self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
@@ -166,7 +169,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
         if (self instanceof Player) {
             return;
         }
-        if (self instanceof LivingEntity living && ((ILivingEntityMuteki) living).forced()) {
+        if (self instanceof LivingEntity living && ((ILivingEntityMuteki) living).mutekiForced()) {
             return;
         }
         if (this.removalReason != null && this.removalReason.shouldDestroy() && (self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {

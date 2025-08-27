@@ -20,6 +20,7 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
@@ -204,6 +205,24 @@ public class FumetsuStorm extends Entity implements IFumetsu {
     @Override
     public void kill() {
     }
+
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Entity changeDimension(ServerLevel pDestination) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Entity changeDimension(ServerLevel p_20118_, ITeleporter teleporter) {
+        return null;
+    }
+
 
     @Override
     protected void readAdditionalSaveData(CompoundTag pCompound) {

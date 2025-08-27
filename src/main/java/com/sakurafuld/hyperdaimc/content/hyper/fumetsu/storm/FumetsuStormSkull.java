@@ -58,7 +58,7 @@ public class FumetsuStormSkull extends FumetsuSkull {
             FumetsuStorm storm = new FumetsuStorm(HyperEntities.FUMETSU_STORM.get(), this.getLevel());
             storm.setup(this.getOwner(), this.position());
 
-            ((IServerLevelFumetsu) serverLevel).spawn(storm);
+            ((IServerLevelFumetsu) serverLevel).fumetsuSpawn(storm);
 
             serverLevel.playSound(null, this.getX(), this.getY(), this.getZ(), HyperSounds.FUMETSU_STORM.get(), SoundSource.HOSTILE, 24, 1);
         }

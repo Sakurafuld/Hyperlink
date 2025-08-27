@@ -83,27 +83,16 @@ public class VRXMenu extends AbstractContainerMenu {
             first = map.remove(face);
         }
 
-        LOG.debug("openVRX2");
-
-        try {
-            if (first == null) {
-                this.indexes.add(Pair.of(NonNullList.withSize(27, VRXOne.EMPTY), face));
-            } else {
-                this.addIndex(first, face);
-            }
-        } catch (Throwable t) {
-            LOG.debug("openVRXErr:{}", Arrays.toString(t.getStackTrace()));
+        if (first == null) {
+            this.indexes.add(Pair.of(NonNullList.withSize(27, VRXOne.EMPTY), face));
+        } else {
+            this.addIndex(first, face);
         }
-
-
-        LOG.debug("openVRX3");
 
         map.forEach((direction, ones) -> this.addIndex(ones, direction));
         if (face != null) {
             this.addIndex(nulls, null);
         }
-
-        LOG.debug("openVRX4");
 
         ItemStackHandler handler = new ItemStackHandler(27);
 

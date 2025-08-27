@@ -27,6 +27,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
@@ -346,6 +347,23 @@ public class FumetsuSkull extends Entity implements IFumetsu {
     @Override
     public boolean isOnFire() {
         return false;
+    }
+
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Entity changeDimension(ServerLevel pDestination) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Entity changeDimension(ServerLevel p_20118_, ITeleporter teleporter) {
+        return null;
     }
 
     @Override

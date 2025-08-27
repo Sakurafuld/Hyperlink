@@ -31,7 +31,7 @@ public abstract class SynchedEntityDataMixin {
     private <T> void setMuteki(EntityDataAccessor<T> pKey, T pValue, boolean pForce, CallbackInfo ci) {
         if (pKey == LivingEntityAccessor.getDATA_HEALTH_ID() && this.entity instanceof LivingEntity living && pValue instanceof Float health) {
             if (MutekiHandler.muteki(living)) {
-                if (((ILivingEntityMuteki) living).forced()) {
+                if (((ILivingEntityMuteki) living).mutekiForced()) {
                     return;
                 }
                 if (health <= this.getItem(LivingEntityAccessor.getDATA_HEALTH_ID()).getValue() || !Float.isFinite(health)) {
@@ -44,13 +44,13 @@ public abstract class SynchedEntityDataMixin {
     @Inject(method = "get", at = @At("HEAD"), cancellable = true)
     @SuppressWarnings("unchecked")
     private <T> void getMuteki(EntityDataAccessor<T> pKey, CallbackInfoReturnable<T> cir) {
-        if (pKey == LivingEntityAccessor.getDATA_HEALTH_ID() && this.entity instanceof LivingEntity living && !((ILivingEntityMuteki) living).forced()) {
+        if (pKey == LivingEntityAccessor.getDATA_HEALTH_ID() && this.entity instanceof LivingEntity living && !((ILivingEntityMuteki) living).mutekiForced()) {
             CallbackInfoReturnable<Float> cirf = ((CallbackInfoReturnable<Float>) cir);
             boolean muteki = MutekiHandler.muteki(living);
             if (NovelHandler.novelized(living)) {
                 cirf.setReturnValue(0f);
             } else if (muteki) {
-                cirf.setReturnValue(((ILivingEntityMuteki) living).lastHealth());
+                cirf.setReturnValue(((ILivingEntityMuteki) living).mutekiLastHealth());
             }
         }
     }

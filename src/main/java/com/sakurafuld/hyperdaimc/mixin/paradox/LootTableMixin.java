@@ -17,7 +17,7 @@ public abstract class LootTableMixin implements ILootTableParadox {
     private List<LootPool> pools;
 
     @Override
-    public boolean isNoDrop() {
+    public boolean paradoxIsNoDrop() {
         return this.pools.isEmpty();
     }
 }

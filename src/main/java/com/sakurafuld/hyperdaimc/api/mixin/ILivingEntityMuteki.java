@@ -1,14 +1,14 @@
 package com.sakurafuld.hyperdaimc.api.mixin;
 
 public interface ILivingEntityMuteki {
-    default void force(boolean force) {
+    default void mutekiForce(boolean force) {
     }
 
-    default boolean forced() {
+    default boolean mutekiForced() {
         return false;
     }
 
     boolean muteki();
 
-    float lastHealth();
+    float mutekiLastHealth();
 }

@@ -2,6 +2,7 @@ package com.sakurafuld.hyperdaimc.content.hyper.fumetsu.storm;
 
 import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
+import com.sakurafuld.hyperdaimc.api.mixin.IServerLevelFumetsu;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
@@ -55,10 +56,11 @@ public class FumetsuStormSkull extends FumetsuSkull {
     private void transform() {
         if (this.level() instanceof ServerLevel serverLevel) {
             serverLevel.playSound(null, this.getX(), this.getY(), this.getZ(), HyperSounds.FUMETSU_STORM.get(), SoundSource.HOSTILE, 24, 1);
+            FumetsuStorm storm = new FumetsuStorm(HyperEntities.FUMETSU_STORM.get(), this.level());
+            storm.setup(this.getOwner(), this.position());
+            ((IServerLevelFumetsu) serverLevel).fumetsuSpawn(storm);
         }
-        FumetsuStorm storm = new FumetsuStorm(HyperEntities.FUMETSU_STORM.get(), this.level());
-        storm.setup(this.getOwner(), this.position());
-        this.level().addFreshEntity(storm);
+
         ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
     }
 

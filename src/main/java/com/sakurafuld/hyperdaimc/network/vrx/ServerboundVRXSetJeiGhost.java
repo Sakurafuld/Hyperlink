@@ -1,5 +1,6 @@
 package com.sakurafuld.hyperdaimc.network.vrx;
 
+import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXMenu;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXOne;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXSlot;
@@ -8,9 +9,12 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
+
+import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 
 public class ServerboundVRXSetJeiGhost {
     private final int id;
@@ -63,6 +67,18 @@ public class ServerboundVRXSetJeiGhost {
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             if (ctx.get().getSender().containerMenu instanceof VRXMenu menu && menu.containerId == this.id) {
+                if (HyperCommonConfig.VRX_SEAL_HYPERLINK.get() && !HyperCommonConfig.VRX_VULNERABILIZATION.get()) {
+                    ItemStack stack = null;
+                    if (this.one instanceof VRXOne.Item item) {
+                        stack = item.getItemStack();
+                    } else if (this.stack != null) {
+                        stack = this.stack;
+                    }
+
+                    if (stack != null && ForgeRegistries.ITEMS.getKey(stack.getItem()).getNamespace().equals(HYPERDAIMC)) {
+                        return;
+                    }
+                }
                 Slot slot = menu.getSlot(this.index);
                 if (slot instanceof VRXSlot vrxSlot && this.one != null) {
                     vrxSlot.setOne(this.one);

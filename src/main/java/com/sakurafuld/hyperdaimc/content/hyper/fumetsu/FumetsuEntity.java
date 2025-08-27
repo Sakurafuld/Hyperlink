@@ -1,6 +1,5 @@
 package com.sakurafuld.hyperdaimc.content.hyper.fumetsu;
 
-import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
@@ -18,6 +17,9 @@ import com.sakurafuld.hyperdaimc.helper.Writes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.protocol.Packet;
@@ -52,23 +54,22 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
+import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
-import java.util.List;
 import java.util.Random;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 
 public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMuteki {
-    public static final List<FumetsuEntity> EXISTING = Lists.newArrayList();
-    private static final EntityDataAccessor<Boolean> DATA_LOGOUT = SynchedEntityData.defineId(FumetsuEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> DATA_GENOCIDE = SynchedEntityData.defineId(FumetsuEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> DATA_TARGET = SynchedEntityData.defineId(FumetsuEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<BlockPos> DATA_ORIGIN = SynchedEntityData.defineId(FumetsuEntity.class, EntityDataSerializers.BLOCK_POS);
     private static final EntityDataAccessor<Boolean> DATA_STORM = SynchedEntityData.defineId(FumetsuEntity.class, EntityDataSerializers.BOOLEAN);
 
+    private long login = System.currentTimeMillis();
     private final float[] xRotOHeads = new float[2];
     private final float[] yRotOHeads = new float[2];
     private final float[] xRotHeads = new float[2];
@@ -88,7 +89,6 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         super(pEntityType, pLevel);
         this.moveControl = new FumetsuMoveControl();
         this.xpReward = 0;
-        EXISTING.add(this);
     }
 
     public static AttributeSupplier createAttributes() {
@@ -100,7 +100,6 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.getEntityData().define(DATA_LOGOUT, false);
         this.getEntityData().define(DATA_GENOCIDE, false);
         this.getEntityData().define(DATA_TARGET, 0);
         this.getEntityData().define(DATA_ORIGIN, Boxes.INVALID);
@@ -145,13 +144,14 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
             this.setYHeadRot(this.lastYHeadRot);
         }
         this.setOldPosAndRot();
-        this.force(true);
+        this.mutekiForce(true);
         int health = Math.round(this.getHealth());
         if (health > 0) {
             this.lastHealth = health;
         }
-        this.force(false);
-        if (this.getEntityData().get(DATA_LOGOUT)) {
+        this.mutekiForce(false);
+
+        if (this.login < FumetsuHandler.logout.get()) {
             if (this.level() instanceof IServerLevelFumetsu levelFumetsu) {
 
                 Random random = new Random();
@@ -164,7 +164,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
                     entity.setNoGravity(true);
                     entity.setGlowingTag(true);
                     entity.setUnlimitedLifetime();
-                    levelFumetsu.spawn(entity);
+                    levelFumetsu.fumetsuSpawn(entity);
                 }
                 this.level().broadcastEntityEvent(this, EntityEvent.POOF);
             }
@@ -180,7 +180,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
             this.genocide();
         }
         if (this.getOrigin().equals(Boxes.INVALID)) {
-            this.originate();
+            this.getEntityData().set(DATA_ORIGIN, this.blockPosition());
         }
 
         if (this.getEntityData().get(DATA_TARGET) > 0) {
@@ -472,7 +472,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     }
 
     @Override
-    public float lastHealth() {
+    public float mutekiLastHealth() {
         return this.lastHealth;
     }
 
@@ -487,7 +487,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
 
             skull.setup(type, this, start, target.subtract(start), power);
 
-            ((IServerLevelFumetsu) serverLevel).spawn(skull);
+            ((IServerLevelFumetsu) serverLevel).fumetsuSpawn(skull);
             serverLevel.playSound(null, start.x(), start.y(), start.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 2, 1 + (this.getRandom().nextFloat() - this.getRandom().nextFloat()) * 0.2f);
         }
     }
@@ -535,10 +535,6 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         return color != null ? color.getValue() : super.getTeamColor();
     }
 
-    public void logout() {
-        this.getEntityData().set(DATA_LOGOUT, true);
-    }
-
     public boolean isGenocide() {
         return this.getEntityData().get(DATA_GENOCIDE);
     }
@@ -552,7 +548,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     }
 
     public void originate() {
-        this.getEntityData().set(DATA_ORIGIN, this.blockPosition());
+        this.getEntityData().set(DATA_ORIGIN, Boxes.INVALID);
     }
 
     public boolean isAvailableTarget(@Nullable Entity target) {
@@ -571,8 +567,8 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         return this.getEntityData().get(DATA_STORM);
     }
 
-    public void setStorm(boolean step) {
-        this.getEntityData().set(DATA_STORM, step);
+    public void setStorm(boolean storm) {
+        this.getEntityData().set(DATA_STORM, storm);
     }
 
     @Nullable
@@ -684,6 +680,23 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         return false;
     }
 
+    @Nullable
+    @Override
+    public Entity changeDimension(ServerLevel pDestination) {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public Entity changeDimension(ServerLevel pDestination, ITeleporter teleporter) {
+        return null;
+    }
+
+    @Override
+    public boolean isSilent() {
+        return false;
+    }
+
     @Override
     public void onRemovedFromWorld() {
         if (NovelHandler.novelized(this)) {
@@ -734,15 +747,43 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
     @Override
     public void addAdditionalSaveData(CompoundTag pCompound) {
         super.addAdditionalSaveData(pCompound);
-        pCompound.putBoolean("Logout", this.getEntityData().get(DATA_LOGOUT));
+        pCompound.putBoolean("GenocideData", this.isGenocide());
+        pCompound.putInt("TargetData", this.getEntityData().get(DATA_TARGET));
+        pCompound.put("OriginData", NbtUtils.writeBlockPos(this.getOrigin()));
+        pCompound.putBoolean("StormData", this.isStorming());
+        pCompound.putLong("Login", this.login);
+        pCompound.putInt("GenocideTime", this.genocideTime);
+        pCompound.put("LastPosFumetsu", this.newDoubleList(this.lastPos.x(), this.lastPos.y(), this.lastPos.z()));
+        pCompound.put("LastDeltaFumetsu", this.newDoubleList(this.lastDelta.x(), this.lastDelta.y(), this.lastDelta.z()));
+        pCompound.putFloat("LastXRotFumetsu", this.lastXRot);
+        pCompound.putFloat("LastYRotFumetsu", this.lastYRot);
+        pCompound.putFloat("LastYHeadRotFumetsu", this.lastYHeadRot);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
-        if (pCompound.contains("Logout")) {
-            this.logout();
+        this.getEntityData().set(DATA_GENOCIDE, pCompound.getBoolean("GenocideData"));
+        this.getEntityData().set(DATA_TARGET, pCompound.getInt("TargetData"));
+        this.getEntityData().set(DATA_ORIGIN, NbtUtils.readBlockPos((pCompound.getCompound("OriginData"))));
+        this.getEntityData().set(DATA_STORM, pCompound.getBoolean("StormData"));
+        if (pCompound.contains("Login")) {
+            this.login = pCompound.getLong("Login");
+        } else if (!pCompound.contains("Logout")) {
+            this.login = System.currentTimeMillis();
+            this.originate();
+            this.genocide();
+        } else {
+            this.login = 0;
         }
+        this.genocideTime = pCompound.getInt("GenocideTime");
+        ListTag lastPos = pCompound.getList("LastPosFumetsu", Tag.TAG_DOUBLE);
+        this.lastPos = new Vec3(lastPos.getDouble(0), lastPos.getDouble(1), lastPos.getDouble(2));
+        ListTag lastDelta = pCompound.getList("LastDeltaFumetsu", Tag.TAG_DOUBLE);
+        this.lastDelta = new Vec3(lastDelta.getDouble(0), lastDelta.getDouble(1), lastDelta.getDouble(2));
+        this.lastXRot = pCompound.getFloat("LastXRotFumetsu");
+        this.lastYRot = pCompound.getFloat("LastYRotFumetsu");
+        this.lastYHeadRot = pCompound.getFloat("LastYHeadRotFumetsu");
     }
 
     @Override

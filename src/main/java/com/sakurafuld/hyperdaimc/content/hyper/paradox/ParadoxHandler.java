@@ -134,7 +134,7 @@ public class ParadoxHandler {
             blockState.getBlock().playerDestroy(level, player, pos, blockState, blockEntity, player.getMainHandItem());
 
             ResourceLocation loot = blockState.getBlock().getLootTable();
-            if (loot == BuiltInLootTables.EMPTY || (level.getServer().getLootData().getLootTable(loot) instanceof ILootTableParadox table && table.isNoDrop())) {
+            if (loot == BuiltInLootTables.EMPTY || (level.getServer().getLootData().getLootTable(loot) instanceof ILootTableParadox table && table.paradoxIsNoDrop())) {
                 ItemStack stack = new ItemStack(blockState.getBlock());
                 if (!stack.isEmpty()) {
                     Block.popResource(level, pos, stack);

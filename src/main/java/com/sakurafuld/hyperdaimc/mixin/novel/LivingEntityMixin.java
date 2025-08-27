@@ -16,7 +16,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 import static com.sakurafuld.hyperdaimc.helper.Deets.require;
 
 @Mixin(LivingEntity.class)
@@ -34,10 +33,9 @@ public abstract class LivingEntityMixin implements IEntityNovel {
         LivingEntity self = (LivingEntity) ((Object) this);
         NovelDamageSource damage = new NovelDamageSource(writer);
 
-        ((ILivingEntityMuteki) self).force(true);
+        ((ILivingEntityMuteki) self).mutekiForce(true);
 
         if (!MutekiHandler.muteki(self) || (!HyperCommonConfig.MUTEKI_NOVEL.get() && self.getHealth() <= 1)) {
-            LOG.debug("completeNovelized");
             this.setNovelized();
         }
 
@@ -62,16 +60,16 @@ public abstract class LivingEntityMixin implements IEntityNovel {
                     self.die(damage));
 
             if (!FumetsuEntity.class.equals(self.getClass())) {
-                ((ILivingEntityMuteki) self).force(true);
+                ((ILivingEntityMuteki) self).mutekiForce(true);
                 for (int count = 0; count < 2048 && (self.getHealth() > 0 || self.isAlive()); count++) {
                     self.setHealth(0);
                     self.getEntityData().set(DATA_HEALTH_ID, 0f);
                 }
-                ((ILivingEntityMuteki) self).force(false);
+                ((ILivingEntityMuteki) self).mutekiForce(false);
             }
         }
 
-        ((ILivingEntityMuteki) self).force(false);
+        ((ILivingEntityMuteki) self).mutekiForce(false);
     }
 
     @Unique

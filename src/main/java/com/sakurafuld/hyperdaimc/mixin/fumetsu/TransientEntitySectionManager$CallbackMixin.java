@@ -4,6 +4,7 @@ import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.helper.Deets;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -14,8 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.side;
-
 @Mixin(targets = "net.minecraft.world.level.entity.TransientEntitySectionManager$Callback")
 public abstract class TransientEntitySectionManager$CallbackMixin {
 
@@ -25,14 +24,24 @@ public abstract class TransientEntitySectionManager$CallbackMixin {
 
     @Inject(method = "onRemove", at = @At("HEAD"), cancellable = true)
     private void onRemoveFumetsu(Entity.RemovalReason pReason, CallbackInfo ci) {
-        if (side().isClient() && FumetsuHandler.clientSpecialRemove) {
-            return;
+        if (this.realEntity != null) {
+            if (FumetsuHandler.specialRemove.get() || this.realEntity instanceof Player) {
+                return;
+            }
+            if (!NovelHandler.novelized(this.realEntity) && (this.realEntity instanceof IFumetsu || (this.realEntity instanceof LivingEntity living && MutekiHandler.muteki(living)))) {
+                Deets.LOG.info("onRemoveFumetsuCancel");
+                ci.cancel();
+            }
         }
-        if (this.realEntity instanceof Player) {
-            return;
-        }
-        if (this.realEntity != null && !NovelHandler.novelized(this.realEntity) && (this.realEntity instanceof IFumetsu || (this.realEntity instanceof LivingEntity living && MutekiHandler.muteki(living)))) {
-            ci.cancel();
-        }
+    }
+
+    @Inject(method = "onMove", at = @At("HEAD"))
+    private void onMoveFumetsu$HEAD(CallbackInfo ci) {
+        FumetsuHandler.specialRemove.set(true);
+    }
+
+    @Inject(method = "onMove", at = @At("RETURN"))
+    private void onMoveFumetsu$RETURN(CallbackInfo ci) {
+        FumetsuHandler.specialRemove.set(false);
     }
 }

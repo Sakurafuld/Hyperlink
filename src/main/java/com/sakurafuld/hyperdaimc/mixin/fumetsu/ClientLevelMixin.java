@@ -1,6 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
+import com.sakurafuld.hyperdaimc.api.mixin.IClientLevelFumetsu;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.EntityTickList;
@@ -10,19 +11,28 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientLevel.class)
 @OnlyIn(Dist.CLIENT)
-public abstract class ClientLevelMixin {
+public abstract class ClientLevelMixin implements IClientLevelFumetsu {
     @Shadow
     protected abstract void tickPassenger(Entity pMount, Entity pRider);
 
     @Shadow
     @Final
     EntityTickList tickingEntities;
+
+    @Unique
+    private final EntityTickList tickingEntities2 = new EntityTickList();
+
+    @Override
+    public EntityTickList fumetsuTickList() {
+        return this.tickingEntities2;
+    }
 
     @Inject(method = "tickNonPassenger", at = @At("HEAD"), cancellable = true)
     private void tickNonPassenger(Entity entity, CallbackInfo ci) {

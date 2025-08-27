@@ -1,6 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.hyper.fumetsu.squall;
 
 import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
+import com.sakurafuld.hyperdaimc.api.mixin.IServerLevelFumetsu;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
@@ -42,22 +43,22 @@ public class FumetsuSquall extends FumetsuSkull {
         super.skullTick();
 
         if (this.tickCount % 5 == 0) {
-            Vec3 center = this.getBoundingBox().getCenter();
-
-            for (int count = 0; count < 4; count++) {
-                double x = center.x() + Math.cos(Math.toRadians(this.random.nextInt(360)));
-                double y = center.y() + Math.sin(Math.toRadians(this.random.nextInt(360)));
-                double z = center.z() + Math.sin(Math.toRadians(this.random.nextInt(360)));
-
-                Vec3 vector = new Vec3(x, y, z);
-                FumetsuSkull skull = new FumetsuSkull(HyperEntities.FUMETSU_SKULL.get(), this.level());
-                skull.setup(this.random.nextBoolean() ? Type.CRIMSON : Type.CYAN, this.getOwner(), center, vector.subtract(center), 1.75f);
-
-                this.level().addFreshEntity(skull);
-            }
-
-
             if (this.level() instanceof ServerLevel serverLevel) {
+                Vec3 center = this.getBoundingBox().getCenter();
+
+                for (int count = 0; count < 4; count++) {
+
+                    double x = center.x() + Math.cos(Math.toRadians(this.random.nextInt(360)));
+                    double y = center.y() + Math.sin(Math.toRadians(this.random.nextInt(360)));
+                    double z = center.z() + Math.sin(Math.toRadians(this.random.nextInt(360)));
+
+                    Vec3 vector = new Vec3(x, y, z);
+                    FumetsuSkull skull = new FumetsuSkull(HyperEntities.FUMETSU_SKULL.get(), this.level());
+                    skull.setup(this.random.nextBoolean() ? Type.CRIMSON : Type.CYAN, this.getOwner(), center, vector.subtract(center), 1.75f);
+
+                    ((IServerLevelFumetsu) serverLevel).fumetsuSpawn(skull);
+                }
+
                 serverLevel.playSound(null, center.x(), center.y(), center.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 0.25f, 3 + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);
             }
         }

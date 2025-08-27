@@ -73,7 +73,7 @@ public class NovelHandler {
             Vec3 vector = view.scale(reach);
             Vec3 eye = mc.player.getEyePosition().subtract(view);
             if (mc.player.isShiftKeyDown() == HyperCommonConfig.NOVEL_INVERT_SHIFT.get()) {
-                List<Entity> entities = rayTraceEntities(mc.player, eye, eye.add(vector), mc.player.getBoundingBox().expandTowards(vector).inflate(1), 0.75f);
+                List<Entity> entities = rayTraceEntities(mc.player, eye, eye.add(vector), mc.player.getBoundingBox().expandTowards(vector).inflate(1), 1);
                 if (!entities.isEmpty()) {
                     event.setCanceled(true);
                     HyperConnection.INSTANCE.sendToServer(new ServerboundNovelize());
@@ -106,16 +106,14 @@ public class NovelHandler {
             return;
         }
 
-        if (!writer.level().isClientSide()) {
-            if (victim instanceof PartEntity<?> part) {
-                novelize(writer, part.getParent(), send);
-            }
+        if (victim instanceof PartEntity<?> part) {
+            novelize(writer, part.getParent(), send);
+        }
 
-            ((IEntityNovel) victim).novelize(writer);
+        ((IEntityNovel) victim).novelize(writer);
 
-            if (send) {
-                HyperConnection.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> victim), new ClientboundNovelize(writer.getId(), victim.getId(), 1));
-            }
+        if (send) {
+            HyperConnection.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> victim), new ClientboundNovelize(writer.getId(), victim.getId(), 1));
         }
     }
 

@@ -42,6 +42,7 @@ public class HyperCommonConfig {
 
     public static final ForgeConfigSpec.BooleanValue FUMETSU_RECIPE;
     public static final ForgeConfigSpec.BooleanValue FUMETSU_SUMMON;
+    public static final ForgeConfigSpec.BooleanValue FUMETSU_LOGOUT;
     public static final ForgeConfigSpec.IntValue FUMETSU_HEALTH;
     public static final ForgeConfigSpec.IntValue FUMETSU_RANGE;
     public static final ForgeConfigSpec.BooleanValue FUMETSU_UNDERGROUND;
@@ -191,6 +192,10 @@ public class HyperCommonConfig {
                         .comment("Enable Fumetsu summoning by assembling blocks",
                                 "Default: true")
                         .define("Enable summoning", true);
+                FUMETSU_LOGOUT = builder
+                        .comment("Enable Fumetsu to log out",
+                                "Default: true")
+                        .define("Enable logging out", true);
                 FUMETSU_HEALTH = builder
                         .comment("Default: 20")
                         .defineInRange("Max health", 20, 20, Integer.MAX_VALUE);

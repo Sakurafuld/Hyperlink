@@ -58,6 +58,10 @@ public abstract class VRXOne {
         this.type = type;
     }
 
+    public boolean workOnClient() {
+        return this.type.client;
+    }
+
     @Nullable
     public abstract Object prepareInsert(CapabilityProvider<?> provider, @Nullable Direction face, List<VRXOne> previous);
 
@@ -97,20 +101,21 @@ public abstract class VRXOne {
         public static List<Type> VALUES = null;
         public static Map<String, Type> MAP = null;
 
-        public static final Type EMPTY = register("empty", Integer.MAX_VALUE, () -> VRXOne.EMPTY, stack -> VRXOne.EMPTY, (provider, face) -> Collections.emptyList(), (provider, face) -> false);
-        public static final Type ITEM = register("item", 0, Item::new, Item::new, Item::collect, Item::check, Item::cast);
-        public static final Type FLUID = register("fluid", 10, Fluid::new, Fluid::convert, Fluid::collect, Fluid::check, Fluid::cast);
-        public static final Type ENERGY = register("energy", -10, Energy::new, Energy::convert, Energy::collect, Energy::check);
+        public static final Type EMPTY = register("empty", Integer.MAX_VALUE, false, () -> VRXOne.EMPTY, stack -> VRXOne.EMPTY, (provider, face) -> Collections.emptyList(), (provider, face) -> false, null);
+        public static final Type ITEM = register("item", 0, false, Item::new, Item::new, Item::collect, Item::check, Item::cast);
+        public static final Type FLUID = register("fluid", 10, false, Fluid::new, Fluid::convert, Fluid::collect, Fluid::check, Fluid::cast);
+        public static final Type ENERGY = register("energy", -10, false, Energy::new, Energy::convert, Energy::collect, Energy::check, null);
 
         private final String name;
         private final int priority;
+        private final boolean client;
         private final Supplier<VRXOne> creator;
         private final Function<ItemStack, VRXOne> converter;
         private final BiFunction<CapabilityProvider<?>, Direction, List<VRXOne>> collector;
         private final BiFunction<CapabilityProvider<?>, Direction, Boolean> checker;
         private final @Nullable Function<Object, VRXJeiWrapper<?>> caster;
 
-        private Type(String name, int priority,
+        private Type(String name, int priority, boolean client,
                      Supplier<VRXOne> creator,
                      Function<ItemStack, VRXOne> converter,
                      BiFunction<CapabilityProvider<?>, Direction, List<VRXOne>> collector,
@@ -119,6 +124,7 @@ public abstract class VRXOne {
 
             this.name = name;
             this.priority = priority;
+            this.client = client;
             this.creator = creator;
             this.converter = converter;
             this.collector = collector;
@@ -126,7 +132,7 @@ public abstract class VRXOne {
             this.caster = caster;
         }
 
-        public static Type register(String name, int priority,
+        public static Type register(String name, int priority, boolean client,
                                     Supplier<VRXOne> creator,
                                     Function<ItemStack, VRXOne> converter,
                                     BiFunction<CapabilityProvider<?>, Direction, List<VRXOne>> collector,
@@ -140,7 +146,7 @@ public abstract class VRXOne {
                 MAP = Maps.newHashMap();
             }
 
-            Type type = new Type(name, priority, creator, converter, collector, checker, caster);
+            Type type = new Type(name, priority, client, creator, converter, collector, checker, caster);
 
             VALUES.add(type);
             VALUES.sort(Comparator.comparingInt(t -> t.priority));
@@ -148,15 +154,6 @@ public abstract class VRXOne {
 
             LOG.debug("registerVRXType:{}", name);
             return type;
-        }
-
-        public static Type register(String name, int priority,
-                                    Supplier<VRXOne> creator,
-                                    Function<ItemStack, VRXOne> converter,
-                                    BiFunction<CapabilityProvider<?>, Direction, List<VRXOne>> collector,
-                                    BiFunction<CapabilityProvider<?>, Direction, Boolean> checker) {
-
-            return register(name, priority, creator, converter, collector, checker, null);
         }
 
         public static Type of(String name) {

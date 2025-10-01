@@ -26,6 +26,7 @@
     "fumetsu.EntityLookupMixin",
     "fumetsu.EntityMixin",
     "fumetsu.EntitySectionMixin",
+    "fumetsu.EntitySectionStorageMixin",
     "fumetsu.EntityTypeMixin",
     "fumetsu.LivingEntityMixin",
     "fumetsu.PersistentEntitySectionManager$CallbackMixin",
@@ -47,9 +48,9 @@
     "muteki.SynchedEntityDataMixin",
     "muteki.TunnelAspectWriteBuildersMixin",
     "novel.EntityMixin",
+    "novel.EntityTickListMixin",
     "novel.LivingEntityMixin",
     "novel.MobMixin",
-    "novel.ServerLevelMixin",
     "paradox.LootTableMixin",
     "paradox.ServerPlayerGameModeMixin",
     "sigil.WitherBossMixin"
@@ -67,12 +68,12 @@
     "materializer.AbstractContainerScreenMixin",
     "muteki.GameModeSwitchScreenMixin",
     "muteki.KeyboardHandlerMixin",
-    "novel.ClientLevelMixin",
     "paradox.ClientLevelMixin",
     "paradox.MinecraftMixin",
     "paradox.MultiPlayerGameModeMixin",
     "tconstruct.ItemRendererMixin",
     "vrx.AbstractContainerScreenMixin"
   ],
-  "minVersion": "0.8"
+  "minVersion": "0.8",
+  "mixinPriority": 2147483647
 }

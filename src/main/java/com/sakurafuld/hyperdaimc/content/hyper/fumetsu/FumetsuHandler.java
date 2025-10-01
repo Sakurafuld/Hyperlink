@@ -12,7 +12,6 @@ import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 public class FumetsuHandler {
     public static ThreadLocal<Long> logout = ThreadLocal.withInitial(() -> 0L);
     public static ThreadLocal<Boolean> spawn = ThreadLocal.withInitial(() -> false);
-
     public static ThreadLocal<Boolean> specialRemove = ThreadLocal.withInitial(() -> false);
 
     @SubscribeEvent

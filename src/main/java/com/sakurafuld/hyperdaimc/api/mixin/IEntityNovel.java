@@ -11,4 +11,8 @@ public interface IEntityNovel {
     boolean isNovelized();
 
     void setNovelized();
+
+    default int novelDead() {
+        return Integer.MAX_VALUE;
+    }
 }

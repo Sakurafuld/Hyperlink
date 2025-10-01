@@ -46,10 +46,9 @@ public abstract class SynchedEntityDataMixin {
     private <T> void getMuteki(EntityDataAccessor<T> pKey, CallbackInfoReturnable<T> cir) {
         if (pKey == LivingEntityAccessor.getDATA_HEALTH_ID() && this.entity instanceof LivingEntity living && !((ILivingEntityMuteki) living).mutekiForced()) {
             CallbackInfoReturnable<Float> cirf = ((CallbackInfoReturnable<Float>) cir);
-            boolean muteki = MutekiHandler.muteki(living);
             if (NovelHandler.novelized(living)) {
                 cirf.setReturnValue(0f);
-            } else if (muteki) {
+            } else if (MutekiHandler.muteki(living)) {
                 cirf.setReturnValue(((ILivingEntityMuteki) living).mutekiLastHealth());
             }
         }

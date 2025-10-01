@@ -4,14 +4,16 @@ import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.api.mixin.IEntityFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
-import com.sakurafuld.hyperdaimc.helper.Deets;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.EntityInLevelCallback;
+import net.minecraftforge.common.util.ITeleporter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin implements IEntityFumetsu {
@@ -20,7 +22,7 @@ public abstract class EntityMixin implements IEntityFumetsu {
 
     @Override
     public void fumetsuExtinction(Entity.RemovalReason reason) {
-        Deets.LOG.debug("callbackRemoveFumetsu");
+//        Deets.LOG.debug("callbackRemoveFumetsu");
         this.levelCallback2.onRemove(reason);
     }
 
@@ -52,7 +54,27 @@ public abstract class EntityMixin implements IEntityFumetsu {
         if (this instanceof IFumetsu) {
             ci.cancel();
             this.levelCallback2 = pLevelCallback;
-            Deets.LOG.debug("setLevelCallbackFumetsu");
+//            Deets.LOG.debug("setLevelCallbackFumetsu");
         }
+    }
+
+    @Inject(method = "changeDimension(Lnet/minecraft/server/level/ServerLevel;)Lnet/minecraft/world/entity/Entity;", at = @At("HEAD"))
+    private void changeDimension$HEAD(ServerLevel pDestination, CallbackInfoReturnable<Entity> cir) {
+        FumetsuHandler.specialRemove.set(true);
+    }
+
+    @Inject(method = "changeDimension(Lnet/minecraft/server/level/ServerLevel;)Lnet/minecraft/world/entity/Entity;", at = @At("RETURN"))
+    private void changeDimension$RETURN(ServerLevel pDestination, CallbackInfoReturnable<Entity> cir) {
+        FumetsuHandler.specialRemove.set(false);
+    }
+
+    @Inject(method = "changeDimension(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraftforge/common/util/ITeleporter;)Lnet/minecraft/world/entity/Entity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;removeAfterChangingDimensions()V"), remap = false)
+    private void changeDimension$BEFORE(ServerLevel p_20118_, ITeleporter teleporter, CallbackInfoReturnable<Entity> cir) {
+        FumetsuHandler.specialRemove.set(true);
+    }
+
+    @Inject(method = "changeDimension(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraftforge/common/util/ITeleporter;)Lnet/minecraft/world/entity/Entity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;removeAfterChangingDimensions()V", shift = At.Shift.AFTER), remap = false)
+    private void changeDimension$AFTER(ServerLevel p_20118_, ITeleporter teleporter, CallbackInfoReturnable<Entity> cir) {
+        FumetsuHandler.specialRemove.set(false);
     }
 }

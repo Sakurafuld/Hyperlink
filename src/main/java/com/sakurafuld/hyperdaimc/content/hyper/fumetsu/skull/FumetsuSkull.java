@@ -128,7 +128,7 @@ public class FumetsuSkull extends Entity implements IFumetsu {
 
     @Override
     public void fumetsuTick() {
-        if (this.tickCount > this.getAge() || !this.getLevel().isLoaded(this.blockPosition()) || this.getOwner() == null || this.getOwner().isRemoved()) {
+        if (NovelHandler.novelized(this) || this.tickCount > this.getAge() || !this.getLevel().isLoaded(this.blockPosition()) || this.getOwner() == null || this.getOwner().isRemoved()) {
             ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
             return;
         }
@@ -286,39 +286,36 @@ public class FumetsuSkull extends Entity implements IFumetsu {
     protected void onHitEntity(EntityHitResult pResult) {
         FumetsuEntity fumetsu = this.getOwner();
         if (fumetsu != null && fumetsu.isAvailableTarget(pResult.getEntity())) {
-            if (!this.getLevel().isClientSide()) {
-                if (this.getLevel() instanceof ServerLevel serverLevel) {
-                    NovelHandler.playSound(serverLevel, pResult.getEntity().position());
-                }
+            if (this.getLevel() instanceof ServerLevel level) {
+                NovelHandler.playSound(level, pResult.getEntity().position());
+                for (Entity entity : level.getEntities(this, pResult.getEntity().getBoundingBox().inflate(1), this::canHitEntity)) {
 
-                this.getLevel().getEntities(this, pResult.getEntity().getBoundingBox().inflate(1), this::canHitEntity).forEach(entity -> {
-                    int page = 1;
-                    NovelHandler.novelize(fumetsu, entity, false);
+                    NovelHandler.novelize(fumetsu, entity, true);
                     if (entity instanceof LivingEntity living) {
-                        int max;
+                        int page;
                         if (this.getSkullType() == Type.CRYSTAL) {
                             living.removeAllEffects();
-                            max = 20;
+                            page = 20;
                         } else {
-                            max = this.random.nextInt(4, 10);
+                            page = this.random.nextInt(4, 10);
                         }
-                        page += max;
-                        for (int count = 0; count < max && !NovelHandler.novelized(living); count++) {
-                            NovelHandler.novelize(fumetsu, living, false);
+                        if (!NovelHandler.novelized(living)) {
+                            HyperConnection.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new ClientboundNovelize(fumetsu.getId(), entity.getId(), page));
+                            for (int count = 0; count < page && !NovelHandler.novelized(living); count++) {
+                                NovelHandler.novelize(fumetsu, living, false);
+                            }
                         }
                     }
-                    HyperConnection.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new ClientboundNovelize(fumetsu.getId(), entity.getId(), page));
-                });
+                }
+                ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
             }
-
-            ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
         }
     }
 
     protected boolean canHitEntity(Entity pTarget) {
         FumetsuEntity fumetsu = this.getOwner();
         if (fumetsu != null) {
-            return !this.ownedBy(pTarget) && fumetsu.getTarget() != null && pTarget.getType() == fumetsu.getTarget().getType() && fumetsu.isAvailableTarget(pTarget);
+            return !(pTarget instanceof IFumetsu) && !this.ownedBy(pTarget) && fumetsu.getTarget() != null && pTarget.getType() == fumetsu.getTarget().getType() && fumetsu.isAvailableTarget(pTarget);
         } else {
             return false;
         }

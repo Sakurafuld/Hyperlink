@@ -21,10 +21,10 @@ public class GashatParticle extends Particle {
     public GashatParticle(GashatParticleOptions options, ClientLevel pLevel, double pX, double pY, double pZ, double pXSpeed, double pYSpeed, double pZSpeed) {
         super(pLevel, pX, pY, pZ, pXSpeed, pYSpeed, pZSpeed);
         this.options = options;
-        this.color = (0xFF << 24) | ((int) (options.color.x() * 0xFF) << 16) | ((int) (options.color.y() * 0xFF) << 8) | (int) (options.color.z() * 0xFF);
+        this.color = (0xFF << 24) | ((int) (options.color().x() * 0xFF) << 16) | ((int) (options.color().y() * 0xFF) << 8) | (int) (options.color().z() * 0xFF);
         this.xRot = pLevel.getRandom().nextInt(360);
         this.yRot = pLevel.getRandom().nextInt(360);
-        this.setSize(options.radius, options.radius);
+        this.setSize(options.radius(), options.radius());
     }
 
     @Override
@@ -50,9 +50,9 @@ public class GashatParticle extends Particle {
 
             poseStack.mulPose(Vector3f.YP.rotationDegrees(this.yRot));
             poseStack.mulPose(Vector3f.XP.rotationDegrees(this.xRot));
-            poseStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.rotLerp(pPartialTicks, ((this.age - 1) % 360f) * this.options.speed, (this.age % 360f) * this.options.speed)));
+            poseStack.mulPose(Vector3f.ZP.rotationDegrees(Mth.rotLerp(pPartialTicks, ((this.age - 1) % 360f) * this.options.speed(), (this.age % 360f) * this.options.speed())));
 
-            Renders.hollowTriangle(poseStack.last().pose(), Renders.getBuffer(Renders.Type.LIGHTNING_NO_CULL), this.options.radius, this.options.width, this.color);
+            Renders.hollowTriangle(poseStack.last().pose(), Renders.getBuffer(Renders.Type.LIGHTNING_NO_CULL), this.options.radius(), this.options.width(), this.color);
 
         });
 

@@ -7,22 +7,40 @@ import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelDamageSource;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.LogicalSide;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
+import javax.annotation.Nullable;
+
+import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin implements IEntityNovel {
+    @Unique
+    private int dead = 0;
+
     @Shadow
     @Final
     private static EntityDataAccessor<Float> DATA_HEALTH_ID;
+
+    @Shadow
+    private long lastDamageStamp;
+
+    @Shadow
+    @Nullable
+    private DamageSource lastDamageSource;
 
     @Override
     public void novelize(LivingEntity writer) {
@@ -45,6 +63,8 @@ public abstract class LivingEntityMixin implements IEntityNovel {
         }
 
         self.getCombatTracker().recordDamage(damage, 0, 0);
+        this.lastDamageSource = damage;
+        this.lastDamageStamp = self.getLevel().getGameTime();
         this.novelSetHealth();
 //        double dx = writer.getX() - self.getX();
 //
@@ -56,12 +76,14 @@ public abstract class LivingEntityMixin implements IEntityNovel {
 //        self.hurtDir = (float)(Math.toDegrees(Mth.atan2(dz, dx)) - self.getYRot());
 //        self.knockback(0.4, dx, dz);
         if (NovelHandler.novelized(self)) {
-            require(LogicalSide.SERVER).run(() ->
-                    self.die(damage));
+            if (!self.getLevel().isClientSide()) {
+                LOG.debug("DieNovelized");
+                self.die(damage);
+            }
 
             if (!FumetsuEntity.class.equals(self.getClass())) {
                 ((ILivingEntityMuteki) self).mutekiForce(true);
-                for (int count = 0; count < 2048 && (self.getHealth() > 0 || self.isAlive()); count++) {
+                for (int count = 0; count < 2048 && (self.getHealth() > 0 || !self.isDeadOrDying() || self.isAlive()); count++) {
                     self.setHealth(0);
                     self.getEntityData().set(DATA_HEALTH_ID, 0f);
                 }
@@ -87,5 +109,59 @@ public abstract class LivingEntityMixin implements IEntityNovel {
             self.setHealth(0);
             self.getEntityData().set(DATA_HEALTH_ID, 0f);
         }
+    }
+
+    @Inject(method = "getHealth", at = @At("HEAD"), cancellable = true)
+    private void getHealthNovel(CallbackInfoReturnable<Float> cir) {
+        LivingEntity self = (LivingEntity) ((Object) this);
+        if (((ILivingEntityMuteki) self).mutekiForced()) {
+            return;
+        }
+        if (NovelHandler.novelized(self)) {
+            cir.setReturnValue(0f);
+        } else if (MutekiHandler.muteki(self)) {
+            cir.setReturnValue(((ILivingEntityMuteki) self).mutekiLastHealth());
+        }
+    }
+
+    @Inject(method = "isDeadOrDying", at = @At("HEAD"), cancellable = true)
+    private void isDeadOrDyingNovel(CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity self = (LivingEntity) ((Object) this);
+        if (((ILivingEntityMuteki) self).mutekiForced()) {
+            return;
+        }
+        if (NovelHandler.novelized(self)) {
+            cir.setReturnValue(true);
+        } else if (MutekiHandler.muteki(self)) {
+            cir.setReturnValue(false);
+        }
+    }
+
+    @Inject(method = "isAlive", at = @At("HEAD"), cancellable = true)
+    private void isAliveNovel(CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity self = (LivingEntity) ((Object) this);
+        if (((ILivingEntityMuteki) self).mutekiForced()) {
+            return;
+        }
+        if (NovelHandler.novelized(self)) {
+            cir.setReturnValue(false);
+        } else if (MutekiHandler.muteki(self)) {
+            cir.setReturnValue(true);
+        }
+    }
+
+    @Override
+    public int novelDead() {
+        return ++this.dead;
+    }
+
+    @Inject(method = "addAdditionalSaveData", at = @At("HEAD"))
+    private void addAdditionalSaveDataNovel(CompoundTag pCompound, CallbackInfo ci) {
+        pCompound.putInt(HYPERDAIMC + ":NovelDead", this.dead);
+    }
+
+    @Inject(method = "readAdditionalSaveData", at = @At("HEAD"))
+    private void readAdditionalSaveDataNovel(CompoundTag pCompound, CallbackInfo ci) {
+        this.dead = pCompound.getInt(HYPERDAIMC + ":NovelDead");
     }
 }

@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
-import com.sakurafuld.hyperdaimc.helper.Deets;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.Util;
@@ -56,7 +55,7 @@ public abstract class ChunkMapMixin {
     @Inject(locals = LocalCapture.CAPTURE_FAILHARD, method = "addEntity", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;put(ILjava/lang/Object;)Ljava/lang/Object;"), cancellable = true)
     private void addEntityFumetsu$0(Entity pEntity, CallbackInfo ci, EntityType<?> entitytype, int i, int j, ChunkMap.TrackedEntity chunkmap$trackedentity) {
         if (pEntity instanceof IFumetsu) {
-            Deets.LOG.debug("addEntityFumetsu");
+//            Deets.LOG.debug("addEntityFumetsu");
             ci.cancel();
             if (this.entityMap2.containsKey(pEntity.getId())) {
                 throw Util.pauseInIde(new IllegalStateException("Entity is already tracked!"));
@@ -88,7 +87,7 @@ public abstract class ChunkMapMixin {
         ChunkMap.TrackedEntity trackedEntity = this.entityMap2.get(pEntity.getId());
         if (trackedEntity != null) {
             if (FumetsuHandler.specialRemove.get() || NovelHandler.novelized(trackedEntity.entity)) {
-                Deets.LOG.debug("removeEntityFumetsu");
+//                Deets.LOG.debug("removeEntityFumetsu");
                 this.entityMap2.remove(pEntity.getId());
                 trackedEntity.broadcastRemoved();
             }

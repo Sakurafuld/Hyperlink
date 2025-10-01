@@ -7,7 +7,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -54,10 +53,7 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void tickMuteki(CallbackInfo ci) {
-        LivingEntity self = (LivingEntity) ((Object) this);
-        if (!(self instanceof Player)) {
-            this.muteki = MutekiHandler.checkMuteki((LivingEntity) ((Object) this));
-        }
+        this.muteki = MutekiHandler.checkMuteki((LivingEntity) (Object) this);
 
         this.mutekiForce(true);
         float health = this.getHealth();
@@ -71,7 +67,7 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
     private void dieMuteki$LivingEntity(DamageSource pDamageSource, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) ((Object) this);
 
-        if ((!Float.isFinite(self.getHealth()) || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
+        if (!NovelHandler.novelized(self) && MutekiHandler.muteki(self)) {
             ci.cancel();
         }
     }

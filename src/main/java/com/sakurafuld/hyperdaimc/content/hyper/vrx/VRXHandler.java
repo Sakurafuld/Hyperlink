@@ -367,6 +367,9 @@ public class VRXHandler {
 
                 List<VRXOne> ones = Lists.newArrayList();
                 for (VRXOne one : entry.contents) {
+                    if (event.getLevel().isClientSide() && !one.workOnClient()) {
+                        continue;
+                    }
 
                     Object checked = one.prepareInsert(blockEntity, entry.face, ones);
                     // |

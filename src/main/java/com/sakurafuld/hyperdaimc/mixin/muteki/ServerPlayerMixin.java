@@ -26,6 +26,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Arrays;
+
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player {
     @Shadow
@@ -37,23 +39,25 @@ public abstract class ServerPlayerMixin extends Player {
 
     @Inject(method = "die", at = @At("HEAD"), cancellable = true)
     private void dieMuteki$Player(DamageSource pDamageSource, CallbackInfo ci) {
-        Deets.LOG.debug("serverPlayerDied!!");
         ServerPlayer self = (ServerPlayer) ((Object) this);
 
-        if ((!Float.isFinite(self.getHealth()) || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
+       /* if ((!Float.isFinite(self.getHealth()) || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
             ci.cancel();
-        } else if (NovelHandler.novelized(self)) {
+        } else*/
+        if (NovelHandler.novelized(self)) {
             ci.cancel();
-            Deets.LOG.debug("serverPlayerDiedByNovel!!");
+            Deets.LOG.debug("ServerPlayerDiesNovelized:{}", Arrays.stream(Thread.currentThread().getStackTrace())
+                    .skip(3)
+                    .limit(10)
+                    .map(e -> "\n" + e.getClassName() + "." + e.getMethodName() + "@" + e.getLineNumber())
+                    .toList());
             ForgeHooks.onLivingDeath(self, pDamageSource);
-
-            boolean flag = self.getLevel().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES);
-            if (flag) {
+            boolean showDeathMessage = self.getLevel().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES);
+            if (showDeathMessage) {
                 Deets.LOG.debug("serverPlayerDiedByNovelShowMessage!!");
                 Component component = self.getCombatTracker().getDeathMessage();
                 self.connection.send(new ClientboundPlayerCombatKillPacket(self.getCombatTracker(), component), (p_9142_) -> {
                     if (!p_9142_.isSuccess()) {
-                        Deets.LOG.debug("serverPlayerDiedByNovelFail!!");
                         String s = component.getString(256);
                         Component component1 = new TranslatableComponent("death.attack.message_too_long", (new TextComponent(s)).withStyle(ChatFormatting.YELLOW));
                         Component component2 = (new TranslatableComponent("death.attack.even_more_magic", self.getDisplayName())).withStyle((p_143420_) -> p_143420_.withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, component1)));
@@ -71,8 +75,8 @@ public abstract class ServerPlayerMixin extends Player {
                 } else {
                     self.server.getPlayerList().broadcastMessage(component, ChatType.SYSTEM, Util.NIL_UUID);
                 }
+                Deets.LOG.debug("SPDiesNovelized:{}", component.getString());
             } else {
-                Deets.LOG.debug("serverPlayerDiedByNovelNoMessage!!");
                 self.connection.send(new ClientboundPlayerCombatKillPacket(this.getCombatTracker(), TextComponent.EMPTY));
             }
 
@@ -101,7 +105,9 @@ public abstract class ServerPlayerMixin extends Player {
             this.setTicksFrozen(0);
             this.setSharedFlagOnFire(false);
             this.getCombatTracker().recheckStatus();
-            Deets.LOG.debug("serverPlayerDiedByNovelEnd!!");
+        } else if (MutekiHandler.muteki(self)) {
+            ci.cancel();
+            Deets.LOG.debug("ServerPlayerCancelDieMuteki");
         }
     }
 }

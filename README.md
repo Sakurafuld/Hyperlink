@@ -71,6 +71,8 @@ MinecraftForge
   - ケミカルMAXとフメツドクロの特殊な醸造レシピを有効化するのか
 - Enable summoning = true
   - ブロックを組み立ててフメツウザーを召喚できるか
+- Enable logging out = true
+  - フメツウザーがログアウトするのか
 - Max health = 20
   - 最大体力
 - Search range = 128

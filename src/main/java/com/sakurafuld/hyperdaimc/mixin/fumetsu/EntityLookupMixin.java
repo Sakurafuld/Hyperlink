@@ -5,7 +5,6 @@ import com.google.common.collect.Maps;
 import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
-import com.sakurafuld.hyperdaimc.helper.Deets;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.util.AbortableIterationConsumer;
@@ -60,7 +59,7 @@ public abstract class EntityLookupMixin<T extends EntityAccess> {
     @Inject(method = "add", at = @At("HEAD"), cancellable = true)
     public void add(T pEntity, CallbackInfo ci) {
         if (pEntity instanceof IFumetsu) {
-            Deets.LOG.info("lookupAddFumetsu");
+//            Deets.LOG.debug("lookupAddFumetsu");
             ci.cancel();
             UUID uuid = pEntity.getUUID();
             if (this.byUuid2.containsKey(uuid)) {
@@ -77,7 +76,7 @@ public abstract class EntityLookupMixin<T extends EntityAccess> {
         if (pEntity instanceof IFumetsu) {
             ci.cancel();
             if (FumetsuHandler.specialRemove.get() || NovelHandler.novelized((Entity) pEntity)) {
-                Deets.LOG.info("lookupRemoveFumetsu");
+//                Deets.LOG.debug("lookupRemoveFumetsu");
                 this.byUuid2.remove(pEntity.getUUID());
                 this.byId2.remove(pEntity.getId());
             }

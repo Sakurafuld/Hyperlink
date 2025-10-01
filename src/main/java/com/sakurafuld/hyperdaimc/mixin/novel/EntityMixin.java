@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -67,6 +68,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
 
     @Override
     public void novelRemove(Entity.RemovalReason reason) {
+        Entity self = (Entity) (Object) this;
         this.setNovelized();
         if (this.removalReason == null) {
             this.removalReason = reason;
@@ -87,6 +89,16 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
         }
 
         this.invalidateCaps();
+
+        if (self instanceof LivingEntity living) {
+            living.getBrain().clearMemories();
+            if (living instanceof Player player) {
+                player.inventoryMenu.removed(player);
+                if (player instanceof ServerPlayer serverPlayer && player.containerMenu != null && player.hasContainerOpen()) {
+                    serverPlayer.doCloseContainer();
+                }
+            }
+        }
     }
 
     @Override
@@ -122,12 +134,17 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     private void removeNovel(Entity.RemovalReason pReason, CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
         if (FumetsuHandler.specialRemove.get()) {
+            if (self instanceof IEntityFumetsu fumetsu) {
+                fumetsu.fumetsuExtinction(pReason);
+            }
             return;
         }
-        if (self instanceof Player) {
-            return;
-        }
-        if (pReason.shouldDestroy() && (self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
+
+        if ((self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
+//            if (self instanceof Player) {
+//                LOG.debug("RemoveMutekiPlayer");
+//                return;
+//            }
             ci.cancel();
         }
     }
@@ -137,12 +154,17 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     private void setRemovedNovel(Entity.RemovalReason pReason, CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
         if (FumetsuHandler.specialRemove.get()) {
+            if (self instanceof IEntityFumetsu fumetsu) {
+                fumetsu.fumetsuExtinction(pReason);
+            }
             return;
         }
-        if (self instanceof Player) {
-            return;
-        }
-        if (pReason.shouldDestroy() && (self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
+
+        if ((self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
+//            if (self instanceof Player) {
+//                LOG.debug("RemoveMutekiPlayer");
+//                return;
+//            }
             ci.cancel();
         }
     }
@@ -157,7 +179,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
         if (self instanceof Player) {
             return;
         }
-        if (this.removalReason != null && this.removalReason.shouldDestroy() && (self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
+        if (this.removalReason != null && (self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
             cir.setReturnValue(null);
         }
     }

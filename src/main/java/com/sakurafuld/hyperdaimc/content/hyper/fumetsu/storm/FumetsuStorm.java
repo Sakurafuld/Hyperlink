@@ -5,6 +5,8 @@ import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
 import com.sakurafuld.hyperdaimc.helper.Calculates;
+import com.sakurafuld.hyperdaimc.network.HyperConnection;
+import com.sakurafuld.hyperdaimc.network.novel.ClientboundNovelize;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -22,6 +24,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -65,7 +68,7 @@ public class FumetsuStorm extends Entity implements IFumetsu {
     @Override
     public void fumetsuTick() {
         FumetsuEntity fumetsu = this.getOwner();
-        if (this.tickCount > 40 || fumetsu == null || fumetsu.isRemoved()) {
+        if (NovelHandler.novelized(this) || this.tickCount > 40 || fumetsu == null || fumetsu.isRemoved()) {
             ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
         } else {
             this.baseTick();
@@ -91,20 +94,25 @@ public class FumetsuStorm extends Entity implements IFumetsu {
             this.setPos(moveX, moveY, moveZ);
 
             if ((this.tickCount + this.getId()) % 3 == 0) {
-                List<Entity> list = this.level().getEntities(this, this.getBoundingBox(), entity -> entity.getType() != this.getType() && !entity.equals(fumetsu) && fumetsu.isAvailableTarget(entity));
-                if (!list.isEmpty() && this.level() instanceof ServerLevel serverLevel) {
-                    NovelHandler.playSound(serverLevel, this.getBoundingBox().getCenter());
-                }
+                if (this.level() instanceof ServerLevel level) {
+                    List<Entity> list = level.getEntities(this, this.getBoundingBox(), entity -> !(entity instanceof IFumetsu) && !entity.equals(fumetsu) && fumetsu.isAvailableTarget(entity));
 
-                list.forEach(entity -> {
-                    NovelHandler.novelize(fumetsu, entity, false);
-                    if (entity instanceof LivingEntity living) {
-                        living.removeAllEffects();
-                        for (int count = 0; count < 5 && !NovelHandler.novelized(living); count++) {
-                            NovelHandler.novelize(fumetsu, living, false);
+                    if (!list.isEmpty()) {
+                        NovelHandler.playSound(level, this.getBoundingBox().getCenter());
+                        for (Entity entity : list) {
+                            NovelHandler.novelize(fumetsu, entity, true);
+                            if (entity instanceof LivingEntity living) {
+                                living.removeAllEffects();
+                                if (!NovelHandler.novelized(living)) {
+                                    HyperConnection.INSTANCE.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entity), new ClientboundNovelize(fumetsu.getId(), entity.getId(), 5));
+                                    for (int count = 0; count < 5 && !NovelHandler.novelized(living); count++) {
+                                        NovelHandler.novelize(fumetsu, living, false);
+                                    }
+                                }
+                            }
                         }
                     }
-                });
+                }
             }
         }
     }

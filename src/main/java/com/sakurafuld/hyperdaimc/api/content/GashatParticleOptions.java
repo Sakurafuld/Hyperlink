@@ -15,7 +15,7 @@ import org.joml.Vector3f;
 
 import java.util.Locale;
 
-public class GashatParticleOptions implements ParticleOptions {
+public record GashatParticleOptions(Vector3f color, float radius, float width, float speed) implements ParticleOptions {
     public static final Codec<GashatParticleOptions> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                             ExtraCodecs.VECTOR3F.fieldOf("color").forGetter(self -> self.color),
@@ -42,18 +42,6 @@ public class GashatParticleOptions implements ParticleOptions {
         }
     };
 
-
-    public final Vector3f color;
-    public final float radius;
-    public final float width;
-    public final float speed;
-
-    public GashatParticleOptions(Vector3f color, float radius, float width, float speed) {
-        this.color = color;
-        this.radius = radius;
-        this.width = width;
-        this.speed = speed;
-    }
 
     @Override
     public ParticleType<?> getType() {

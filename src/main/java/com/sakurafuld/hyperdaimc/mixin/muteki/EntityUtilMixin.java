@@ -43,6 +43,7 @@ public abstract class EntityUtilMixin {
     @Inject(method = "forceSetRemoved", at = @At("HEAD"), cancellable = true, remap = false)
     private static void forceSetRemoveMuteki(Entity entity, Entity.RemovalReason reason, CallbackInfo ci) {
         if (entity instanceof IFumetsu || (entity instanceof LivingEntity living && MutekiHandler.muteki(living))) {
+            entity.hurt(entity.damageSources().generic(), 1);
             ci.cancel();
         }
     }
@@ -65,6 +66,7 @@ public abstract class EntityUtilMixin {
     @Inject(method = "forceRemoveNoPacket", at = @At("HEAD"), cancellable = true, remap = false)
     private static void forceRemoveNoPacketMuteki(Entity entity, Entity.RemovalReason reason, boolean leaveLevelCalls, CallbackInfo ci) {
         if (entity instanceof IFumetsu || (entity instanceof LivingEntity living && MutekiHandler.muteki(living))) {
+            entity.hurt(entity.damageSources().generic(), 1);
             ci.cancel();
         }
     }

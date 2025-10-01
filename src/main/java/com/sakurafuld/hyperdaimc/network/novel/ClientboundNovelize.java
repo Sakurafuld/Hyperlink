@@ -12,13 +12,13 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
+import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
 import static com.sakurafuld.hyperdaimc.helper.Deets.require;
 
 public class ClientboundNovelize {
     private final int writer;
     private final int victim;
     private final int page;
-
 
     public ClientboundNovelize(int writer, int victim, int page) {
         this.writer = writer;
@@ -43,6 +43,7 @@ public class ClientboundNovelize {
 
     @OnlyIn(Dist.CLIENT)
     private void handle() {
+        LOG.debug("clientNovelize");
         Entity mob = Minecraft.getInstance().level.getEntity(this.writer);
         Entity victim = Minecraft.getInstance().level.getEntity(this.victim);
         if (mob instanceof LivingEntity living && victim != null) {

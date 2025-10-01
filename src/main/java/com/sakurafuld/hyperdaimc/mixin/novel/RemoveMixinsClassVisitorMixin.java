@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.novel;
 
-import flashfur.omnimobs.coremod.MixinRemoverClassVisitor;
+import flashfur.omnimobs.coremod.RemoveMixinsClassVisitor;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,9 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
 
 @Pseudo
-@Mixin(MixinRemoverClassVisitor.class)
-public abstract class MixinRemoverClassVisitorMixin extends ClassVisitor {
-    protected MixinRemoverClassVisitorMixin(int api, ClassVisitor classVisitor) {
+@Mixin(RemoveMixinsClassVisitor.class)
+public abstract class RemoveMixinsClassVisitorMixin extends ClassVisitor {
+    protected RemoveMixinsClassVisitorMixin(int api, ClassVisitor classVisitor) {
         super(api, classVisitor);
     }
 

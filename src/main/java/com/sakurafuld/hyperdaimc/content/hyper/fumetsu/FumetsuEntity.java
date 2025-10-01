@@ -151,7 +151,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         }
         this.mutekiForce(false);
 
-        if (this.login < FumetsuHandler.logout.get()) {
+        if (HyperCommonConfig.FUMETSU_LOGOUT.get() && this.login < FumetsuHandler.logout.get()) {
             if (this.level() instanceof IServerLevelFumetsu levelFumetsu) {
 
                 Random random = new Random();

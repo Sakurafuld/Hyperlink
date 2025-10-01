@@ -67,7 +67,7 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
     private void dieMuteki$LivingEntity(DamageSource pDamageSource, CallbackInfo ci) {
         LivingEntity self = (LivingEntity) ((Object) this);
 
-        if ((!Float.isFinite(self.getHealth()) || !NovelHandler.novelized(self)) && MutekiHandler.muteki(self)) {
+        if (!NovelHandler.novelized(self) && MutekiHandler.muteki(self)) {
             ci.cancel();
         }
     }

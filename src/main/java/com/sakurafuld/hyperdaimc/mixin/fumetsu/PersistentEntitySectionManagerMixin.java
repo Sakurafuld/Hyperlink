@@ -5,7 +5,6 @@ import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.api.mixin.EntityLookupWrapper;
 import com.sakurafuld.hyperdaimc.api.mixin.IPersistentEntityManagerFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
-import com.sakurafuld.hyperdaimc.helper.Deets;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.*;
 import org.slf4j.Logger;
@@ -24,7 +23,7 @@ public abstract class PersistentEntitySectionManagerMixin<T extends EntityAccess
     @Final
     static Logger LOGGER;
 
-    @Shadow
+    @Shadow(remap = false)
     protected abstract boolean addEntityWithoutEvent(T pEntity, boolean pWorldGenSpawned);
 
     @Mutable
@@ -69,7 +68,7 @@ public abstract class PersistentEntitySectionManagerMixin<T extends EntityAccess
     @Inject(method = "addEntityUuid", at = @At("HEAD"), cancellable = true)
     private void addEntityUuidFumetsu(T pEntity, CallbackInfoReturnable<Boolean> cir) {
         if (pEntity instanceof IFumetsu) {
-            Deets.LOG.info("addEntityUuidFumetsu");
+//            Deets.LOG.debug("addEntityUuidFumetsu");
             if (!this.knownUuids2.add(pEntity.getUUID())) {
                 LOGGER.warn("UUID of added entity already exists: {}", pEntity);
                 cir.setReturnValue(false);

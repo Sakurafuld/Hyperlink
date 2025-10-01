@@ -36,7 +36,7 @@ public class ClientboundDeskSyncSave {
 
     @OnlyIn(Dist.CLIENT)
     private void handle() {
-        Deets.LOG.info("handlerDeskSync2Client");
+        Deets.LOG.debug("handlerDeskSync2Client");
         DeskSavedData.get(Minecraft.getInstance().level).load(this.tag);
     }
 }

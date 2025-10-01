@@ -18,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
+
 @Mixin(targets = "net.minecraft.world.level.entity.PersistentEntitySectionManager$Callback")
 public abstract class PersistentEntitySectionManager$CallbackMixin<T extends EntityAccess> {
 
@@ -35,11 +37,15 @@ public abstract class PersistentEntitySectionManager$CallbackMixin<T extends Ent
 
     @Inject(method = "onRemove", at = @At("HEAD"), cancellable = true)
     private void onRemoveFumetsu$0(Entity.RemovalReason pReason, CallbackInfo ci) {
-        if (FumetsuHandler.specialRemove.get() || this.realEntity instanceof Player) {
+        if (FumetsuHandler.specialRemove.get()) {
             return;
         }
         if (this.realEntity != null && !NovelHandler.novelized(this.realEntity) && (this.realEntity instanceof IFumetsu || (this.realEntity instanceof LivingEntity living && MutekiHandler.muteki(living)))) {
-            Deets.LOG.info("onRemoveFumetsuCancel");
+            if (this.realEntity instanceof Player) {
+                LOG.debug("RemoveMutekiPlayer");
+                return;
+            }
+            Deets.LOG.debug("onRemoveFumetsuCancel");
             ci.cancel();
         }
     }
@@ -48,7 +54,7 @@ public abstract class PersistentEntitySectionManager$CallbackMixin<T extends Ent
     private void onRemoveFumetsu$1(Entity.RemovalReason pReason, CallbackInfo ci) {
         if (this.entity instanceof IFumetsu) {
             if (FumetsuHandler.specialRemove.get() || NovelHandler.novelized((Entity) this.entity)) {
-                Deets.LOG.info("removeEntityUuidFumetsu");
+//                Deets.LOG.debug("removeEntityUuidFumetsu");
                 ((IPersistentEntityManagerFumetsu) this.this$0).fumetsuKnown().remove(this.entity.getUUID());
             }
         }

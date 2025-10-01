@@ -1,15 +1,17 @@
 package com.sakurafuld.hyperdaimc.network.novel;
 
+import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.function.Supplier;
 
 import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
@@ -30,21 +32,22 @@ public class ServerboundNovelize {
 
             if (player.getMainHandItem().is(HyperItems.NOVEL.get())) {
                 double reach = Math.max(player.getBlockReach(), player.getEntityReach());
-                Vec3 view = player.getViewVector(1);
-                Vec3 vector = view.scale(reach);
-                Vec3 eye = player.getEyePosition();
-                if (player.isShiftKeyDown() != HyperCommonConfig.NOVEL_INVERT_SHIFT.get()) {
-                    NovelHandler.rayTraceEntities(player, eye, eye.add(vector), player.getBoundingBox().expandTowards(vector).inflate(1), 0).stream()
-                            .min(Comparator.comparingDouble(entity -> entity.position().distanceToSqr(eye)))
-                            .ifPresent(entity -> {
-                                NovelHandler.novelize(player, entity, true);
-                                NovelHandler.playSound(level, entity.position());
-                            });
-                } else {
-                    NovelHandler.rayTraceEntities(player, eye, eye.add(vector), player.getBoundingBox().expandTowards(vector).inflate(1), 0.75f).stream()
-                            .peek(entity -> NovelHandler.novelize(player, entity, true))
+                if (player.isShiftKeyDown() == HyperCommonConfig.NOVEL_INVERT_SHIFT.get()) {
+                    List<Entity> entities = Lists.newArrayList();
+                    NovelHandler.rayTraceEntities(player, reach).stream()
+                            .peek(entities::add)
+                            .filter(NovelHandler.PREDICATE_SINGLE)
                             .min(Comparator.comparingDouble(player::distanceTo))
                             .ifPresent(entity -> NovelHandler.playSound(level, entity.position()));
+                    for (Entity entity : entities) {
+                        NovelHandler.novelize(player, entity, true);
+                    }
+                } else {
+                    Entity entity = NovelHandler.rayTraceEntity(player, reach);
+                    if (entity != null) {
+                        NovelHandler.novelize(player, entity, true);
+                        NovelHandler.playSound(level, entity.position());
+                    }
                 }
             }
         });

@@ -41,6 +41,7 @@ public class HyperCommonConfig {
 
     public static final ForgeConfigSpec.BooleanValue FUMETSU_RECIPE;
     public static final ForgeConfigSpec.BooleanValue FUMETSU_SUMMON;
+    public static final ForgeConfigSpec.BooleanValue FUMETSU_LOGOUT;
     public static final ForgeConfigSpec.IntValue FUMETSU_HEALTH;
     public static final ForgeConfigSpec.IntValue FUMETSU_RANGE;
     public static final ForgeConfigSpec.BooleanValue FUMETSU_UNDERGROUND;
@@ -91,7 +92,7 @@ public class HyperCommonConfig {
                         .define("Novel vulnerabilization", false);
                 NOVEL_IGNORE = builder
                         .comment("Specific entities that ignore Novelize")
-                        .defineList("Ignore entities", List.of("minecraft:item", "minecraft:experience_orb", "hyperdaimc:fumetsu_skull", "hyperdaimc:fumetsu_storm", "hyperdaimc:fumetsu_storm_skull"),
+                        .defineList("Ignored entities", List.of("minecraft:item", "minecraft:experience_orb", "hyperdaimc:fumetsu_skull", "hyperdaimc:fumetsu_storm", "hyperdaimc:fumetsu_storm_skull"),
                                 object -> object instanceof String string && ResourceLocation.isValidResourceLocation(string));
                 NOVEL_SPECIAL = builder
                         .comment("Specific entities not interrupted in the death process by Novel ( e.g. entities with a death animation )")
@@ -190,6 +191,10 @@ public class HyperCommonConfig {
                         .comment("Enable Fumetsu summoning by assembling blocks",
                                 "Default: true")
                         .define("Enable summoning", true);
+                FUMETSU_LOGOUT = builder
+                        .comment("Enable Fumetsu to log out",
+                                "Default: true")
+                        .define("Enable logging out", true);
                 FUMETSU_HEALTH = builder
                         .comment("Default: 20")
                         .defineInRange("Max health", 20, 20, Integer.MAX_VALUE);

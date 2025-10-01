@@ -7,7 +7,6 @@ import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
 import com.sakurafuld.hyperdaimc.helper.Deets;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,11 +24,15 @@ public abstract class TransientEntitySectionManager$CallbackMixin {
     @Inject(method = "onRemove", at = @At("HEAD"), cancellable = true)
     private void onRemoveFumetsu(Entity.RemovalReason pReason, CallbackInfo ci) {
         if (this.realEntity != null) {
-            if (FumetsuHandler.specialRemove.get() || this.realEntity instanceof Player) {
+            if (FumetsuHandler.specialRemove.get()) {
                 return;
             }
             if (!NovelHandler.novelized(this.realEntity) && (this.realEntity instanceof IFumetsu || (this.realEntity instanceof LivingEntity living && MutekiHandler.muteki(living)))) {
-                Deets.LOG.info("onRemoveFumetsuCancel");
+//                if (this.realEntity instanceof Player) {
+//                    LOG.debug("RemoveMutekiPlayer");
+//                    return;
+//                }
+                Deets.LOG.debug("onRemoveFumetsuCancel");
                 ci.cancel();
             }
         }

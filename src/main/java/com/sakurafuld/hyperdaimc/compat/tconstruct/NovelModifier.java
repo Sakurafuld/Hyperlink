@@ -44,7 +44,7 @@ public class NovelModifier extends NoLevelsModifier implements MeleeHitModifierH
             LivingEntity attacker = context.getAttacker();
             if (tool.hasTag(TinkerTags.Items.MELEE_PRIMARY)) {
                 Entity target = context.getTarget();
-                if (NovelHandler.PREDICATE.test(target)) {
+                if (NovelHandler.PREDICATE_SINGLE.test(target)) {
                     NovelHandler.novelize(attacker, target, true);
                     NovelHandler.playSound(serverLevel, target.position());
                 }
@@ -58,7 +58,7 @@ public class NovelModifier extends NoLevelsModifier implements MeleeHitModifierH
     public boolean onProjectileHitEntity(@NotNull ModifierNBT modifiers, @NotNull ModDataNBT persistentData, @NotNull ModifierEntry modifier, @NotNull Projectile projectile, @NotNull EntityHitResult hit, @Nullable LivingEntity attacker, @Nullable LivingEntity target) {
         if (attacker != null && attacker.level() instanceof ServerLevel serverLevel) {
             Entity entity = hit.getEntity();
-            if (NovelHandler.PREDICATE.test(entity)) {
+            if (NovelHandler.PREDICATE_SINGLE.test(entity)) {
                 NovelHandler.novelize(attacker, entity, true);
                 NovelHandler.playSound(serverLevel, entity.position());
             }

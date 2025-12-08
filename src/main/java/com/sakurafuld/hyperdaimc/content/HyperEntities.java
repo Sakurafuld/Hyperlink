@@ -15,7 +15,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Supplier;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
 public class HyperEntities {
     public static final DeferredRegister<EntityType<?>> REGISTRY
@@ -33,7 +33,6 @@ public class HyperEntities {
                 EntityType.Builder.of(FumetsuEntity::new, MobCategory.MONSTER)
                         .sized(0.9F, 3.5F)
                         .clientTrackingRange(10)
-                        .noSummon()
                         .setCustomClientFactory((packet, level) -> {
                             FumetsuEntity fumetsu = new FumetsuEntity(HyperEntities.FUMETSU.get(), level);
                             fumetsu.setMovable(true);

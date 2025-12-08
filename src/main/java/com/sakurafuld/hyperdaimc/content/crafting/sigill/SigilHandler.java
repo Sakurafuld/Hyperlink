@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
 @Mod.EventBusSubscriber(modid = HYPERDAIMC)
 public class SigilHandler {
@@ -23,12 +23,10 @@ public class SigilHandler {
 
     @SubscribeEvent
     public static void brew(PotionBrewEvent.Post event) {
-        if (event.getItem(0).is(HyperBlocks.FUMETSU_SKULL.get().asItem())) {
+        if (event.getItem(0).is(HyperBlocks.FUMETSU_SKULL.get().asItem()))
             event.setItem(0, HyperBlocks.FUMETSU_LEFT.get().asItem().getDefaultInstance());
-        }
-        if (event.getItem(2).is(HyperBlocks.FUMETSU_SKULL.get().asItem())) {
+        if (event.getItem(2).is(HyperBlocks.FUMETSU_SKULL.get().asItem()))
             event.setItem(2, HyperBlocks.FUMETSU_RIGHT.get().asItem().getDefaultInstance());
-        }
     }
 
     @SubscribeEvent
@@ -37,7 +35,7 @@ public class SigilHandler {
         if (table.getLootTableId().getNamespace().equals("minecraft")) {
             if (LOOT.contains(table.getLootTableId().getPath())) {
                 table.addPool(LootPool.lootPool()
-                        .when(LootItemRandomChanceCondition.randomChance(0.25f))
+                        .when(LootItemRandomChanceCondition.randomChance(0.125f))
                         .add(LootItem.lootTableItem(HyperItems.GOD_SIGIL.get()))
                         .build());
             }

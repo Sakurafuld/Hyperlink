@@ -14,10 +14,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class OmnidirectionalHopperBlockEntityMixin {
     @Redirect(method = "tryEntityImport", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;isAlive()Z"), remap = false)
     private boolean tryEntityImportMuteki(Entity instance) {
-        if (instance instanceof LivingEntity living && MutekiHandler.muteki(living)) {
+        if (instance instanceof LivingEntity living && MutekiHandler.muteki(living))
             return false;
-        } else {
+        else
             return instance.isAlive();
-        }
     }
 }

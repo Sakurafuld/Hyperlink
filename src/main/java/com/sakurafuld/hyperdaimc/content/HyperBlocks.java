@@ -20,7 +20,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
 public class HyperBlocks {
     public static final DeferredRegister<Block> REGISTRY

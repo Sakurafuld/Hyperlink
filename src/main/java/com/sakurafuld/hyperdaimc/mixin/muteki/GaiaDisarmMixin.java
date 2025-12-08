@@ -14,8 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class GaiaDisarmMixin {
     @Inject(method = "disArm", at = @At("HEAD"), cancellable = true, remap = false)
     private void disarmMuteki(Player player, CallbackInfo ci) {
-        if (MutekiHandler.muteki(player)) {
-            ci.cancel();
-        }
+        if (MutekiHandler.muteki(player)) ci.cancel();
     }
 }

@@ -1,9 +1,9 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
-import com.sakurafuld.hyperdaimc.api.mixin.IServerLevelFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IServerLevelFumetsu;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
@@ -28,7 +28,7 @@ public abstract class ServerLevel$EntityCallbacksMixin implements LevelCallback<
     private void onTickingStartFumetsu(Entity p_143363_, CallbackInfo ci) {
         if (this.this$0 instanceof IServerLevelFumetsu levelFumetsu && p_143363_ instanceof IFumetsu) {
 //            Deets.LOG.debug("tickingStartFumetsu");
-            levelFumetsu.fumetsuTickList().add(p_143363_);
+            levelFumetsu.hyperdaimc$fumetsuTickList().add(p_143363_);
             ci.cancel();
         }
     }
@@ -36,9 +36,9 @@ public abstract class ServerLevel$EntityCallbacksMixin implements LevelCallback<
     @Inject(method = "onTickingEnd(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)
     private void onTickingEndFumetsu(Entity p_143363_, CallbackInfo ci) {
         if (this.this$0 instanceof IServerLevelFumetsu levelFumetsu && p_143363_ instanceof IFumetsu) {
-            if (FumetsuHandler.specialRemove.get() || NovelHandler.novelized(p_143363_)) {
+            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) p_143363_).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("tickingEndFumetsu");
-                levelFumetsu.fumetsuTickList().remove(p_143363_);
+                levelFumetsu.hyperdaimc$fumetsuTickList().remove(p_143363_);
                 ci.cancel();
             }
         }
@@ -48,7 +48,7 @@ public abstract class ServerLevel$EntityCallbacksMixin implements LevelCallback<
     private boolean onTrackingStartFumetsu$navi(Set<Mob> instance, Object e) {
         if (this.this$0 instanceof IServerLevelFumetsu levelFumetsu && e instanceof IFumetsu) {
 //            Deets.LOG.debug("trackingStartFumetsu$Navi");
-            return levelFumetsu.fumetsuNavi().add((Mob) e);
+            return levelFumetsu.hyperdaimc$fumetsuNavi().add((Mob) e);
         } else {
             return instance.add((Mob) e);
         }
@@ -57,9 +57,9 @@ public abstract class ServerLevel$EntityCallbacksMixin implements LevelCallback<
     @Redirect(method = "onTrackingEnd(Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "INVOKE", target = "Ljava/util/Set;remove(Ljava/lang/Object;)Z"))
     private boolean onTrackingEndFumetsu$navi(Set<Mob> instance, Object o) {
         if (this.this$0 instanceof IServerLevelFumetsu levelFumetsu && o instanceof IFumetsu) {
-            if (FumetsuHandler.specialRemove.get() || NovelHandler.novelized((Entity) o)) {
+            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) o).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("trackingEndFumetsu$Navi");
-                return levelFumetsu.fumetsuNavi().remove(o);
+                return levelFumetsu.hyperdaimc$fumetsuNavi().remove(o);
             } else {
                 return false;
             }
@@ -71,7 +71,7 @@ public abstract class ServerLevel$EntityCallbacksMixin implements LevelCallback<
     @Inject(method = "onTrackingEnd(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)
     private void onTrackingEndFumetsu(Entity p_143375_, CallbackInfo ci) {
         if (p_143375_ instanceof IFumetsu) {
-            if (FumetsuHandler.specialRemove.get() || NovelHandler.novelized(p_143375_)) {
+            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) p_143375_).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("trackingEndFumetsu");
                 return;
             }

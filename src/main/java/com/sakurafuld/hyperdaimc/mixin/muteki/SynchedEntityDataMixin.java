@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
-import com.sakurafuld.hyperdaimc.api.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.ILivingEntityMuteki;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
@@ -31,26 +31,24 @@ public abstract class SynchedEntityDataMixin {
     private <T> void setMuteki(EntityDataAccessor<T> pKey, T pValue, boolean pForce, CallbackInfo ci) {
         if (pKey == LivingEntityAccessor.getDATA_HEALTH_ID() && this.entity instanceof LivingEntity living && pValue instanceof Float health) {
             if (MutekiHandler.muteki(living)) {
-                if (((ILivingEntityMuteki) living).mutekiForced()) {
+                if (((ILivingEntityMuteki) living).hyperdaimc$isMutekiForced())
                     return;
-                }
-                if (health <= this.getItem(LivingEntityAccessor.getDATA_HEALTH_ID()).getValue() || !Float.isFinite(health)) {
+
+                if (health <= this.getItem(LivingEntityAccessor.getDATA_HEALTH_ID()).getValue() || !Float.isFinite(health))
                     ci.cancel();
-                }
             }
         }
     }
 
     @Inject(method = "get", at = @At("HEAD"), cancellable = true)
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "CancellableInjectionUsage"})
     private <T> void getMuteki(EntityDataAccessor<T> pKey, CallbackInfoReturnable<T> cir) {
-        if (pKey == LivingEntityAccessor.getDATA_HEALTH_ID() && this.entity instanceof LivingEntity living && !((ILivingEntityMuteki) living).mutekiForced()) {
+        if (pKey == LivingEntityAccessor.getDATA_HEALTH_ID() && this.entity instanceof LivingEntity living && !((ILivingEntityMuteki) living).hyperdaimc$isMutekiForced()) {
             CallbackInfoReturnable<Float> cirf = ((CallbackInfoReturnable<Float>) cir);
-            if (NovelHandler.novelized(living)) {
+            if (NovelHandler.novelized(living))
                 cirf.setReturnValue(0f);
-            } else if (MutekiHandler.muteki(living)) {
-                cirf.setReturnValue(((ILivingEntityMuteki) living).mutekiLastHealth());
-            }
+            else if (MutekiHandler.muteki(living))
+                cirf.setReturnValue(((ILivingEntityMuteki) living).hyperdaimc$mutekiLastHealth());
         }
     }
 }

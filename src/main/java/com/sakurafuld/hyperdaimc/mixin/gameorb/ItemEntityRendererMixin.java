@@ -2,9 +2,10 @@ package com.sakurafuld.hyperdaimc.mixin.gameorb;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.sakurafuld.hyperdaimc.addon.kubejs.GameOverItemJS;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.crafting.gameorb.GameOrbRenderer;
-import com.sakurafuld.hyperdaimc.helper.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.Renders;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
@@ -13,21 +14,26 @@ import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.KUBE_JS;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.require;
 
 @Mixin(ItemEntityRenderer.class)
 @OnlyIn(Dist.CLIENT)
 public abstract class ItemEntityRendererMixin {
     @Inject(method = "render(Lnet/minecraft/world/entity/item/ItemEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/ItemRenderer;render(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemDisplayContext;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;IILnet/minecraft/client/resources/model/BakedModel;)V"))
     private void renderGameOrb(ItemEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight, CallbackInfo ci) {
-        if (pEntity.getItem().is(HyperItems.GAME_ORB.get())) {
+        if (this.isGameOver(pEntity.getItem().getItem())) {
 
             Vec3 vec = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition().subtract(pEntity.getBoundingBox().getCenter());
             Renders.with(pMatrixStack, () -> {
@@ -41,5 +47,12 @@ public abstract class ItemEntityRendererMixin {
                 GameOrbRenderer.renderHalo(pMatrixStack, ItemRenderer.getFoilBuffer(pBuffer, Sheets.translucentCullBlockSheet(), true, pEntity.getItem().hasFoil()), ItemDisplayContext.GROUND, pPackedLight, OverlayTexture.NO_OVERLAY);
             });
         }
+    }
+
+    @Unique
+    private boolean isGameOver(Item item) {
+        if (item == HyperItems.GAME_ORB.get())
+            return true;
+        return require(KUBE_JS) && item instanceof GameOverItemJS;
     }
 }

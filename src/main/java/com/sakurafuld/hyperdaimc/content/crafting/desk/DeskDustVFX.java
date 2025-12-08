@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.content.crafting.desk;
 
 import com.mojang.math.Axis;
-import com.sakurafuld.hyperdaimc.api.content.IScreenVFX;
-import com.sakurafuld.hyperdaimc.helper.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.render.IScreenVFX;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec2;

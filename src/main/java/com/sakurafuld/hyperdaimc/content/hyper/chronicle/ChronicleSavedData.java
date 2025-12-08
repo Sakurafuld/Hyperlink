@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.content.hyper.chronicle;
 
 import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.helper.Boxes;
+import com.sakurafuld.hyperdaimc.infrastructure.Boxes;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.chronicle.ClientboundChronicleSyncSave;
 import it.unimi.dsi.fastutil.ints.Int2LongOpenHashMap;
@@ -21,13 +21,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Consumer;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
 public class ChronicleSavedData extends SavedData {
     private static final Object2ObjectOpenHashMap<ResourceKey<Level>, ChronicleSavedData> client = new Object2ObjectOpenHashMap<>();
@@ -47,11 +51,10 @@ public class ChronicleSavedData extends SavedData {
     }
 
     public static ChronicleSavedData get(Level level) {
-        if (level instanceof ServerLevel serverLevel) {
+        if (level instanceof ServerLevel serverLevel)
             return serverLevel.getDataStorage().computeIfAbsent(tag -> new ChronicleSavedData(level, tag), () -> new ChronicleSavedData(level), HYPERDAIMC + "_chronicle");
-        } else {
+        else
             return client.computeIfAbsent(level.dimension(), dimension -> new ChronicleSavedData(level));
-        }
     }
 
     private void addEntry(Entry entry) {
@@ -67,49 +70,46 @@ public class ChronicleSavedData extends SavedData {
     }
 
     private void removeEntry(Entry entry) {
-        LOG.debug("removeEntry");
         this.entries.remove(entry);
         this.posMap.values().removeIf(list -> {
             list.remove(entry);
             return list.isEmpty();
         });
 
-        BlockPos.betweenClosedStream(entry.from, entry.to)
-                .forEach(pos -> {
-                    LevelChunkSection section = this.level.getChunkAt(pos).getSection(this.level.getSectionIndex(pos.getY()));
-                    Int2LongOpenHashMap map = this.sectionMap.computeIfAbsent(section, s -> new Int2LongOpenHashMap());
-                    map.remove((pos.getX() & 0xF) << 8 | (pos.getY() & 0xF) << 4 | pos.getZ() & 0xF);
-                    if (map.isEmpty()) {
-                        this.sectionMap.remove(section);
-                    }
-                });
+        BlockPos.betweenClosedStream(entry.from, entry.to).forEach(pos -> {
+            LevelChunkSection section = this.level.getChunkAt(pos).getSection(this.level.getSectionIndex(pos.getY()));
+            Int2LongOpenHashMap map = this.sectionMap.get(section);
+            if (map == null) return;
+
+            map.remove((pos.getX() & 0xF) << 8 | (pos.getY() & 0xF) << 4 | pos.getZ() & 0xF);
+            if (map.isEmpty()) this.sectionMap.remove(section);
+        });
     }
 
     public List<Entry> getEntries() {
-        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get())
             return Collections.emptyList();
-        }
         return this.entries;
     }
 
-    public Optional<List<Entry>> getPaused(BlockPos pos) {
-        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(this.posMap.get(pos.asLong()));
+    @Nullable
+    public List<Entry> getPaused(BlockPos pos) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get())
+            return null;
+        return this.posMap.get(pos.asLong());
     }
 
-    public Optional<Int2LongOpenHashMap> getPaused(LevelChunkSection section) {
-        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(this.sectionMap.get(section));
+    @Nullable
+    public Int2LongOpenHashMap getPaused(LevelChunkSection section) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get())
+            return null;
+        return this.sectionMap.get(section);
     }
 
     public boolean check(UUID uuid, BlockPos from, BlockPos to, Consumer<Component> sender) {
-        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get())
             return false;
-        }
+
 
         from = Boxes.clamp(this.level, from);
         to = Boxes.clamp(this.level, to);
@@ -128,9 +128,8 @@ public class ChronicleSavedData extends SavedData {
     }
 
     public void pause(UUID uuid, BlockPos from, BlockPos to) {
-        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get())
             return;
-        }
 
         from = Boxes.clamp(this.level, from);
         to = Boxes.clamp(this.level, to);
@@ -140,24 +139,22 @@ public class ChronicleSavedData extends SavedData {
             this.addEntry(entry);
             this.setDirty();
         }
-
-        LOG.debug("chSize-entries:{},posMap:{},sectionMap:{}", this.entries.size(), this.posMap.size(), this.sectionMap.size());
     }
 
     public void restart(UUID uuid, BlockPos pos) {
-        if (!HyperCommonConfig.ENABLE_CHRONICLE.get()) {
+        if (!HyperCommonConfig.ENABLE_CHRONICLE.get())
             return;
+
+        List<Entry> paused = this.getPaused(pos);
+        if (paused == null) return;
+
+        for (Entry entry : paused) {
+            if (entry.uuid.equals(uuid)) {
+                this.removeEntry(entry);
+                this.setDirty();
+                break;
+            }
         }
-
-        LOG.debug("restart");
-        this.getPaused(pos)
-                .flatMap(list -> list.stream().filter(entry -> entry.uuid.equals(uuid)).findFirst())
-                .ifPresent(entry -> {
-                    this.removeEntry(entry);
-                    this.setDirty();
-                });
-
-        LOG.debug("chSize-entries:{},posMap:{},sectionMap:{}", this.entries.size(), this.posMap.size(), this.sectionMap.size());
     }
 
     public void sync2Client(PacketDistributor.PacketTarget target) {
@@ -183,7 +180,6 @@ public class ChronicleSavedData extends SavedData {
                 .map(CompoundTag.class::cast)
                 .map(Entry::load)
                 .forEach(this::addEntry);
-        LOG.debug("chSize-entries:{},posMap:{},sectionMap:{}", this.entries.size(), this.posMap.size(), this.sectionMap.size());
     }
 
     public static class Entry {
@@ -191,12 +187,35 @@ public class ChronicleSavedData extends SavedData {
         public final BlockPos from;
         public final BlockPos to;
         public final AABB aabb;
+        public final long time;
+        private final Vec3 center;
 
-        private Entry(UUID uuid, BlockPos from, BlockPos to) {
+        private Entry(UUID uuid, BlockPos from, BlockPos to, long time) {
             this.uuid = uuid;
             this.from = new BlockPos(Math.min(from.getX(), to.getX()), Math.min(from.getY(), to.getY()), Math.min(from.getZ(), to.getZ()));
             this.to = new BlockPos(Math.max(from.getX(), to.getX()), Math.max(from.getY(), to.getY()), Math.max(from.getZ(), to.getZ()));
             this.aabb = Boxes.of(this.from, this.to);
+            this.time = time;
+            this.center = this.aabb.getCenter();
+        }
+
+        @SuppressWarnings("RedundantIfStatement")
+        public boolean visible(Vec3 camera, float distance) {
+            if (Math.abs(this.center.x() - camera.x()) > this.aabb.getXsize() / 2 + distance)
+                return false;
+            if (Math.abs(this.center.y() - camera.y()) > this.aabb.getYsize() / 2 + distance)
+                return false;
+            if (Math.abs(this.center.z() - camera.z()) > this.aabb.getZsize() / 2 + distance)
+                return false;
+            return true;
+        }
+
+        private Entry(UUID uuid, BlockPos from, BlockPos to) {
+            this(uuid, from, to, System.currentTimeMillis());
+        }
+
+        public static Entry load(CompoundTag tag) {
+            return new Entry(tag.getUUID("UUID"), BlockPos.of(tag.getLong("From")), BlockPos.of(tag.getLong("To")), tag.getLong("Time"));
         }
 
         public CompoundTag save() {
@@ -204,11 +223,8 @@ public class ChronicleSavedData extends SavedData {
             tag.putUUID("UUID", this.uuid);
             tag.putLong("From", this.from.asLong());
             tag.putLong("To", this.to.asLong());
+            tag.putLong("Time", this.time);
             return tag;
-        }
-
-        public static Entry load(CompoundTag tag) {
-            return new Entry(tag.getUUID("UUID"), BlockPos.of(tag.getLong("From")), BlockPos.of(tag.getLong("To")));
         }
 
         @Override

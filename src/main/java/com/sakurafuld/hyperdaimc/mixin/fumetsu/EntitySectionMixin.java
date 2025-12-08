@@ -1,12 +1,11 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
 import com.google.common.collect.Streams;
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
 import net.minecraft.util.AbortableIterationConsumer;
 import net.minecraft.util.ClassInstanceMultiMap;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.EntityAccess;
 import net.minecraft.world.level.entity.EntitySection;
 import net.minecraft.world.level.entity.EntityTypeTest;
@@ -47,7 +46,7 @@ public abstract class EntitySectionMixin<T extends EntityAccess> {
                 cir.setReturnValue(this.storage2.remove(pEntity));
                 return;
             }
-            if (NovelHandler.novelized((Entity) pEntity)) {
+            if (((IEntityNovel) pEntity).hyperdaimc$isNovelized()) {
                 cir.setReturnValue(this.storage2.remove(pEntity));
             } else {
                 cir.setReturnValue(false);

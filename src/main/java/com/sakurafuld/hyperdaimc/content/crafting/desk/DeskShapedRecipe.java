@@ -42,96 +42,6 @@ public class DeskShapedRecipe implements IDeskRecipe, IShapedRecipe<RecipeWrappe
         this.hideFromJei = hideFromJei;
     }
 
-    @Override
-    public boolean isMinecraft() {
-        return this.minecraft;
-    }
-
-    @Override
-    public boolean showToJei() {
-        return !this.hideFromJei;
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return this.ingredients;
-    }
-
-    @Override
-    public boolean matches(RecipeWrapper pContainer, Level pLevel) {
-        for (int row = 0; row <= 9 - this.width; ++row) {
-            for (int column = 0; column <= 9 - this.height; ++column) {
-                if (this.matches(pContainer, row, column, true)) {
-                    return true;
-                }
-
-                if (this.matches(pContainer, row, column, false)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public ItemStack assemble(RecipeWrapper pContainer, RegistryAccess pRegistryAccess) {
-        return this.getResultItem(pRegistryAccess).copy();
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int pWidth, int pHeight) {
-        return pWidth >= this.width && pHeight >= this.height;
-    }
-
-    @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        return this.result;
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return HyperRecipes.SHAPED_DESK.get();
-    }
-
-    @Override
-    public int getRecipeWidth() {
-        return this.width;
-    }
-
-    @Override
-    public int getRecipeHeight() {
-        return this.height;
-    }
-
-    private boolean matches(RecipeWrapper wrapper, int width, int height, boolean mirror) {
-        for (int row = 0; row < 9; ++row) {
-            for (int column = 0; column < 9; ++column) {
-                int x = row - width;
-                int y = column - height;
-                Ingredient ingredient = Ingredient.EMPTY;
-                if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
-                    if (mirror) {
-                        ingredient = this.ingredients.get(this.width - x - 1 + y * this.width);
-                    } else {
-                        ingredient = this.ingredients.get(x + y * this.width);
-                    }
-                }
-
-                if (!ingredient.test(wrapper.getItem(row + column * 9))) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
     private static NonNullList<Ingredient> dissolvePattern(String[] pattern, Map<String, Ingredient> map, int width, int height) {
         NonNullList<Ingredient> dissolved = NonNullList.withSize(width * height, Ingredient.EMPTY);
         Set<String> set = Sets.newHashSet(map.keySet());
@@ -249,6 +159,95 @@ public class DeskShapedRecipe implements IDeskRecipe, IShapedRecipe<RecipeWrappe
         return map;
     }
 
+    @Override
+    public boolean isMinecraft() {
+        return this.minecraft;
+    }
+
+    @Override
+    public boolean showToJei() {
+        return !this.hideFromJei;
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        return this.ingredients;
+    }
+
+    @Override
+    public boolean matches(RecipeWrapper pContainer, Level pLevel) {
+        for (int row = 0; row <= 9 - this.width; ++row) {
+            for (int column = 0; column <= 9 - this.height; ++column) {
+                if (this.matches(pContainer, row, column, true)) {
+                    return true;
+                }
+
+                if (this.matches(pContainer, row, column, false)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public ItemStack assemble(RecipeWrapper pContainer, RegistryAccess pRegistryAccess) {
+        return this.getResultItem(pRegistryAccess).copy();
+    }
+
+    @Override
+    public boolean canCraftInDimensions(int pWidth, int pHeight) {
+        return pWidth >= this.width && pHeight >= this.height;
+    }
+
+    @Override
+    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+        return this.result;
+    }
+
+    @Override
+    public ResourceLocation getId() {
+        return this.id;
+    }
+
+    @Override
+    public RecipeSerializer<?> getSerializer() {
+        return HyperRecipes.SHAPED_DESK.get();
+    }
+
+    @Override
+    public int getRecipeWidth() {
+        return this.width;
+    }
+
+    @Override
+    public int getRecipeHeight() {
+        return this.height;
+    }
+
+    private boolean matches(RecipeWrapper wrapper, int width, int height, boolean mirror) {
+        for (int row = 0; row < 9; ++row) {
+            for (int column = 0; column < 9; ++column) {
+                int x = row - width;
+                int y = column - height;
+                Ingredient ingredient = Ingredient.EMPTY;
+                if (x >= 0 && y >= 0 && x < this.width && y < this.height) {
+                    if (mirror) {
+                        ingredient = this.ingredients.get(this.width - x - 1 + y * this.width);
+                    } else {
+                        ingredient = this.ingredients.get(x + y * this.width);
+                    }
+                }
+
+                if (!ingredient.test(wrapper.getItem(row + column * 9))) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 
     public static class Serializer implements RecipeSerializer<DeskShapedRecipe> {
         @Override

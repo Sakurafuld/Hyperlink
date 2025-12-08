@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
-import com.sakurafuld.hyperdaimc.api.mixin.ILevelChunkSectionChronicle;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.ILevelChunkSectionChronicle;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
@@ -25,7 +25,7 @@ public abstract class ChunkAccessMixin {
     @Inject(method = "<init>", at = @At("TAIL"))
     private void contractorChronicle(ChunkPos pChunkPos, UpgradeData pUpgradeData, LevelHeightAccessor pLevelHeightAccessor, Registry<Biome> pBiomeRegistry, long pInhabitedTime, LevelChunkSection[] pSections, BlendingData pBlendingData, CallbackInfo ci) {
         for (LevelChunkSection section : this.sections) {
-            ((ILevelChunkSectionChronicle) section).chronicleSetChunk((ChunkAccess) ((Object) this));
+            ((ILevelChunkSectionChronicle) section).hyperdaimc$setChunk((ChunkAccess) ((Object) this));
         }
     }
 }

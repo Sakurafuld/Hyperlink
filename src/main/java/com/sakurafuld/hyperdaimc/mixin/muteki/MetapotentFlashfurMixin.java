@@ -17,17 +17,15 @@ public abstract class MetapotentFlashfurMixin {
     @Inject(method = "instantKill", at = @At("HEAD"), cancellable = true, remap = false)
     private void instantKillMuteki(LivingEntity entity, float knockback, CallbackInfo ci) {
         if (MutekiHandler.muteki(entity)) {
-            if (FumetsuEntity.class.equals(entity.getClass())) {
+            if (FumetsuEntity.class.equals(entity.getClass()))
                 entity.hurt(entity.damageSources().generic(), 1);
-            }
             ci.cancel();
         }
     }
 
     @Inject(method = "eraseEntity", at = @At("HEAD"), cancellable = true, remap = false)
     private void eraseEntityMuteki(Entity entity, CallbackInfo ci) {
-        if (entity instanceof LivingEntity living && MutekiHandler.muteki(living)) {
+        if (entity instanceof LivingEntity living && MutekiHandler.muteki(living))
             ci.cancel();
-        }
     }
 }

@@ -2,8 +2,8 @@ package com.sakurafuld.hyperdaimc.content.over.materializer;
 
 import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.api.content.IOItemHandler;
 import com.sakurafuld.hyperdaimc.content.HyperBlockEntities;
+import com.sakurafuld.hyperdaimc.infrastructure.capability.IOItemHandler;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.materializer.ClientboundMaterializerSyncRecipe;
 import net.minecraft.core.BlockPos;
@@ -41,17 +41,17 @@ import java.util.List;
 
 public class MaterializerBlockEntity extends BlockEntity implements MenuProvider {
 
+    public final ItemStackHandler fuel = new ItemStackHandler() {
+        @Override
+        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+            return !stack.isEmpty() && MaterializerHandler.getFuel(stack.getItem()) > 0;
+        }
+    };
     public final ItemStackHandler catalyst = new ItemStackHandler() {
         @Override
         protected void onContentsChanged(int slot) {
             MaterializerBlockEntity.this.updateRecipe();
             MaterializerBlockEntity.this.setChanged();
-        }
-    };
-    public final ItemStackHandler fuel = new ItemStackHandler() {
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return !stack.isEmpty() && MaterializerHandler.getFuel(stack.getItem()) > 0;
         }
     };
     public final ItemStackHandler result = new ItemStackHandler() {
@@ -60,13 +60,12 @@ public class MaterializerBlockEntity extends BlockEntity implements MenuProvider
             return false;
         }
     };
-    private final IOItemHandler<ItemStackHandler> ioHandler = new IOItemHandler<>(this.catalyst, this.result);
-    private LazyOptional<IItemHandler> capabilityFuel = LazyOptional.of(() -> this.fuel);
-    private LazyOptional<IItemHandler> capability = LazyOptional.of(() -> this.ioHandler);
-
     private final List<ItemStack> processRecipe = Lists.newArrayList();
+    private LazyOptional<IItemHandler> capabilityFuel = LazyOptional.of(() -> this.fuel);
+    private final IOItemHandler<ItemStackHandler> ioHandler = new IOItemHandler<>(this.catalyst, this.result);
     private int fuelMax = 0;
     private int fuelRemaining = 0;
+    private LazyOptional<IItemHandler> capability = LazyOptional.of(() -> this.ioHandler);
     private int processProgress = 0;
     public final ContainerData data = new ContainerData() {
         @Override
@@ -92,7 +91,6 @@ public class MaterializerBlockEntity extends BlockEntity implements MenuProvider
             return 3;
         }
     };
-
 
     public MaterializerBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(HyperBlockEntities.MATERIALIZER.get(), pPos, pBlockState);
@@ -227,4 +225,6 @@ public class MaterializerBlockEntity extends BlockEntity implements MenuProvider
         this.fuelRemaining = pTag.getInt("FuelRemaining");
         this.processProgress = pTag.getInt("ProcessProgress");
     }
+
+
 }

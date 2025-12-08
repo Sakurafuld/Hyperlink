@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.content.over.materializer;
 
 import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.api.content.MaterializerRecipeEvent;
+import com.sakurafuld.hyperdaimc.infrastructure.event.MaterializerRecipeEvent;
 import com.sakurafuld.hyperdaimc.mixin.materializer.Ingredient$TagValueAccessor;
 import com.sakurafuld.hyperdaimc.mixin.materializer.IngredientAccessor;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
 @Mod.EventBusSubscriber(modid = HYPERDAIMC)
 public class MaterializerHandler {

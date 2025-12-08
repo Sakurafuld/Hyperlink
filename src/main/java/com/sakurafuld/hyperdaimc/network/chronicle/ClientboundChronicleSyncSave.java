@@ -6,21 +6,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
-
-public class ClientboundChronicleSyncSave {
-    private final CompoundTag tag;
-
-    public ClientboundChronicleSyncSave(CompoundTag tag) {
-        this.tag = tag;
-    }
-
+public record ClientboundChronicleSyncSave(CompoundTag tag) {
     public static void encode(ClientboundChronicleSyncSave msg, FriendlyByteBuf buf) {
         buf.writeNbt(msg.tag);
     }
@@ -30,13 +21,12 @@ public class ClientboundChronicleSyncSave {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> require(LogicalSide.CLIENT).run(this::handle));
+        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::handle));
         ctx.get().setPacketHandled(true);
     }
 
     @OnlyIn(Dist.CLIENT)
     private void handle() {
-        LOG.debug("handleSyncChronicle");
-        ChronicleSavedData.get(Minecraft.getInstance().level).load(this.tag);
+        ChronicleSavedData.get(Minecraft.getInstance().level).load(this.tag());
     }
 }

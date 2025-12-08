@@ -1,10 +1,10 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
 import com.google.common.collect.Sets;
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
-import com.sakurafuld.hyperdaimc.api.mixin.EntityLookupWrapper;
-import com.sakurafuld.hyperdaimc.api.mixin.IPersistentEntityManagerFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.EntityLookupWrapper;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IPersistentEntityManagerFumetsu;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.*;
 import org.slf4j.Logger;
@@ -22,26 +22,24 @@ public abstract class PersistentEntitySectionManagerMixin<T extends EntityAccess
     @Shadow
     @Final
     static Logger LOGGER;
-
-    @Shadow(remap = false)
-    protected abstract boolean addEntityWithoutEvent(T pEntity, boolean pWorldGenSpawned);
-
+    @Unique
+    private final Set<UUID> knownUuids2 = Sets.newHashSet();
     @Mutable
     @Shadow
     @Final
     private EntityLookup<T> visibleEntityStorage;
-    @Unique
-    private final Set<UUID> knownUuids2 = Sets.newHashSet();
 
+    @Shadow(remap = false)
+    protected abstract boolean addEntityWithoutEvent(T pEntity, boolean pWorldGenSpawned);
 
     @Override
     @SuppressWarnings("unchecked")
-    public void fumetsuSpawn(Entity entity) {
+    public void hyperdaimc$fumetsuSpawn(Entity entity) {
         this.addEntityWithoutEvent((T) entity, false);
     }
 
     @Override
-    public Set<UUID> fumetsuKnown() {
+    public Set<UUID> hyperdaimc$fumetsuKnown() {
         return this.knownUuids2;
     }
 

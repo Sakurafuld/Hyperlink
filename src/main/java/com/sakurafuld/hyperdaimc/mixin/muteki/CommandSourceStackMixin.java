@@ -24,15 +24,14 @@ public abstract class CommandSourceStackMixin {
 
     @Inject(method = "getEntityOrException", at = @At("RETURN"))
     private void getEntityOrExceptionMuteki(CallbackInfoReturnable<Entity> cir) throws CommandSyntaxException {
-        if (HyperCommonConfig.MUTEKI_SELECTOR.get() && cir.getReturnValue() instanceof LivingEntity entity && MutekiHandler.muteki(entity)) {
+        if (HyperCommonConfig.MUTEKI_SELECTOR.get() && cir.getReturnValue() instanceof LivingEntity entity && MutekiHandler.muteki(entity))
             throw MutekiHandler.ERROR_REQUIRE.create();
-        }
+
     }
 
     @Inject(method = "getPlayerOrException", at = @At("RETURN"))
     private void getPlayerOrExceptionMuteki(CallbackInfoReturnable<ServerPlayer> cir) throws CommandSyntaxException {
-        if (!MutekiHandler.specialGameModeSwitch && HyperCommonConfig.MUTEKI_SELECTOR.get() && MutekiHandler.muteki(cir.getReturnValue())) {
+        if (!MutekiHandler.specialGameModeSwitch && HyperCommonConfig.MUTEKI_SELECTOR.get() && MutekiHandler.muteki(cir.getReturnValue()))
             throw MutekiHandler.ERROR_REQUIRE.create();
-        }
     }
 }

@@ -3,7 +3,7 @@ package com.sakurafuld.hyperdaimc.content.crafting.chemical;
 import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.content.HyperBlocks;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
-import com.sakurafuld.hyperdaimc.helper.Calculates;
+import com.sakurafuld.hyperdaimc.infrastructure.Calculates;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,14 +23,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
 import java.util.Random;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
 @Mod.EventBusSubscriber(modid = HYPERDAIMC)
 public class ChemicalHandler {
@@ -39,7 +37,7 @@ public class ChemicalHandler {
 
     @SubscribeEvent
     public static void mutation(LivingEvent.LivingTickEvent event) {
-        if (event.getEntity() instanceof Zombie zombie) {
+        if (event.getEntity() instanceof Zombie zombie && !MutekiHandler.muteki(zombie)) {
             CompoundTag tag = zombie.getPersistentData();
             if (tag.contains(TAG_MUTATION, Tag.TAG_INT)) {
                 int mutation = tag.getInt(TAG_MUTATION);
@@ -51,45 +49,41 @@ public class ChemicalHandler {
                         zombie.setYRot(zombie.getRandom().nextFloat() * 360);
                         zombie.setYBodyRot(zombie.getRandom().nextFloat() * 360);
                     }
-                    require(LogicalSide.SERVER).run(() -> {
-                        if (mutation > 80 && !MutekiHandler.muteki(zombie)) {
-                            Player player = zombie.level().getNearestPlayer(zombie, 32);
-                            double yRot;
-                            if (player != null) {
-                                Vec3 vec = player.position().subtract(zombie.position());
-                                yRot = Math.toDegrees(Mth.atan2(vec.x(), vec.z())) + 90;
-                            } else {
-                                yRot = zombie.yBodyRot;
-                            }
-                            Direction face = Direction.fromYRot(yRot);
-                            BlockPos pos = zombie.blockPosition().above();
-                            BlockState state = HyperBlocks.SOUL.get().defaultBlockState();
-
-                            List<BlockPos> list = Lists.newArrayList(pos.below(), pos);
-                            if (face.getAxis() == Direction.Axis.X) {
-                                list.add(pos.west());
-                                list.add(pos.east());
-                            } else {
-                                list.add(pos.north());
-                                list.add(pos.south());
-                            }
-
-                            list.forEach(at -> {
-                                if (zombie.level().getBlockState(at).canBeReplaced()) {
-                                    zombie.level().setBlockAndUpdate(at, state);
-                                } else {
-                                    Block.popResource(zombie.level(), at, state.getBlock().asItem().getDefaultInstance());
-                                }
-                                zombie.level().levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, at, Block.getId(state));
-                                zombie.playSound(SoundEvents.ZOMBIE_DEATH, 1, 0.5f);
-                            });
-
-                            zombie.discard();
+                    if (!zombie.level().isClientSide() && mutation > 80) {
+                        Player player = zombie.level().getNearestPlayer(zombie, 32);
+                        double yRot;
+                        if (player != null) {
+                            Vec3 vec = player.position().subtract(zombie.position());
+                            yRot = Math.toDegrees(Mth.atan2(vec.x(), vec.z())) + 90;
+                        } else {
+                            yRot = zombie.yBodyRot;
                         }
-                    });
-                } else {
-                    tag.remove(TAG_MUTATION);
-                }
+                        Direction face = Direction.fromYRot(yRot);
+                        BlockPos pos = zombie.blockPosition().above();
+                        BlockState state = HyperBlocks.SOUL.get().defaultBlockState();
+
+                        List<BlockPos> list = Lists.newArrayList(pos.below(), pos);
+                        if (face.getAxis() == Direction.Axis.X) {
+                            list.add(pos.west());
+                            list.add(pos.east());
+                        } else {
+                            list.add(pos.north());
+                            list.add(pos.south());
+                        }
+
+                        list.forEach(at -> {
+                            if (zombie.level().getBlockState(at).canBeReplaced()) {
+                                zombie.level().setBlockAndUpdate(at, state);
+                            } else {
+                                Block.popResource(zombie.level(), at, state.getBlock().asItem().getDefaultInstance());
+                            }
+                            zombie.level().levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, at, Block.getId(state));
+                            zombie.playSound(SoundEvents.ZOMBIE_DEATH, 1, 0.5f);
+                        });
+
+                        zombie.discard();
+                    }
+                } else tag.remove(TAG_MUTATION);
             }
         }
     }

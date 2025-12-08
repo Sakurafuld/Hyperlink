@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.handler.ParadoxHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -27,18 +27,16 @@ public abstract class CakeBlockMixin {
     @Inject(method = "eat", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;awardStat(Lnet/minecraft/resources/ResourceLocation;)V"), cancellable = true)
     private static void eatChronicle$BEFORE(LevelAccessor pLevel, BlockPos pPos, BlockState pState, Player pPlayer, CallbackInfoReturnable<InteractionResult> cir) {
         if (pLevel instanceof Level level && pState.getValue(BITES) >= 6) {
-            if (ChronicleHandler.isPaused(level, pPos, pPlayer)) {
+            if (ChronicleHandler.isPaused(level, pPos, pPlayer))
                 cir.setReturnValue(InteractionResult.PASS);
-            } else if (!HyperCommonConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(level, pPos, null)) {
+            else if (!HyperCommonConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(level, pPos, null))
                 ParadoxHandler.gashaconPlayer = pPlayer;
-            }
         }
     }
 
     @Inject(method = "eat", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/LevelAccessor;removeBlock(Lnet/minecraft/core/BlockPos;Z)Z", shift = At.Shift.AFTER))
     private static void eatChronicle$AFTER(LevelAccessor pLevel, BlockPos pPos, BlockState pState, Player pPlayer, CallbackInfoReturnable<InteractionResult> cir) {
-        if (pLevel instanceof Level level && pState.getValue(BITES) >= 6 && !HyperCommonConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(level, pPos, null) && !ChronicleHandler.isPaused(level, pPos, pPlayer)) {
+        if (pLevel instanceof Level level && pState.getValue(BITES) >= 6 && !HyperCommonConfig.CHRONICLE_OWNER.get() && ChronicleHandler.isPaused(level, pPos, null) && !ChronicleHandler.isPaused(level, pPos, pPlayer))
             ParadoxHandler.gashaconPlayer = null;
-        }
     }
 }

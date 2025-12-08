@@ -5,8 +5,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
 public class HyperSounds {
     public static final DeferredRegister<SoundEvent> REGISTRY
@@ -17,7 +17,10 @@ public class HyperSounds {
     public static final RegistryObject<SoundEvent> CHRONICLE_SELECT;
     public static final RegistryObject<SoundEvent> CHRONICLE_PAUSE;
     public static final RegistryObject<SoundEvent> CHRONICLE_RESTART;
-    public static final RegistryObject<SoundEvent> PARADOX;
+    public static final RegistryObject<SoundEvent> PERFECT_KNOCKOUT;
+    public static final RegistryObject<SoundEvent> PARADOX_SELECT;
+    public static final RegistryObject<SoundEvent> PARADOX_CHAIN;
+    public static final RegistryObject<SoundEvent> PARADOX_UNCHAIN;
     public static final RegistryObject<SoundEvent> VRX_OPEN;
     public static final RegistryObject<SoundEvent> VRX_CREATE;
     public static final RegistryObject<SoundEvent> VRX_ERASE;
@@ -41,7 +44,10 @@ public class HyperSounds {
         CHRONICLE_SELECT = register("chronicle_select");
         CHRONICLE_PAUSE = register("chronicle_pause");
         CHRONICLE_RESTART = register("chronicle_restart");
-        PARADOX = register("perfect_knockout");
+        PERFECT_KNOCKOUT = register("perfect_knockout");
+        PARADOX_SELECT = register("paradox_select");
+        PARADOX_CHAIN = register("paradox_chain");
+        PARADOX_UNCHAIN = register("paradox_unchain");
         VRX_OPEN = register("vrx_open");
         VRX_CREATE = register("vrx_create");
         VRX_ERASE = register("vrx_erase");

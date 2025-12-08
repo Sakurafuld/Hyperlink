@@ -22,15 +22,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
 public class DeskShapelessRecipeBuilder implements RecipeBuilder {
-    private boolean minecraft = false;
     private final ItemLike result;
     private final int count;
     private final List<Ingredient> ingredients = Lists.newArrayList();
     private final List<String> values = Lists.newArrayList();
     private final List<String> exclusion = Lists.newArrayList();
+    private boolean minecraft = false;
 
     public DeskShapelessRecipeBuilder(ItemLike result, int count) {
         this.result = result;

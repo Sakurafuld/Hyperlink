@@ -2,13 +2,12 @@ package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.util.AbortableIterationConsumer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.EntityAccess;
 import net.minecraft.world.level.entity.EntityLookup;
 import net.minecraft.world.level.entity.EntityTypeTest;
@@ -31,9 +30,9 @@ public abstract class EntityLookupMixin<T extends EntityAccess> {
     @Final
     private static Logger LOGGER;
     @Unique
-    private Int2ObjectMap<T> byId2 = new Int2ObjectLinkedOpenHashMap<>();
-    @Unique
     private final Map<UUID, T> byUuid2 = Maps.newHashMap();
+    @Unique
+    private Int2ObjectMap<T> byId2 = new Int2ObjectLinkedOpenHashMap<>();
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void constructorFumetsu(CallbackInfo ci) {
@@ -75,7 +74,7 @@ public abstract class EntityLookupMixin<T extends EntityAccess> {
     public void remove(T pEntity, CallbackInfo ci) {
         if (pEntity instanceof IFumetsu) {
             ci.cancel();
-            if (FumetsuHandler.specialRemove.get() || NovelHandler.novelized((Entity) pEntity)) {
+            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) pEntity).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("lookupRemoveFumetsu");
                 this.byUuid2.remove(pEntity.getUUID());
                 this.byId2.remove(pEntity.getId());

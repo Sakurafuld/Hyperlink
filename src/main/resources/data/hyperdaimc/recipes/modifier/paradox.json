@@ -1,0 +1,18 @@
+{
+  "type": "tconstruct:modifier",
+  "tools": [
+    {
+      "tag": "tconstruct:modifiable/harvest"
+    }
+  ],
+  "inputs": [
+    {
+      "item": "hyperdaimc:paradox"
+    }
+  ],
+  "slots": {
+    "abilities": 1
+  },
+  "result": "hyperdaimc:paradox",
+  "level": 1
+}

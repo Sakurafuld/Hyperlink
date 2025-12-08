@@ -17,10 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.PacketDistributor;
-
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
 
 public class ChemicalEntity extends ThrownPotion {
     public ChemicalEntity(EntityType<? extends ThrownPotion> pEntityType, Level pLevel) {
@@ -39,27 +36,28 @@ public class ChemicalEntity extends ThrownPotion {
 
     @Override
     protected void onHit(HitResult pResult) {
-        if (pResult.getType() != HitResult.Type.MISS) {
+        if (pResult.getType() != HitResult.Type.MISS)
             this.gameEvent(GameEvent.PROJECTILE_LAND, this.getOwner());
-        }
 
-        require(LogicalSide.SERVER).run(() -> this.level().getEntities(this, this.getBoundingBox().inflate(2, 1, 2), EntitySelector.LIVING_ENTITY_STILL_ALIVE).stream()
-                .map(LivingEntity.class::cast)
-                .filter(entity -> !entity.getPersistentData().contains(ChemicalHandler.TAG_MUTATION))
-                .forEach(entity -> {
-                    if (entity instanceof Zombie) {
-                        entity.playSound(HyperSounds.CHEMICAL_MAXIMIZATION.get(), 1, 1);
-                        entity.getPersistentData().putInt(ChemicalHandler.TAG_MUTATION, 0);
-                        HyperConnection.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new ClientboundChemicalMutation(entity.getId()));
-                    } else {
-                        entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 300 + this.random.nextInt(50), 1), this.getOwner());
-                        entity.addEffect(new MobEffectInstance(MobEffects.POISON, 300 + this.random.nextInt(50), 1), this.getOwner());
-                        entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200 + this.random.nextInt(200), 0), this.getOwner());
-                        entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100 + this.random.nextInt(100), 0), this.getOwner());
-                        entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 50 + this.random.nextInt(50), 0), this.getOwner());
-                        entity.setSecondsOnFire(5 + this.random.nextInt(3));
-                    }
-                }));
+        if (!this.level().isClientSide()) {
+            this.level().getEntities(this, this.getBoundingBox().inflate(2, 1, 2), EntitySelector.LIVING_ENTITY_STILL_ALIVE).stream()
+                    .map(LivingEntity.class::cast)
+                    .filter(entity -> !entity.getPersistentData().contains(ChemicalHandler.TAG_MUTATION))
+                    .forEach(entity -> {
+                        if (entity instanceof Zombie) {
+                            entity.playSound(HyperSounds.CHEMICAL_MAXIMIZATION.get(), 1, 1);
+                            entity.getPersistentData().putInt(ChemicalHandler.TAG_MUTATION, 0);
+                            HyperConnection.INSTANCE.send(PacketDistributor.TRACKING_ENTITY.with(() -> entity), new ClientboundChemicalMutation(entity.getId()));
+                        } else {
+                            entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 300 + this.random.nextInt(50), 1), this.getOwner());
+                            entity.addEffect(new MobEffectInstance(MobEffects.POISON, 300 + this.random.nextInt(50), 1), this.getOwner());
+                            entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 200 + this.random.nextInt(200), 0), this.getOwner());
+                            entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100 + this.random.nextInt(100), 0), this.getOwner());
+                            entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 50 + this.random.nextInt(50), 0), this.getOwner());
+                            entity.setSecondsOnFire(5 + this.random.nextInt(3));
+                        }
+                    });
+        }
 
         this.level().levelEvent(LevelEvent.PARTICLES_SPELL_POTION_SPLASH, this.blockPosition(), 0x805080);
         this.discard();

@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.novel;
 
-import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
 import net.mcreator.dragionnsstuff.entity.BlackCatEntity;
 import net.mcreator.dragionnsstuff.network.DragionnsStuffModVariables;
 import net.mcreator.dragionnsstuff.procedures.BlackCatEntityDiesProcedure;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Pseudo;
 @Mixin(BlackCatEntity.class)
 public abstract class BlackCatEntityMixin implements IEntityNovel {
     @Override
-    public void novelRemove(Entity.RemovalReason reason) {
+    public void hyperdaimc$novelRemove(Entity.RemovalReason reason) {
         BlackCatEntity self = (BlackCatEntity) (Object) this;
         self.setRemoved(reason);
         BlackCatEntityDiesProcedure.execute(self.level(), self.getX(), self.getY(), self.getZ());

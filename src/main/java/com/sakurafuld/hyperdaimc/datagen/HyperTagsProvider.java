@@ -5,9 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.IntrinsicHolderTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
-import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -19,19 +17,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
 public class HyperTagsProvider extends ItemTagsProvider {
 
-    public HyperTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> pLookupProvider, CompletableFuture<TagsProvider.TagLookup<Block>> pBlockTags, @Nullable ExistingFileHelper existingFileHelper) {
+    public HyperTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> pLookupProvider, CompletableFuture<TagLookup<Block>> pBlockTags, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, pLookupProvider, pBlockTags, HYPERDAIMC, existingFileHelper);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected void addTags(HolderLookup.Provider pProvider) {
-        Object2ObjectOpenHashMap<String, IntrinsicHolderTagsProvider.IntrinsicTagAppender<Item>> material = new Object2ObjectOpenHashMap<>();
+        Object2ObjectOpenHashMap<String, IntrinsicTagAppender<Item>> material = new Object2ObjectOpenHashMap<>();
         for (Object2ObjectMap.Entry<String, RegistryObject<Item>> entry : HyperItems.MATERIAL.object2ObjectEntrySet()) {
             int separator = entry.getKey().lastIndexOf('_');
             String suffix = entry.getKey().substring(separator + 1);
@@ -144,7 +142,7 @@ public class HyperTagsProvider extends ItemTagsProvider {
                 .add(Items.FLOWER_BANNER_PATTERN, Items.CREEPER_BANNER_PATTERN, Items.SKULL_BANNER_PATTERN, Items.MOJANG_BANNER_PATTERN);
     }
 
-    private IntrinsicHolderTagsProvider.IntrinsicTagAppender<Item> tag(String name) {
+    private IntrinsicTagAppender<Item> tag(String name) {
         return this.tag(ItemTags.create(identifier(name)));
     }
 }

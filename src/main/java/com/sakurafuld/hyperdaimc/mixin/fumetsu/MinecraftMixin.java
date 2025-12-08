@@ -1,7 +1,8 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
-import com.sakurafuld.hyperdaimc.api.mixin.IClientLevelFumetsu;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IClientLevelFumetsu;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
@@ -35,10 +36,9 @@ public abstract class MinecraftMixin {
         if (this.level instanceof IClientLevelFumetsu levelFumetsu) {
             ProfilerFiller profilerfiller = this.level.getProfiler();
             profilerfiller.push("entities");
-            levelFumetsu.fumetsuTickList().forEach((p_194183_) -> {
-                if (!p_194183_.isRemoved() && !p_194183_.isPassenger()) {
-                    this.guardEntityTickFumetsu(this::tickNonPassengerFumetsu, p_194183_);
-                }
+            levelFumetsu.hyperdaimc$fumetsuTickList().forEach(entity -> {
+                if (!(entity.isRemoved() && NovelHandler.novelized(entity)))
+                    this.guardEntityTickFumetsu(this::tickNonPassengerFumetsu, entity);
             });
             profilerfiller.pop();
         }
@@ -74,30 +74,30 @@ public abstract class MinecraftMixin {
             this.level.getProfiler().pop();
             fumetsu.setMovable(false);
 
-            for (Entity passenger : entity.getPassengers()) {
-                this.tickPassengerFumetsu(entity, passenger);
-            }
+//            for (Entity passenger : entity.getPassengers()) {
+//                this.tickPassengerFumetsu(entity, passenger);
+//            }
         }
     }
 
 
-    @Unique
-    private void tickPassengerFumetsu(Entity pMount, Entity pRider) {
-        if (this.level instanceof IClientLevelFumetsu levelFumetsu && pRider instanceof IFumetsu fumetsu) {
-            if (!pRider.isRemoved() && pRider.getVehicle() == pMount) {
-                if (levelFumetsu.fumetsuTickList().contains(pRider)) {
-                    fumetsu.setMovable(true);
-                    pRider.setOldPosAndRot();
-                    ++pRider.tickCount;
-                    fumetsu.fumetsuTick();
-                    fumetsu.setMovable(false);
-                    for (Entity entity : pRider.getPassengers()) {
-                        this.tickPassengerFumetsu(pRider, entity);
-                    }
-                }
-            } else {
-                pRider.stopRiding();
-            }
-        }
-    }
+//    @Unique
+//    private void tickPassengerFumetsu(Entity pMount, Entity pRider) {
+//        if (this.level instanceof IClientLevelFumetsu levelFumetsu && pRider instanceof IFumetsu fumetsu) {
+//            if (!pRider.isRemoved() && pRider.getVehicle() == pMount) {
+//                if (levelFumetsu.fumetsuTickList().contains(pRider)) {
+//                    fumetsu.setMovable(true);
+//                    pRider.setOldPosAndRot();
+//                    ++pRider.tickCount;
+//                    fumetsu.fumetsuTick();
+//                    fumetsu.setMovable(false);
+//                    for (Entity entity : pRider.getPassengers()) {
+//                        this.tickPassengerFumetsu(pRider, entity);
+//                    }
+//                }
+//            } else {
+//                pRider.stopRiding();
+//            }
+//        }
+//    }
 }

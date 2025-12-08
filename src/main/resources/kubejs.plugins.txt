@@ -1,0 +1,1 @@
+com.sakurafuld.hyperdaimc.addon.kubejs.HyperKubeJS hyperdaimc

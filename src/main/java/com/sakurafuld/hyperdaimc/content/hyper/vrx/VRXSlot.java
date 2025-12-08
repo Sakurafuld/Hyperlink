@@ -35,8 +35,9 @@ public class VRXSlot extends SlotItemHandler {
 
     public void clicked(int button, ClickType type) {
         if (!this.menu.getCarried().isEmpty()) {
-            VRXOne one = VRXOne.Type.convert(this.menu.getCarried());
-            one.stackSlot(this.menu, this, button, type);
+            VRXOne one = VRXRegistry.convert(this.menu.getCarried(), this.menu.getAvailableTypes());
+            if (!one.isEmpty())
+                one.stackSlot(this.menu, this, button, type);
         } else if (!this.isEmpty()) {
             this.getOne().stackSlot(this.menu, this, button, type);
         }
@@ -44,8 +45,8 @@ public class VRXSlot extends SlotItemHandler {
 
     public boolean scrolled(double delta, boolean shiftDown) {
         if (!this.menu.getCarried().isEmpty()) {
-            VRXOne one = VRXOne.Type.convert(this.menu.getCarried());
-            return one.scrollSlot(this.menu, this, delta, shiftDown);
+            VRXOne one = VRXRegistry.convert(this.menu.getCarried(), this.menu.getAvailableTypes());
+            return !one.isEmpty() && one.scrollSlot(this.menu, this, delta, shiftDown);
         } else if (!this.isEmpty()) {
             return this.getOne().scrollSlot(this.menu, this, delta, shiftDown);
         } else {
@@ -68,18 +69,17 @@ public class VRXSlot extends SlotItemHandler {
 
     public void grow(long quantity) {
         quantity = Math.max(0, Math.round(Math.min(Long.MAX_VALUE, (double) this.getOne().getQuantity() + (double) quantity)));
-        if (quantity > 0) {
+        if (quantity > 0)
             this.getOne().setQuantity(quantity);
-        } else {
-            this.setOne(VRXOne.EMPTY);
-        }
+        else this.setOne(VRXOne.EMPTY);
+
         this.setChanged();
     }
 
     @NotNull
     @Override
     public ItemStack getItem() {
-        return !this.isEmpty() && this.getOne() instanceof VRXOne.Item item ? item.getItemStack() : ItemStack.EMPTY;
+        return !this.isEmpty() && this.getOne() instanceof VRXOneItem item ? item.getItemStack() : ItemStack.EMPTY;
     }
 
     @Override

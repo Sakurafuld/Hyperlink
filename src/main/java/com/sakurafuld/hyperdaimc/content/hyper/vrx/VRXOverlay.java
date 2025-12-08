@@ -1,12 +1,14 @@
 package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
-import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
-import com.sakurafuld.hyperdaimc.helper.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.Renders;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -17,8 +19,9 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class VRXOverlay implements IGuiOverlay {
@@ -28,37 +31,49 @@ public class VRXOverlay implements IGuiOverlay {
     public void render(ForgeGui gui, GuiGraphics graphics, float partialTick, int width, int height) {
         Minecraft mc = Minecraft.getInstance();
 
-
-        if (mc.hitResult == null || mc.hitResult.getType() == HitResult.Type.MISS) {
+        HitResult hit = mc.hitResult;
+        LocalPlayer player = Objects.requireNonNull(mc.player);
+        if (hit == null || hit.getType() == HitResult.Type.MISS)
             return;
-        }
-        if (!mc.player.getMainHandItem().is(HyperItems.VRX.get()) && !mc.player.getOffhandItem().is(HyperItems.VRX.get())) {
+        if (!player.getMainHandItem().is(HyperItems.VRX.get()) && !player.getOffhandItem().is(HyperItems.VRX.get()))
             return;
-        }
 
+        List<VRXOne> ones = new ObjectArrayList<>();
+        if (hit instanceof BlockHitResult result) {
 
-        List<VRXOne> ones = Lists.newArrayList();
-        if (mc.hitResult instanceof BlockHitResult hit) {
-
-            List<VRXSavedData.Entry> entries = VRXSavedData.get(mc.level).getEntries(hit.getBlockPos());
+            List<VRXSavedData.Entry> entries = VRXSavedData.get(mc.level).getEntries(result.getBlockPos());
             if (!entries.isEmpty()) {
+                boolean flag = false;
+                List<VRXOne> nulls = new ObjectArrayList<>();
+                for (VRXSavedData.Entry entry : entries) {
+                    if (!flag && entry.face == null) nulls.addAll(entry.contents);
+                    else if (entry.face == result.getDirection()) {
+                        flag = true;
+                        ones.addAll(entry.contents);
+                    }
+                }
 
-                if (entries.stream().anyMatch(entry -> entry.face == hit.getDirection())) {
-                    entries.stream()
-                            .filter(entry -> entry.face == hit.getDirection())
-                            .forEach(entry -> ones.addAll(entry.contents));
-                } else {
-                    entries.stream()
-                            .filter(entry -> entry.face == null)
-                            .forEach(entry -> ones.addAll(entry.contents));
+                if (!flag) {
+                    ones.clear();
+                    ones.addAll(nulls);
                 }
+//                if (entries.stream().anyMatch(entry -> entry.face == result.getDirection())) {
+//                    entries.stream()
+//                            .filter(entry -> entry.face == result.getDirection())
+//                            .forEach(entry -> ones.addAll(entry.contents));
+//                } else {
+//                    entries.stream()
+//                            .filter(entry -> entry.face == null)
+//                            .forEach(entry -> ones.addAll(entry.contents));
+//                }
             }
-        } else if (mc.hitResult instanceof EntityHitResult hit) {
-            hit.getEntity().getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
-                if (!vrx.getEntries().isEmpty()) {
-                    vrx.getEntries().forEach(entry -> ones.addAll(entry.contents));
-                }
-            });
+        } else if (hit instanceof EntityHitResult result) {
+            Entity entity = result.getEntity();
+            if (entity.getPersistentData().getBoolean(VRXHandler.TAG_HAS_VRX))
+                entity.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
+                    if (!vrx.getEntries().isEmpty())
+                        vrx.getEntries().forEach(entry -> ones.addAll(entry.contents()));
+                });
         }
 
         if (!ones.isEmpty()) {
@@ -70,7 +85,7 @@ public class VRXOverlay implements IGuiOverlay {
             int left = (width / 2) - (gridWidth * 18 / 2);
             int top = (height / 2) - (gridHeight * 18 / 2);
 
-            ones.sort(Comparator.comparingInt(one -> one.type.getPriority()));
+            ones.sort(Comparator.comparingInt(one -> one.type.priority()));
 
             for (int dy = 0; dy < gridHeight; ++dy) {
                 for (int dx = 0; dx < gridWidth; ++dx) {
@@ -79,7 +94,6 @@ public class VRXOverlay implements IGuiOverlay {
                         int x = left + dx * 18;
                         int y = top + dy * 18;
                         Renders.with(graphics.pose(), () -> {
-//                            RenderSystem.setShaderTexture(0, OVERLAY);
                             graphics.blit(OVERLAY, x, y, 0, 0, 18, 18, 18, 18);
                             one.render(graphics, x + 1, y + 1);
                         });

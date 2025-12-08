@@ -3,11 +3,11 @@ package com.sakurafuld.hyperdaimc.content.crafting.desk;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mojang.math.Axis;
-import com.sakurafuld.hyperdaimc.api.content.IScreenVFX;
 import com.sakurafuld.hyperdaimc.content.HyperBlockEntities;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
-import com.sakurafuld.hyperdaimc.helper.Calculates;
-import com.sakurafuld.hyperdaimc.helper.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.Calculates;
+import com.sakurafuld.hyperdaimc.infrastructure.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.render.IScreenVFX;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.desk.ServerboundDeskDoneAnimation;
 import com.sakurafuld.hyperdaimc.network.desk.ServerboundDeskLockRecipe;
@@ -33,7 +33,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
@@ -47,8 +47,6 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
     private final Set<IScreenVFX> visualEffects = Sets.newHashSet();
     private final Set<IScreenVFX> temporaryEffects = Sets.newHashSet();
     private final Set<Integer> vanished = Sets.newHashSet();
-    private Data data = Data.EMPTY;
-    private boolean visualCrafting = false;
     public int canCraftTicks = 0;
     public Vec2 resultPos = null;
     public Vec2 resultOldPos = null;
@@ -57,12 +55,25 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
     public float resultOldSize = 1;
     public float resultRot = 0;
     public float resultOldRot = 0;
+    private Data data = Data.EMPTY;
+    private boolean visualCrafting = false;
     private int standby = 0;
 
     public DeskScreen(DeskMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.imageHeight = 296;
         this.inventoryLabelY = this.imageHeight - 94;
+    }
+
+    private static void renderCover(GuiGraphics graphics, int x, int y, int size, int color) {
+        Renders.with(graphics.pose(), () -> {
+            graphics.pose().translate(0, 0, 300);
+            graphics.fill(x, y, x + size, y + size, color);
+        });
+    }
+
+    private static void renderCover(GuiGraphics graphics, int x, int y, int size) {
+        renderCover(graphics, x, y, size, 0x8B8B8B8B);
     }
 
     @Override
@@ -337,17 +348,6 @@ public class DeskScreen extends AbstractContainerScreen<DeskMenu> {
                 renderCover(graphics, x, y, size, color);
             }
         }
-    }
-
-    private static void renderCover(GuiGraphics graphics, int x, int y, int size, int color) {
-        Renders.with(graphics.pose(), () -> {
-            graphics.pose().translate(0, 0, 300);
-            graphics.fill(x, y, x + size, y + size, color);
-        });
-    }
-
-    private static void renderCover(GuiGraphics graphics, int x, int y, int size) {
-        renderCover(graphics, x, y, size, 0x8B8B8B8B);
     }
 
     private void renderParticle(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {

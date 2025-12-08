@@ -5,20 +5,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
-
-public class ClientboundDeskMinecraft {
-    private final DeskSavedData.Entry entry;
-
-    public ClientboundDeskMinecraft(DeskSavedData.Entry entry) {
-        this.entry = entry;
-    }
-
+public record ClientboundDeskMinecraft(DeskSavedData.Entry entry) {
     public static void encode(ClientboundDeskMinecraft msg, FriendlyByteBuf buf) {
         buf.writeNbt(msg.entry.save());
     }
@@ -28,7 +20,7 @@ public class ClientboundDeskMinecraft {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> require(LogicalSide.CLIENT).run(this::handle));
+        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::handle));
         ctx.get().setPacketHandled(true);
     }
 

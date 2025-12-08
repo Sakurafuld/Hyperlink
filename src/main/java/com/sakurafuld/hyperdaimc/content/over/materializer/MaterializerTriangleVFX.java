@@ -1,9 +1,9 @@
 package com.sakurafuld.hyperdaimc.content.over.materializer;
 
 import com.mojang.math.Axis;
-import com.sakurafuld.hyperdaimc.api.content.IScreenVFX;
-import com.sakurafuld.hyperdaimc.helper.Calculates;
-import com.sakurafuld.hyperdaimc.helper.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.Calculates;
+import com.sakurafuld.hyperdaimc.infrastructure.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.render.IScreenVFX;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.phys.Vec2;
 

@@ -35,6 +35,24 @@
       "hyperdaimc:perfect_knockout"
     ]
   },
+  "paradox_select": {
+    "subtitle": "subtitles.hyperdaimc.paradox_select",
+    "sounds": [
+      "hyperdaimc:paradox_select"
+    ]
+  },
+  "paradox_chain": {
+    "subtitle": "subtitles.hyperdaimc.paradox_chain",
+    "sounds": [
+      "hyperdaimc:paradox_chain"
+    ]
+  },
+  "paradox_unchain": {
+    "subtitle": "subtitles.hyperdaimc.paradox_unchain",
+    "sounds": [
+      "hyperdaimc:paradox_unchain"
+    ]
+  },
   "vrx_open": {
     "subtitle": "subtitles.hyperdaimc.vrx_open",
     "sounds": [

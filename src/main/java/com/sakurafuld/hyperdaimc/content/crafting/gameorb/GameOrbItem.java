@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.content.crafting.gameorb;
 
-import com.sakurafuld.hyperdaimc.helper.Writes;
+import com.sakurafuld.hyperdaimc.infrastructure.Writes;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;

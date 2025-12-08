@@ -32,8 +32,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.LOG;
 
 public class DeskShapelessRecipe implements IDeskRecipe {
     private final ResourceLocation id;

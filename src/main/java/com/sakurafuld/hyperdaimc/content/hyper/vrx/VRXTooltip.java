@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
-import com.sakurafuld.hyperdaimc.helper.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.Renders;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -18,11 +18,9 @@ import org.joml.Matrix4f;
 import java.util.Comparator;
 import java.util.List;
 
-public class VRXTooltip implements TooltipComponent {
-    private final List<VRXOne> contents;
-
+public record VRXTooltip(List<VRXOne> contents) implements TooltipComponent {
     public VRXTooltip(List<VRXOne> contents) {
-        this.contents = contents.stream().sorted(Comparator.comparingInt(one -> one.type.getPriority())).toList();
+        this.contents = contents.stream().sorted(Comparator.comparingInt(one -> one.type.priority())).toList();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -73,41 +71,38 @@ public class VRXTooltip implements TooltipComponent {
             }
         }
 
-        private void blit(GuiGraphics graphics, int x, int y, Texture texture) {
+        private void blit(GuiGraphics graphics, int x, int y, ClientBundleTooltip.Texture texture) {
             graphics.blit(ClientBundleTooltip.TEXTURE_LOCATION, x, y, 0, (float) texture.x, (float) texture.y, texture.w, texture.h, 128, 128);
         }
 
         private void renderSlot(GuiGraphics graphics, int x, int y, int index) {
             Renders.with(graphics.pose(), () -> {
                 if (index >= this.tooltip().contents.size()) {
-                    this.blit(graphics, x, y, Texture.SLOT);
+                    this.blit(graphics, x, y, ClientBundleTooltip.Texture.SLOT);
                 } else {
                     VRXOne one = this.tooltip.contents.get(index);
-                    this.blit(graphics, x, y, Texture.SLOT);
-                    if (!one.isEmpty()) {
-                        graphics.pose().translate(0, 0, 0);
-                        one.render(graphics, x + 1, y + 1);
-                    }
+                    this.blit(graphics, x, y, ClientBundleTooltip.Texture.SLOT);
+                    if (!one.isEmpty()) one.render(graphics, x + 1, y + 1);
                 }
             });
         }
 
         private void drawBorder(GuiGraphics graphics, int x, int y, int width, int height) {
-            this.blit(graphics, x, y, Texture.BORDER_CORNER_TOP);
-            this.blit(graphics, x + width * 18 + 1, y, Texture.BORDER_CORNER_TOP);
+            this.blit(graphics, x, y, ClientBundleTooltip.Texture.BORDER_CORNER_TOP);
+            this.blit(graphics, x + width * 18 + 1, y, ClientBundleTooltip.Texture.BORDER_CORNER_TOP);
 
             for (int dx = 0; dx < width; ++dx) {
-                this.blit(graphics, x + 1 + dx * 18, y, Texture.BORDER_HORIZONTAL_TOP);
-                this.blit(graphics, x + 1 + dx * 18, y + height * 20, Texture.BORDER_HORIZONTAL_BOTTOM);
+                this.blit(graphics, x + 1 + dx * 18, y, ClientBundleTooltip.Texture.BORDER_HORIZONTAL_TOP);
+                this.blit(graphics, x + 1 + dx * 18, y + height * 20, ClientBundleTooltip.Texture.BORDER_HORIZONTAL_BOTTOM);
             }
 
             for (int dy = 0; dy < height; ++dy) {
-                this.blit(graphics, x, y + dy * 20 + 1, Texture.BORDER_VERTICAL);
-                this.blit(graphics, x + width * 18 + 1, y + dy * 20 + 1, Texture.BORDER_VERTICAL);
+                this.blit(graphics, x, y + dy * 20 + 1, ClientBundleTooltip.Texture.BORDER_VERTICAL);
+                this.blit(graphics, x + width * 18 + 1, y + dy * 20 + 1, ClientBundleTooltip.Texture.BORDER_VERTICAL);
             }
 
-            this.blit(graphics, x, y + height * 20, Texture.BORDER_CORNER_BOTTOM);
-            this.blit(graphics, x + width * 18 + 1, y + height * 20, Texture.BORDER_CORNER_BOTTOM);
+            this.blit(graphics, x, y + height * 20, ClientBundleTooltip.Texture.BORDER_CORNER_BOTTOM);
+            this.blit(graphics, x + width * 18 + 1, y + height * 20, ClientBundleTooltip.Texture.BORDER_CORNER_BOTTOM);
         }
 
         private int getGridWidth() {

@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class FumetsuSkullBlockEntityRenderer implements BlockEntityRenderer<FumetsuSkullBlockEntity> {
@@ -47,6 +47,13 @@ public class FumetsuSkullBlockEntityRenderer implements BlockEntityRenderer<Fume
         this.models.put(HyperBlocks.FUMETSU_WALL_LEFT.get(), model);
     }
 
+    public static LayerDefinition create(int x, int y) {
+        MeshDefinition mesh = new MeshDefinition();
+        PartDefinition root = mesh.getRoot();
+        root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(x, y).addBox(-4, -8, -4, 8, 8, 8), PartPose.ZERO);
+        return LayerDefinition.create(mesh, 64, 32);
+    }
+
     @Override
     public void render(FumetsuSkullBlockEntity pBlockEntity, float pPartialTick, PoseStack pPoseStack, MultiBufferSource pBufferSource, int pPackedLight, int pPackedOverlay) {
         BlockState state = pBlockEntity.getBlockState();
@@ -55,12 +62,5 @@ public class FumetsuSkullBlockEntityRenderer implements BlockEntityRenderer<Fume
         float yRot = 22.5f * (wall ? (2f + direction.get2DDataValue()) * 4f : state.getValue(SkullBlock.ROTATION));
 
         SkullBlockRenderer.renderSkull(direction, yRot, 0, pPoseStack, pBufferSource, pPackedLight, this.models.getOrDefault(pBlockEntity.getBlockState().getBlock(), this.center), RenderType.entityCutoutNoCullZOffset(TEXTURE));
-    }
-
-    public static LayerDefinition create(int x, int y) {
-        MeshDefinition mesh = new MeshDefinition();
-        PartDefinition root = mesh.getRoot();
-        root.addOrReplaceChild("head", CubeListBuilder.create().texOffs(x, y).addBox(-4, -8, -4, 8, 8, 8), PartPose.ZERO);
-        return LayerDefinition.create(mesh, 64, 32);
     }
 }

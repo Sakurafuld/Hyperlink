@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
-import com.sakurafuld.hyperdaimc.api.mixin.FumetsuTickList;
-import com.sakurafuld.hyperdaimc.api.mixin.IClientLevelFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.FumetsuTickList;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IClientLevelFumetsu;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -16,7 +16,7 @@ public abstract class ClientLevelMixin implements IClientLevelFumetsu {
     private final FumetsuTickList fumetsuTickList = new FumetsuTickList();
 
     @Override
-    public FumetsuTickList fumetsuTickList() {
+    public FumetsuTickList hyperdaimc$fumetsuTickList() {
         return this.fumetsuTickList;
     }
 }

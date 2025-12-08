@@ -7,8 +7,7 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import java.util.List;
 import java.util.Set;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.TINKERSCONSTRUCT;
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.*;
 
 public class HyperMixin implements IMixinConfigPlugin {
     @Override
@@ -21,9 +20,14 @@ public class HyperMixin implements IMixinConfigPlugin {
         return null;
     }
 
+    @SuppressWarnings("RedundantIfStatement")
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        return !mixinClassName.contains(TINKERSCONSTRUCT) || require(TINKERSCONSTRUCT).ready();
+        if (mixinClassName.contains(TINKERSCONSTRUCT) && !require(TINKERSCONSTRUCT))
+            return false;
+        if (mixinClassName.contains(TICEX) && !require(TICEX))
+            return false;
+        return true;
     }
 
     @Override
@@ -38,11 +42,9 @@ public class HyperMixin implements IMixinConfigPlugin {
 
     @Override
     public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-
     }
 
     @Override
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
-
     }
 }

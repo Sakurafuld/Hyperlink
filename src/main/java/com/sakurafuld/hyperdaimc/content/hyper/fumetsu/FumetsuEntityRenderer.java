@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
-import com.sakurafuld.hyperdaimc.helper.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.Renders;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -22,7 +22,7 @@ import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.Event;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class FumetsuEntityRenderer extends MobRenderer<FumetsuEntity, FumetsuEntityModel> {
@@ -34,9 +34,8 @@ public class FumetsuEntityRenderer extends MobRenderer<FumetsuEntity, FumetsuEnt
 
     @Override
     public void render(FumetsuEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pPackedLight) {
-        if (pEntity.isGenocide()) {
+        if (pEntity.isGenocide())
             this.renderAura(pMatrixStack, pBuffer, pEntity, pPartialTicks);
-        }
 
         pMatrixStack.pushPose();
 
@@ -78,11 +77,9 @@ public class FumetsuEntityRenderer extends MobRenderer<FumetsuEntity, FumetsuEnt
             this.model.renderToBuffer(pMatrixStack, vertexconsumer, pPackedLight, overlay, 1, 1, 1, invisibleTeam ? 0.15F : 1);
         }
 
-        if (!pEntity.isSpectator()) {
-            for (RenderLayer<FumetsuEntity, FumetsuEntityModel> renderlayer : this.layers) {
+        if (!pEntity.isSpectator())
+            for (RenderLayer<FumetsuEntity, FumetsuEntityModel> renderlayer : this.layers)
                 renderlayer.render(pMatrixStack, pBuffer, pPackedLight, pEntity, limbSwing, limbSwingAmount, pPartialTicks, ticks, yHeadRot, xRot);
-            }
-        }
 
         pMatrixStack.popPose();
         RenderNameTagEvent nameplateEvent = new RenderNameTagEvent(pEntity, pEntity.getDisplayName(), this, pMatrixStack, pBuffer, pPackedLight, pPartialTicks);
@@ -102,7 +99,7 @@ public class FumetsuEntityRenderer extends MobRenderer<FumetsuEntity, FumetsuEnt
             poseStack.scale(size, size, size);
 
             Renders.with(poseStack, () -> {
-                poseStack.mulPose(Axis.XP.rotationDegrees(120 + xRot));
+                poseStack.mulPose(Axis.XP.rotationDegrees(110 + xRot));
                 poseStack.mulPose(Axis.ZP.rotationDegrees(Mth.rotLerp(partialTicks, ((fumetsu.tickCount - 1) % 360f) * 3f, (fumetsu.tickCount % 360f) * 3f)));
 
                 Renders.hollowTriangle(poseStack.last().pose(), buffer.getBuffer(Renders.Type.LIGHTNING_NO_CULL), 3, 0.5f, 0x7FFF0101);

@@ -2,12 +2,13 @@ package com.sakurafuld.hyperdaimc.content.crafting.desk;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.sakurafuld.hyperdaimc.api.content.AbstractGashatItem;
-import com.sakurafuld.hyperdaimc.api.mixin.MixinLevelTickEvent;
+import com.sakurafuld.hyperdaimc.addon.kubejs.GashatItemJS;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.crafting.gameorb.GameOrbRenderer;
 import com.sakurafuld.hyperdaimc.content.crafting.material.MaterialItem;
-import com.sakurafuld.hyperdaimc.helper.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.item.AbstractGashatItem;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.MixinLevelTickEvent;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.desk.ClientboundDeskMinecraft;
 import net.minecraft.Util;
@@ -37,11 +38,18 @@ import net.minecraftforge.network.PacketDistributor;
 import java.util.List;
 import java.util.Random;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.*;
 
 @Mod.EventBusSubscriber(modid = HYPERDAIMC)
 public class DeskHandler {
     private static final Random RANDOM = new Random();
+
+    public static void minecraftAt(Level level, BlockPos pos, List<ItemStack> ingredients, ItemStack result) {
+        if (!level.isClientSide()) {
+            DeskSavedData.Entry entry = DeskSavedData.get(level).add(pos, ingredients, result);
+            HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new ClientboundDeskMinecraft(entry));
+        }
+    }
 
     @SubscribeEvent
     public static void logIn(PlayerEvent.PlayerLoggedInEvent event) {
@@ -231,13 +239,17 @@ public class DeskHandler {
     }
 
     private static boolean shouldTweakTranslationAsGenerated(Item item) {
-        return item instanceof MaterialItem || item instanceof AbstractGashatItem;
+        if (item instanceof MaterialItem || item instanceof AbstractGashatItem)
+            return true;
+
+        return require(KUBE_JS) && KubeJS.INSTANCE.shouldTweakTranslationAsGenerated(item);
     }
 
-    public static void minecraftAt(Level level, BlockPos pos, List<ItemStack> ingredients, ItemStack result) {
-        if (!level.isClientSide()) {
-            DeskSavedData.Entry entry = DeskSavedData.get(level).add(pos, ingredients, result);
-            HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(level::dimension), new ClientboundDeskMinecraft(entry));
+    enum KubeJS {
+        INSTANCE;
+
+        boolean shouldTweakTranslationAsGenerated(Item item) {
+            return item instanceof GashatItemJS;
         }
     }
 }

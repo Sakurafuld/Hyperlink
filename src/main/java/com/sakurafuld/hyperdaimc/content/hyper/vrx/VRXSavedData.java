@@ -1,5 +1,6 @@
 package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
@@ -17,17 +18,19 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.network.PacketDistributor;
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.apache.commons.lang3.mutable.MutableObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Predicate;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
 public class VRXSavedData extends SavedData {
     private static final Object2ObjectOpenHashMap<ResourceKey<Level>, VRXSavedData> client = new Object2ObjectOpenHashMap<>();
 
     private final List<Entry> entries = Lists.newArrayList();
-    private final Long2ObjectOpenHashMap<List<Entry>> map = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectOpenHashMap<List<Entry>> posMap = new Long2ObjectOpenHashMap<>();
 
     private VRXSavedData() {
     }
@@ -37,135 +40,114 @@ public class VRXSavedData extends SavedData {
     }
 
     public static VRXSavedData get(Level level) {
-        if (level instanceof ServerLevel serverLevel) {
+        if (level instanceof ServerLevel serverLevel)
             return serverLevel.getDataStorage().computeIfAbsent(VRXSavedData::new, VRXSavedData::new, HYPERDAIMC + "_vrx");
-        } else {
+        else
             return client.computeIfAbsent(level.dimension(), dimension -> new VRXSavedData());
+    }
+
+    public void removeIf(Predicate<Entry> predicate) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) return;
+        for (Iterator<Entry> iterator = this.entries.iterator(); iterator.hasNext(); ) {
+            Entry entry = iterator.next();
+            if (predicate.test(entry)) {
+                iterator.remove();
+                this.posMap.computeIfPresent(entry.pos.asLong(), (p, e) -> {
+                    e.remove(entry);
+                    return e;
+                });
+            }
         }
     }
 
     public List<Entry> getEntries() {
-        if (!HyperCommonConfig.ENABLE_VRX.get()) {
-            return Collections.emptyList();
-        }
+        if (!HyperCommonConfig.ENABLE_VRX.get()) return Collections.emptyList();
         return this.entries;
     }
 
     public List<Entry> getEntries(BlockPos pos) {
-        if (!HyperCommonConfig.ENABLE_VRX.get()) {
-            return Collections.emptyList();
-        }
-
-        return this.map.getOrDefault(pos.asLong(), Collections.emptyList());
+        if (!HyperCommonConfig.ENABLE_VRX.get()) return Collections.emptyList();
+        return this.posMap.getOrDefault(pos.asLong(), Collections.emptyList());
     }
 
-    public boolean create(UUID uuid, BlockPos pos, EnumMap<Direction, List<VRXOne>> map, List<VRXOne> nulls) {
-        if (!HyperCommonConfig.ENABLE_VRX.get()) {
-            return false;
-        }
+    public boolean create(UUID uuid, BlockPos pos, VRXMenu.Palette palette) {
+        if (!HyperCommonConfig.ENABLE_VRX.get()) return false;
 
-        this.entries.removeIf(entry -> entry.uuid.equals(uuid) && entry.pos.equals(pos));
-        this.map.computeIfPresent(pos.asLong(), (p, l) -> {
+        this.entries.removeIf(entry -> entry.matches(uuid, pos));
+        this.posMap.computeIfPresent(pos.asLong(), (p, l) -> {
             l.removeIf(e -> e.uuid.equals(uuid));
             return l;
         });
 
-        MutableBoolean success = new MutableBoolean(false);
-        map.forEach((face, ones) -> {
-            if (this.addEntry(uuid, pos, face, ones)) {
+        MutableBoolean success = new MutableBoolean();
+        palette.forEach((face, ones) -> {
+            if (!ones.isEmpty()) {
+                Entry entry = new Entry(uuid, pos, face, ones);
+                this.entries.add(entry);
+                this.posMap.computeIfAbsent(pos.asLong(), p -> Lists.newArrayList()).add(entry);
                 success.setTrue();
             }
         });
-
-        if (this.addEntry(uuid, pos, null, nulls)) {
-            success.setTrue();
-        }
 
         this.setDirty();
         return success.booleanValue();
     }
 
-    private boolean addEntry(UUID uuid, BlockPos pos, @Nullable Direction face, List<VRXOne> ones) {
-        if (!HyperCommonConfig.ENABLE_VRX.get()) {
-            return false;
-        }
-
-        if (!ones.isEmpty()) {
-            Entry entry = new Entry(uuid, pos, face, ones);
-            if (this.entries.remove(entry)) {
-                this.map.computeIfPresent(pos.asLong(), (p, e) -> {
-                    e.remove(entry);
-                    return e;
-                });
-            }
-
-            this.entries.add(entry);
-            this.map.computeIfAbsent(pos.asLong(), p -> Lists.newArrayList()).add(entry);
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean check(UUID uuid, BlockPos pos, Direction face) {
-        if (this.entries.contains(new Entry(uuid, pos, face, Collections.emptyList()))) {
-            return true;
-        } else {
-            return this.entries.stream().anyMatch(entry -> entry.uuid.equals(uuid) && entry.pos.equals(pos));
-        }
+    public boolean check(UUID uuid, BlockPos pos) {
+        return this.entries.stream().anyMatch(entry -> entry.matches(uuid, pos));
     }
 
     public void erase(UUID uuid, BlockPos pos, Direction face) {
-        Entry entry = new Entry(uuid, pos, face, Collections.emptyList());
-        MutableBoolean erased = new MutableBoolean(this.entries.remove(entry));
-        if (erased.booleanValue()) {
-            this.map.computeIfPresent(pos.asLong(), (p, e) -> {
-                e.remove(entry);
-                return e;
-            });
-        } else {
-            MutableBoolean same = new MutableBoolean(false);
-            this.entries.removeIf(next -> {
-                if (next.uuid.equals(uuid) && next.pos.equals(pos)) {
-                    same.setTrue();
-                    if (next.face == null) {
-                        this.map.computeIfPresent(next.pos.asLong(), (p, e) -> {
-                            e.remove(next);
-                            return e;
-                        });
-                        erased.setTrue();
-                        return true;
-                    }
+        MutableObject<Entry> fullMatched = new MutableObject<>();
+        MutableObject<Entry> nullMatched = new MutableObject<>();
+        MutableBoolean containsMatched = new MutableBoolean();
+
+        for (Entry e : this.entries) {
+            if (e.matches(uuid, pos)) {
+                containsMatched.setTrue();
+                if (e.face == null && nullMatched.getValue() == null)
+                    nullMatched.setValue(e);
+
+                if (e.face == face) {
+                    fullMatched.setValue(e);
+                    break;
                 }
-
-                return false;
-            });
-
-            if (!erased.booleanValue() && same.booleanValue()) {
-                this.entries.removeIf(next -> {
-                    if (next.uuid.equals(uuid) && next.pos.equals(pos)) {
-                        this.map.computeIfPresent(next.pos.asLong(), (p, e) -> {
-                            e.remove(next);
-                            return e;
-                        });
-                        erased.setTrue();
-                        return true;
-                    } else {
-                        return false;
-                    }
-                });
             }
         }
 
-        if (erased.booleanValue()) {
+        if (fullMatched.getValue() != null) {
+            this.entries.remove(fullMatched.getValue());
+            this.posMap.computeIfPresent(pos.asLong(), (p, l) -> {
+                l.remove(fullMatched.getValue());
+                return l;
+            });
+            this.setDirty();
+            return;
+        }
+
+        if (nullMatched.getValue() != null) {
+            this.entries.remove(nullMatched.getValue());
+            this.posMap.computeIfPresent(pos.asLong(), (p, l) -> {
+                l.remove(nullMatched.getValue());
+                return l;
+            });
+            this.setDirty();
+            return;
+        }
+
+        if (containsMatched.booleanValue()) {
+            this.entries.removeIf(entry -> entry.matches(uuid, pos));
+            this.posMap.computeIfPresent(pos.asLong(), (p, l) -> {
+                l.removeIf(entry -> entry.matches(uuid, pos));
+                return l;
+            });
             this.setDirty();
         }
     }
 
     public void erase(Entry entry) {
         this.entries.remove(entry);
-        this.map.computeIfPresent(entry.pos.asLong(), (p, e) -> {
+        this.posMap.computeIfPresent(entry.pos.asLong(), (p, e) -> {
             e.remove(entry);
             return e;
         });
@@ -178,22 +160,23 @@ public class VRXSavedData extends SavedData {
     @Override
     public CompoundTag save(CompoundTag pCompoundTag) {
         ListTag entries = new ListTag();
-        for (Entry entry : this.entries) {
+        for (Entry entry : this.entries)
             entries.add(entry.save());
-        }
+
         pCompoundTag.put("Entries", entries);
         return pCompoundTag;
     }
 
     public void load(CompoundTag tag) {
         this.entries.clear();
-        this.map.clear();
+        this.posMap.clear();
         tag.getList("Entries", Tag.TAG_COMPOUND).stream()
                 .map(CompoundTag.class::cast)
                 .map(Entry::load)
+                .filter(entry -> !entry.contents.isEmpty())
                 .forEach(entry -> {
                     this.entries.add(entry);
-                    this.map.computeIfAbsent(entry.pos.asLong(), p -> Lists.newArrayList()).add(entry);
+                    this.posMap.computeIfAbsent(entry.pos.asLong(), p -> Lists.newArrayList()).add(entry);
                 });
     }
 
@@ -213,7 +196,7 @@ public class VRXSavedData extends SavedData {
             this.uuid = uuid;
             this.pos = pos;
             this.face = face;
-            this.contents = contents;
+            this.contents = ImmutableList.copyOf(contents);
 
             if (face == null) {
                 this.xRot = 0;
@@ -227,24 +210,6 @@ public class VRXSavedData extends SavedData {
                     this.yRot = 0;
                 }
             }
-
-        }
-
-        public CompoundTag save() {
-            CompoundTag tag = new CompoundTag();
-            tag.putUUID("UUID", this.uuid);
-            tag.putLong("Pos", this.pos.asLong());
-
-            if (this.face != null) {
-                tag.putString("Face", this.face.name());
-            }
-
-            ListTag list = new ListTag();
-            for (VRXOne one : this.contents) {
-                list.add(one.serialize());
-            }
-            tag.put("Contents", list);
-            return tag;
         }
 
         public static Entry load(CompoundTag tag) {
@@ -252,22 +217,40 @@ public class VRXSavedData extends SavedData {
             BlockPos pos = BlockPos.of(tag.getLong("Pos"));
 
             Direction face;
-            if (tag.contains("Face")) {
+            if (tag.contains("Face"))
                 face = Direction.valueOf(tag.getString("Face"));
-            } else {
+            else
                 face = null;
-            }
 
 
             List<VRXOne> contents = tag.getList("Contents", Tag.TAG_COMPOUND).stream()
                     .map(CompoundTag.class::cast)
-                    .map(nbt -> {
-                        VRXOne.Type type = VRXOne.Type.of(nbt.getString("Type"));
-                        return type.load(nbt.getCompound("Data"));
-                    })
+                    .map(VRXType::deserializeStatic)
+                    .filter(one -> !one.isEmpty())
                     .toList();
 
             return new Entry(uuid, pos, face, contents);
+        }
+
+        public CompoundTag save() {
+            CompoundTag tag = new CompoundTag();
+            tag.putUUID("UUID", this.uuid);
+            tag.putLong("Pos", this.pos.asLong());
+
+            if (this.face != null)
+                tag.putString("Face", this.face.name());
+
+
+            ListTag list = new ListTag();
+            for (VRXOne one : this.contents)
+                list.add(one.serialize());
+
+            tag.put("Contents", list);
+            return tag;
+        }
+
+        public boolean matches(UUID uuid, BlockPos pos) {
+            return this.uuid.equals(uuid) && this.pos.equals(pos);
         }
 
         @Override
@@ -275,7 +258,7 @@ public class VRXSavedData extends SavedData {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Entry entry = (Entry) o;
-            return Objects.equals(uuid, entry.uuid) && Objects.equals(pos, entry.pos) && face == entry.face;
+            return this.matches(entry.uuid, entry.pos) && face == entry.face;
         }
 
         @Override

@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
 import flashfur.omnimobs.util.EntityUtil;
 import flashfur.omnimobs.util.ForceDamageSource;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -20,9 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class EntityUtilMixin {
     @Inject(method = "forceSetDeltaMovement(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;)V", at = @At("HEAD"), cancellable = true, remap = false)
     private static void forceSetDeltaMovementMuteki(Entity entity, Vec3 vec3, CallbackInfo ci) {
-        if (entity instanceof IFumetsu || (entity instanceof LivingEntity living && MutekiHandler.muteki(living))) {
+        if (entity instanceof IFumetsu || (entity instanceof LivingEntity living && MutekiHandler.muteki(living)))
             ci.cancel();
-        }
     }
 
     @Inject(method = "forceHurt", at = @At("HEAD"), cancellable = true, remap = false)
@@ -35,9 +34,7 @@ public abstract class EntityUtilMixin {
 
     @Inject(method = "forceSetHealth", at = @At("HEAD"), cancellable = true, remap = false)
     private static void forceSetHealthMuteki(LivingEntity entity, float value, CallbackInfo ci) {
-        if (MutekiHandler.muteki(entity)) {
-            ci.cancel();
-        }
+        if (MutekiHandler.muteki(entity)) ci.cancel();
     }
 
     @Inject(method = "forceSetRemoved", at = @At("HEAD"), cancellable = true, remap = false)
@@ -58,9 +55,8 @@ public abstract class EntityUtilMixin {
     @Inject(method = "forceSetEntityData", at = @At("HEAD"), cancellable = true, remap = false)
     private static <T> void forceSetEntityDataMuteki(SynchedEntityData entityData, EntityDataAccessor<T> entityDataAccessor, T t, CallbackInfo ci) {
         Entity entity = ((SynchedEntityDataAccessor) entityData).getEntity();
-        if (entity instanceof IFumetsu || (entity instanceof LivingEntity living && MutekiHandler.muteki(living))) {
+        if (entity instanceof IFumetsu || (entity instanceof LivingEntity living && MutekiHandler.muteki(living)))
             ci.cancel();
-        }
     }
 
     @Inject(method = "forceRemoveNoPacket", at = @At("HEAD"), cancellable = true, remap = false)

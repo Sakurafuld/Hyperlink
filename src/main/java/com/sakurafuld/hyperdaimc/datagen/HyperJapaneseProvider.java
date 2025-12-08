@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
 public class HyperJapaneseProvider extends LanguageProvider {
     private static final Map<String, String> MAP = Util.make(Maps.newHashMap(), map -> {
@@ -104,6 +104,9 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("subtitles.hyperdaimc.chronicle_pause", "ポーズ！！");
         this.add("subtitles.hyperdaimc.chronicle_restart", "リスタート！！");
         this.add("subtitles.hyperdaimc.perfect_knockout", "コンボ！！");
+        this.add("subtitles.hyperdaimc.paradox_select", "連鎖範囲を選ぶ");
+        this.add("subtitles.hyperdaimc.paradox_chain", "連鎖範囲を選び終わる");
+        this.add("subtitles.hyperdaimc.paradox_unchain", "連鎖範囲を無くす");
         this.add("subtitles.hyperdaimc.vrx_open", "V.R.X.を開く");
         this.add("subtitles.hyperdaimc.vrx_create", "V!R!X!");
         this.add("subtitles.hyperdaimc.vrx_erase", "X!R!V!");
@@ -118,6 +121,7 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.novel", "俺の言う通りのストーリー！");
         this.add("tooltip.hyperdaimc.chronicle", "時は今こそ極まれり！");
         this.add("tooltip.hyperdaimc.paradox", "交差する強さ連鎖！");
+        this.add("tooltip.hyperdaimc.paradox.r_click_to_clear", "カーソルで右クリックして中身をクリア");
         this.add("tooltip.hyperdaimc.vrx", "天地創造ゲットメイク！");
         this.add("tooltip.hyperdaimc.vrx.face", "%s方向からの%sの内容確認");
         this.add("tooltip.hyperdaimc.vrx.face.empty", " -無いようです");
@@ -137,9 +141,9 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.desk.minecrafting", "マインしてクラフトだ！");
         this.add("tooltip.hyperdaimc.desk.lock", "クリックでレシピをロック");
         this.add("tooltip.hyperdaimc.desk.unlock", "シフトクリックでレシピをクリア");
-        this.add("tooltip.hyperdaimc.desk.animation", "Ctrl+Altを押している間はアニメーションが再生されません");
+        this.add("tooltip.hyperdaimc.desk.animation", "Ctrl+Altを押している間はアニメーションを無効化");
         this.add("tooltip.hyperdaimc.god_sigil", "神の恵みを受け取れぇ！");
-        this.add("tooltip.hyperdaimc.chemical_max", "ゾンビに投げよう");
+        this.add("tooltip.hyperdaimc.chemical_max", "ゾンビにとってはデンジャラス！");
 
         this.add("container.hyperdaimc.vrx.face", "方向: %s");
 
@@ -164,6 +168,7 @@ public class HyperJapaneseProvider extends LanguageProvider {
 
         this.add("recipe.hyperdaimc.desk", "ゲーマクラフト");
         this.add("recipe.hyperdaimc.materializer", "マテリアライズ");
+        this.add("recipe.hyperdaimc.brewing", "ハイパー醸造");
 
         this.add("information.hyperdaimc.fumetsu_wither.0", """
                 %2$s、%3$s、%4$s、%5$sをいい感じに配置し、%1$sを持ちながらシフト右クリックすることで%7$sを召喚することが出来る
@@ -175,6 +180,9 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("modifier.hyperdaimc.novel", "マイティノベル X");
         this.add("modifier.hyperdaimc.novel.flavor", "なぜ君がぁ、、、！");
         this.add("modifier.hyperdaimc.novel.description", "全ての攻撃が相手を即死させる");
+        this.add("modifier.hyperdaimc.paradox", "パーフェクトノックアウト99");
+        this.add("modifier.hyperdaimc.paradox.flavor", "50と50で99だ！");
+        this.add("modifier.hyperdaimc.paradox.description", "全てのブロックを即座に破壊する");
     }
 
     private <T> String specialize(T entry, String name) {

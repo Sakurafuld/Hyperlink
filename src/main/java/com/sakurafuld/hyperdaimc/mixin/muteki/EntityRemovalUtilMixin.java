@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
 import flashfur.omnimobs.util.EntityRemovalUtil;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

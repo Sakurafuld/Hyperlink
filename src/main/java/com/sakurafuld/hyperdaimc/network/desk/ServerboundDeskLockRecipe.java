@@ -8,17 +8,10 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
-public class ServerboundDeskLockRecipe {
-    private final int id;
-    private final Object2ObjectOpenHashMap<Item, IntAVLTreeSet> lock;
-
-    public ServerboundDeskLockRecipe(int id, Object2ObjectOpenHashMap<Item, IntAVLTreeSet> lock) {
-        this.id = id;
-        this.lock = lock;
-    }
-
+public record ServerboundDeskLockRecipe(int id, Object2ObjectOpenHashMap<Item, IntAVLTreeSet> lock) {
     public static void encode(ServerboundDeskLockRecipe msg, FriendlyByteBuf buf) {
         buf.writeVarInt(msg.id);
         buf.writeVarInt(msg.lock.size());
@@ -50,7 +43,7 @@ public class ServerboundDeskLockRecipe {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            if (ctx.get().getSender().containerMenu instanceof DeskMenu menu && menu.containerId == this.id) {
+            if (Objects.requireNonNull(ctx.get().getSender()).containerMenu instanceof DeskMenu menu && menu.containerId == this.id) {
                 menu.access.execute(((level, pos) -> level.getBlockEntity(pos, HyperBlockEntities.DESK.get()).ifPresent(desk ->
                         desk.lockRecipe(this.lock))));
             }

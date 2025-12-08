@@ -14,15 +14,10 @@ import net.minecraft.world.phys.*;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
-public class ServerboundVRXErase {
-    private final boolean block;
-
-    public ServerboundVRXErase(boolean block) {
-        this.block = block;
-    }
-
+public record ServerboundVRXErase(boolean block) {
     public static void encode(ServerboundVRXErase msg, FriendlyByteBuf buf) {
         buf.writeBoolean(msg.block);
     }
@@ -33,7 +28,7 @@ public class ServerboundVRXErase {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
+            ServerPlayer player = Objects.requireNonNull(ctx.get().getSender());
             if (player.getMainHandItem().is(HyperItems.VRX.get()) && !player.isShiftKeyDown()) {
                 double reach = Math.max(player.getBlockReach(), player.getEntityReach());
                 Vec3 position = null;
@@ -63,9 +58,8 @@ public class ServerboundVRXErase {
                     }
                 }
 
-                if (position != null) {
+                if (position != null)
                     VRXHandler.playSound(player.serverLevel(), position, false);
-                }
             }
         });
         ctx.get().setPacketHandled(true);

@@ -1,10 +1,10 @@
 package com.sakurafuld.hyperdaimc.content.hyper.fumetsu.storm;
 
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
-import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
-import com.sakurafuld.hyperdaimc.helper.Calculates;
+import com.sakurafuld.hyperdaimc.infrastructure.Calculates;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.novel.ClientboundNovelize;
 import net.minecraft.nbt.CompoundTag;
@@ -69,7 +69,7 @@ public class FumetsuStorm extends Entity implements IFumetsu {
     public void fumetsuTick() {
         FumetsuEntity fumetsu = this.getOwner();
         if (NovelHandler.novelized(this) || this.tickCount > 40 || fumetsu == null || fumetsu.isRemoved()) {
-            ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
+            ((IEntityNovel) this).hyperdaimc$novelRemove(RemovalReason.DISCARDED);
         } else {
             this.baseTick();
 

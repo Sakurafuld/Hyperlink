@@ -18,8 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class FlowingFluidMixin {
     @Inject(method = "canSpreadTo", at = @At("HEAD"), cancellable = true)
     private void canSpreadToChronicle(BlockGetter pLevel, BlockPos pFromPos, BlockState pFromBlockState, Direction pDirection, BlockPos pToPos, BlockState pToBlockState, FluidState pToFluidState, Fluid pFluid, CallbackInfoReturnable<Boolean> cir) {
-        if (pLevel instanceof Level level && (ChronicleHandler.isPaused(level, pFromPos, null) || ChronicleHandler.isPaused(level, pToPos, null))) {
+        if (pLevel instanceof Level level && (ChronicleHandler.isPaused(level, pFromPos, null) || ChronicleHandler.isPaused(level, pToPos, null)))
             cir.setReturnValue(false);
-        }
     }
 }

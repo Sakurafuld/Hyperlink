@@ -6,7 +6,7 @@ import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXCapability;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXMenu;
-import net.minecraft.core.BlockPos;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXType;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -20,15 +20,11 @@ import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PacketDistributor;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
-public class ServerboundVRXMyself {
-    private final boolean open;
-
-    public ServerboundVRXMyself(boolean open) {
-        this.open = open;
-    }
-
+public record ServerboundVRXMyself(boolean open) {
     public static void encode(ServerboundVRXMyself msg, FriendlyByteBuf buf) {
         buf.writeBoolean(msg.open);
     }
@@ -39,12 +35,13 @@ public class ServerboundVRXMyself {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
+            ServerPlayer player = Objects.requireNonNull(ctx.get().getSender());
 
             // CreativeModeInventoryScreen.ItemPickerMenuの対応が、、.
             if (player.isCreative() || player.containerMenu.getCarried().is(HyperItems.VRX.get())) {
                 if (this.open) {
-                    Pair<Pair<BlockPos, Integer>, Direction> pair = Pair.of(Pair.of(null, player.getId()), null);
+                    Pair<List<Direction>, List<VRXType>> pair = VRXMenu.Canvas.getAvailables(player);
+                    VRXMenu.Canvas canvas = VRXMenu.Canvas.entity(player.getId(), null, pair.getFirst(), pair.getSecond());
                     NetworkHooks.openScreen(player, new MenuProvider() {
                         @Override
                         public Component getDisplayName() {
@@ -53,9 +50,9 @@ public class ServerboundVRXMyself {
 
                         @Override
                         public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-                            return new VRXMenu(pContainerId, pPlayerInventory, pair);
+                            return new VRXMenu(pContainerId, pPlayerInventory, canvas);
                         }
-                    }, buf -> VRXMenu.parse(buf, pair));
+                    }, canvas::write);
 
                     player.playNotifySound(HyperSounds.VRX_OPEN.get(), SoundSource.PLAYERS, 0.5f, 0.75f);
                 } else {

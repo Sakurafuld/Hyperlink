@@ -1,12 +1,12 @@
 package com.sakurafuld.hyperdaimc.content.hyper.fumetsu.storm;
 
-import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
-import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
-import com.sakurafuld.hyperdaimc.api.mixin.IServerLevelFumetsu;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.skull.FumetsuSkull;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IServerLevelFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -58,10 +58,10 @@ public class FumetsuStormSkull extends FumetsuSkull {
             serverLevel.playSound(null, this.getX(), this.getY(), this.getZ(), HyperSounds.FUMETSU_STORM.get(), SoundSource.HOSTILE, 24, 1);
             FumetsuStorm storm = new FumetsuStorm(HyperEntities.FUMETSU_STORM.get(), this.level());
             storm.setup(this.getOwner(), this.position());
-            ((IServerLevelFumetsu) serverLevel).fumetsuSpawn(storm);
+            ((IServerLevelFumetsu) serverLevel).hyperdaimc$fumetsuSpawn(storm);
         }
 
-        ((IEntityNovel) this).novelRemove(RemovalReason.DISCARDED);
+        ((IEntityNovel) this).hyperdaimc$novelRemove(RemovalReason.DISCARDED);
     }
 
     @Override

@@ -1,9 +1,10 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
 import com.google.common.collect.Lists;
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.Util;
@@ -35,15 +36,14 @@ import java.util.Objects;
 
 @Mixin(ChunkMap.class)
 public abstract class ChunkMapMixin {
+    @Unique
+    private final Int2ObjectMap<ChunkMap.TrackedEntity> entityMap2 = new Int2ObjectOpenHashMap<>();
     @Shadow
     @Final
     ServerLevel level;
 
     @Shadow
     public abstract DistanceManager getDistanceManager();
-
-    @Unique
-    private final Int2ObjectMap<ChunkMap.TrackedEntity> entityMap2 = new Int2ObjectOpenHashMap<>();
 
     @Inject(method = "move", at = @At("HEAD"))
     private void moveFumetsu(ServerPlayer pPlayer, CallbackInfo ci) {
@@ -52,7 +52,7 @@ public abstract class ChunkMapMixin {
         }
     }
 
-    @Inject(locals = LocalCapture.CAPTURE_FAILHARD, method = "addEntity", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;put(ILjava/lang/Object;)Ljava/lang/Object;"), cancellable = true)
+    @Inject(locals = LocalCapture.CAPTURE_FAILSOFT, method = "addEntity", at = @At(value = "INVOKE", target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;put(ILjava/lang/Object;)Ljava/lang/Object;"), cancellable = true)
     private void addEntityFumetsu$0(Entity pEntity, CallbackInfo ci, EntityType<?> entitytype, int i, int j, ChunkMap.TrackedEntity chunkmap$trackedentity) {
         if (pEntity instanceof IFumetsu) {
 //            Deets.LOG.debug("addEntityFumetsu");
@@ -86,7 +86,7 @@ public abstract class ChunkMapMixin {
     private void removeEntityFumetsu$1(Entity pEntity, CallbackInfo ci) {
         ChunkMap.TrackedEntity trackedEntity = this.entityMap2.get(pEntity.getId());
         if (trackedEntity != null) {
-            if (FumetsuHandler.specialRemove.get() || NovelHandler.novelized(trackedEntity.entity)) {
+            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) trackedEntity.entity).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("removeEntityFumetsu");
                 this.entityMap2.remove(pEntity.getId());
                 trackedEntity.broadcastRemoved();

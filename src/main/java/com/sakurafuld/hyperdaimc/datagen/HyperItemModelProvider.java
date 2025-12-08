@@ -12,7 +12,7 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
 public class HyperItemModelProvider extends ItemModelProvider {
     public HyperItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -31,7 +31,7 @@ public class HyperItemModelProvider extends ItemModelProvider {
 
                 ItemModelBuilder builder = this.getBuilder("special/" + entry.getKey())
                         .parent(new ModelFile.UncheckedModelFile("item/generated"));
-                for (int index = 0; index < material.tint.length; index++) {
+                for (int index = 0; index < material.layerCount; index++) {
                     builder.texture("layer" + index, this.modLoc("item/material/" + suffix + index));
                 }
 

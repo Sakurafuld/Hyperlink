@@ -1,11 +1,11 @@
 package com.sakurafuld.hyperdaimc.content.hyper.fumetsu.squall;
 
-import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
-import com.sakurafuld.hyperdaimc.api.mixin.IServerLevelFumetsu;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.skull.FumetsuSkull;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IServerLevelFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -56,7 +56,7 @@ public class FumetsuSquall extends FumetsuSkull {
                     FumetsuSkull skull = new FumetsuSkull(HyperEntities.FUMETSU_SKULL.get(), this.level());
                     skull.setup(this.random.nextBoolean() ? Type.CRIMSON : Type.CYAN, this.getOwner(), center, vector.subtract(center), 1.75f);
 
-                    ((IServerLevelFumetsu) serverLevel).fumetsuSpawn(skull);
+                    ((IServerLevelFumetsu) serverLevel).hyperdaimc$fumetsuSpawn(skull);
                 }
 
                 serverLevel.playSound(null, center.x(), center.y(), center.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 0.25f, 3 + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f);

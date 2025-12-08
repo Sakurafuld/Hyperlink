@@ -3,7 +3,6 @@ package com.sakurafuld.hyperdaimc.mixin.muteki;
 import com.mojang.authlib.GameProfile;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
-import com.sakurafuld.hyperdaimc.helper.Deets;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -27,6 +26,7 @@ import net.minecraft.world.scores.Score;
 import net.minecraft.world.scores.Team;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 import net.minecraftforge.common.ForgeHooks;
+import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,7 +34,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 @Mixin(ServerPlayer.class)
@@ -46,12 +45,16 @@ public abstract class ServerPlayerMixin extends Player {
     @Final
     public MinecraftServer server;
 
-    @Shadow
-    protected abstract void tellNeutralMobsThatIDied();
-
     public ServerPlayerMixin(Level pLevel, BlockPos pPos, float pYRot, GameProfile pGameProfile) {
         super(pLevel, pPos, pYRot, pGameProfile);
     }
+
+    @Shadow
+    protected abstract void tellNeutralMobsThatIDied();
+
+    @Shadow
+    @Final
+    private static Logger LOGGER;
 
     @Inject(method = "die", at = @At("HEAD"), cancellable = true)
     private void dieMuteki$Player(DamageSource pDamageSource, CallbackInfo ci) {
@@ -59,13 +62,13 @@ public abstract class ServerPlayerMixin extends Player {
 
         if (NovelHandler.novelized(self)) {
             ci.cancel();
-            Deets.LOG.debug("ServerPlayerDiesNovelized:{}", Arrays.stream(Thread.currentThread().getStackTrace())
-                    .skip(3)
-                    .limit(10)
-                    .map(e -> "\n" + e.getClassName() + "." + e.getMethodName() + "@" + e.getLineNumber())
-                    .toList());
             this.gameEvent(GameEvent.ENTITY_DIE);
-            ForgeHooks.onLivingDeath(this, pDamageSource);
+            try {
+                ForgeHooks.onLivingDeath(this, pDamageSource);
+            } catch (Throwable throwable) {
+                LOGGER.error("Errored on LivingDeathEvent", throwable);
+            }
+
             boolean showDeathMessage = this.level().getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES);
             if (showDeathMessage) {
                 Component component = this.getCombatTracker().getDeathMessage();
@@ -85,7 +88,6 @@ public abstract class ServerPlayerMixin extends Player {
                 } else {
                     this.server.getPlayerList().broadcastSystemMessage(component, false);
                 }
-                Deets.LOG.debug("SPDiesNovelized:{}", component.getString());
             } else {
                 this.connection.send(new ClientboundPlayerCombatKillPacket(this.getId(), CommonComponents.EMPTY));
             }
@@ -118,7 +120,12 @@ public abstract class ServerPlayerMixin extends Player {
             this.setLastDeathLocation(Optional.of(GlobalPos.of(this.level().dimension(), this.blockPosition())));
         } else if (MutekiHandler.muteki(self)) {
             ci.cancel();
-            Deets.LOG.debug("ServerPlayerCancelDieMuteki");
         }
+    }
+
+    @Inject(method = "restoreFrom", at = @At("RETURN"))
+    private void restoreFromMuteki(ServerPlayer pThat, boolean pKeepEverything, CallbackInfo ci) {
+        if (!NovelHandler.novelized(pThat) && MutekiHandler.muteki(pThat))
+            this.getInventory().replaceWith(pThat.getInventory());
     }
 }

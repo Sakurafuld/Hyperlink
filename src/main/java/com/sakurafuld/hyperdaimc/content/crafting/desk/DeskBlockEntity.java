@@ -1,9 +1,9 @@
 package com.sakurafuld.hyperdaimc.content.crafting.desk;
 
 import com.google.common.collect.Lists;
-import com.sakurafuld.hyperdaimc.api.content.IOItemHandler;
 import com.sakurafuld.hyperdaimc.content.HyperBlockEntities;
 import com.sakurafuld.hyperdaimc.content.HyperRecipes;
+import com.sakurafuld.hyperdaimc.infrastructure.capability.IOItemHandler;
 import it.unimi.dsi.fastutil.ints.IntAVLTreeSet;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -44,7 +44,7 @@ import java.util.function.BiConsumer;
 public class DeskBlockEntity extends BlockEntity implements MenuProvider {
     private final Object2ObjectOpenHashMap<Item, IntAVLTreeSet> lock = new Object2ObjectOpenHashMap<>();
     private final Object2IntOpenHashMap<Item> minimum = new Object2IntOpenHashMap<>();
-
+    public Player minecrafter = null;
     public final ItemStackHandler inventory = new ItemStackHandler(81) {
 
         @Override
@@ -76,6 +76,7 @@ public class DeskBlockEntity extends BlockEntity implements MenuProvider {
             DeskBlockEntity.this.setChanged();
         }
     };
+    private boolean minecraft = false;
     public final ItemStackHandler result = new ItemStackHandler() {
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
@@ -96,11 +97,6 @@ public class DeskBlockEntity extends BlockEntity implements MenuProvider {
             }
         }
     };
-    private final RecipeWrapper wrapper = new RecipeWrapper(this.inventory);
-    private final IOItemHandler<ItemStackHandler> ioHandler = new IOItemHandler<>(this.inventory, this.result);
-    private LazyOptional<IItemHandler> capability = LazyOptional.of(() -> this.ioHandler);
-    private boolean minecraft = false;
-    public Player minecrafter = null;
     public final ContainerData data = new ContainerData() {
         @Override
         public int get(int pIndex) {
@@ -117,10 +113,13 @@ public class DeskBlockEntity extends BlockEntity implements MenuProvider {
             return 1;
         }
     };
+    private final RecipeWrapper wrapper = new RecipeWrapper(this.inventory);
 
     public DeskBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(HyperBlockEntities.DESK.get(), pPos, pBlockState);
     }
+
+    private final IOItemHandler<ItemStackHandler> ioHandler = new IOItemHandler<>(this.inventory, this.result);
 
     public void updateRecipe() {
         if (this.getLevel() instanceof ServerLevel serverLevel) {
@@ -135,6 +134,8 @@ public class DeskBlockEntity extends BlockEntity implements MenuProvider {
                     });
         }
     }
+
+    private LazyOptional<IItemHandler> capability = LazyOptional.of(() -> this.ioHandler);
 
     public void consumeRecipe() {
         for (int index = 0; index < this.inventory.getSlots(); index++) {
@@ -302,4 +303,6 @@ public class DeskBlockEntity extends BlockEntity implements MenuProvider {
         this.lockRecipe(lock);
         this.updateRecipe();
     }
+
+
 }

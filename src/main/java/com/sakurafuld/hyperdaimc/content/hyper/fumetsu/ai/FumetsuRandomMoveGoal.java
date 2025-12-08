@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.hyper.fumetsu.ai;
 
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
-import com.sakurafuld.hyperdaimc.helper.Boxes;
+import com.sakurafuld.hyperdaimc.infrastructure.Boxes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.goal.Goal;

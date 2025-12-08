@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.vrx;
 
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXSlot;
-import com.sakurafuld.hyperdaimc.helper.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.Renders;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.Slot;

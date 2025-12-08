@@ -3,9 +3,9 @@ package com.sakurafuld.hyperdaimc.content.crafting.desk;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
-import com.sakurafuld.hyperdaimc.helper.Calculates;
+import com.sakurafuld.hyperdaimc.infrastructure.Calculates;
+import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticleOptions;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.desk.ClientboundDeskSyncSave;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -34,9 +34,8 @@ import org.joml.Vector3f;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-import java.util.function.Supplier;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
 public class DeskSavedData extends SavedData {
     private static final Object2ObjectOpenHashMap<ResourceKey<Level>, DeskSavedData> client = new Object2ObjectOpenHashMap<>();
@@ -98,17 +97,11 @@ public class DeskSavedData extends SavedData {
         HyperConnection.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), new ClientboundDeskSyncSave(this.save(new CompoundTag())));
     }
 
-    public void sync2Client(Supplier<ResourceKey<Level>> dimension) {
-        HyperConnection.INSTANCE.send(PacketDistributor.DIMENSION.with(dimension), new ClientboundDeskSyncSave(this.save(new CompoundTag())));
-    }
-
     public static class Entry {
         private static final Random RANDOM = new Random();
         public final BlockPos pos;
         public final List<One> ingredients;
         public final ItemStack result;
-        private int ticks = 0;
-        private boolean renderOnes = true;
         public long seed;
         public float itemSize = 0;
         public float oldItemSize = 0;
@@ -117,6 +110,8 @@ public class DeskSavedData extends SavedData {
         public float fxAlpha = 1;
         public float fxSize = 0;
         public float oldFXSize = 0;
+        private int ticks = 0;
+        private boolean renderOnes = true;
 
         private Entry(BlockPos pos, List<ItemStack> ingredients, ItemStack result) {
             this(pos, ImmutableList.copyOf(Util.make(Lists.<One>newArrayList(), list -> {
@@ -125,8 +120,10 @@ public class DeskSavedData extends SavedData {
                 for (int index = 0; index < ingredients.size(); index++) {
                     ints.add(index);
                 }
-                IntLists.shuffle(ints, RANDOM);
-                double lastAngle = RANDOM.nextDouble(360);
+
+                Random random = new Random();
+                IntLists.shuffle(ints, random);
+                double lastAngle = random.nextDouble(360);
                 for (int index = 0; index < ingredients.size(); index++) {
                     list.add(new One(ingredients.get(index), index / (float) ingredients.size(), ints.getInt(index), RANDOM.nextDouble(2, 4), RANDOM.nextDouble(4), lastAngle));
                 }
@@ -138,6 +135,33 @@ public class DeskSavedData extends SavedData {
             this.ingredients = ingredients;
             this.result = result;
             this.seed = pos.asLong();
+        }
+
+        public static Entry load(CompoundTag tag) {
+            BlockPos pos = BlockPos.of(tag.getLong("Pos"));
+
+            List<One> ingredients = tag.getList("Ingredients", Tag.TAG_COMPOUND).stream()
+                    .map(CompoundTag.class::cast)
+                    .map(One::load)
+                    .toList();
+
+            ItemStack result = ItemStack.of(tag.getCompound("Result"));
+            Entry entry = new Entry(pos, ImmutableList.copyOf(ingredients), result);
+
+            entry.ticks = tag.getInt("Ticks");
+            entry.renderOnes = tag.getBoolean("RenderOnes");
+            entry.seed = tag.getLong("Seed");
+            entry.itemSize = tag.getFloat("ItemSize");
+            entry.oldItemSize = tag.getFloat("OldItemSize");
+
+            entry.rot = new Vector3f(tag.getFloat("RotX"), tag.getFloat("RotY"), tag.getFloat("RotZ"));
+            entry.oldRot = new Vector3f(tag.getFloat("OldRotX"), tag.getFloat("OldRotY"), tag.getFloat("OldRotZ"));
+
+            entry.fxAlpha = tag.getFloat("FXAlpha");
+            entry.fxSize = tag.getFloat("FXSize");
+            entry.oldFXSize = tag.getFloat("OldFXSize");
+
+            return entry;
         }
 
         public boolean tick(Level level) {
@@ -166,6 +190,7 @@ public class DeskSavedData extends SavedData {
                 }
 
                 if (this.ticks <= max + 20) {
+                    if (this.ticks == max + 1) this.seed = new Random().nextLong(Long.MAX_VALUE);
                     this.oldFXSize = this.fxSize;
 
                     double delta = (this.ticks - max) / 20d;
@@ -233,46 +258,19 @@ public class DeskSavedData extends SavedData {
             return tag;
         }
 
-        public static Entry load(CompoundTag tag) {
-            BlockPos pos = BlockPos.of(tag.getLong("Pos"));
-
-            List<One> ingredients = tag.getList("Ingredients", Tag.TAG_COMPOUND).stream()
-                    .map(CompoundTag.class::cast)
-                    .map(One::load)
-                    .toList();
-
-            ItemStack result = ItemStack.of(tag.getCompound("Result"));
-            Entry entry = new Entry(pos, ImmutableList.copyOf(ingredients), result);
-
-            entry.ticks = tag.getInt("Ticks");
-            entry.renderOnes = tag.getBoolean("RenderOnes");
-            entry.seed = tag.getLong("Seed");
-            entry.itemSize = tag.getFloat("ItemSize");
-            entry.oldItemSize = tag.getFloat("OldItemSize");
-
-            entry.rot = new Vector3f(tag.getFloat("RotX"), tag.getFloat("RotY"), tag.getFloat("RotZ"));
-            entry.oldRot = new Vector3f(tag.getFloat("OldRotX"), tag.getFloat("OldRotY"), tag.getFloat("OldRotZ"));
-
-            entry.fxAlpha = tag.getFloat("FXAlpha");
-            entry.fxSize = tag.getFloat("FXSize");
-            entry.oldFXSize = tag.getFloat("OldFXSize");
-
-            return entry;
-        }
-
         public boolean shouldRenderOnes() {
             return this.renderOnes;
         }
     }
 
     public static class One {
-        private final Random random = new Random();
         public final ItemStack stack;
         public final float percent;
         public final int index;
         public final double reach;
         public final double y;
         public final double angle;
+        private final Random random = new Random();
         public int ticks = 0;
         public Vec3 position = Vec3.ZERO;
         public Vec3 oldPosition = Vec3.ZERO;
@@ -289,6 +287,27 @@ public class DeskSavedData extends SavedData {
             this.y = y;
             this.angle = angle;
             this.color = (0xFF << 24) | (this.random.nextBoolean() ? 0xFF0101 : 0x01FFFF);
+        }
+
+        public static One load(CompoundTag tag) {
+            ItemStack stack = ItemStack.of(tag.getCompound("Item"));
+            float percent = tag.getFloat("Percent");
+            int index = tag.getInt("Index");
+            double reach = tag.getDouble("Reach");
+            double y = tag.getDouble("Y");
+            double lastAngle = tag.getDouble("Angle");
+
+            One one = new One(stack, percent, index, reach, y, lastAngle);
+
+            one.ticks = tag.getInt("Ticks");
+            one.position = new Vec3(tag.getDouble("PosX"), tag.getDouble("PosY"), tag.getDouble("PosZ"));
+            one.oldPosition = new Vec3(tag.getDouble("OldPosX"), tag.getDouble("OldPosY"), tag.getDouble("OldPosZ"));
+            one.rot = new Vector3f(tag.getFloat("RotX"), tag.getFloat("RotY"), tag.getFloat("RotZ"));
+            one.oldRot = new Vector3f(tag.getFloat("OldRotX"), tag.getFloat("OldRotY"), tag.getFloat("OldRotZ"));
+            one.radius = tag.getFloat("Radius");
+            one.color = tag.getInt("Color");
+
+            return one;
         }
 
         public void tick(Level level, Entry entry) {
@@ -403,27 +422,6 @@ public class DeskSavedData extends SavedData {
             tag.putInt("Color", this.color);
 
             return tag;
-        }
-
-        public static One load(CompoundTag tag) {
-            ItemStack stack = ItemStack.of(tag.getCompound("Item"));
-            float percent = tag.getFloat("Percent");
-            int index = tag.getInt("Index");
-            double reach = tag.getDouble("Reach");
-            double y = tag.getDouble("Y");
-            double lastAngle = tag.getDouble("Angle");
-
-            One one = new One(stack, percent, index, reach, y, lastAngle);
-
-            one.ticks = tag.getInt("Ticks");
-            one.position = new Vec3(tag.getDouble("PosX"), tag.getDouble("PosY"), tag.getDouble("PosZ"));
-            one.oldPosition = new Vec3(tag.getDouble("OldPosX"), tag.getDouble("OldPosY"), tag.getDouble("OldPosZ"));
-            one.rot = new Vector3f(tag.getFloat("RotX"), tag.getFloat("RotY"), tag.getFloat("RotZ"));
-            one.oldRot = new Vector3f(tag.getFloat("OldRotX"), tag.getFloat("OldRotY"), tag.getFloat("OldRotZ"));
-            one.radius = tag.getFloat("Radius");
-            one.color = tag.getInt("Color");
-
-            return one;
         }
     }
 }

@@ -6,12 +6,13 @@ import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXCapability;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXMenu;
-import net.minecraft.core.BlockPos;
+import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXType;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -22,15 +23,11 @@ import net.minecraft.world.phys.*;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
-public class ServerboundVRXOpenMenu {
-    private final boolean block;
-
-    public ServerboundVRXOpenMenu(boolean block) {
-        this.block = block;
-    }
-
+public record ServerboundVRXOpenMenu(boolean block) {
     public static void encode(ServerboundVRXOpenMenu msg, FriendlyByteBuf buf) {
         buf.writeBoolean(msg.block);
     }
@@ -41,17 +38,18 @@ public class ServerboundVRXOpenMenu {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
+            ServerPlayer player = Objects.requireNonNull(ctx.get().getSender());
             if (player.getMainHandItem().is(HyperItems.VRX.get()) && !player.isShiftKeyDown()) {
                 double reach = Math.max(player.getBlockReach(), player.getEntityReach());
-                Pair<Pair<BlockPos, Integer>, Direction> pair = null;
+                VRXMenu.Canvas canvas = null;
                 Component name = null;
 
                 if (this.block) {
                     if (player.pick(reach, 1, false) instanceof BlockHitResult hit && hit.getType() != HitResult.Type.MISS) {
                         BlockState state = player.level().getBlockState(hit.getBlockPos());
                         if (state.hasBlockEntity()) {
-                            pair = Pair.of(Pair.of(hit.getBlockPos(), null), hit.getDirection());
+                            Pair<List<Direction>, List<VRXType>> pair = VRXMenu.Canvas.getAvailables(player.level().getBlockEntity(hit.getBlockPos()));
+                            canvas = VRXMenu.Canvas.block(hit.getBlockPos(), hit.getDirection(), pair.getFirst(), pair.getSecond());
                             name = state.getBlock().getName();
                         }
                     }
@@ -62,15 +60,15 @@ public class ServerboundVRXOpenMenu {
                     AABB aabb = player.getBoundingBox().expandTowards(vector).inflate(1);
                     EntityHitResult hit = ProjectileUtil.getEntityHitResult(player, start, end, aabb, entity -> !entity.isSpectator() && entity.isPickable(), reach * reach);
                     if (hit != null && hit.getType() != HitResult.Type.MISS && (HyperCommonConfig.VRX_PLAYER.get() || !(hit.getEntity() instanceof Player)) && hit.getEntity().getCapability(VRXCapability.TOKEN).isPresent()) {
-                        pair = Pair.of(Pair.of(null, hit.getEntity().getId()), null);
+                        Pair<List<Direction>, List<VRXType>> pair = VRXMenu.Canvas.getAvailables(hit.getEntity());
+                        canvas = VRXMenu.Canvas.entity(hit.getEntity().getId(), null, pair.getFirst(), pair.getSecond());
                         name = hit.getEntity().getDisplayName();
                     }
                 }
 
-                if (pair != null) {
-
+                if (canvas != null) {
                     Component finalName = name;
-                    Pair<Pair<BlockPos, Integer>, Direction> finalPair = pair;
+                    VRXMenu.Canvas finalCanvas = canvas;
                     NetworkHooks.openScreen(player, new MenuProvider() {
                         @Override
                         public Component getDisplayName() {
@@ -79,11 +77,12 @@ public class ServerboundVRXOpenMenu {
 
                         @Override
                         public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-                            return new VRXMenu(pContainerId, pPlayerInventory, finalPair);
+                            return new VRXMenu(pContainerId, pPlayerInventory, finalCanvas);
                         }
-                    }, buf -> VRXMenu.parse(buf, finalPair));
+                    }, finalCanvas::write);
 
                     player.playNotifySound(HyperSounds.VRX_OPEN.get(), SoundSource.PLAYERS, 0.5f, 0.75f);
+                    player.swing(InteractionHand.MAIN_HAND, true);
                 }
             }
         });

@@ -40,8 +40,8 @@ credits = '''
         小森平 様
         無料効果音で遊ぼう！ https://taira-komori.jpn.org/index.html
     [編集]
-        窓の杜 様
-        Audacity https://forest.watch.impress.co.jp/library/software/audacity
+        The Audacity Team 様
+        Audacity https://www.audacityteam.org/
 ''' #optional
 # A text field displayed in the mod UI
 authors = "${mod_authors}" #optional
@@ -84,14 +84,12 @@ mandatory = false
 versionRange = "[1,)"
 ordering = "AFTER"
 side = "BOTH"
-
 [[dependencies.hyperdaimc]]
 modId = "integratedtunnels"
 mandatory = false
 versionRange = "[1,)"
 ordering = "AFTER"
 side = "BOTH"
-
 [[dependencies.hyperdaimc]]
 modId = "mekanism"
 mandatory = false
@@ -101,7 +99,49 @@ side = "BOTH"
 [[dependencies.hyperdaimc]]
 modId = "tconstruct"
 mandatory = false
-versionRange = "[3.9.1.19,)"
+versionRange = "[1,)"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.hyperdaimc]]
+modId = "botania"
+mandatory = false
+versionRange = "[1,)"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.hyperdaimc]]
+modId = "extrabotany"
+mandatory = false
+versionRange = "[1,)"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.hyperdaimc]]
+modId = "ars_nouveau"
+mandatory = false
+versionRange = "[1,)"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.hyperdaimc]]
+modId = "irons_spellbooks"
+mandatory = false
+versionRange = "[1,)"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.hyperdaimc]]
+modId = "projecte"
+mandatory = false
+versionRange = "[1,)"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.hyperdaimc]]
+modId = "slashblade"
+mandatory = false
+versionRange = "[1,)"
+ordering = "AFTER"
+side = "BOTH"
+[[dependencies.hyperdaimc]]
+modId = "ticex"
+mandatory = false
+versionRange = "[0.4,)"
 ordering = "AFTER"
 side = "BOTH"
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares

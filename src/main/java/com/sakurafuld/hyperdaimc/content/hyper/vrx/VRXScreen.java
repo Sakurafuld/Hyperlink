@@ -22,7 +22,7 @@ import net.minecraft.world.inventory.Slot;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
 public class VRXScreen extends AbstractContainerScreen<VRXMenu> {
     private static final ResourceLocation BACKGROUND = identifier("textures/gui/container/vrx.png");

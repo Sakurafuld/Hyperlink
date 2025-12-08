@@ -19,10 +19,9 @@ public abstract class PixieAIStealMixin {
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Ljava/util/ArrayList;isEmpty()Z"), remap = false)
     private boolean tickMuteki(ArrayList<Integer> instance) {
-        if (MutekiHandler.muteki(this.temptingPlayer)) {
+        if (MutekiHandler.muteki(this.temptingPlayer))
             return true;
-        } else {
+        else
             return instance.isEmpty();
-        }
     }
 }

@@ -1,10 +1,10 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
-import com.sakurafuld.hyperdaimc.helper.Deets;
+import com.sakurafuld.hyperdaimc.infrastructure.Deets;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Final;
@@ -27,7 +27,7 @@ public abstract class TransientEntitySectionManager$CallbackMixin {
             if (FumetsuHandler.specialRemove.get()) {
                 return;
             }
-            if (!NovelHandler.novelized(this.realEntity) && (this.realEntity instanceof IFumetsu || (this.realEntity instanceof LivingEntity living && MutekiHandler.muteki(living)))) {
+            if (!((IEntityNovel) this.realEntity).hyperdaimc$isNovelized() && (this.realEntity instanceof IFumetsu || (this.realEntity instanceof LivingEntity living && MutekiHandler.muteki(living)))) {
 //                if (this.realEntity instanceof Player) {
 //                    LOG.debug("RemoveMutekiPlayer");
 //                    return;

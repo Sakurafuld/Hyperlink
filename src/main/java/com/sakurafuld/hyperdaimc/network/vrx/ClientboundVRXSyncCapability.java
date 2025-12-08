@@ -7,22 +7,13 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
-
-public class ClientboundVRXSyncCapability {
-    private final int entity;
-    private final CompoundTag tag;
-
-    public ClientboundVRXSyncCapability(int entity, CompoundTag tag) {
-        this.entity = entity;
-        this.tag = tag;
-    }
-
+public record ClientboundVRXSyncCapability(int entity, CompoundTag tag) {
     public static void encode(ClientboundVRXSyncCapability msg, FriendlyByteBuf buf) {
         buf.writeVarInt(msg.entity);
         buf.writeNbt(msg.tag);
@@ -33,15 +24,16 @@ public class ClientboundVRXSyncCapability {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> require(LogicalSide.CLIENT).run(this::handle));
+        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::handle));
         ctx.get().setPacketHandled(true);
     }
 
     @OnlyIn(Dist.CLIENT)
     private void handle() {
-        Entity entity = Minecraft.getInstance().level.getEntity(this.entity);
+        Entity entity = Objects.requireNonNull(Minecraft.getInstance().level).getEntity(this.entity);
         if (entity != null) {
-            entity.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> vrx.deserializeNBT(this.tag));
+            entity.getCapability(VRXCapability.TOKEN).ifPresent(vrx ->
+                    vrx.deserializeNBT(this.tag));
         }
     }
 }

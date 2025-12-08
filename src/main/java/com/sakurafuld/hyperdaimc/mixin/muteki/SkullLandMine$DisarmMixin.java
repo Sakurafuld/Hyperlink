@@ -13,10 +13,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class SkullLandMine$DisarmMixin {
     @Redirect(method = "explode", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;isSpectator()Z"), remap = false)
     private boolean explodeMuteki(Player instance) {
-        if (MutekiHandler.muteki(instance)) {
+        if (MutekiHandler.muteki(instance))
             return true;
-        } else {
+        else
             return instance.isSpectator();
-        }
     }
 }

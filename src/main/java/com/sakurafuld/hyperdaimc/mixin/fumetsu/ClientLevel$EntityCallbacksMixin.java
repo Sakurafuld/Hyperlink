@@ -1,9 +1,9 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
-import com.sakurafuld.hyperdaimc.api.mixin.IClientLevelFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IClientLevelFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.entity.LevelCallback;
@@ -27,7 +27,7 @@ public abstract class ClientLevel$EntityCallbacksMixin implements LevelCallback<
     private void onTickingStartFumetsu(Entity p_143363_, CallbackInfo ci) {
         if (this.this$0 instanceof IClientLevelFumetsu levelFumetsu && p_143363_ instanceof IFumetsu) {
 //            Deets.LOG.debug("tickingStartFumetsu");
-            levelFumetsu.fumetsuTickList().add(p_143363_);
+            levelFumetsu.hyperdaimc$fumetsuTickList().add(p_143363_);
             ci.cancel();
         }
     }
@@ -35,9 +35,9 @@ public abstract class ClientLevel$EntityCallbacksMixin implements LevelCallback<
     @Inject(method = "onTickingEnd(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)
     private void onTickingEndFumetsu(Entity p_143363_, CallbackInfo ci) {
         if (this.this$0 instanceof IClientLevelFumetsu levelFumetsu && p_143363_ instanceof IFumetsu) {
-            if (FumetsuHandler.specialRemove.get() || NovelHandler.novelized(p_143363_)) {
+            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) p_143363_).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("tickingEndFumetsu");
-                levelFumetsu.fumetsuTickList().remove(p_143363_);
+                levelFumetsu.hyperdaimc$fumetsuTickList().remove(p_143363_);
                 ci.cancel();
             }
         }

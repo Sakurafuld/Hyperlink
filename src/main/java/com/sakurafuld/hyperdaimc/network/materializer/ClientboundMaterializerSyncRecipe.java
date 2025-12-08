@@ -8,23 +8,14 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.require;
-
-public class ClientboundMaterializerSyncRecipe {
-    private final BlockPos pos;
-    private final List<ItemStack> processRecipe;
-
-    public ClientboundMaterializerSyncRecipe(BlockPos pos, List<ItemStack> processRecipe) {
-        this.pos = pos;
-        this.processRecipe = processRecipe;
-    }
-
+public record ClientboundMaterializerSyncRecipe(BlockPos pos, List<ItemStack> processRecipe) {
     public static void encode(ClientboundMaterializerSyncRecipe msg, FriendlyByteBuf buf) {
         buf.writeBlockPos(msg.pos);
         buf.writeCollection(msg.processRecipe, (buf1, stack) -> buf1.writeItemStack(stack, false));
@@ -37,14 +28,14 @@ public class ClientboundMaterializerSyncRecipe {
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> require(LogicalSide.CLIENT).run(this::handle));
+        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::handle));
         ctx.get().setPacketHandled(true);
     }
 
     @OnlyIn(Dist.CLIENT)
     private void handle() {
-        Minecraft.getInstance().level.getBlockEntity(this.pos, HyperBlockEntities.MATERIALIZER.get()).ifPresent(materializer -> {
-            materializer.updateRecipe(this.processRecipe);
-        });
+        Objects.requireNonNull(Minecraft.getInstance().level).getBlockEntity(this.pos, HyperBlockEntities.MATERIALIZER.get())
+                .ifPresent(materializer ->
+                        materializer.updateRecipe(this.processRecipe));
     }
 }

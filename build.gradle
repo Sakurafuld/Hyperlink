@@ -91,7 +91,7 @@ minecraft {
 
         server {
             property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
+//            args '--nogui'
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -141,15 +141,27 @@ repositories {
     maven {
         url = "https://api.modrinth.com/maven"
     }
+    maven {
+        name = "KubeJS Maven"
+        url = "https://maven.latvian.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+        }
+    }
+    maven {
+        name = "Architectury"
+        url = "https://maven.architectury.dev"
+        content {
+            includeGroup "dev.architectury"
+        }
+    }
 }
 
 dependencies {
 
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    implementation fg.deobf('com.sakurafuld.hyperdaimc:BetterTags:1.20.1-1.4')
-    compileOnly fg.deobf('com.sakurafuld.hyperdaimc:bloodyhell:0.1.2')
-
+    compileOnly fg.deobf('com.sakurafuld.hyperdaimc:fantasy_ending:1.20.1-2.7.19c-all')
 
     compileOnly fg.deobf("maven.modrinth:FKhAAkIk:1.3")
     compileOnly fg.deobf("maven.modrinth:Ec1dswXy:1.7.2")
@@ -157,33 +169,46 @@ dependencies {
     compileOnly fg.deobf("maven.modrinth:6hI5AK5F:0.3.3.3")
 
     implementation fg.deobf("curse.maven:embeddium-908741:5681725")
+/////////////    implementation fg.deobf("curse.maven:ferritecore-429235:4810975")
+/////////////    implementation fg.deobf("curse.maven:modernfix-790626:7200213")
+/////////////    implementation fg.deobf("curse.maven:alltheleaks-1091339:7235989")
     implementation fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
-    implementation fg.deobf("curse.maven:jade-324717:6271651")
+    implementation fg.deobf("curse.maven:jade-324717:6855440")
+//    compileOnly fg.deobf("curse.maven:oculus-581495:6020952")
 
+    implementation fg.deobf("curse.maven:ftb-library-forge-404465:6807424")
     implementation fg.deobf("top.theillusivec4.curios:curios-forge:5.14.1+1.20.1")
     implementation fg.deobf("curse.maven:patchouli-306770:6164575")
     implementation fg.deobf("curse.maven:citadel-331936:6002521")
     implementation fg.deobf("curse.maven:attributefix-280510:4911084")
     implementation fg.deobf("curse.maven:event-wrapper-1256971:6788387")
-    compileOnly fg.deobf("curse.maven:cyclops-core-232758:6491014")
-    compileOnly fg.deobf("curse.maven:common-capabilities-247007:6514954")
+    implementation fg.deobf("curse.maven:cyclops-core-232758:6491014")
+    implementation fg.deobf("curse.maven:common-capabilities-247007:6514954")
     compileOnly fg.deobf("curse.maven:lionfish-api-1001614:5922047")
-    compileOnly fg.deobf("curse.maven:playeranimator-658587:4587214")
-    compileOnly fg.deobf("curse.maven:moffs-addonapi-dynload-1242459:6420515")
-    compileOnly fg.deobf("curse.maven:brandons-core-231382:5422013")
-    compileOnly fg.deobf("curse.maven:codechicken-lib-1-8-242818:5753868")
+    implementation fg.deobf("curse.maven:playeranimator-658587:4587214")
+    implementation fg.deobf("curse.maven:moffs-addonapi-dynload-1242459:6420515")
+    implementation fg.deobf("curse.maven:brandons-core-231382:5422013")
+    implementation fg.deobf("curse.maven:codechicken-lib-1-8-242818:5753868")
     compileOnly fg.deobf("curse.maven:yacl-667299:6336646")
-    compileOnly fg.deobf("slimeknights.mantle:Mantle:${minecraft_version}-${mantle_build}")
+    implementation fg.deobf("slimeknights.mantle:Mantle:${minecraft_version}-${mantle_build}")
     compileOnly fg.deobf("curse.maven:kotlin-for-forge-351264:5402061")
     compileOnly fg.deobf("curse.maven:cloth-config-348521:5729105")
     compileOnly fg.deobf("curse.maven:carbon-config-898104:6540092")
-    compileOnly fg.deobf("curse.maven:geckolib-388172:6333474")
-    compileOnly fg.deobf("curse.maven:l2library-620203:6806000")
-    compileOnly fg.deobf("curse.maven:caelus-308989:5281700")
+    implementation fg.deobf("curse.maven:geckolib-388172:7025129")
+//    implementation fg.deobf("curse.maven:l2library-620203:6806000")
+    implementation fg.deobf("curse.maven:caelus-308989:5281700")
+//    implementation fg.deobf("curse.maven:legendreliclib-1307366:7284808")
+//    implementation fg.deobf("curse.maven:legendreliclib-1307366:7090301")
+//    implementation fg.deobf("curse.maven:legendreliclib-1307366:7244887")
+//    runtimeOnly fg.deobf("curse.maven:legendreliclib-1307366:7090301")
 
-    compileOnly fg.deobf("mekanism:Mekanism:${mekanism_version}")
+    implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+    implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
+    implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
+
+    implementation fg.deobf("mekanism:Mekanism:${mekanism_version}")
     compileOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:additions")
-    compileOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")
+    implementation  fg.deobf("mekanism:Mekanism:${mekanism_version}:generators")
     compileOnly fg.deobf("mekanism:Mekanism:${mekanism_version}:tools")
     compileOnly fg.deobf("curse.maven:compact-void-miners-395607:5109833")
 
@@ -192,14 +217,21 @@ dependencies {
 
     compileOnly fg.deobf("curse.maven:lendercataclysm-551586:6501448")
 
-    compileOnly fg.deobf("slimeknights.tconstruct:TConstruct:${minecraft_version}-${tinkers_build}")
-    compileOnly fg.deobf("curse.maven:ticex-tinkers-construct-ex-1242469:6866978")
+    implementation fg.deobf("slimeknights.tconstruct:TConstruct:${minecraft_version}-${tinkers_build}")
+    implementation fg.deobf("curse.maven:ticex-tinkers-construct-ex-1242469:7101320")
 
-    compileOnly fg.deobf("curse.maven:slashblade-resharped-1022428:6845813")
+//    implementation fg.deobf("curse.maven:slashblade-resharped-1022428:7234815")//1.8.61
+    implementation fg.deobf("curse.maven:slashblade-resharped-1022428:7073488")//1.7.56
+//    implementation fg.deobf("curse.maven:slashblade-resharped-1022428:7060054")//1.7.55
+    implementation fg.deobf("curse.maven:slashblade-hf-blade-1299888:6917439")
+    compileOnly fg.deobf("curse.maven:sjap-310187:7039817")
+//    implementation fg.deobf("curse.maven:slashblade-japanese-addon-pack-adder-1349409:7246260")
+//    implementation fg.deobf("curse.maven:slashblade-japanese-addon-pack-adder-1349409:7009272")
+//    implementation fg.deobf("curse.maven:legendblade-1143899:6697179")
 
-    compileOnly fg.deobf("curse.maven:re-avaritia-623969:6418092")
+//    implementation fg.deobf("curse.maven:re-avaritia-623969:6958116")
 
-    compileOnly fg.deobf("curse.maven:draconic-evolution-223565:6793843")
+    implementation fg.deobf("curse.maven:draconic-evolution-223565:6793843")
 
     implementation fg.deobf("curse.maven:botania-225643:6870713")
     implementation fg.deobf("curse.maven:extrabotany-reburn-1271869:6818025")
@@ -210,24 +242,30 @@ dependencies {
 
     implementation fg.deobf("curse.maven:timeless-and-classics-zero-1028108:6654541")
 
-    compileOnly fg.deobf("curse.maven:guideme-1173950:6634593")
-    compileOnly fg.deobf("curse.maven:applied-energistics-2-223794:6629570")
-    compileOnly fg.deobf("curse.maven:ae2-things-forge-609977:4616683")
-    compileOnly fg.deobf("curse.maven:mega-cells-622112:6175008")
-    compileOnly fg.deobf("curse.maven:ae2-mega-things-1150075:6203824")
+//    compileOnly fg.deobf("curse.maven:guideme-1173950:6634593")
+//    compileOnly fg.deobf("curse.maven:applied-energistics-2-223794:6629570")
+//    compileOnly fg.deobf("curse.maven:ae2-things-forge-609977:4616683")
+//    compileOnly fg.deobf("curse.maven:mega-cells-622112:6175008")
+//    compileOnly fg.deobf("curse.maven:ae2-mega-things-1150075:6203824")
 
-    compileOnly fg.deobf("curse.maven:the-god-1199808:6348575")
+    implementation fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:6970299")
 
-    compileOnly fg.deobf("curse.maven:irons-spells-n-spellbooks-855414:6970299")
+//    compileOnly fg.deobf("curse.maven:goety-586095:6778940")
+//    compileOnly fg.deobf("curse.maven:goety-revelation-1236817:6892481")
+//
+//    implementation fg.deobf("curse.maven:l2-complements-758349:6939786")
+//    implementation fg.deobf("curse.maven:l2-artifacts-659547:6801939")
+//    implementation fg.deobf("curse.maven:l2hostility-909207:6985550")
 
-    compileOnly fg.deobf("curse.maven:goety-586095:6778940")
-    compileOnly fg.deobf("curse.maven:goety-revelation-1236817:6892481")
+    compileOnly fg.deobf("curse.maven:ars-nouveau-401955:6688854")
 
-    compileOnly fg.deobf("curse.maven:l2-complements-758349:6939786")
-    compileOnly fg.deobf("curse.maven:l2-artifacts-659547:6801939")
-    compileOnly fg.deobf("curse.maven:l2hostility-909207:6985550")
+    implementation fg.deobf("curse.maven:projecte-226410:4901949")
+//    implementation fg.deobf("curse.maven:project-expansion-579177:5772569")
 
-    compileOnly fg.deobf("curse.maven:chunkpregenerator-267193:5518264")
+    implementation fg.deobf("curse.maven:blood-magic-224791:7253333")
+//
+//    implementation fg.deobf("curse.maven:evilcraft-74610:7223463")
+//    compileOnly fg.deobf("curse.maven:chunkpregenerator-267193:5518264")
     implementation fg.deobf("curse.maven:deuf-duplicate-entity-uuid-fix-296646:4598640")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'

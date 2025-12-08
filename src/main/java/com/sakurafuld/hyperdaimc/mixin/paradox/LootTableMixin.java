@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.paradox;
 
-import com.sakurafuld.hyperdaimc.api.mixin.ILootTableParadox;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.ILootTableParadox;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Final;
@@ -17,7 +17,7 @@ public abstract class LootTableMixin implements ILootTableParadox {
     private List<LootPool> pools;
 
     @Override
-    public boolean paradoxIsNoDrop() {
+    public boolean hyperdaimc$hasNoDrop() {
         return this.pools.isEmpty();
     }
 }

@@ -2,11 +2,13 @@ package com.sakurafuld.hyperdaimc.content.hyper.vrx;
 
 import com.mojang.datafixers.util.Pair;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.api.content.AbstractGashatItem;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
+import com.sakurafuld.hyperdaimc.infrastructure.item.AbstractGashatItem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -23,7 +25,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 
+import java.util.List;
+
 public class VRXItem extends AbstractGashatItem {
+    private static final Component DESCRIPTION = Component.translatable("tooltip.hyperdaimc.vrx.description").withStyle(ChatFormatting.GRAY);
+    private static final Component DESCRIPTION_CLOSE = Component.translatable("tooltip.hyperdaimc.vrx.description.close").withStyle(ChatFormatting.GRAY);
+    private static Component descriptionConfigurable = null;
+
     private long lastTime = 0;
     private String lastName = VRXHandler.getMake();
 
@@ -32,63 +40,60 @@ public class VRXItem extends AbstractGashatItem {
     }
 
     @Override
-    public boolean canAttackBlock(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer) {
-        if (!this.enabled.get()) {
-            return super.canAttackBlock(pState, pLevel, pPos, pPlayer);
+    protected void appendDescription(List<Component> tooltip) {
+        tooltip.add(DESCRIPTION);
+        tooltip.add(DESCRIPTION_CLOSE);
+        if (descriptionConfigurable == null) {
+            String configurable = String.join(", ", VRXRegistry.allNames());
+            descriptionConfigurable = Component.translatable("tooltip.hyperdaimc.vrx.description.configurable", Component.literal(configurable).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)).withStyle(ChatFormatting.WHITE);
         }
+        tooltip.add(descriptionConfigurable);
+    }
+
+    @Override
+    public boolean canAttackBlock(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer) {
+        if (!this.enabled.get()) return super.canAttackBlock(pState, pLevel, pPos, pPlayer);
         return !pPlayer.isCreative();
     }
 
     @Override
     public Component getName(ItemStack pStack) {
-        if (!this.enabled.get()) {
-            return super.getName(pStack);
-        }
-        if (Util.getMillis() - this.lastTime > 100) {
+        if (!this.enabled.get()) return super.getName(pStack);
+        if (Util.getMillis() - this.lastTime > 100)
             this.lastName = VRXHandler.getMake();
-        }
         this.lastTime = Util.getMillis();
         return super.getName(pStack).copy().append(" (" + this.lastName + ")");
     }
 
     @Override
     public UseAnim getUseAnimation(ItemStack pStack) {
-        if (!this.enabled.get()) {
-            return super.getUseAnimation(pStack);
-        }
+        if (!this.enabled.get()) return super.getUseAnimation(pStack);
         return UseAnim.EAT;
     }
 
     @Override
     public int getUseDuration(ItemStack pStack) {
-        if (!this.enabled.get()) {
-            return super.getUseDuration(pStack);
-        }
-
+        if (!this.enabled.get()) return super.getUseDuration(pStack);
         return 16;
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        if (!this.enabled.get()) {
-            return super.use(pLevel, pPlayer, pUsedHand);
-        }
+        if (!this.enabled.get()) return super.use(pLevel, pPlayer, pUsedHand);
 
         if (pUsedHand == InteractionHand.MAIN_HAND && pPlayer.isShiftKeyDown()) {
             pPlayer.startUsingItem(pUsedHand);
             return InteractionResultHolder.consume(pPlayer.getItemInHand(pUsedHand));
-        } else {
-            return super.use(pLevel, pPlayer, pUsedHand);
-        }
+        } else return super.use(pLevel, pPlayer, pUsedHand);
     }
 
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
-        if (!this.enabled.get()) {
-            return super.finishUsingItem(pStack, pLevel, pLivingEntity);
-        }
+        if (!this.enabled.get()) return super.finishUsingItem(pStack, pLevel, pLivingEntity);
 
         if (pLivingEntity instanceof ServerPlayer player) {
+            Pair<List<Direction>, List<VRXType>> pair = VRXMenu.Canvas.getAvailables(player);
+            VRXMenu.Canvas canvas = VRXMenu.Canvas.entity(player.getId(), null, pair.getFirst(), pair.getSecond());
             NetworkHooks.openScreen(player, new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
@@ -97,9 +102,9 @@ public class VRXItem extends AbstractGashatItem {
 
                 @Override
                 public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-                    return new VRXMenu(pContainerId, pPlayerInventory, Pair.of(Pair.of(null, player.getId()), null));
+                    return new VRXMenu(pContainerId, pPlayerInventory, canvas);
                 }
-            }, buf -> VRXMenu.parse(buf, Pair.of(Pair.of(null, player.getId()), null)));
+            }, canvas::write);
 
             player.playNotifySound(HyperSounds.VRX_OPEN.get(), SoundSource.PLAYERS, 0.5f, 0.75f);
         }

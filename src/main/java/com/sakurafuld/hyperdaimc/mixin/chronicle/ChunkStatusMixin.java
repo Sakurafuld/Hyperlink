@@ -23,11 +23,11 @@ import java.util.function.Function;
 public abstract class ChunkStatusMixin {
     @Inject(method = "generate", at = @At("HEAD"))
     private void generateChronicle$HEAD(Executor pExectutor, ServerLevel pLevel, ChunkGenerator pChunkGenerator, StructureTemplateManager pStructureTemplateManager, ThreadedLevelLightEngine pLightEngine, Function<ChunkAccess, CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> pTask, List<ChunkAccess> pCache, CallbackInfoReturnable<CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> cir) {
-        ChronicleHandler.chunkGenerating.set(true);
+        ChronicleHandler.chunkGenerating = true;
     }
 
     @Inject(method = "generate", at = @At("RETURN"))
     private void generateChronicle$RETURN(Executor pExectutor, ServerLevel pLevel, ChunkGenerator pChunkGenerator, StructureTemplateManager pStructureTemplateManager, ThreadedLevelLightEngine pLightEngine, Function<ChunkAccess, CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> pTask, List<ChunkAccess> pCache, CallbackInfoReturnable<CompletableFuture<Either<ChunkAccess, ChunkHolder.ChunkLoadingFailure>>> cir) {
-        ChronicleHandler.chunkGenerating.set(false);
+        ChronicleHandler.chunkGenerating = false;
     }
 }

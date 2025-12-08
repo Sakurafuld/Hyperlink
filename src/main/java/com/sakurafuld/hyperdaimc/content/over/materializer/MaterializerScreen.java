@@ -1,10 +1,10 @@
 package com.sakurafuld.hyperdaimc.content.over.materializer;
 
 import com.google.common.collect.Sets;
-import com.sakurafuld.hyperdaimc.api.content.IScreenVFX;
 import com.sakurafuld.hyperdaimc.content.HyperBlockEntities;
-import com.sakurafuld.hyperdaimc.helper.Renders;
-import com.sakurafuld.hyperdaimc.helper.Writes;
+import com.sakurafuld.hyperdaimc.infrastructure.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.Writes;
+import com.sakurafuld.hyperdaimc.infrastructure.render.IScreenVFX;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
 @OnlyIn(Dist.CLIENT)
 public class MaterializerScreen extends AbstractContainerScreen<MaterializerMenu> {
@@ -48,7 +48,7 @@ public class MaterializerScreen extends AbstractContainerScreen<MaterializerMenu
 
     @Override
     protected void containerTick() {
-        this.getMenu().access.execute(((level, pos) -> level.getBlockEntity(pos, HyperBlockEntities.MATERIALIZER.get()).ifPresent(materializer -> {
+        this.getMenu().access.execute((level, pos) -> level.getBlockEntity(pos, HyperBlockEntities.MATERIALIZER.get()).ifPresent(materializer -> {
             ItemStack stack = materializer.getProcessItem();
             if (!stack.isEmpty() && this.getMenu().getFuelRemaining() > 0) {
                 if (--this.processTicks <= 0) {
@@ -63,12 +63,10 @@ public class MaterializerScreen extends AbstractContainerScreen<MaterializerMenu
                     if (renderable instanceof MaterializerItemVFX vfx) {
                         vfx.clear();
                         return true;
-                    } else {
-                        return false;
-                    }
+                    } else return false;
                 });
             }
-        })));
+        }));
 
 
         this.renderables.removeIf(renderable -> renderable instanceof IScreenVFX vfx && !vfx.tick());
@@ -102,11 +100,10 @@ public class MaterializerScreen extends AbstractContainerScreen<MaterializerMenu
     @Override
     protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         pGuiGraphics.blit(BACKGROUND, this.getGuiLeft(), this.getGuiTop(), 0, 0, this.imageWidth, this.imageHeight);
-        int color = (0xFF << 24) | Writes.gameOver("A").getSiblings().get(0).getStyle().getColor().getValue();
+        int color = 0xFF << 24 | Writes.gameOver(0);
         int fuel = this.getMenu().getFuelGauge();
-        if (fuel > 0) {
+        if (fuel > 0)
             pGuiGraphics.fill(this.getGuiLeft() + 12, this.getGuiTop() + 37, this.getGuiLeft() + 12 + fuel, this.getGuiTop() + 39, color);
-        }
     }
 
     @Override
@@ -115,9 +112,9 @@ public class MaterializerScreen extends AbstractContainerScreen<MaterializerMenu
             pGuiGraphics.pose().translate(0, 0, 50);
             pGuiGraphics.fill(46, 62, 131, 65, 0xFF8B8B8B);
             int progress = this.getMenu().getProcessGauge();
-            if (progress > 0) {
+            if (progress > 0)
                 pGuiGraphics.blit(BACKGROUND, 46, 56, 0, 166, progress, 9);
-            }
+
             if (this.jump > 0) {
                 int partial = Math.round(Mth.lerp(this.jump / 6f, 0x8B, 0xFF));
                 int color = (partial << 24) | (partial << 16) | (partial << 8) | partial;

@@ -1,7 +1,8 @@
 package com.sakurafuld.hyperdaimc.mixin.novel;
 
-import com.sakurafuld.hyperdaimc.api.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.Deets;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityEvent;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,18 +19,25 @@ public abstract class EntityTickListMixin {
     @Redirect(method = "forEach", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"))
     private <T> void forEachNovel(Consumer<T> instance, T t) {
         Entity entity = (Entity) t;
-        if (!(entity instanceof Player) && NovelHandler.novelized(entity)) {
-            if (entity instanceof LivingEntity living && !entity.isRemoved() && (!entity.level().isClientSide() || entity.level().shouldTickDeath(entity))) {
-                if (!NovelHandler.special(living)) {
+        novelized:
+        {
+            if (/*!(entity instanceof Player) && */NovelHandler.novelized(entity)) {
+
+                if (entity instanceof LivingEntity living && !entity.isRemoved() && (!entity.level().isClientSide() || entity.level().shouldTickDeath(entity))) {
+                    if (NovelHandler.special(living)) break novelized;
+
                     int time = ++living.deathTime;
-                    if (!entity.level().isClientSide() && ((IEntityNovel) living).novelDead() >= 20) {
+                    if (!entity.level().isClientSide() && ((IEntityNovel) living).hyperdaimc$novelDead(true) >= 20) {
                         living.level().broadcastEntityEvent(living, EntityEvent.POOF);
-                        ((IEntityNovel) living).novelRemove(Entity.RemovalReason.KILLED);
+                        ((IEntityNovel) living).hyperdaimc$novelRemove(Entity.RemovalReason.KILLED);
                         return;
                     }
-                    if (!entity.level().isClientSide()) {
+//                    if (entity instanceof Player && entity.level().isClientSide()) break novelized;
+//                    if (entity instanceof ServerPlayer player && player.containerMenu != player.inventoryMenu)
+//                        player.doCloseContainer();
+
+                    if (!entity.level().isClientSide())
                         entity.checkDespawn();
-                    }
 
                     living.setOldPosAndRot();
                     living.yHeadRotO = living.getYHeadRot();
@@ -38,15 +46,21 @@ public abstract class EntityTickListMixin {
                     living.walkAnimation.update(0, 1);
                     living.setSwimming(false);
                     living.deathTime = time;
+                    living.hurtTime = 0;
+                } else {
+                    if (!entity.level().isClientSide())
+                        entity.checkDespawn();
+                    entity.setOldPosAndRot();
                 }
-            } else {
-                if (!entity.level().isClientSide()) {
-                    entity.checkDespawn();
+
+                entity.tickCount++;
+                if (entity instanceof Player && entity.tickCount % 100 == 0) {
+                    Deets.LOG.info("ListedNovelizedPlayer");
                 }
-                entity.setOldPosAndRot();
+                return;
             }
-        } else {
-            instance.accept(t);
         }
+
+        instance.accept(t);
     }
 }

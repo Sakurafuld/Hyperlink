@@ -25,14 +25,14 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
 public class DeskShapedRecipeBuilder implements RecipeBuilder {
-    private boolean minecraft = false;
     private final ItemLike result;
     private final int count;
     private final List<String> pattern = Lists.newArrayList();
     private final Map<Character, Ingredient> key = Maps.newLinkedHashMap();
+    private boolean minecraft = false;
 
     public DeskShapedRecipeBuilder(ItemLike result, int count) {
         this.result = result;

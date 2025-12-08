@@ -24,6 +24,16 @@ public class DeskBlock extends Block implements EntityBlock {
         super(pProperties);
     }
 
+    public static void give(Player player, ItemStack stack) {
+        if (!player.getInventory().add(stack) && !stack.isEmpty()) {
+            ItemEntity entity = player.drop(stack, false);
+            if (entity != null) {
+                entity.setNoPickUpDelay();
+                entity.setThrower(player.getUUID());
+            }
+        }
+    }
+
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
@@ -63,16 +73,6 @@ public class DeskBlock extends Block implements EntityBlock {
             desk.minecrafter = null;
         } else {
             super.playerDestroy(pLevel, pPlayer, pPos, pState, pBlockEntity, pTool);
-        }
-    }
-
-    public static void give(Player player, ItemStack stack) {
-        if (!player.getInventory().add(stack) && !stack.isEmpty()) {
-            ItemEntity entity = player.drop(stack, false);
-            if (entity != null) {
-                entity.setNoPickUpDelay();
-                entity.setThrower(player.getUUID());
-            }
         }
     }
 }

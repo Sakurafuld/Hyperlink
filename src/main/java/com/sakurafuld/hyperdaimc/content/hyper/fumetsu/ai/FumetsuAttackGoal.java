@@ -1,12 +1,12 @@
 package com.sakurafuld.hyperdaimc.content.hyper.fumetsu.ai;
 
 import com.google.common.collect.Lists;
-import com.sakurafuld.hyperdaimc.api.mixin.IServerLevelFumetsu;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.skull.FumetsuSkull;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.squall.FumetsuSquall;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IServerLevelFumetsu;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -23,26 +23,20 @@ import java.util.List;
 public class FumetsuAttackGoal extends Goal {
     private final FumetsuEntity fumetsu;
     private final float range;
+    private final List<WeightedEntry.Wrapper<Runnable>> attacks = Lists.newArrayList();
     @Nullable
     private LivingEntity target = null;
     private int attackTime = -1;
     private int annihilate = 12;
-    private final List<WeightedEntry.Wrapper<Runnable>> attacks = Lists.newArrayList();
 
     public FumetsuAttackGoal(FumetsuEntity fumetsu, float range) {
         this.fumetsu = fumetsu;
         this.range = range;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 
-        this.attacks.add(WeightedEntry.wrap(() -> {
-            this.fumetsu.shoot(FumetsuSkull.Type.CRIMSON, 1);
-        }, 30));
-        this.attacks.add(WeightedEntry.wrap(() -> {
-            this.fumetsu.shoot(FumetsuSkull.Type.CYAN, 2);
-        }, 30));
-        this.attacks.add(WeightedEntry.wrap(() -> {
-            this.fumetsu.shoot(FumetsuSkull.Type.CRYSTAL, 0);
-        }, 15));
+        this.attacks.add(WeightedEntry.wrap(() -> this.fumetsu.shoot(FumetsuSkull.Type.CRIMSON, 1), 30));
+        this.attacks.add(WeightedEntry.wrap(() -> this.fumetsu.shoot(FumetsuSkull.Type.CYAN, 2), 30));
+        this.attacks.add(WeightedEntry.wrap(() -> this.fumetsu.shoot(FumetsuSkull.Type.CRYSTAL, 0), 15));
         this.attacks.add(WeightedEntry.wrap(() -> {
             this.fumetsu.shoot(FumetsuSkull.Type.CRIMSON, 0);
             this.fumetsu.shoot(FumetsuSkull.Type.CRIMSON, 1);
@@ -63,12 +57,11 @@ public class FumetsuAttackGoal extends Goal {
                 FumetsuSquall squall = new FumetsuSquall(HyperEntities.FUMETSU_SQUALL.get(), this.fumetsu.level());
                 squall.setup(this.fumetsu, start, this.fumetsu.getViewVector(1), 0.75f);
 
-                ((IServerLevelFumetsu) serverLevel).fumetsuSpawn(squall);
+                ((IServerLevelFumetsu) serverLevel).hyperdaimc$fumetsuSpawn(squall);
                 serverLevel.playSound(null, start.x(), start.y(), start.z(), HyperSounds.FUMETSU_SHOOT.get(), SoundSource.HOSTILE, 2, 1 + (this.fumetsu.getRandom().nextFloat() - this.fumetsu.getRandom().nextFloat()) * 0.2f);
             }
         }, 10));
         this.attacks.add(WeightedEntry.wrap(this::annihilate, 5));
-
     }
 
     @Override
@@ -77,9 +70,7 @@ public class FumetsuAttackGoal extends Goal {
         if (target != null && !target.isRemoved()) {
             this.target = target;
             return true;
-        } else {
-            return false;
-        }
+        } else return false;
     }
 
     @Override
@@ -112,13 +103,12 @@ public class FumetsuAttackGoal extends Goal {
             movement = movement.add(normalized.x() * 0.5, normalized.y() * 0.5, normalized.z() * 0.5);
 
             double length = point.subtract(this.fumetsu.position()).length();
-            if (length <= 0.2) {
+            if (length <= 0.2)
                 movement = movement.scale(0.01);
-            }
 
             this.fumetsu.setDeltaMovement(movement);
 
-            float interval = Mth.lerp(this.fumetsu.getHealth() / this.fumetsu.getMaxHealth(), 0, 10);
+            float interval = Mth.lerp(this.fumetsu.getHealth() / this.fumetsu.getMaxHealth(), 5, 10);
             if (--this.attackTime == 0) {
 
                 double distance = this.fumetsu.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
@@ -127,12 +117,10 @@ public class FumetsuAttackGoal extends Goal {
                 if (--this.annihilate <= 0) {
                     this.annihilate = 12;
                     this.annihilate();
-                } else {
+                } else
                     WeightedRandom.getRandomItem(this.fumetsu.getRandom(), this.attacks).ifPresent(attack -> attack.getData().run());
-                }
-            } else if (this.attackTime < 0) {
+            } else if (this.attackTime < 0)
                 this.attackTime = Math.round(interval);
-            }
         }
     }
 

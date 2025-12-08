@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.content.hyper.fumetsu.storm;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.sakurafuld.hyperdaimc.helper.Boxes;
-import com.sakurafuld.hyperdaimc.helper.Renders;
+import com.sakurafuld.hyperdaimc.infrastructure.Boxes;
+import com.sakurafuld.hyperdaimc.infrastructure.Renders;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

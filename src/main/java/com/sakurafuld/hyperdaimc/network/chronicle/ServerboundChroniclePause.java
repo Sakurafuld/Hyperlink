@@ -10,17 +10,10 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
-public class ServerboundChroniclePause {
-    private final BlockPos from;
-    private final BlockPos to;
-
-    public ServerboundChroniclePause(BlockPos from, BlockPos to) {
-        this.from = from;
-        this.to = to;
-    }
-
+public record ServerboundChroniclePause(BlockPos from, BlockPos to) {
     public static void encode(ServerboundChroniclePause msg, FriendlyByteBuf buf) {
         buf.writeBlockPos(msg.from);
         buf.writeBlockPos(msg.to);
@@ -32,7 +25,7 @@ public class ServerboundChroniclePause {
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
+            ServerPlayer player = Objects.requireNonNull(ctx.get().getSender());
             if (player.getMainHandItem().is(HyperItems.CHRONICLE.get())) {
                 ChronicleSavedData data = ChronicleSavedData.get(player.level());
                 data.pause(player.getUUID(), this.from, this.to);

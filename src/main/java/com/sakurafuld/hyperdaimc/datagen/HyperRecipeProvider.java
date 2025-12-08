@@ -13,7 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Consumer;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
 public class HyperRecipeProvider extends RecipeProvider {
     public HyperRecipeProvider(PackOutput pOutput) {

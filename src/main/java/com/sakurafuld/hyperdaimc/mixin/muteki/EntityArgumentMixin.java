@@ -18,8 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.LOG;
-
 @Mixin(EntityArgument.class)
 public abstract class EntityArgumentMixin {
     @Inject(method = "getEntity", at = @At("RETURN"), cancellable = true)
@@ -30,12 +28,10 @@ public abstract class EntityArgumentMixin {
                     .findFirst()
                     .orElse(null);
 
-            if (found == null) {
-                LOG.debug("getEntityMuteki");
+            if (found == null)
                 throw MutekiHandler.ERROR_NOT_FOUND.create();
-            } else {
+            else
                 cir.setReturnValue(found);
-            }
         }
     }
 
@@ -46,12 +42,10 @@ public abstract class EntityArgumentMixin {
                     .filter(entity -> !(entity instanceof LivingEntity living && MutekiHandler.muteki(living)))
                     .collect(Collectors.toList());
 
-            if (found.isEmpty()) {
-                LOG.debug("getOptionalEntitiesMuteki");
+            if (found.isEmpty())
                 throw MutekiHandler.ERROR_NOT_FOUND.create();
-            } else {
+            else
                 cir.setReturnValue(found);
-            }
         }
     }
 
@@ -62,12 +56,10 @@ public abstract class EntityArgumentMixin {
                     .filter(entity -> !MutekiHandler.muteki(entity))
                     .collect(Collectors.toList());
 
-            if (found.isEmpty()) {
-                LOG.debug("getOptionalPlayersMuteki");
+            if (found.isEmpty())
                 throw MutekiHandler.ERROR_NOT_FOUND.create();
-            } else {
+            else
                 cir.setReturnValue(found);
-            }
         }
     }
 
@@ -79,12 +71,11 @@ public abstract class EntityArgumentMixin {
                     .findFirst()
                     .orElse(null);
 
-            if (found == null) {
-                LOG.debug("getPlayerMuteki");
+            if (found == null)
                 throw MutekiHandler.ERROR_NOT_FOUND.create();
-            } else {
+            else
                 cir.setReturnValue(found);
-            }
+
         }
     }
 
@@ -95,12 +86,10 @@ public abstract class EntityArgumentMixin {
                     .filter(entity -> !MutekiHandler.muteki(entity))
                     .collect(Collectors.toList());
 
-            if (found.isEmpty()) {
-                LOG.debug("getPlayersMuteki");
+            if (found.isEmpty())
                 throw MutekiHandler.ERROR_NOT_FOUND.create();
-            } else {
+            else
                 cir.setReturnValue(found);
-            }
         }
     }
 }

@@ -11,6 +11,7 @@ import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntityRenderer;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.skull.FumetsuSkullRenderer;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.squall.FumetsuSquallRenderer;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.storm.FumetsuStormRenderer;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxTooltip;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXOverlay;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXScreen;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXTooltip;
@@ -58,25 +59,25 @@ public class HyperSetup {
             BrewingRecipeRegistry.addRecipe(new IBrewingRecipe() {
                 @Override
                 public boolean isInput(ItemStack input) {
-                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get())
                         return false;
-                    }
+
                     return input.is(Items.POTION) || input.is(Items.SPLASH_POTION) || input.is(Items.LINGERING_POTION);
                 }
 
                 @Override
                 public boolean isIngredient(ItemStack ingredient) {
-                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get())
                         return false;
-                    }
+
                     return ingredient.is(HyperItems.GOD_SIGIL.get());
                 }
 
                 @Override
                 public ItemStack getOutput(ItemStack input, ItemStack ingredient) {
-                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get())
                         return ItemStack.EMPTY;
-                    }
+
                     return this.isInput(input) && this.isIngredient(ingredient) ? HyperItems.CHEMICAL_MAX.get().getDefaultInstance() : ItemStack.EMPTY;
                 }
             });
@@ -84,25 +85,25 @@ public class HyperSetup {
             BrewingRecipeRegistry.addRecipe(new IBrewingRecipe() {
                 @Override
                 public boolean isInput(ItemStack input) {
-                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get())
                         return false;
-                    }
+
                     return input.is(HyperItems.CHEMICAL_MAX.get());
                 }
 
                 @Override
                 public boolean isIngredient(ItemStack ingredient) {
-                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get())
                         return false;
-                    }
+
                     return ingredient.is(Items.NETHER_STAR);
                 }
 
                 @Override
                 public ItemStack getOutput(ItemStack input, ItemStack ingredient) {
-                    if (!HyperCommonConfig.FUMETSU_RECIPE.get()) {
+                    if (!HyperCommonConfig.FUMETSU_RECIPE.get())
                         return ItemStack.EMPTY;
-                    }
+
                     return this.isInput(input) && this.isIngredient(ingredient) ? HyperBlocks.FUMETSU_SKULL.get().asItem().getDefaultInstance() : ItemStack.EMPTY;
                 }
             });
@@ -158,8 +159,10 @@ public class HyperSetup {
     }
 
     @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
     public void registerTooltip(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(VRXTooltip.class, VRXTooltip.Client::new);
+        event.register(ParadoxTooltip.class, ParadoxTooltip.Client::new);
     }
 
     @SubscribeEvent

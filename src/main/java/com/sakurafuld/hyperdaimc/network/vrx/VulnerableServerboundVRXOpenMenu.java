@@ -1,10 +1,7 @@
 package com.sakurafuld.hyperdaimc.network.vrx;
 
-import com.mojang.datafixers.util.Pair;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.vrx.VRXMenu;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,52 +10,39 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 @Deprecated
-public class VulnerableServerboundVRXOpenMenu {
-    private final Pair<BlockPos, Integer> provider;
-    private final Pair<Pair<BlockPos, Integer>, Direction> pair;
-
-    public VulnerableServerboundVRXOpenMenu(Pair<Pair<BlockPos, Integer>, Direction> pair) {
-        this.pair = pair;
-        this.provider = pair.getFirst();
-    }
-
+public record VulnerableServerboundVRXOpenMenu(VRXMenu.Canvas canvas) {
     public static void encode(VulnerableServerboundVRXOpenMenu msg, FriendlyByteBuf buf) {
-        VRXMenu.parse(buf, msg.pair);
+        msg.canvas.write(buf);
     }
 
     public static VulnerableServerboundVRXOpenMenu decode(FriendlyByteBuf buf) {
-        return new VulnerableServerboundVRXOpenMenu(VRXMenu.parse(buf));
+        return new VulnerableServerboundVRXOpenMenu(VRXMenu.Canvas.read(buf));
     }
 
     public void handle(Supplier<NetworkEvent.Context> ctx) {
-        if (!HyperCommonConfig.VRX_VULNERABILIZATION.get()) {
+        if (!HyperCommonConfig.VRX_VULNERABILIZATION.get())
             return;
-        }
+
         ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            Component name;
-            if (this.provider.getFirst() != null) {
-                BlockState state = player.level().getBlockState(this.provider.getFirst());
-                if (!state.hasBlockEntity()) {
-                    return;
-                } else {
-                    name = state.getBlock().getName();
-                }
-            } else {
-                Entity entity = player.level().getEntity(this.provider.getSecond());
-                if (entity == null) {
-                    return;
-                } else {
-                    name = entity.getDisplayName();
-                }
-            }
+            ServerPlayer player = Objects.requireNonNull(ctx.get().getSender());
+            Component name = this.canvas().supply(player.level(), block -> block.getBlockState().getBlock().getName(), Entity::getDisplayName);
+//            if (this.canvas.block != null) {
+//                BlockEntity block = this.canvas.getBlock(player.level());
+//                if (block == null) return;
+//                else name = block.getBlockState().getBlock().getName();
+//            } else {
+//                Entity entity = this.canvas.getEntity(player.level());
+//                if (entity == null) return;
+//                else name = entity.getDisplayName();
+//            }
+
             NetworkHooks.openScreen(player, new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
@@ -67,10 +51,9 @@ public class VulnerableServerboundVRXOpenMenu {
 
                 @Override
                 public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
-                    return new VRXMenu(pContainerId, pPlayerInventory, VulnerableServerboundVRXOpenMenu.this.pair);
+                    return new VRXMenu(pContainerId, pPlayerInventory, VulnerableServerboundVRXOpenMenu.this.canvas);
                 }
-            }, buf -> VRXMenu.parse(buf, VulnerableServerboundVRXOpenMenu.this.pair));
-
+            }, VulnerableServerboundVRXOpenMenu.this.canvas::write);
         });
         ctx.get().setPacketHandled(true);
     }

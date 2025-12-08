@@ -36,33 +36,6 @@ public class SigilItem extends Item {
         super(pProperties.rarity(Rarity.UNCOMMON).stacksTo(1).fireResistant());
     }
 
-    @Override
-    public boolean hasCraftingRemainingItem(ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
-        return itemStack.copy();
-    }
-
-    @Override
-    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(Component.translatable("tooltip.hyperdaimc.god_sigil").withStyle(ChatFormatting.GRAY));
-    }
-
-    @Override
-    public InteractionResult useOn(UseOnContext pContext) {
-        if (HyperCommonConfig.FUMETSU_SUMMON.get() && pContext.getPlayer() != null && pContext.getPlayer().isShiftKeyDown()) {
-
-            if (checkAndSpawn(pContext.getLevel(), pContext.getClickedPos(), getOrCreatePattern0()) || checkAndSpawn(pContext.getLevel(), pContext.getClickedPos(), getOrCreatePattern1()))
-                ;
-
-            return InteractionResult.sidedSuccess(pContext.getLevel().isClientSide());
-        }
-        return super.useOn(pContext);
-    }
-
     public static boolean checkAndSpawn(Level level, BlockPos pos, BlockPattern pattern) {
         BlockPattern.BlockPatternMatch match = pattern.find(level, pos);
         if (match != null) {
@@ -129,5 +102,32 @@ public class SigilItem extends Item {
         }
 
         return pattern1;
+    }
+
+    @Override
+    public boolean hasCraftingRemainingItem(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
+        return itemStack.copy();
+    }
+
+    @Override
+    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        pTooltipComponents.add(Component.translatable("tooltip.hyperdaimc.god_sigil").withStyle(ChatFormatting.GRAY));
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext pContext) {
+        if (HyperCommonConfig.FUMETSU_SUMMON.get() && pContext.getPlayer() != null && pContext.getPlayer().isShiftKeyDown()) {
+
+            if (checkAndSpawn(pContext.getLevel(), pContext.getClickedPos(), getOrCreatePattern0()) || checkAndSpawn(pContext.getLevel(), pContext.getClickedPos(), getOrCreatePattern1()))
+                ;
+
+            return InteractionResult.sidedSuccess(pContext.getLevel().isClientSide());
+        }
+        return super.useOn(pContext);
     }
 }

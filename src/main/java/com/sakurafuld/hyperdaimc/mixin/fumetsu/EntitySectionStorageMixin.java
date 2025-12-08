@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.fumetsu;
 
-import com.sakurafuld.hyperdaimc.api.mixin.EntitySectionWrapper;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.EntitySectionWrapper;
 import net.minecraft.world.level.entity.EntityAccess;
 import net.minecraft.world.level.entity.EntitySection;
 import net.minecraft.world.level.entity.EntitySectionStorage;

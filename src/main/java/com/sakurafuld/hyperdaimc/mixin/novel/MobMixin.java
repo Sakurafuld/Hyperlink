@@ -1,10 +1,10 @@
 package com.sakurafuld.hyperdaimc.mixin.novel;
 
-import com.sakurafuld.hyperdaimc.api.content.IFumetsu;
-import com.sakurafuld.hyperdaimc.api.mixin.IEntityFumetsu;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
+import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityFumetsu;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -21,7 +21,7 @@ public abstract class MobMixin {
         Entity self = (Entity) (Object) this;
         if (FumetsuHandler.specialRemove.get()) {
             if (self instanceof IEntityFumetsu fumetsu) {
-                fumetsu.fumetsuExtinction(Entity.RemovalReason.CHANGED_DIMENSION);
+                fumetsu.hyperdaimc$extinction(Entity.RemovalReason.CHANGED_DIMENSION);
             }
             return;
         }

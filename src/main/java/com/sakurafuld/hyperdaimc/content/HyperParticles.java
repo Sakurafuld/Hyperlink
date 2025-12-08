@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.content;
 
 import com.mojang.serialization.Codec;
-import com.sakurafuld.hyperdaimc.api.content.GashatParticle;
-import com.sakurafuld.hyperdaimc.api.content.GashatParticleOptions;
+import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticle;
+import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -14,7 +14,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import static com.sakurafuld.hyperdaimc.helper.Deets.HYPERDAIMC;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
 @Mod.EventBusSubscriber(modid = HYPERDAIMC, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class HyperParticles {

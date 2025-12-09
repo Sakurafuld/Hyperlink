@@ -58,13 +58,13 @@ public class NovelHandler {
     private static List<ItemStack> capturedItems = null;
     private static int capturedExperiences = -1;
 
-    public enum ModifierRenderingLevel {
+    public enum RenderingLevel {
         NONE,
         UNIQUE,
         ALL;
 
         public boolean check() {
-            return this.ordinal() <= HyperCommonConfig.NOVEL_MODIFIER_RENDERING.get().ordinal();
+            return this.ordinal() <= HyperCommonConfig.NOVEL_RENDERING_LEVEL.get().ordinal();
         }
     }
 

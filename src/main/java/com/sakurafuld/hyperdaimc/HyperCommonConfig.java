@@ -22,7 +22,7 @@ public class HyperCommonConfig {
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> NOVEL_SPECIAL;
     public static final ForgeConfigSpec.DoubleValue NOVEL_REACH;
     public static final ForgeConfigSpec.BooleanValue NOVEL_INVERT_SHIFT;
-    public static final ForgeConfigSpec.EnumValue<NovelHandler.ModifierRenderingLevel> NOVEL_MODIFIER_RENDERING;
+    public static final ForgeConfigSpec.EnumValue<NovelHandler.RenderingLevel> NOVEL_RENDERING_LEVEL;
 
     public static final ForgeConfigSpec.BooleanValue ENABLE_CHRONICLE;
     public static final ForgeConfigSpec.BooleanValue CHRONICLE_VULNERABILIZATION;
@@ -40,7 +40,7 @@ public class HyperCommonConfig {
     public static final ForgeConfigSpec.BooleanValue PARADOX_NO_CHAIN_PARTICLES;
     public static final ForgeConfigSpec.IntValue PARADOX_FADE;
     public static final ForgeConfigSpec.BooleanValue PARADOX_INVERT_SHIFT;
-    public static final ForgeConfigSpec.EnumValue<ParadoxHandler.ParticleLevel> PARADOX_PARTICLE_LEVEL;
+    public static final ForgeConfigSpec.EnumValue<ParadoxHandler.RenderingLevel> PARADOX_RENDERING_LEVEL;
 
 
     public static final ForgeConfigSpec.BooleanValue ENABLE_VRX;
@@ -117,10 +117,10 @@ public class HyperCommonConfig {
                 NOVEL_INVERT_SHIFT = builder
                         .comment("Default: false ( = Shift to target a single entity)")
                         .define("Invert Novel control", false);
-                NOVEL_MODIFIER_RENDERING = builder
-                        .comment("Level of effect rendering when the modifier is applied to Tinker's tools",
+                NOVEL_RENDERING_LEVEL = builder
+                        .comment("Level of effect rendering",
                                 "Default: ALL")
-                        .defineEnum("Modifier rendering level", NovelHandler.ModifierRenderingLevel.ALL);
+                        .defineEnum("Rendering level", NovelHandler.RenderingLevel.ALL);
             }
             builder.pop();
 
@@ -185,10 +185,10 @@ public class HyperCommonConfig {
                 PARADOX_INVERT_SHIFT = builder
                         .comment("Default: false ( = Shift to no continuous target blocks)")
                         .define("Invert Paradox control", false);
-                PARADOX_PARTICLE_LEVEL = builder
-                        .comment("Level of particle rendering when destroyed",
+                PARADOX_RENDERING_LEVEL = builder
+                        .comment("Level of effect rendering when destroyed",
                                 "Default: TERRAIN")
-                        .defineEnum("Particle level", ParadoxHandler.ParticleLevel.TERRAIN);
+                        .defineEnum("Rendering level", ParadoxHandler.RenderingLevel.TERRAIN);
                 PARADOX_NO_CHAIN_PARTICLES = builder
                         .comment("Disable particles when chain destroyed",
                                 "Default: false")

@@ -20,16 +20,13 @@ public abstract class MobMixin {
     private void removeAfterChangingDimensionsNovel(CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
         if (FumetsuHandler.specialRemove.get()) {
-            if (self instanceof IEntityFumetsu fumetsu) {
+            if (self instanceof IEntityFumetsu fumetsu)
                 fumetsu.hyperdaimc$extinction(Entity.RemovalReason.CHANGED_DIMENSION);
-            }
             return;
         }
-        if (self instanceof Player) {
+        if (self instanceof Player)
             return;
-        }
-        if ((self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self)) {
+        if ((self instanceof IFumetsu || (self instanceof LivingEntity living && MutekiHandler.muteki(living))) && !NovelHandler.novelized(self))
             ci.cancel();
-        }
     }
 }

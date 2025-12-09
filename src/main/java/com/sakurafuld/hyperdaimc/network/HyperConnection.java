@@ -48,6 +48,7 @@ public class HyperConnection {
         INSTANCE.registerMessage(++id, ClientboundParadoxSyncEntry.class, ClientboundParadoxSyncEntry::encode, ClientboundParadoxSyncEntry::decode, ClientboundParadoxSyncEntry::handle);
         INSTANCE.registerMessage(++id, ClientboundParadoxSyncCapability.class, ClientboundParadoxSyncCapability::encode, ClientboundParadoxSyncCapability::decode, ClientboundParadoxSyncCapability::handle);
         INSTANCE.registerMessage(++id, ServerboundParadoxAction.class, ServerboundParadoxAction::encode, ServerboundParadoxAction::decode, ServerboundParadoxAction::handle);
+        INSTANCE.registerMessage(++id, ServerboundParadoxClearCreative.class, ServerboundParadoxClearCreative::encode, ServerboundParadoxClearCreative::decode, ServerboundParadoxClearCreative::handle);
 
         INSTANCE.registerMessage(++id, ClientboundVRXSyncSave.class, ClientboundVRXSyncSave::encode, ClientboundVRXSyncSave::decode, ClientboundVRXSyncSave::handle);
         INSTANCE.registerMessage(++id, ClientboundVRXSyncCapability.class, ClientboundVRXSyncCapability::encode, ClientboundVRXSyncCapability::decode, ClientboundVRXSyncCapability::handle);

@@ -3,8 +3,12 @@ package com.sakurafuld.hyperdaimc.content.hyper.paradox;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.infrastructure.item.AbstractGashatItem;
+import com.sakurafuld.hyperdaimc.network.HyperConnection;
+import com.sakurafuld.hyperdaimc.network.paradox.ServerboundParadoxClearCreative;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -26,6 +30,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -188,25 +194,24 @@ public class ParadoxItem extends AbstractGashatItem {
 
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack pStack, ItemStack pOther, Slot pSlot, ClickAction pAction, Player pPlayer, SlotAccess pAccess) {
-        if (!this.enabled.get())
+        if (!this.enabled.get() || pAction != ClickAction.SECONDARY || !pOther.isEmpty())
             return super.overrideOtherStackedOnMe(pStack, pOther, pSlot, pAction, pPlayer, pAccess);
-
-        if (pAction == ClickAction.SECONDARY && pOther.isEmpty()) {
-            UUID uuid = getUUID(pStack);
-            if (uuid != null) {
-                if (!pPlayer.level().isClientSide()) {
-                    ParadoxSavedData data = ParadoxSavedData.getServer();
-                    removeUUID(pStack);
-                    data.remove(uuid);
-                    data.sync2Client(uuid);
-                } else {
-                    pPlayer.playNotifySound(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.MASTER, 0.5f, 1);
-                    pPlayer.playNotifySound(SoundEvents.FIRE_EXTINGUISH, SoundSource.MASTER, 0.5f, 2);
-                }
+        UUID uuid = getUUID(pStack);
+        if (uuid != null) {
+            if (!pPlayer.level().isClientSide()) {
+                ParadoxSavedData data = ParadoxSavedData.getServer();
+                removeUUID(pStack);
+                data.remove(uuid);
+                data.sync2Client(uuid);
+            } else {
+                if (pPlayer.isCreative())
+                    Creative.INSTANCE.accept(pSlot);
+                pPlayer.playNotifySound(SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.MASTER, 0.5f, 1);
+                pPlayer.playNotifySound(SoundEvents.FIRE_EXTINGUISH, SoundSource.MASTER, 0.5f, 2);
             }
+        }
 
-            return true;
-        } else return super.overrideOtherStackedOnMe(pStack, pOther, pSlot, pAction, pPlayer, pAccess);
+        return true;
     }
 
     @Override
@@ -252,5 +257,18 @@ public class ParadoxItem extends AbstractGashatItem {
     public @Nullable EquipmentSlot getEquipmentSlot(ItemStack stack) {
         if (!this.enabled.get()) return super.getEquipmentSlot(stack);
         return EquipmentSlot.MAINHAND;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    enum Creative {
+        INSTANCE;
+
+        void accept(Slot slot) {
+            if (Minecraft.getInstance().screen instanceof CreativeModeInventoryScreen screen && !(slot instanceof CreativeModeInventoryScreen.SlotWrapper)) {
+                int index = slot.index;
+                index -= screen.isInventoryOpen() ? 0 : 9;
+                HyperConnection.INSTANCE.sendToServer(new ServerboundParadoxClearCreative(index));
+            }
+        }
     }
 }

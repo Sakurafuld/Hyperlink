@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SlashEffectRendererMixin<T extends EntitySlashEffect> {
     @Inject(method = "render(Lmods/flammpfeil/slashblade/entity/EntitySlashEffect;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;scale(FFF)V", ordinal = 0, remap = true), remap = false)
     private void renderTicEx(T entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, CallbackInfo ci) {
-        if (!NovelHandler.ModifierRenderingLevel.UNIQUE.check())
+        if (!NovelHandler.RenderingLevel.UNIQUE.check())
             return;
         IEntitySlashEffectTicEx entityTicEx = (IEntitySlashEffectTicEx) entity;
         if (entityTicEx.hyperdaimc$isTicExNovel() && entityTicEx.hyperdaimc$isSpecial()) {

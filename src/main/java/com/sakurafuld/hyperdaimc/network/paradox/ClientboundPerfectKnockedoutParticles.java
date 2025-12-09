@@ -43,9 +43,9 @@ public record ClientboundPerfectKnockedoutParticles(Long2IntOpenHashMap map) {
 
     @OnlyIn(Dist.CLIENT)
     private void handle() {
-        if (!ParadoxHandler.ParticleLevel.TERRAIN.check())
+        if (!ParadoxHandler.RenderingLevel.TERRAIN.check())
             return;
-        boolean gashat = ParadoxHandler.ParticleLevel.ALL.check();
+        boolean gashat = ParadoxHandler.RenderingLevel.ALL.check();
         Minecraft mc = Minecraft.getInstance();
         ClientLevel level = Objects.requireNonNull(mc.level);
         for (Long2IntMap.Entry entry : this.map().long2IntEntrySet()) {

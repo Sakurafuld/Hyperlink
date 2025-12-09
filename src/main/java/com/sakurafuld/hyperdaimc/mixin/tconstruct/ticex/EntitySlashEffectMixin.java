@@ -36,7 +36,7 @@ public abstract class EntitySlashEffectMixin extends ProjectileMixin implements 
 
     @Inject(locals = LocalCapture.CAPTURE_FAILSOFT, method = "tick", at = @At(value = "INVOKE", target = "Lmods/flammpfeil/slashblade/entity/EntitySlashEffect;getShooter()Lnet/minecraft/world/entity/Entity;", ordinal = 0, remap = false))
     private void tickTicEx(CallbackInfo ci, Vec3 start, Vector4f normal, Vector4f dir, float progress, Vec3 normal3d, BlockHitResult rayResult) {
-        if (!NovelHandler.ModifierRenderingLevel.ALL.check())
+        if (!NovelHandler.RenderingLevel.ALL.check())
             return;
         EntitySlashEffect self = (EntitySlashEffect) (Object) this;
         if (self.level() instanceof ServerLevel level && this.hyperdaimc$isTicExNovel()) {

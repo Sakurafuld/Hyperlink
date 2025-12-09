@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -40,6 +41,7 @@ import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 @Mod.EventBusSubscriber(modid = HYPERDAIMC, value = Dist.CLIENT)
 public class ParadoxRenderer {
     private static long lastNoHeld = 0;
+    private static long lastHeld = 0;
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
@@ -71,6 +73,7 @@ public class ParadoxRenderer {
         boolean mainHanded = mainHand.is(HyperItems.PARADOX.get());
         boolean hasParadox = mainHanded || offhand.is(HyperItems.PARADOX.get());
         if (!hasParadox) lastNoHeld = player.tickCount;
+        else lastHeld = player.tickCount;
 
         PoseStack poseStack = event.getPoseStack();
         Vec3 camera = event.getCamera().getPosition();
@@ -139,7 +142,10 @@ public class ParadoxRenderer {
             });
         }
 
-        float alpha = hasParadox ? 1 : (1f - Math.min(1, (float) (lastNoHeld - ParadoxHandler.lastHeld) / HyperCommonConfig.PARADOX_FADE.get()));
+//        if (player.tickCount % 40 == 0)
+//            LOG.debug("paradoFade lastNoHeld={}, lastHeld={}, fade={}, answer={}", lastNoHeld, lastHeld, HyperCommonConfig.PARADOX_FADE.get(),
+//                    (lastNoHeld - lastHeld) / (float) HyperCommonConfig.PARADOX_FADE.get());
+        float alpha = hasParadox ? 1 : (1f - Mth.clamp((lastNoHeld - lastHeld) / (float) HyperCommonConfig.PARADOX_FADE.get(), 0, 1));
         if (alpha <= 0) return;
 
         if (!capability.isPresent() && ParadoxCapabilityPlayer.isCapable(player))

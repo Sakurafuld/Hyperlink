@@ -148,7 +148,8 @@ public abstract class LivingEntityMixin implements IEntityNovel {
     private ParticleOptions makePoofParticlesNovel(ParticleOptions pParticleData) {
         LivingEntity self = (LivingEntity) (Object) this;
         RandomSource random = self.getRandom();
-        if (NovelHandler.novelized(self) && random.nextFloat() < 0.75)
+
+        if (NovelHandler.RenderingLevel.ALL.check() && random.nextFloat() < 0.75 && NovelHandler.novelized(self))
             return GashatParticleOptions.drop(random::nextFloat, -0.1f);
         else return pParticleData;
     }

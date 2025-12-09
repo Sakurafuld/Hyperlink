@@ -27,7 +27,7 @@ public abstract class EntityAbstractSummonedSwordMixin extends EntityMixin {
 
     @Unique
     private void tickParticles() {
-        if (!NovelHandler.ModifierRenderingLevel.ALL.check())
+        if (!NovelHandler.RenderingLevel.ALL.check())
             return;
         EntityAbstractSummonedSword self = (EntityAbstractSummonedSword) (Object) this;
         if (((IEntityTicEx) self).hyperdaimc$isTicExNovel() && self.tickCount % 2 == 0 && self.level() instanceof ServerLevel level) {

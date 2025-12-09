@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class DriveRendererMixin<T extends EntityDrive> {
     @Inject(method = "render(Lmods/flammpfeil/slashblade/entity/EntityDrive;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lmods/flammpfeil/slashblade/client/renderer/model/BladeModelManager;getModel(Lnet/minecraft/resources/ResourceLocation;)Lmods/flammpfeil/slashblade/client/renderer/model/obj/WavefrontObject;", remap = false), remap = false)
     private void renderTicEx(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource bufferIn, int packedLightIn, CallbackInfo ci) {
-        if (!NovelHandler.ModifierRenderingLevel.UNIQUE.check())
+        if (!NovelHandler.RenderingLevel.UNIQUE.check())
             return;
         if (((IEntityTicEx) entity).hyperdaimc$isTicExNovel()) {
             float ticks = Math.max(0, entity.tickCount + partialTicks);

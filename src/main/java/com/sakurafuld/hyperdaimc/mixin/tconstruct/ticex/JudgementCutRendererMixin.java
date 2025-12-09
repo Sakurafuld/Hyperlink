@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class JudgementCutRendererMixin<T extends EntityJudgementCut> {
     @Inject(method = "render(Lmods/flammpfeil/slashblade/entity/EntityJudgementCut;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At("RETURN"), remap = false)
     private void renderTicEx(T entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, CallbackInfo ci) {
-        if (!NovelHandler.ModifierRenderingLevel.UNIQUE.check())
+        if (!NovelHandler.RenderingLevel.UNIQUE.check())
             return;
         if (((IEntityTicEx) entity).hyperdaimc$isTicExNovel()) {
             float size = (float) Calculates.curve((entity.tickCount + partialTicks) / (double) (entity.getLifetime() + 1 + partialTicks), 0.2, 2, 0);

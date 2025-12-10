@@ -102,37 +102,6 @@ public class ParadoxChainCluster {
             map.put(dir, spin(chains, basePos, baseDirection, dir, viewDirection));
     }
 
-//    public void write(FriendlyByteBuf buf) {
-//        buf.writeMap(this.horizontalMap,
-//                FriendlyByteBuf::writeEnum,
-//                ParadoxChainCluster::writeChains);
-//        buf.writeMap(this.verticalHorizontalMap,
-//                FriendlyByteBuf::writeEnum,
-//                (buf1, map) ->
-//                        buf.writeMap(map,
-//                                FriendlyByteBuf::writeEnum,
-//                                ParadoxChainCluster::writeChains));
-//    }
-//
-//    private static void writeChains(FriendlyByteBuf buf, Set<ParadoxChain> chains) {
-//        buf.writeCollection(chains, (buf1, chain) -> chain.write(buf1));
-//    }
-//
-//    public ParadoxChainCluster(FriendlyByteBuf buf) {
-//        this.horizontalMap = buf.readMap(i -> Maps.newEnumMap(Direction.class),
-//                buf1 -> buf1.readEnum(Direction.class),
-//                ParadoxChainCluster::readChains);
-//        this.verticalHorizontalMap = buf.readMap(i -> Maps.newEnumMap(Direction.class),
-//                buf1 -> buf1.readEnum(Direction.class),
-//                buf1 -> buf1.readMap(i -> Maps.newEnumMap(Direction.class),
-//                        buf2 -> buf2.readEnum(Direction.class),
-//                        ParadoxChainCluster::readChains));
-//    }
-//
-//    private static Set<ParadoxChain> readChains(FriendlyByteBuf buf) {
-//        return buf.readCollection(ObjectOpenHashSet::new, ParadoxChain::new);
-//    }
-
     public CompoundTag serialize() {
         CompoundTag tag = new CompoundTag();
         ListTag horizontalMap = new ListTag();

@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.network.chronicle;
 
 import com.sakurafuld.hyperdaimc.content.HyperItems;
-import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleSavedData;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.system.ChronicleHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

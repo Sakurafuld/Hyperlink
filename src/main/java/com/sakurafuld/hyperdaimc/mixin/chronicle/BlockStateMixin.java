@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
-import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.paradox.handler.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.system.ChronicleHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.system.ParadoxHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;

@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.system.ChronicleHandler;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.chronicle.ClientboundChronicleHitEffect;
 import net.minecraft.core.BlockPos;

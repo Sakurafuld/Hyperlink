@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
-import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.system.ChronicleHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;

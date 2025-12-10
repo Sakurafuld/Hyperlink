@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.network.paradox;
 
-import com.sakurafuld.hyperdaimc.content.hyper.paradox.handler.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.system.ParadoxHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticle;
 import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticleOptions;
 import it.unimi.dsi.fastutil.longs.Long2IntMap;

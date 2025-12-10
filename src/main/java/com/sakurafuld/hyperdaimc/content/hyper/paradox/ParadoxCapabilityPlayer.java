@@ -5,7 +5,8 @@ import com.google.common.collect.Queues;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
-import com.sakurafuld.hyperdaimc.content.hyper.paradox.handler.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.system.ParadoxBomber;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.system.ParadoxHandler;
 import com.sakurafuld.hyperdaimc.network.HyperConnection;
 import com.sakurafuld.hyperdaimc.network.paradox.ClientboundParadoxSyncCapability;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -227,7 +228,7 @@ public class ParadoxCapabilityPlayer implements ICapabilitySerializable<Compound
                 int old = this.positions.size();
                 long prePKC = System.currentTimeMillis();
                 ParadoxHandler.gashacon(serverPlayer, () -> ParadoxHandler.captureAndTransfer(serverPlayer, () ->
-                        ParadoxHandler.perfectKnockoutChaining(serverPlayer, this.positions, this.skipPaused)));
+                        ParadoxBomber.perfectKnockoutChaining(serverPlayer, this.positions, this.skipPaused)));
                 LOG.info("[Pickdox] PKC {}ms lagged for {}blocks", System.currentTimeMillis() - prePKC, old - this.positions.size());
             }
 

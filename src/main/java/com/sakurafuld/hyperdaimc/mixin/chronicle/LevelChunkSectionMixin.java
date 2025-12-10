@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
-import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleSavedData;
-import com.sakurafuld.hyperdaimc.content.hyper.paradox.handler.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.system.ChronicleHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.system.ParadoxHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.ILevelChunkSectionChronicle;
 import it.unimi.dsi.fastutil.ints.Int2LongOpenHashMap;
 import net.minecraft.core.BlockPos;

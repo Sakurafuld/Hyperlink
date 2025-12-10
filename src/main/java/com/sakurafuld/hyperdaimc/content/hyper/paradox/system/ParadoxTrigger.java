@@ -1,4 +1,4 @@
-package com.sakurafuld.hyperdaimc.content.hyper.paradox.handler;
+package com.sakurafuld.hyperdaimc.content.hyper.paradox.system;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
@@ -79,7 +79,7 @@ public class ParadoxTrigger {
             if (ParadoxHandler.hasParadox(player)) {
                 if (player.pick(reach, 1, HyperCommonConfig.PARADOX_HIT_FLUID.get()) instanceof BlockHitResult result && result.getType() != HitResult.Type.MISS) {
                     BlockPos pos = result.getBlockPos();
-                    if (ParadoxHandler.canPerfectKnockout(player, level, pos, false)) {
+                    if (ParadoxBomber.canPerfectKnockout(player, level, pos, false)) {
                         event.setCanceled(true);
                         if (player.isShiftKeyDown() != HyperCommonConfig.PARADOX_INVERT_SHIFT.get()) {
                             if (millis - lastKnockout > 250 || millis - lastShiftClick > 75) {

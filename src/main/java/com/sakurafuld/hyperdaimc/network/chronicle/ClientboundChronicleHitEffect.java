@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.network.chronicle;
 
-import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.system.ChronicleHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;

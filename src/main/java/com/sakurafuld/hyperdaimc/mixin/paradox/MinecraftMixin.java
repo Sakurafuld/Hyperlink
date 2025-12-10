@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.mixin.paradox;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.content.hyper.paradox.handler.ParadoxHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.paradox.handler.ParadoxTrigger;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.system.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.system.ParadoxTrigger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;

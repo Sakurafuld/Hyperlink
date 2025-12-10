@@ -1,4 +1,4 @@
-package com.sakurafuld.hyperdaimc.content.hyper.paradox.handler;
+package com.sakurafuld.hyperdaimc.content.hyper.paradox.system;
 
 import com.google.common.base.Predicates;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -142,9 +142,6 @@ public class ParadoxRenderer {
             });
         }
 
-//        if (player.tickCount % 40 == 0)
-//            LOG.debug("paradoFade lastNoHeld={}, lastHeld={}, fade={}, answer={}", lastNoHeld, lastHeld, HyperCommonConfig.PARADOX_FADE.get(),
-//                    (lastNoHeld - lastHeld) / (float) HyperCommonConfig.PARADOX_FADE.get());
         float alpha = hasParadox ? 1 : (1f - Mth.clamp((lastNoHeld - lastHeld) / (float) HyperCommonConfig.PARADOX_FADE.get(), 0, 1));
         if (alpha <= 0) return;
 

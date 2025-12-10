@@ -1,8 +1,8 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.paradox.handler.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.system.ChronicleHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.system.ParadoxHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticle;
 import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticleOptions;
 import net.minecraft.client.Minecraft;
@@ -18,11 +18,9 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -39,17 +37,6 @@ public abstract class ParticleEngineMixin {
 
     @Shadow
     public abstract void add(Particle pEffect);
-
-    @Unique
-    private static final Vector3f[] COLORS = new Vector3f[]{
-            new Vector3f(1, 0, 0),
-            new Vector3f(0, 1, 0),
-            new Vector3f(0, 0, 1),
-            new Vector3f(1, 1, 0),
-            new Vector3f(1, 0, 1),
-            new Vector3f(0, 1, 1),
-            new Vector3f(1)
-    };
 
     @Inject(method = "addBlockHitEffects", at = @At("HEAD"), cancellable = true, remap = false)
     private void addBlockHitEffectsChronicle(BlockPos pos, BlockHitResult target, CallbackInfo ci) {

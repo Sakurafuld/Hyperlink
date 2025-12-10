@@ -1,14 +1,13 @@
 package com.sakurafuld.hyperdaimc.content.hyper.paradox;
 
 import com.google.common.collect.Queues;
-import com.sakurafuld.hyperdaimc.content.hyper.paradox.handler.ParadoxHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.paradox.system.ParadoxBomber;
 import com.sakurafuld.hyperdaimc.infrastructure.Boxes;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.LongArrayTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.AABB;
@@ -70,7 +69,7 @@ public class ParadoxChain {
                     BlockPos relative = pos.relative(face);
                     if (checked.add(relative)) {
                         Vec3 center = Vec3.atCenterOf(relative);
-                        boolean contain = ParadoxHandler.canPerfectKnockout(player, level, relative, skipPaused);
+                        boolean contain = ParadoxBomber.canPerfectKnockout(player, level, relative, skipPaused);
                         for (ParadoxChain chain : found) {
                             if (!chain.aabb.contains(center))
                                 continue;
@@ -82,7 +81,7 @@ public class ParadoxChain {
             }
         }
 
-        if (!ParadoxHandler.canPerfectKnockout(player, level, cursor, skipPaused))
+        if (!ParadoxBomber.canPerfectKnockout(player, level, cursor, skipPaused))
             connected.remove(cursor);
         return connected;
     }
@@ -115,15 +114,6 @@ public class ParadoxChain {
     @Override
     public String toString() {
         return "[From=" + this.from + "|To=" + this.to + ']';
-    }
-
-    public void write(FriendlyByteBuf buf) {
-        buf.writeBlockPos(this.from);
-        buf.writeBlockPos(this.to);
-    }
-
-    public ParadoxChain(FriendlyByteBuf buf) {
-        this(buf.readBlockPos(), buf.readBlockPos());
     }
 
     public LongArrayTag serialize() {

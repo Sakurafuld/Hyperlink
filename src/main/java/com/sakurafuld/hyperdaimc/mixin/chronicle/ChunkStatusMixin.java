@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.chronicle;
 
 import com.mojang.datafixers.util.Either;
-import com.sakurafuld.hyperdaimc.content.hyper.chronicle.ChronicleHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.chronicle.system.ChronicleHandler;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ThreadedLevelLightEngine;

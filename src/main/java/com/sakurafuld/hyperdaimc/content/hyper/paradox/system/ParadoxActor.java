@@ -1,4 +1,4 @@
-package com.sakurafuld.hyperdaimc.content.hyper.paradox.handler;
+package com.sakurafuld.hyperdaimc.content.hyper.paradox.system;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.paradox.ParadoxCapabilityItem;
@@ -141,7 +141,7 @@ public class ParadoxActor {
 //                    return;
 
                 Set<ParadoxChain> chains = cluster.get(at, direction, player.getDirection());
-                ParadoxHandler.gashacon(player, () -> ParadoxHandler.startPerfectKnockout(chains, at, player, paradoxPlayer, false));
+                ParadoxHandler.gashacon(player, () -> ParadoxBomber.startPerfectKnockout(chains, at, player, paradoxPlayer, false));
             }
         }));
     }

@@ -49,7 +49,9 @@ public abstract class MinecraftMixin {
 
     @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
     private void setScreenMuteki(Screen pGuiScreen, CallbackInfo ci) {
-        if (pGuiScreen instanceof DeathScreen || (pGuiScreen == null && this.level != null && this.player != null && this.player.isDeadOrDying())) {
+        if (this.player == null)
+            return;
+        if (pGuiScreen instanceof DeathScreen || (pGuiScreen == null && this.level != null && this.player.isDeadOrDying())) {
             boolean novelized = NovelHandler.novelized(this.player);
             if (novelized && this.screen instanceof DeathScreen) ci.cancel();
             else if (!novelized && MutekiHandler.muteki(this.player)) {

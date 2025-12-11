@@ -30,8 +30,6 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
     private float lastHealth = 1;
     @Unique
     private int mutekiNovelized = 0;
-    @Unique
-    private boolean lastMuteki = false;
 
     @Shadow
     @Final
@@ -101,7 +99,6 @@ public abstract class LivingEntityMixin implements ILivingEntityMuteki {
         this.mutekiNovelized = 0;
 
         this.hyperdaimc$mutekiForce(false);
-        this.lastMuteki = muteki;
     }
 
     @Inject(method = "die", at = @At("HEAD"), cancellable = true)

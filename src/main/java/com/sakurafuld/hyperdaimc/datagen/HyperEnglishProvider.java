@@ -90,8 +90,9 @@ public class HyperEnglishProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.paradox.description.control_inverted", "While §esneaking§7, click to §econtinuously§7 destroy blocks");
         this.add("tooltip.hyperdaimc.paradox.description.drop", "§eDropped items (or experiences)§7 go into your §einventory§7. if not, they go §einside§7 this item");
         this.add("tooltip.hyperdaimc.paradox.description.transport", "§eHold§7 and §ethrow§7 this to §etransport§7 the internal items to the targeted §eStorage block");
-        this.add("tooltip.hyperdaimc.paradox.description.chain", "§eR-Click§7 at a start point and an end point to create §eCombo chain");
-        this.add("tooltip.hyperdaimc.paradox.description.unchain", "§eR-Click§7 while §esneaking§7 at a §ecombo chain§7 to remove it");
+        this.add("tooltip.hyperdaimc.paradox.description.chain", "§eR-Click§7 at a start point and an end point to create a §eCombo chain");
+        this.add("tooltip.hyperdaimc.paradox.description.pick", "§eM-Click§7 at a combo chain to create §eCombo cluster");
+        this.add("tooltip.hyperdaimc.paradox.description.unchain", "§eR-Click§7 while §esneaking§7 to remove a chain or a cluster");
         this.add("tooltip.hyperdaimc.vrx", "Creator VRX");
         this.add("tooltip.hyperdaimc.vrx.description", "§eR-CLick§7 on a block or a entity to open gui");
         this.add("tooltip.hyperdaimc.vrx.description.close", "§eClose§7 the gui to set §6V.R.X§7 as the target");

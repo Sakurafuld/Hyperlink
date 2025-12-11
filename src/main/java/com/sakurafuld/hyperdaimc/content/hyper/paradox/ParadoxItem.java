@@ -58,7 +58,9 @@ public class ParadoxItem extends AbstractGashatItem {
     private static final Component DESCRIPTION_DROP = Component.translatable("tooltip.hyperdaimc.paradox.description.drop").withStyle(ChatFormatting.GRAY);
     private static final Component DESCRIPTION_TRANSPORT = Component.translatable("tooltip.hyperdaimc.paradox.description.transport").withStyle(ChatFormatting.GRAY);
     private static final Component DESCRIPTION_CHAIN = Component.translatable("tooltip.hyperdaimc.paradox.description.chain").withStyle(ChatFormatting.GRAY);
+    private static final Component DESCRIPTION_PICK = Component.translatable("tooltip.hyperdaimc.paradox.description.pick").withStyle(ChatFormatting.GRAY);
     private static final Component DESCRIPTION_UNCHAIN = Component.translatable("tooltip.hyperdaimc.paradox.description.unchain").withStyle(ChatFormatting.GRAY);
+
     private static final Set<ToolAction> DIG_ACTIONS = ObjectOpenHashSet.of(ToolActions.AXE_DIG, ToolActions.PICKAXE_DIG, ToolActions.SHOVEL_DIG, ToolActions.HOE_DIG, ToolActions.SWORD_DIG);
 
     public ParadoxItem(String name, Properties pProperties) {
@@ -101,6 +103,7 @@ public class ParadoxItem extends AbstractGashatItem {
         tooltip.add(DESCRIPTION_DROP);
         tooltip.add(DESCRIPTION_TRANSPORT);
         tooltip.add(DESCRIPTION_CHAIN);
+        tooltip.add(DESCRIPTION_PICK);
         tooltip.add(DESCRIPTION_UNCHAIN);
     }
 

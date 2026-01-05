@@ -10,23 +10,39 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 import java.util.Random;
-import java.util.function.Supplier;
 
-public record HyperBrewingRecipe(ResourceLocation id, List<ItemStack> result, List<ItemStack> potion,
-                                 ItemStack ingredient, Supplier<Component> steps) {
-    public static HyperBrewingRecipe unknownSteps(ResourceLocation id, List<ItemStack> result, List<ItemStack> potion, ItemStack ingredient) {
-        Supplier<Component> steps = () -> Component.literal("steps").withStyle(ChatFormatting.OBFUSCATED);
-        return new HyperBrewingRecipe(id, result, potion, ingredient, steps);
+public abstract class HyperBrewingRecipe {
+    public final ResourceLocation id;
+    public final List<ItemStack> result;
+    public final List<ItemStack> potion;
+    public final ItemStack ingredient;
+
+    public HyperBrewingRecipe(ResourceLocation id, List<ItemStack> result, List<ItemStack> potion, ItemStack ingredient) {
+        this.id = id;
+        this.result = result;
+        this.potion = potion;
+        this.ingredient = ingredient;
     }
 
-    public static HyperBrewingRecipe randomSteps(ResourceLocation id, List<ItemStack> result, List<ItemStack> potion, ItemStack ingredient) {
+    public abstract Component steps();
+
+    public static HyperBrewingRecipe bugStar(ResourceLocation id, List<ItemStack> result, List<ItemStack> potion, ItemStack ingredient) {
+        return new HyperBrewingRecipe(id, result, potion, ingredient) {
+            @Override
+            public Component steps() {
+                return Component.literal("steps").withStyle(ChatFormatting.OBFUSCATED);
+            }
+        };
+    }
+
+    public static HyperBrewingRecipe skulls(ResourceLocation id, List<ItemStack> result, List<ItemStack> potion, ItemStack ingredient) {
         Random random = new Random();
-        Supplier<Component> steps = new Supplier<>() {
+        return new HyperBrewingRecipe(id, result, potion, ingredient) {
             private long lastTime = 0;
             private int lastStep = 0;
 
             @Override
-            public Component get() {
+            public Component steps() {
                 if (Util.getMillis() - this.lastTime > 50) {
                     this.lastTime = Util.getMillis();
                     double delta = Math.min(1, ((Math.cos(this.lastTime / 800d) + 1) / 2d));
@@ -37,6 +53,5 @@ public record HyperBrewingRecipe(ResourceLocation id, List<ItemStack> result, Li
                 return Writes.gameOver(String.valueOf(this.lastStep));
             }
         };
-        return new HyperBrewingRecipe(id, result, potion, ingredient, steps);
     }
 }

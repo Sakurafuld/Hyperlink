@@ -42,7 +42,7 @@ public abstract class EntitySectionMixin<T extends EntityAccess> {
     @Inject(method = "remove", at = @At("HEAD"), cancellable = true)
     private void removeFumetsu(T pEntity, CallbackInfoReturnable<Boolean> cir) {
         if (pEntity instanceof IFumetsu) {
-            if (FumetsuHandler.specialRemove.get()) {
+            if (FumetsuHandler.isSpecialRemoving()) {
                 cir.setReturnValue(this.storage2.remove(pEntity));
                 return;
             }

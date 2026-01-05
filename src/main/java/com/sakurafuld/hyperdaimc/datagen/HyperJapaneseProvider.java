@@ -169,11 +169,12 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("recipe.hyperdaimc.desk", "ゲーマクラフト");
         this.add("recipe.hyperdaimc.materializer", "マテリアライズ");
         this.add("recipe.hyperdaimc.brewing", "ハイパー醸造");
+        this.add("recipe.hyperdaimc.information", "ハイパー説明");
 
-        this.add("information.hyperdaimc.fumetsu_wither.0", """
-                %2$s、%3$s、%4$s、%5$sをいい感じに配置し、%1$sを持ちながらシフト右クリックすることで%7$sを召喚することが出来る
-                %7$sは基本的に中立であり、ダメージを受けることが無ければ敵対することはない (そして絶対に敵対してはならない)
-                そのままあなたが、ゲームからログアウトする・ディメンションを移動する・死ぬなどすれば、%7$sはその場に%6$sを残してこのワールドからいなくなる""");
+//        this.add("information.hyperdaimc.fumetsu_wither.0", """
+//                %2$s、%3$s、%4$s、%5$sをいい感じに配置し、%1$sを持ちながらシフト右クリックすることで%7$sを召喚することが出来る
+//                %7$sは基本的に中立であり、ダメージを受けることが無ければ敵対することはない (そして絶対に敵対してはならない)
+//                そのままあなたが、ゲームからログアウトする・ディメンションを移動する・死ぬなどすれば、%7$sはその場に%6$sを残してこのワールドからいなくなる""");
 
         this.add("tooltip.hyperdaimc.materializer.fuel", "使用回数: %s");
 

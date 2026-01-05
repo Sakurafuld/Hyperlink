@@ -30,6 +30,9 @@ import java.util.List;
 public class VRXItem extends AbstractGashatItem {
     private static final Component DESCRIPTION = Component.translatable("tooltip.hyperdaimc.vrx.description").withStyle(ChatFormatting.GRAY);
     private static final Component DESCRIPTION_CLOSE = Component.translatable("tooltip.hyperdaimc.vrx.description.close").withStyle(ChatFormatting.GRAY);
+    private static final Component DESCRIPTION_ERASE = Component.translatable("tooltip.hyperdaimc.vrx.description.erase").withStyle(ChatFormatting.GRAY);
+    private static final Component DESCRIPTION_PLAYER = Component.translatable("tooltip.hyperdaimc.vrx.description.player").withStyle(ChatFormatting.GRAY);
+    private static final Component DESCRIPTION_JEI = Component.translatable("tooltip.hyperdaimc.vrx.description.jei").withStyle(ChatFormatting.GRAY);
     private static Component descriptionConfigurable = null;
 
     private long lastTime = 0;
@@ -43,9 +46,13 @@ public class VRXItem extends AbstractGashatItem {
     protected void appendDescription(List<Component> tooltip) {
         tooltip.add(DESCRIPTION);
         tooltip.add(DESCRIPTION_CLOSE);
+        tooltip.add(DESCRIPTION_ERASE);
+        tooltip.add(DESCRIPTION_PLAYER);
+        if (HyperCommonConfig.VRX_JEI.get())
+            tooltip.add(DESCRIPTION_JEI);
         if (descriptionConfigurable == null) {
-            String configurable = String.join(", ", VRXRegistry.allNames());
-            descriptionConfigurable = Component.translatable("tooltip.hyperdaimc.vrx.description.configurable", Component.literal(configurable).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)).withStyle(ChatFormatting.WHITE);
+            String configurables = String.join(", ", VRXRegistry.allNames());
+            descriptionConfigurable = Component.translatable("tooltip.hyperdaimc.vrx.description.configurables", Component.literal(configurables).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)).withStyle(ChatFormatting.WHITE);
         }
         tooltip.add(descriptionConfigurable);
     }

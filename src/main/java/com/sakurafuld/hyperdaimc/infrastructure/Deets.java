@@ -25,6 +25,7 @@ public class Deets {
     public static final String IRONS_SPELLS_N_SPELLBOOKS = "irons_spellbooks";
     public static final String PROJECT_E = "projecte";
     public static final String OCULUS = "oculus";
+    public static final String EMI = "emi";
 
     private Deets() {
     }

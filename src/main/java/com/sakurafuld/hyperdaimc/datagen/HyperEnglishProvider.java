@@ -95,8 +95,11 @@ public class HyperEnglishProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.paradox.description.unchain", "§eR-Click§7 while §esneaking§7 to remove a chain or a cluster");
         this.add("tooltip.hyperdaimc.vrx", "Creator VRX");
         this.add("tooltip.hyperdaimc.vrx.description", "§eR-CLick§7 on a block or a entity to open gui");
-        this.add("tooltip.hyperdaimc.vrx.description.close", "§eClose§7 the gui to set §6V.R.X§7 as the target");
-        this.add("tooltip.hyperdaimc.vrx.description.configurable", "Configurable: [%s]");
+        this.add("tooltip.hyperdaimc.vrx.description.close", "§eClose§7 the gui to set §6V.R.X.§7 as the target");
+        this.add("tooltip.hyperdaimc.vrx.description.erase", "§eL-Click§7 on a block or a entity to remove its §6V.R.X.§7");
+        this.add("tooltip.hyperdaimc.vrx.description.configurables", "Configurables: [%s]");
+        this.add("tooltip.hyperdaimc.vrx.description.player", "§eR-CLick§7 on the player model in the inventory to open gui as yours");
+        this.add("tooltip.hyperdaimc.vrx.description.jei", "Can configure contents in the gui from §eJEI§7");
         this.add("tooltip.hyperdaimc.vrx.face", "Contents in %s of %s");
         this.add("tooltip.hyperdaimc.vrx.face.empty", " -Empty");
         this.add("tooltip.hyperdaimc.vrx.indexes", "%3$s %1$s / %2$s %4$s");
@@ -117,7 +120,7 @@ public class HyperEnglishProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.desk.unlock", "Shift-click to clear the locked recipe");
         this.add("tooltip.hyperdaimc.desk.animation", "Hold Ctrl+Alt to disable animation");
         this.add("tooltip.hyperdaimc.god_sigil", "God loves you!");
-        this.add("tooltip.hyperdaimc.chemical_max", "Dangerous for zombies!");
+        this.add("tooltip.hyperdaimc.chemical_max", "Too dangerous for zombies!");
         this.add("tooltip.hyperdaimc.materializer.fuel", "Uses: %s");
 
         this.add("container.hyperdaimc.vrx.face", "Direction: %s");
@@ -153,17 +156,18 @@ public class HyperEnglishProvider extends LanguageProvider {
         this.add("recipe.hyperdaimc.desk", "Gamacrafting");
         this.add("recipe.hyperdaimc.materializer", "Materialization");
         this.add("recipe.hyperdaimc.brewing", "Hyper Brewing");
+        this.add("recipe.hyperdaimc.information", "Hyper Info");
 
-        this.add("information.hyperdaimc.fumetsu_wither.0", """
-                Place %2$s, %3$s, %4$s, and %5$s in the same way as summoning a Wither, and you can summon %7$s by holding %1$s and right-clicking while sneaking.
-                %7$s is basically neutral and will not become hostile unless it takes damage (and must never become hostile).
-                If you log out of the game, move to another dimension, or die, %7$s will leave %6$s behind and disappear from this world.""");
+//        this.add("information.hyperdaimc.fumetsu_wither.0", """
+//                Place %2$s, %3$s, %4$s, and %5$s in the same way as summoning a Wither, and you can summon %7$s by holding %1$s and right-clicking while sneaking.
+//                %7$s is basically neutral and will not become hostile unless it takes damage (and must never become hostile).
+//                If you log out of the game, move to another dimension, or die, %7$s will leave %6$s behind and disappear from this world.""");
 
 
         this.add("modifier.hyperdaimc.novel", "Mighty Novel X");
         this.add("modifier.hyperdaimc.novel.flavor", "Critical Destiny!");
         this.add("modifier.hyperdaimc.novel.description", "All attacks kill the target instantly.");
-        this.add("modifier.hyperdaimc.paradox", "Perfect-Knockout99");
+        this.add("modifier.hyperdaimc.paradox", "Perfect Knockout99");
         this.add("modifier.hyperdaimc.paradox.flavor", "50+50=99!");
         this.add("modifier.hyperdaimc.paradox.description", "Can instantly destroy any block.");
     }

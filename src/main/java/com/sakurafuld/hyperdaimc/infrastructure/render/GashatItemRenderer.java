@@ -42,7 +42,7 @@ public class GashatItemRenderer extends BlockEntityWithoutLevelRenderer {
     private final boolean coloring;
     private final boolean rotating;
     private final boolean particle;
-    private final long delay = Math.round(Mth.lerp(Math.random(), 0, 1000000));
+    private final long delay = RANDOM.nextLong(0, 10000000);
 
     private GashatItemRenderer(ResourceLocation model, Supplier<Boolean> enabled, ItemColorCommon tint, boolean halo, boolean scaling, boolean coloring, boolean rotating, boolean particle) {
         super(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
@@ -144,15 +144,15 @@ public class GashatItemRenderer extends BlockEntityWithoutLevelRenderer {
             this.model = model;
             this.made = Util.getMillis();
             this.age = RANDOM.nextInt(500, 1000);
-            this.delay = Math.round(Mth.lerp(Math.random(), 0, 10000));
+            this.delay = RANDOM.nextLong(0, 10000000);
 
             this.color = RANDOM.nextInt(0xFFFFFF);
 
             double angle = Math.toRadians(RANDOM.nextInt(360));
             this.x = Math.cos(angle) / 3;
             this.y = Math.sin(angle) / 3;
-            this.xRot = RANDOM.nextFloat(-22.5f, 22.5f);
-            this.yRot = RANDOM.nextFloat(-22.5f, 22.5f);
+            this.xRot = RANDOM.nextFloat(-45, 45);
+            this.yRot = RANDOM.nextFloat(-45, 45);
             this.tweak = tweak;
         }
 

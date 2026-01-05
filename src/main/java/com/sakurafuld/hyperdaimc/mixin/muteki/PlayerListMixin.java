@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class PlayerListMixin {
     @Inject(method = "respawn", at = @At("HEAD"), cancellable = true)
     private void respawnMuteki(ServerPlayer pPlayer, boolean pKeepEverything, CallbackInfoReturnable<ServerPlayer> cir) {
-        if (!FumetsuHandler.specialRemove.get() && !NovelHandler.novelized(pPlayer) && MutekiHandler.muteki(pPlayer)) {
+        if (!FumetsuHandler.isSpecialRemoving() && !NovelHandler.novelized(pPlayer) && MutekiHandler.muteki(pPlayer)) {
             cir.setReturnValue(pPlayer);
             for (float i = 1; pPlayer.getHealth() <= 0 && i <= 512; i++)
                 pPlayer.setHealth(i);

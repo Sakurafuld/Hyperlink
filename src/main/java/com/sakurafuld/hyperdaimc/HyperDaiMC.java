@@ -73,7 +73,7 @@ public class HyperDaiMC {
                             }
                         } else {
                             String s = String.join("|", dependencies);
-                            LOG.info("Didn't load @AddonMod {}, because dependencies({}) is not loaded", clazz.getSimpleName(), s);
+                            LOG.info("Didn't load @AddonMod {}, because dependencies({}) are not loaded", clazz.getSimpleName(), s);
                         }
                     } catch (Throwable e) {
                         LOG.info("Failed to load @AddonMod! {}", e.toString());

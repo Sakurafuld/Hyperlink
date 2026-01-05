@@ -24,7 +24,7 @@ public abstract class TransientEntitySectionManager$CallbackMixin {
     @Inject(method = "onRemove", at = @At("HEAD"), cancellable = true)
     private void onRemoveFumetsu(Entity.RemovalReason pReason, CallbackInfo ci) {
         if (this.realEntity != null) {
-            if (FumetsuHandler.specialRemove.get()) {
+            if (FumetsuHandler.isSpecialRemoving()) {
                 return;
             }
             if (!((IEntityNovel) this.realEntity).hyperdaimc$isNovelized() && (this.realEntity instanceof IFumetsu || (this.realEntity instanceof LivingEntity living && MutekiHandler.muteki(living)))) {
@@ -40,11 +40,11 @@ public abstract class TransientEntitySectionManager$CallbackMixin {
 
     @Inject(method = "onMove", at = @At("HEAD"))
     private void onMoveFumetsu$HEAD(CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(true);
+        FumetsuHandler.increaseSpecialRemove();
     }
 
     @Inject(method = "onMove", at = @At("RETURN"))
     private void onMoveFumetsu$RETURN(CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(false);
+        FumetsuHandler.decreaseSpecialRemove();
     }
 }

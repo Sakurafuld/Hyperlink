@@ -45,22 +45,22 @@ public abstract class PersistentEntitySectionManagerMixin<T extends EntityAccess
 
     @Inject(method = "processUnloads", at = @At("HEAD"))
     private void processUnloadsFumetsu$HEAD(CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(true);
+        FumetsuHandler.increaseSpecialRemove();
     }
 
     @Inject(method = "processUnloads", at = @At("RETURN"))
     private void processUnloadsFumetsu$RETURN(CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(false);
+        FumetsuHandler.decreaseSpecialRemove();
     }
 
     @Inject(method = "updateChunkStatus(Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/entity/Visibility;)V", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;forEach(Ljava/util/function/Consumer;)V"))
     private void updateChunkStatusFumetsu$BEFORE(CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(true);
+        FumetsuHandler.increaseSpecialRemove();
     }
 
     @Inject(method = "updateChunkStatus(Lnet/minecraft/world/level/ChunkPos;Lnet/minecraft/world/level/entity/Visibility;)V", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;forEach(Ljava/util/function/Consumer;)V", shift = At.Shift.AFTER))
     private void updateChunkStatusFumetsu$AFTER(CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(false);
+        FumetsuHandler.decreaseSpecialRemove();
     }
 
     @Inject(method = "addEntityUuid", at = @At("HEAD"), cancellable = true)

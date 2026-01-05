@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.sakurafuld.hyperdaimc.infrastructure.Renders;
-import com.sakurafuld.hyperdaimc.infrastructure.Writes;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -15,7 +14,6 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import mezz.jei.common.Internal;
 import mezz.jei.common.gui.textures.Textures;
 import net.minecraft.Util;
@@ -26,7 +24,6 @@ import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -43,18 +40,19 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.*;
 
-public class HyperBrewingRecipeCategory extends AbstractRecipeCategory<HyperBrewingRecipe> {
+public class HyperBrewingRecipeCategory extends AbstractHyperRecipeCategory<HyperBrewingRecipe> {
     public static final RecipeType<HyperBrewingRecipe> TYPE = new RecipeType<>(identifier("brewing"), HyperBrewingRecipe.class);
 
     private final IDrawable background;
     private final IDrawableAnimated arrow;
     private final IDrawableAnimated bubbles;
     private final IDrawableStatic blazeHeat;
+    private final IDrawableStatic slot;
 
     public HyperBrewingRecipeCategory(IGuiHelper helper) {
-        super(TYPE, Writes.gameOver(I18n.get("recipe.hyperdaimc.brewing")), Icon.INSTANCE, 114, 61);
+        super(TYPE, Component.translatable("recipe.hyperdaimc.brewing"), Icon.INSTANCE, 114, 61);
 
         Textures textures = Internal.getTextures();
         this.background = textures.getBrewingStandBackground();
@@ -81,11 +79,13 @@ public class HyperBrewingRecipeCategory extends AbstractRecipeCategory<HyperBrew
         }
 
         this.bubbles = helper.createAnimatedDrawable(textures.getBrewingStandBubbles(), new BubblesTimer(helper), IDrawableAnimated.StartDirection.BOTTOM);
+        this.slot = helper.getSlotDrawable();
     }
+
 
     @Override
     public @Nullable ResourceLocation getRegistryName(HyperBrewingRecipe recipe) {
-        return recipe.id();
+        return recipe.id;
     }
 
     @Override
@@ -96,26 +96,45 @@ public class HyperBrewingRecipeCategory extends AbstractRecipeCategory<HyperBrew
         this.bubbles.draw(guiGraphics, 9, 1);
         this.arrow.draw(guiGraphics, 43, 3);
         Font font = Minecraft.getInstance().font;
-        guiGraphics.drawString(font, Component.translatable("gui.jei.category.brewing.steps", recipe.steps().get()), 70, 28, 0x808080, false);
+        guiGraphics.drawString(font, Component.translatable("gui.jei.category.brewing.steps", recipe.steps()), 70, 28, 0x808080, false);
+        if (recipe.result.size() == 3) {
+            this.slot.draw(guiGraphics, 81 - 18 - 1, -1);
+            this.slot.draw(guiGraphics, 81 + 18 - 1, -1);
+        }
+        if (require(EMI))
+            this.slot.draw(guiGraphics, 81 - 1, 3);
     }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, HyperBrewingRecipe recipe, IFocusGroup focuses) {
         builder.addInputSlot(1, 37)
-                .addItemStacks(recipe.potion());
+                .addItemStacks(recipe.potion);
         builder.addInputSlot(24, 44)
-                .addItemStacks(recipe.potion());
+                .addItemStacks(recipe.potion);
         builder.addInputSlot(47, 37)
-                .addItemStacks(recipe.potion());
+                .addItemStacks(recipe.potion);
         builder.addInputSlot(24, 3)
-                .addItemStack(recipe.ingredient());
-        builder.addOutputSlot(81, 3)
-                .addItemStacks(recipe.result())
-                .setStandardSlotBackground();
+                .addItemStack(recipe.ingredient);
+        if (recipe.result.size() == 3) {
+            builder.addOutputSlot(81 - 18, 0)
+                    .addItemStack(recipe.result.get(0))
+                    .setStandardSlotBackground();
+            builder.addOutputSlot(81, 3)
+                    .addItemStack(recipe.result.get(1))
+                    .setStandardSlotBackground();
+            builder.addOutputSlot(81 + 18, 0)
+                    .addItemStack(recipe.result.get(2))
+                    .setStandardSlotBackground();
+        } else {
+            builder.addOutputSlot(81, 3)
+                    .addItemStacks(recipe.result)
+                    .setStandardSlotBackground();
+        }
     }
 
-    private static class Icon implements IDrawable {
-        static final Icon INSTANCE = new Icon();
+    private enum Icon implements IDrawable {
+        INSTANCE;
+
         static final Random RANDOM = new Random();
         static final Set<Particle> PARTICLES = new ObjectOpenHashSet<>();
 
@@ -138,11 +157,11 @@ public class HyperBrewingRecipeCategory extends AbstractRecipeCategory<HyperBrew
                 if (RANDOM.nextInt(400) == 0)
                     PARTICLES.add(new Particle());
 
-            poseStack.pushPose();
-            poseStack.translate(xOffset, yOffset, 150);
-            poseStack.scale(16, 16, 16);
-            PARTICLES.removeIf(particle -> particle.render(poseStack));
-            poseStack.popPose();
+            Renders.with(poseStack, () -> {
+                poseStack.translate(xOffset, yOffset, 150);
+                poseStack.scale(16, 16, 16);
+                PARTICLES.removeIf(particle -> particle.render(poseStack));
+            });
         }
 
         @OnlyIn(Dist.CLIENT)
@@ -204,15 +223,15 @@ public class HyperBrewingRecipeCategory extends AbstractRecipeCategory<HyperBrew
             Particle() {
                 this.made = Util.getMillis();
                 this.age = RANDOM.nextInt(500, 1000);
-                this.delay = Math.round(Mth.lerp(Math.random(), 0, 10000));
+                this.delay = RANDOM.nextLong(0, 10000000);
 
                 this.color = RANDOM.nextInt(0xFFFFFF);
 
                 double angle = Math.toRadians(RANDOM.nextInt(360));
                 this.x = Math.cos(angle) / 3;
                 this.y = Math.sin(angle) / 3;
-                this.xRot = RANDOM.nextFloat(-22.5f, 22.5f);
-                this.yRot = RANDOM.nextFloat(-22.5f, 22.5f);
+                this.xRot = RANDOM.nextFloat(-45, 45);
+                this.yRot = RANDOM.nextFloat(-45, 45);
             }
 
             @OnlyIn(Dist.CLIENT)

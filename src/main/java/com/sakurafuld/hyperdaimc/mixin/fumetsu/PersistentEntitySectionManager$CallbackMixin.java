@@ -33,7 +33,7 @@ public abstract class PersistentEntitySectionManager$CallbackMixin<T extends Ent
 
     @Inject(method = "onRemove", at = @At("HEAD"), cancellable = true)
     private void onRemoveFumetsu$0(Entity.RemovalReason pReason, CallbackInfo ci) {
-        if (FumetsuHandler.specialRemove.get()) {
+        if (FumetsuHandler.isSpecialRemoving()) {
             return;
         }
         if (this.realEntity != null && !((IEntityNovel) this.realEntity).hyperdaimc$isNovelized() && (this.realEntity instanceof IFumetsu || (this.realEntity instanceof LivingEntity living && MutekiHandler.muteki(living)))) {
@@ -49,7 +49,7 @@ public abstract class PersistentEntitySectionManager$CallbackMixin<T extends Ent
     @Inject(method = "onRemove", at = @At(value = "INVOKE", target = "Ljava/util/Set;remove(Ljava/lang/Object;)Z"))
     private void onRemoveFumetsu$1(Entity.RemovalReason pReason, CallbackInfo ci) {
         if (this.entity instanceof IFumetsu) {
-            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) this.entity).hyperdaimc$isNovelized()) {
+            if (FumetsuHandler.isSpecialRemoving() || ((IEntityNovel) this.entity).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("removeEntityUuidFumetsu");
                 ((IPersistentEntityManagerFumetsu) this.this$0).hyperdaimc$fumetsuKnown().remove(this.entity.getUUID());
             }
@@ -58,21 +58,21 @@ public abstract class PersistentEntitySectionManager$CallbackMixin<T extends Ent
 
     @Inject(method = "onMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/entity/EntitySection;remove(Lnet/minecraft/world/level/entity/EntityAccess;)Z"))
     private void onMoveFumetsu$BEFORE(CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(true);
+        FumetsuHandler.increaseSpecialRemove();
     }
 
     @Inject(method = "onMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/entity/EntitySection;remove(Lnet/minecraft/world/level/entity/EntityAccess;)Z", shift = At.Shift.AFTER))
     private void onMoveFumetsu$AFTER(CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(false);
+        FumetsuHandler.decreaseSpecialRemove();
     }
 
     @Inject(method = "updateStatus", at = @At("HEAD"))
     private void processUnloadsFumetsu$HEAD(CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(true);
+        FumetsuHandler.increaseSpecialRemove();
     }
 
     @Inject(method = "updateStatus", at = @At("RETURN"))
     private void processUnloadsFumetsu$RETURN(CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(false);
+        FumetsuHandler.decreaseSpecialRemove();
     }
 }

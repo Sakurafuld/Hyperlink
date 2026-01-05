@@ -35,7 +35,7 @@ public abstract class ClientLevel$EntityCallbacksMixin implements LevelCallback<
     @Inject(method = "onTickingEnd(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)
     private void onTickingEndFumetsu(Entity p_143363_, CallbackInfo ci) {
         if (this.this$0 instanceof IClientLevelFumetsu levelFumetsu && p_143363_ instanceof IFumetsu) {
-            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) p_143363_).hyperdaimc$isNovelized()) {
+            if (FumetsuHandler.isSpecialRemoving() || ((IEntityNovel) p_143363_).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("tickingEndFumetsu");
                 levelFumetsu.hyperdaimc$fumetsuTickList().remove(p_143363_);
                 ci.cancel();

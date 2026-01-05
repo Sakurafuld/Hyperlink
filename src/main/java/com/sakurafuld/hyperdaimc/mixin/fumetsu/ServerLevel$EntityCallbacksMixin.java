@@ -36,7 +36,7 @@ public abstract class ServerLevel$EntityCallbacksMixin implements LevelCallback<
     @Inject(method = "onTickingEnd(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)
     private void onTickingEndFumetsu(Entity p_143363_, CallbackInfo ci) {
         if (this.this$0 instanceof IServerLevelFumetsu levelFumetsu && p_143363_ instanceof IFumetsu) {
-            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) p_143363_).hyperdaimc$isNovelized()) {
+            if (FumetsuHandler.isSpecialRemoving() || ((IEntityNovel) p_143363_).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("tickingEndFumetsu");
                 levelFumetsu.hyperdaimc$fumetsuTickList().remove(p_143363_);
                 ci.cancel();
@@ -57,7 +57,7 @@ public abstract class ServerLevel$EntityCallbacksMixin implements LevelCallback<
     @Redirect(method = "onTrackingEnd(Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "INVOKE", target = "Ljava/util/Set;remove(Ljava/lang/Object;)Z"))
     private boolean onTrackingEndFumetsu$navi(Set<Mob> instance, Object o) {
         if (this.this$0 instanceof IServerLevelFumetsu levelFumetsu && o instanceof IFumetsu) {
-            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) o).hyperdaimc$isNovelized()) {
+            if (FumetsuHandler.isSpecialRemoving() || ((IEntityNovel) o).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("trackingEndFumetsu$Navi");
                 return levelFumetsu.hyperdaimc$fumetsuNavi().remove(o);
             } else {
@@ -71,7 +71,7 @@ public abstract class ServerLevel$EntityCallbacksMixin implements LevelCallback<
     @Inject(method = "onTrackingEnd(Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)
     private void onTrackingEndFumetsu(Entity p_143375_, CallbackInfo ci) {
         if (p_143375_ instanceof IFumetsu) {
-            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) p_143375_).hyperdaimc$isNovelized()) {
+            if (FumetsuHandler.isSpecialRemoving() || ((IEntityNovel) p_143375_).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("trackingEndFumetsu");
                 return;
             }

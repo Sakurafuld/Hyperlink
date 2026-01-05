@@ -74,7 +74,7 @@ public abstract class EntityLookupMixin<T extends EntityAccess> {
     public void remove(T pEntity, CallbackInfo ci) {
         if (pEntity instanceof IFumetsu) {
             ci.cancel();
-            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) pEntity).hyperdaimc$isNovelized()) {
+            if (FumetsuHandler.isSpecialRemoving() || ((IEntityNovel) pEntity).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("lookupRemoveFumetsu");
                 this.byUuid2.remove(pEntity.getUUID());
                 this.byId2.remove(pEntity.getId());

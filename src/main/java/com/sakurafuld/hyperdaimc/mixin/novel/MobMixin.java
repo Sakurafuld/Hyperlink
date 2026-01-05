@@ -19,7 +19,7 @@ public abstract class MobMixin {
     @Inject(method = "removeAfterChangingDimensions", at = @At("HEAD"), cancellable = true)
     private void removeAfterChangingDimensionsNovel(CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
-        if (FumetsuHandler.specialRemove.get()) {
+        if (FumetsuHandler.isSpecialRemoving()) {
             if (self instanceof IEntityFumetsu fumetsu)
                 fumetsu.hyperdaimc$extinction(Entity.RemovalReason.CHANGED_DIMENSION);
             return;

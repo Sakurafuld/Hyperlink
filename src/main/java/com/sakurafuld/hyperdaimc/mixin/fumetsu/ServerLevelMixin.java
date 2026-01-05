@@ -172,11 +172,11 @@ public abstract class ServerLevelMixin implements IServerLevelFumetsu {
 
     @Inject(method = "removePlayerImmediately", at = @At("HEAD"))
     private void removePlayerImmediatelyFumetsu$HEAD(ServerPlayer pPlayer, Entity.RemovalReason pReason, CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(true);
+        FumetsuHandler.increaseSpecialRemove();
     }
 
     @Inject(method = "removePlayerImmediately", at = @At("RETURN"))
     private void removePlayerImmediatelyFumetsu$RETURN(ServerPlayer pPlayer, Entity.RemovalReason pReason, CallbackInfo ci) {
-        FumetsuHandler.specialRemove.set(false);
+        FumetsuHandler.decreaseSpecialRemove();
     }
 }

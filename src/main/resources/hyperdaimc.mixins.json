@@ -36,6 +36,7 @@
     "fumetsu.ServerLevelMixin",
     "fumetsu.TransientEntitySectionManager$CallbackMixin",
     "infrastructure.ServerLevelMixin",
+    "jei.VanillaPluginMixin",
     "materializer.Ingredient$TagValueAccessor",
     "materializer.IngredientAccessor",
     "muteki.CommandSourceStackMixin",

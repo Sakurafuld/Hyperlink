@@ -48,14 +48,16 @@ public class ParadoxRenderer {
     public static void cancelRender(RenderHighlightEvent.Block event) {
         if (!HyperCommonConfig.ENABLE_PARADOX.get())
             return;
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = Objects.requireNonNull(mc.player);
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null)
+            return;
         if (!player.getMainHandItem().is(HyperItems.PARADOX.get()) && !player.getOffhandItem().is(HyperItems.PARADOX.get()))
             return;
-        player.getCapability(ParadoxCapabilityPlayer.TOKEN).ifPresent(paradox -> {
-            if (paradox.hasSelected())
-                event.setCanceled(true);
-        });
+        if (ParadoxCapabilityPlayer.isCapable(player))
+            player.getCapability(ParadoxCapabilityPlayer.TOKEN).ifPresent(paradox -> {
+                if (paradox.hasSelected())
+                    event.setCanceled(true);
+            });
     }
 
     @SubscribeEvent
@@ -66,8 +68,11 @@ public class ParadoxRenderer {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS)
             return;
 
-        Minecraft mc = Objects.requireNonNull(Minecraft.getInstance());
-        LocalPlayer player = Objects.requireNonNull(mc.player);
+        Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
+        if (player == null)
+            return;
+
         ItemStack mainHand = player.getMainHandItem();
         ItemStack offhand = player.getOffhandItem();
         boolean mainHanded = mainHand.is(HyperItems.PARADOX.get());

@@ -14,6 +14,7 @@ import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.IServerLevelFumetsu;
 import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticleOptions;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -49,11 +50,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector3f;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import static com.sakurafuld.hyperdaimc.infrastructure.Deets.LOG;
@@ -91,6 +95,14 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 20)
                 .build();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static FumetsuEntity drawOnly() {
+        FumetsuEntity fumetsu = new FumetsuEntity(HyperEntities.FUMETSU.get(), Minecraft.getInstance().level);
+        Arrays.fill(fumetsu.yRotHeads, 180);
+        Arrays.fill(fumetsu.yRotOHeads, 180);
+        return fumetsu;
     }
 
     @Override
@@ -148,7 +160,7 @@ public class FumetsuEntity extends Monster implements IFumetsu, ILivingEntityMut
         this.mutekiNovelized = 0;
         this.hyperdaimc$mutekiForce(false);
 
-        if (HyperCommonConfig.FUMETSU_LOGOUT.get() && this.login < FumetsuHandler.logout.get()) {
+        if (HyperCommonConfig.FUMETSU_LOGOUT.get() && this.login < FumetsuHandler.LOGOUT.get()) {
             if (this.level() instanceof IServerLevelFumetsu levelFumetsu) {
 
                 Random random = new Random();

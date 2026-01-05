@@ -132,7 +132,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     @SuppressWarnings("all")
     private void removeNovel(Entity.RemovalReason pReason, CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
-        if (FumetsuHandler.specialRemove.get()) {
+        if (FumetsuHandler.isSpecialRemoving()) {
             if (self instanceof IEntityFumetsu fumetsu)
                 fumetsu.hyperdaimc$extinction(pReason);
             return;
@@ -151,7 +151,7 @@ public abstract class EntityMixin extends CapabilityProvider<Entity> implements 
     @Inject(method = "setRemoved", at = @At("HEAD"), cancellable = true)
     private void setRemovedNovel(Entity.RemovalReason pReason, CallbackInfo ci) {
         Entity self = (Entity) (Object) this;
-        if (FumetsuHandler.specialRemove.get()) {
+        if (FumetsuHandler.isSpecialRemoving()) {
             if (self instanceof IEntityFumetsu fumetsu)
                 fumetsu.hyperdaimc$extinction(pReason);
 

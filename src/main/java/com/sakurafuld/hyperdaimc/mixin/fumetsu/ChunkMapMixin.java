@@ -76,7 +76,7 @@ public abstract class ChunkMapMixin {
     @Inject(method = "removeEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ChunkMap;updatePlayerStatus(Lnet/minecraft/server/level/ServerPlayer;Z)V", shift = At.Shift.AFTER))
     private void removeEntityFumetsu$0(Entity pEntity, CallbackInfo ci) {
         for (ChunkMap.TrackedEntity chunkmap$trackedentity : this.entityMap2.values()) {
-            if (FumetsuHandler.specialRemove.get() || NovelHandler.novelized(chunkmap$trackedentity.entity)) {
+            if (FumetsuHandler.isSpecialRemoving() || NovelHandler.novelized(chunkmap$trackedentity.entity)) {
                 chunkmap$trackedentity.removePlayer((ServerPlayer) pEntity);
             }
         }
@@ -86,7 +86,7 @@ public abstract class ChunkMapMixin {
     private void removeEntityFumetsu$1(Entity pEntity, CallbackInfo ci) {
         ChunkMap.TrackedEntity trackedEntity = this.entityMap2.get(pEntity.getId());
         if (trackedEntity != null) {
-            if (FumetsuHandler.specialRemove.get() || ((IEntityNovel) trackedEntity.entity).hyperdaimc$isNovelized()) {
+            if (FumetsuHandler.isSpecialRemoving() || ((IEntityNovel) trackedEntity.entity).hyperdaimc$isNovelized()) {
 //                Deets.LOG.debug("removeEntityFumetsu");
                 this.entityMap2.remove(pEntity.getId());
                 trackedEntity.broadcastRemoved();

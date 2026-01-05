@@ -20,21 +20,21 @@ import java.util.function.Function;
 public abstract class EntityTypeMixin<T extends Entity> {
     @Inject(method = "loadEntityRecursive", at = @At(value = "INVOKE", target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;", ordinal = 0))
     private static void loadEntityRecursiveFumetsu$BEFORE(CompoundTag pCompound, Level pLevel, Function<Entity, Entity> pEntityFunction, CallbackInfoReturnable<Entity> cir) {
-        FumetsuHandler.spawn.set(true);
+        FumetsuHandler.increaseSpawning();
     }
 
     @Inject(method = "loadEntityRecursive", at = @At(value = "INVOKE", target = "Ljava/util/Optional;map(Ljava/util/function/Function;)Ljava/util/Optional;", ordinal = 0, shift = At.Shift.AFTER))
     private static void loadEntityRecursiveFumetsu$AFTER(CompoundTag pCompound, Level pLevel, Function<Entity, Entity> pEntityFunction, CallbackInfoReturnable<Entity> cir) {
-        FumetsuHandler.spawn.set(false);
+        FumetsuHandler.decreaseSpawning();
     }
 
     @Inject(method = "create(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/nbt/CompoundTag;Ljava/util/function/Consumer;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/MobSpawnType;ZZ)Lnet/minecraft/world/entity/Entity;", at = @At("HEAD"))
     private void create$HEAD(ServerLevel pLevel, CompoundTag pNbt, Consumer<T> pConsumer, BlockPos pPos, MobSpawnType pSpawnType, boolean pShouldOffsetY, boolean pShouldOffsetYMore, CallbackInfoReturnable<T> cir) {
-        FumetsuHandler.spawn.set(true);
+        FumetsuHandler.increaseSpawning();
     }
 
     @Inject(method = "create(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/nbt/CompoundTag;Ljava/util/function/Consumer;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/MobSpawnType;ZZ)Lnet/minecraft/world/entity/Entity;", at = @At("RETURN"))
     private void create$RETURN(ServerLevel pLevel, CompoundTag pNbt, Consumer<T> pConsumer, BlockPos pPos, MobSpawnType pSpawnType, boolean pShouldOffsetY, boolean pShouldOffsetYMore, CallbackInfoReturnable<T> cir) {
-        FumetsuHandler.spawn.set(false);
+        FumetsuHandler.decreaseSpawning();
     }
 }

@@ -139,24 +139,23 @@ public class HyperItems {
         return Util.make(REGISTRY.register(name, () -> func.apply(name, new Item.Properties())), MAIN::add);
     }
 
-    public static RegistryObject<Item> registerMaterial(String base, String suffix, Consumer<Item.Properties> property, boolean scaling, boolean coloring, boolean rotation, boolean particle, int... tint) {
+    public static void registerMaterial(String base, String suffix, Consumer<Item.Properties> property, boolean scaling, boolean coloring, boolean rotating, boolean particle, int... tint) {
         String name = base + "_" + suffix;
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> HyperSetup.specialModels.add(identifier("special/" + name)));
-        RegistryObject<Item> object = registerCrafting(name, properties -> new MaterialItem(name, Util.make(properties, property), scaling, coloring, rotation, particle, tint));
+        RegistryObject<Item> object = registerCrafting(name, properties -> new MaterialItem(name, Util.make(properties, property), scaling, coloring, rotating, particle, tint));
         MATERIAL.put(name, object);
-        return object;
     }
 
-    public static RegistryObject<Item> registerEssence(String name, int tint0) {
-        return registerMaterial(name, "essence", properties -> properties.rarity(Rarity.UNCOMMON), false, false, true, false, tint0);
+    public static void registerEssence(String name, int tint0) {
+        registerMaterial(name, "essence", properties -> properties.rarity(Rarity.UNCOMMON), false, false, true, false, tint0);
     }
 
-    public static RegistryObject<Item> registerCore(String name, int tint0, int tint1) {
-        return registerMaterial(name, "core", properties -> properties.rarity(Rarity.RARE), true, false, false, false, tint0, tint1);
+    public static void registerCore(String name, int tint0, int tint1) {
+        registerMaterial(name, "core", properties -> properties.rarity(Rarity.RARE), true, false, false, false, tint0, tint1);
     }
 
-    public static RegistryObject<Item> registerGist(String name, int tint0, int tint1, int tint2) {
-        return registerMaterial(name, "gist", properties -> properties.rarity(Rarity.EPIC), false, true, false, false, tint0, tint1, tint2);
+    public static void registerGist(String name, int tint0, int tint1, int tint2) {
+        registerMaterial(name, "gist", properties -> properties.rarity(Rarity.EPIC), false, true, false, false, tint0, tint1, tint2);
     }
 
     public static Item getMaterial(String base, String suffix) {

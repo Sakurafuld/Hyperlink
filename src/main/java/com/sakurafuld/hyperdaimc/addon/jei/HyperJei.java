@@ -1,6 +1,10 @@
 package com.sakurafuld.hyperdaimc.addon.jei;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
+import com.sakurafuld.hyperdaimc.addon.jei.information.BugStarInformation;
+import com.sakurafuld.hyperdaimc.addon.jei.information.FumetsuInformation;
+import com.sakurafuld.hyperdaimc.addon.jei.information.HyperInformationRecipeCategory;
+import com.sakurafuld.hyperdaimc.addon.jei.information.SoulInformation;
 import com.sakurafuld.hyperdaimc.content.HyperBlocks;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperRecipes;
@@ -113,9 +117,10 @@ public class HyperJei implements IModPlugin {
     }
 
     private void addInformation(IRecipeRegistration registration) {
-        registration.addRecipes(HyperInformationRecipeCategory.TYPE, List.of(new ChemicalInformation(registration.getJeiHelpers().getGuiHelper())));
+        registration.addRecipes(HyperInformationRecipeCategory.TYPE, List.of(new SoulInformation(registration.getJeiHelpers().getGuiHelper())));
         if (HyperCommonConfig.FUMETSU_SUMMON.get()) {
             registration.addRecipes(HyperInformationRecipeCategory.TYPE, List.of(new FumetsuInformation(registration.getJeiHelpers().getGuiHelper())));
+            registration.addRecipes(HyperInformationRecipeCategory.TYPE, List.of(new BugStarInformation(registration.getJeiHelpers().getGuiHelper())));
 //            List<ItemStack> fumetsuWither = Stream.of(HyperItems.GOD_SIGIL.get(), HyperBlocks.SOUL.get().asItem(), HyperBlocks.FUMETSU_LEFT.get().asItem(), HyperBlocks.FUMETSU_SKULL.get().asItem(), HyperBlocks.FUMETSU_RIGHT.get().asItem(), HyperItems.BUG_STARS.get(0).get())
 //                    .map(Item::getDefaultInstance)
 //                    .toList();

@@ -36,13 +36,13 @@ public class HyperTagsProvider extends ItemTagsProvider {
             material.computeIfAbsent(suffix, s -> this.tag(s + "s")).add(entry.getValue().get());
         }
 
-        this.tag("essence/ground")
+        this.essenceTag("ground")
                 .add(Items.GRASS_BLOCK, Items.DIRT, Items.COARSE_DIRT, Items.PODZOL, Items.ROOTED_DIRT, Items.MYCELIUM)
                 .add(Items.SAND, Items.RED_SAND, Items.GRAVEL)
                 .add(Items.SNOW, Items.SNOW_BLOCK, Items.CLAY, Items.MUD, Items.MUDDY_MANGROVE_ROOTS)
                 .addTag(ItemTags.TERRACOTTA)
                 .add(Items.CRIMSON_NYLIUM, Items.WARPED_NYLIUM);
-        this.tag("essence/crust")
+        this.essenceTag("crust")
                 .add(Items.STONE, Items.COBBLESTONE, Items.MOSSY_COBBLESTONE)
                 .add(Items.DEEPSLATE, Items.COBBLED_DEEPSLATE)
                 .add(Items.SANDSTONE, Items.RED_SANDSTONE)
@@ -50,11 +50,11 @@ public class HyperTagsProvider extends ItemTagsProvider {
                 .addTag(Tags.Items.NETHERRACK)
                 .add(Items.BLACKSTONE, Items.BASALT)
                 .addTag(Tags.Items.END_STONES);
-        this.tag("essence/mineral")
+        this.essenceTag("mineral")
                 .addTags(Tags.Items.ORES)
                 .addTags(Tags.Items.STORAGE_BLOCKS_RAW_COPPER, Tags.Items.STORAGE_BLOCKS_RAW_GOLD, Tags.Items.STORAGE_BLOCKS_RAW_IRON)
                 .addTags(Tags.Items.STORAGE_BLOCKS_AMETHYST, Tags.Items.STORAGE_BLOCKS_COAL, Tags.Items.STORAGE_BLOCKS_COPPER, Tags.Items.STORAGE_BLOCKS_DIAMOND, Tags.Items.STORAGE_BLOCKS_EMERALD, Tags.Items.STORAGE_BLOCKS_GOLD, Tags.Items.STORAGE_BLOCKS_IRON, Tags.Items.STORAGE_BLOCKS_LAPIS, Tags.Items.STORAGE_BLOCKS_QUARTZ, Tags.Items.STORAGE_BLOCKS_REDSTONE, Tags.Items.STORAGE_BLOCKS_NETHERITE);
-        this.tag("essence/herb")
+        this.essenceTag("herb")
                 .add(Items.GRASS, Items.FERN, Items.DEAD_BUSH)
                 .addTags(ItemTags.SMALL_FLOWERS, ItemTags.TALL_FLOWERS)
                 .add(Items.SPORE_BLOSSOM, Items.MOSS_CARPET, Items.MOSS_BLOCK, Items.HANGING_ROOTS, Items.SMALL_DRIPLEAF, Items.BIG_DRIPLEAF)
@@ -63,7 +63,7 @@ public class HyperTagsProvider extends ItemTagsProvider {
                 .add(Items.WHEAT_SEEDS, Items.BEETROOT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS)
                 .add(Items.WHEAT, Items.COCOA_BEANS, Items.MELON, Items.PUMPKIN)
                 .add(Items.CRIMSON_ROOTS, Items.WEEPING_VINES, Items.WARPED_ROOTS, Items.TWISTING_VINES);
-        this.tag("essence/marine")
+        this.essenceTag("marine")
                 .add(Items.WATER_BUCKET)
                 .add(Items.SEAGRASS, Items.KELP)
                 .add(Items.COD, Items.SALMON, Items.TROPICAL_FISH, Items.PUFFERFISH)
@@ -73,34 +73,34 @@ public class HyperTagsProvider extends ItemTagsProvider {
                 .addTags(Tags.Items.GEMS_PRISMARINE, Tags.Items.DUSTS_PRISMARINE)
                 .add(Items.PRISMARINE, Items.DARK_PRISMARINE)
                 .add(Items.CONDUIT);
-        this.tag("essence/tree")
+        this.essenceTag("tree")
                 .addTags(ItemTags.SAPLINGS)
                 .add(Items.CRIMSON_FUNGUS, Items.WARPED_FUNGUS)
                 .add(Items.OAK_LOG, Items.SPRUCE_LOG, Items.BIRCH_LOG, Items.JUNGLE_LOG, Items.ACACIA_LOG, Items.DARK_OAK_LOG, Items.CRIMSON_STEM, Items.WARPED_STEM)
                 .addTag(ItemTags.LEAVES)
                 .add(Items.NETHER_WART_BLOCK, Items.WARPED_WART_BLOCK);
-        this.tag("essence/food")
+        this.essenceTag("food")
                 .add(Items.APPLE, Items.BREAD)
                 .add(Items.PORKCHOP, Items.BEEF, Items.CHICKEN, Items.MUTTON, Items.RABBIT)
                 .add(Items.COOKED_PORKCHOP, Items.COOKED_BEEF, Items.COOKED_CHICKEN, Items.COOKED_MUTTON, Items.COOKED_RABBIT)
                 .add(Items.DRIED_KELP, Items.COOKED_COD, Items.COOKED_SALMON)
-                .add(Items.CARROT, Items.POTATO, Items.BEETROOT, Items.SWEET_BERRIES/*, Items.GLOW_BERRIES*/)
+                .add(Items.CARROT, Items.POTATO, Items.BEETROOT, Items.SWEET_BERRIES)
                 .add(Items.BAKED_POTATO, Items.MUSHROOM_STEW, Items.RABBIT_STEW, Items.BEETROOT_SOUP)
                 .add(Items.COOKIE, Items.PUMPKIN_PIE)
                 .add(Items.ROTTEN_FLESH, Items.SPIDER_EYE, Items.POISONOUS_POTATO, Items.CHORUS_FRUIT)
-                .add(Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.CAKE)
+                .add(Items.GOLDEN_CARROT, Items.CAKE, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE)
                 .addOptionalTag((identifier("forge", "foods")));
-        this.tag("essence/motion")
+        this.essenceTag("motion")
                 .add(Items.FEATHER, Items.COMPASS, Items.MAP, Items.ICE, Items.PACKED_ICE, Items.BLUE_ICE, Items.LADDER)
                 .addTag(ItemTags.BOATS)
                 .add(Items.MINECART, Items.CHEST_MINECART, Items.FURNACE_MINECART, Items.HOPPER_MINECART, Items.TNT_MINECART)
                 .addTag(ItemTags.RAILS)
                 .add(Items.PISTON, Items.STICKY_PISTON, Items.SLIME_BLOCK, Items.HONEY_BLOCK)
                 .add(Items.ENDER_PEARL, Items.ENDER_EYE);
-        this.tag("essence/partition")
+        this.essenceTag("partition")
                 .addTags(ItemTags.FENCES, ItemTags.WALLS, ItemTags.DOORS, ItemTags.TRAPDOORS)
                 .addTags(Tags.Items.GLASS_COLORLESS, Tags.Items.STAINED_GLASS);
-        this.tag("essence/light")
+        this.essenceTag("light")
                 .add(Items.TORCH, Items.REDSTONE_TORCH, Items.SOUL_TORCH, Items.LANTERN, Items.SOUL_LANTERN)
                 .add(Items.LAVA_BUCKET)
                 .addTag(ItemTags.COALS)
@@ -108,14 +108,14 @@ public class HyperTagsProvider extends ItemTagsProvider {
                 .add(Items.FLINT_AND_STEEL, Items.GLOW_INK_SAC, Items.GLOW_ITEM_FRAME, Items.GLOW_LICHEN, Items.GLOW_BERRIES, Items.AMETHYST_CLUSTER, Items.SEA_PICKLE)
                 .add(Items.JACK_O_LANTERN, Items.REDSTONE_LAMP, Items.SEA_LANTERN, Items.MAGMA_BLOCK, Items.GLOWSTONE, Items.SHROOMLIGHT, Items.END_ROD)
                 .add(Items.CRYING_OBSIDIAN, Items.ENCHANTING_TABLE, Items.BEACON);
-        this.tag("essence/shadow")
+        this.essenceTag("shadow")
                 .addTag(ItemTags.BEDS)
                 .add(Items.PHANTOM_MEMBRANE, Items.GHAST_TEAR, Items.WITHER_SKELETON_SKULL, Items.SOUL_SAND, Items.SOUL_SOIL)
                 .addTag(Tags.Items.GLASS_TINTED)
                 .add(Items.NETHER_BRICKS, Items.STONE_BRICKS, Items.MOSSY_STONE_BRICKS, Items.IRON_BARS, Items.PURPUR_BLOCK, Items.OBSIDIAN)
                 .add(Items.EXPERIENCE_BOTTLE, Items.FERMENTED_SPIDER_EYE, Items.TOTEM_OF_UNDYING, Items.END_CRYSTAL)
                 .add(Items.SCULK_VEIN, Items.SCULK, Items.SCULK_SENSOR, Items.SCULK_SHRIEKER, Items.SCULK_SHRIEKER);
-        this.tag("essence/battle")
+        this.essenceTag("battle")
                 .add(Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.GOLDEN_SWORD, Items.DIAMOND_SWORD, Items.NETHERITE_SWORD)
                 .add(Items.WOODEN_AXE, Items.STONE_AXE, Items.IRON_AXE, Items.GOLDEN_AXE, Items.DIAMOND_AXE, Items.NETHERITE_AXE)
                 .add(Items.BOW, Items.CROSSBOW, Items.ARROW, Items.SPECTRAL_ARROW, Items.TRIDENT, Items.TNT)
@@ -124,17 +124,17 @@ public class HyperTagsProvider extends ItemTagsProvider {
                 .add(Items.LEATHER_LEGGINGS, Items.IRON_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.DIAMOND_LEGGINGS, Items.NETHERITE_LEGGINGS)
                 .add(Items.LEATHER_BOOTS, Items.IRON_BOOTS, Items.GOLDEN_BOOTS, Items.DIAMOND_BOOTS, Items.NETHERITE_BOOTS)
                 .add(Items.SHIELD);
-        this.tag("essence/sound")
+        this.essenceTag("sound")
                 .add(Items.NOTE_BLOCK, Items.JUKEBOX)
-                .addTag(ItemTags.CREEPER_DROP_MUSIC_DISCS);
-        this.tag("essence/work")
+                .addTag(ItemTags.MUSIC_DISCS);
+        this.essenceTag("work")
                 .add(Items.CRAFTING_TABLE, Items.FURNACE, Items.BLAST_FURNACE, Items.SMOKER)
                 .add(Items.CAULDRON, Items.BREWING_STAND, Items.COMPOSTER, Items.STONECUTTER, Items.GRINDSTONE, Items.LOOM, Items.FLETCHING_TABLE, Items.CARTOGRAPHY_TABLE, Items.SMITHING_TABLE)
                 .addTag(ItemTags.ANVIL)
                 .add(Items.CHEST, Items.TRAPPED_CHEST, Items.BARREL)
                 .add(Items.SHULKER_BOX, Items.BLACK_SHULKER_BOX, Items.BLUE_SHULKER_BOX, Items.BROWN_SHULKER_BOX, Items.CYAN_SHULKER_BOX, Items.GRAY_SHULKER_BOX, Items.GREEN_SHULKER_BOX, Items.LIGHT_BLUE_SHULKER_BOX, Items.LIGHT_GRAY_SHULKER_BOX, Items.LIME_SHULKER_BOX, Items.MAGENTA_SHULKER_BOX, Items.ORANGE_SHULKER_BOX, Items.PINK_SHULKER_BOX, Items.PURPLE_SHULKER_BOX, Items.RED_SHULKER_BOX, Items.WHITE_SHULKER_BOX, Items.YELLOW_SHULKER_BOX)
                 .add(Items.HOPPER, Items.DROPPER, Items.DISPENSER);
-        this.tag("essence/drawing")
+        this.essenceTag("drawing")
                 .addTag(Tags.Items.DYES)
                 .add(Items.WHITE_GLAZED_TERRACOTTA, Items.ORANGE_GLAZED_TERRACOTTA, Items.MAGENTA_GLAZED_TERRACOTTA, Items.LIGHT_BLUE_GLAZED_TERRACOTTA, Items.YELLOW_GLAZED_TERRACOTTA, Items.LIME_GLAZED_TERRACOTTA, Items.PINK_GLAZED_TERRACOTTA, Items.GRAY_GLAZED_TERRACOTTA, Items.LIGHT_GRAY_GLAZED_TERRACOTTA, Items.CYAN_GLAZED_TERRACOTTA, Items.PURPLE_GLAZED_TERRACOTTA, Items.BLUE_GLAZED_TERRACOTTA, Items.BROWN_GLAZED_TERRACOTTA, Items.GREEN_GLAZED_TERRACOTTA, Items.RED_GLAZED_TERRACOTTA, Items.BLACK_GLAZED_TERRACOTTA)
                 .add(Items.FIREWORK_ROCKET, Items.FIREWORK_STAR)
@@ -145,4 +145,9 @@ public class HyperTagsProvider extends ItemTagsProvider {
     private IntrinsicTagAppender<Item> tag(String name) {
         return this.tag(ItemTags.create(identifier(name)));
     }
+
+    private IntrinsicTagAppender<Item> essenceTag(String name) {
+        return this.tag(ItemTags.create(identifier("essence/" + name)));
+    }
+
 }

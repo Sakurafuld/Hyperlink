@@ -2,6 +2,6 @@
   "values": [
     "minecraft:note_block",
     "minecraft:jukebox",
-    "#minecraft:creeper_drop_music_discs"
+    "#minecraft:music_discs"
   ]
 }

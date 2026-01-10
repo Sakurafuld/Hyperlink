@@ -30,8 +30,9 @@
     "minecraft:poisonous_potato",
     "minecraft:chorus_fruit",
     "minecraft:golden_carrot",
-    "minecraft:golden_apple",
     "minecraft:cake",
+    "minecraft:golden_apple",
+    "minecraft:enchanted_golden_apple",
     {
       "id": "#forge:foods",
       "required": false

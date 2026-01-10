@@ -24,7 +24,7 @@ public class HyperRecipeProvider extends RecipeProvider {
     protected void buildRecipes(Consumer<FinishedRecipe> pWriter) {
         DeskShapelessRecipeBuilder.essence("ground")
                 .values(ItemTags.DIRT, Tags.Items.SAND, Tags.Items.GRAVEL)
-                .exclusion(Items.MOSS_BLOCK)
+//                .exclusion(Items.MOSS_BLOCK)
                 .saveMaterial(pWriter);
         DeskShapelessRecipeBuilder.essence("crust")
                 .values(Tags.Items.STONE, Tags.Items.COBBLESTONE, Tags.Items.SANDSTONE)

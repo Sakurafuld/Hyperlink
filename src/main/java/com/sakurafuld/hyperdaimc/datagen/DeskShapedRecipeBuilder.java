@@ -102,7 +102,7 @@ public class DeskShapedRecipeBuilder implements RecipeBuilder {
     @Override
     public void save(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ResourceLocation pRecipeId) {
         this.ensureValid(pRecipeId);
-        pFinishedRecipeConsumer.accept(new Result(pRecipeId));
+        pFinishedRecipeConsumer.accept(new Finisher(pRecipeId));
     }
 
     public void saveMaterial(Consumer<FinishedRecipe> finisher) {
@@ -139,13 +139,14 @@ public class DeskShapedRecipeBuilder implements RecipeBuilder {
         }
     }
 
-    public class Result implements FinishedRecipe {
+    class Finisher implements FinishedRecipe {
         private final ResourceLocation id;
 
-        public Result(ResourceLocation id) {
+        Finisher(ResourceLocation id) {
             this.id = id;
         }
 
+        @Override
         public void serializeRecipeData(JsonObject pJson) {
             if (DeskShapedRecipeBuilder.this.minecraft) {
                 pJson.addProperty("minecraft", true);

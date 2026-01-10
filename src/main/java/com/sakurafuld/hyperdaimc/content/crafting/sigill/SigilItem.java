@@ -3,6 +3,7 @@ package com.sakurafuld.hyperdaimc.content.crafting.sigill;
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.HyperBlocks;
 import com.sakurafuld.hyperdaimc.content.HyperEntities;
+import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -10,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -60,6 +62,8 @@ public class SigilItem extends Item {
                 level.addFreshEntity(fumetsu);
 
                 fumetsu.setMovable(false);
+
+                level.playSound(null, fumetsu, HyperSounds.DESK_POP.get(), SoundSource.BLOCKS, 1, 1 + level.getRandom().nextFloat() * 0.2f);
 
                 for (int w = 0; w < pattern.getWidth(); ++w) {
                     for (int h = 0; h < pattern.getHeight(); ++h) {

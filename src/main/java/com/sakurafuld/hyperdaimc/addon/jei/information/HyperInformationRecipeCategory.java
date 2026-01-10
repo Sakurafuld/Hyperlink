@@ -1,7 +1,8 @@
-package com.sakurafuld.hyperdaimc.addon.jei;
+package com.sakurafuld.hyperdaimc.addon.jei.information;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.sakurafuld.hyperdaimc.addon.jei.AbstractHyperRecipeCategory;
 import com.sakurafuld.hyperdaimc.infrastructure.Renders;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;

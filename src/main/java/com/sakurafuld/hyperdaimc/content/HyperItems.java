@@ -159,7 +159,7 @@ public class HyperItems {
     }
 
     public static Item getMaterial(String base, String suffix) {
-        return ForgeRegistries.ITEMS.getValue(identifier(base + "_" + suffix));
+        return MATERIAL.get(base + "_" + suffix).get();
     }
 
     public static Item getEssence(String name) {

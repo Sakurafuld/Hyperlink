@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
-import java.util.function.Supplier;
 
 public class Deets {
     public static final String HYPERDAIMC = "hyperdaimc";
@@ -25,6 +24,7 @@ public class Deets {
     public static final String IRONS_SPELLS_N_SPELLBOOKS = "irons_spellbooks";
     public static final String PROJECT_E = "projecte";
     public static final String OCULUS = "oculus";
+    public static final String JUST_ENOUGH_ITEMS = "jei";
     public static final String EMI = "emi";
 
     private Deets() {
@@ -45,73 +45,5 @@ public class Deets {
 
     public static ResourceLocation identifier(String path) {
         return identifier(HYPERDAIMC, path);
-    }
-
-    public enum Act {
-        FALSE,
-        TRUE;
-
-        public void run(Runnable runnable) {
-            switch (this) {
-                case FALSE -> {
-                    return;
-                }
-                case TRUE -> {
-                    runnable.run();
-                    return;
-                }
-            }
-            throw new IllegalStateException();
-        }
-
-        public void runOr(Runnable trueRun, Runnable falseRun) {
-            switch (this) {
-                case FALSE -> {
-                    falseRun.run();
-                    return;
-                }
-                case TRUE -> {
-                    trueRun.run();
-                    return;
-                }
-            }
-            throw new IllegalStateException();
-        }//required()で使うとき、run()はいいけどget()は気をつけなきゃやばい.
-
-        public <T> T get(Supplier<T> supplier) {
-            switch (this) {
-                case FALSE -> {
-                    return null;
-                }
-                case TRUE -> {
-                    return supplier.get();
-                }
-            }
-            throw new IllegalStateException();
-        }
-
-        public <T> T getOr(Supplier<T> trueGet, Supplier<T> falseGet) {
-            switch (this) {
-                case FALSE -> {
-                    return falseGet.get();
-                }
-                case TRUE -> {
-                    return trueGet.get();
-                }
-            }
-            throw new IllegalStateException();
-        }
-
-        public boolean ready() {
-            switch (this) {
-                case FALSE -> {
-                    return false;
-                }
-                case TRUE -> {
-                    return true;
-                }
-            }
-            throw new IllegalStateException();
-        }
     }
 }

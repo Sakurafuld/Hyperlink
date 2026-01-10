@@ -27,12 +27,15 @@ import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
 
+import static com.sakurafuld.hyperdaimc.infrastructure.Deets.*;
+
 public class VRXItem extends AbstractGashatItem {
     private static final Component DESCRIPTION = Component.translatable("tooltip.hyperdaimc.vrx.description").withStyle(ChatFormatting.GRAY);
     private static final Component DESCRIPTION_CLOSE = Component.translatable("tooltip.hyperdaimc.vrx.description.close").withStyle(ChatFormatting.GRAY);
     private static final Component DESCRIPTION_ERASE = Component.translatable("tooltip.hyperdaimc.vrx.description.erase").withStyle(ChatFormatting.GRAY);
     private static final Component DESCRIPTION_PLAYER = Component.translatable("tooltip.hyperdaimc.vrx.description.player").withStyle(ChatFormatting.GRAY);
     private static final Component DESCRIPTION_JEI = Component.translatable("tooltip.hyperdaimc.vrx.description.jei").withStyle(ChatFormatting.GRAY);
+    private static final Component DESCRIPTION_EMI = Component.translatable("tooltip.hyperdaimc.vrx.description.emi").withStyle(ChatFormatting.GRAY);
     private static Component descriptionConfigurable = null;
 
     private long lastTime = 0;
@@ -48,8 +51,12 @@ public class VRXItem extends AbstractGashatItem {
         tooltip.add(DESCRIPTION_CLOSE);
         tooltip.add(DESCRIPTION_ERASE);
         tooltip.add(DESCRIPTION_PLAYER);
-        if (HyperCommonConfig.VRX_JEI.get())
-            tooltip.add(DESCRIPTION_JEI);
+        if (HyperCommonConfig.VRX_JEI.get()) {
+            if (require(EMI))
+                tooltip.add(DESCRIPTION_EMI);
+            else if (require(JUST_ENOUGH_ITEMS))
+                tooltip.add(DESCRIPTION_JEI);
+        }
         if (descriptionConfigurable == null) {
             String configurables = String.join(", ", VRXRegistry.allNames());
             descriptionConfigurable = Component.translatable("tooltip.hyperdaimc.vrx.description.configurables", Component.literal(configurables).withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)).withStyle(ChatFormatting.WHITE);

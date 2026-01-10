@@ -65,8 +65,8 @@ public class HyperEnglishProvider extends LanguageProvider {
 
         this.add("tooltip.hyperdaimc.show_description", "Hold [§fShift§7] for description");
         this.add("tooltip.hyperdaimc.muteki", "Hyper Muteki");
-        this.add("tooltip.hyperdaimc.muteki.description", "§ePlace§7 this on §ehotbar§7 to become §6invincible");
-        this.add("tooltip.hyperdaimc.muteki.curios_description", "§ePlace§7 this on §ehotbar§7 or §ecurios slot§7 to become §6invincible");
+        this.add("tooltip.hyperdaimc.muteki.description", "§ePlace§7 this on your §ehotbar§7 to become §6invincible");
+        this.add("tooltip.hyperdaimc.muteki.curios_description", "§ePlace§7 this on your §ehotbar§7 or §9§oCurios §eslot§7 to become §6invincible");
         this.add("tooltip.hyperdaimc.muteki.description.theft", "§eProtects§7 you from §eitem theft");
         this.add("tooltip.hyperdaimc.muteki.description.command", "§eProtects§7 you from §ecommand selectors");
         this.add("tooltip.hyperdaimc.muteki.description.novel", "Fully immune to Novelcalibur");
@@ -76,7 +76,7 @@ public class HyperEnglishProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.novel.description_inverted", "§eL-Click§7 to §6kill§7 an entity you are looking at");
         this.add("tooltip.hyperdaimc.novel.description_inverted.sneaking", "While §esneaking§7, click to target §eall nearby entities§7 within your field of view");
         this.add("tooltip.hyperdaimc.novel.description.work", "Allow §erare loot§7 and §eexperience§7 drops, and §eEnchantment§7 abilities works");
-        this.add("tooltip.hyperdaimc.novel.description.tconstruct", "Provides the §emodifier§7 for §9§oTinker's Construct§7 mod");
+        this.add("tooltip.hyperdaimc.novel.description.tconstruct", "Provides the §emodifier§7 for §9§oTinker's Construct§7");
         this.add("tooltip.hyperdaimc.chronicle", "Rider Chronicle");
         this.add("tooltip.hyperdaimc.chronicle.description", "§eR-Click§7 at a start point and an end point to §6protect§7 that area");
         this.add("tooltip.hyperdaimc.chronicle.description.restart", "§eL-Click§7 at a protected area to unprotect it");
@@ -85,21 +85,23 @@ public class HyperEnglishProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.chronicle.description.paradox", "Fully immune to Pickdox");
         this.add("tooltip.hyperdaimc.paradox", "Perfect Knockout");
         this.add("tooltip.hyperdaimc.paradox.r_click_to_clear", "§eR-Click§7 under the mouse to clear the internal items");
-        this.add("tooltip.hyperdaimc.paradox.description", "§eL-Click§7 to §6destroy§7 blocks");
-        this.add("tooltip.hyperdaimc.paradox.description.control", "While §esneaking§7, click to destroy blocks §eone by one");
-        this.add("tooltip.hyperdaimc.paradox.description.control_inverted", "While §esneaking§7, click to §econtinuously§7 destroy blocks");
-        this.add("tooltip.hyperdaimc.paradox.description.drop", "§eDropped items (or experiences)§7 go into your §einventory§7. if not, they go §einside§7 this item");
+        this.add("tooltip.hyperdaimc.paradox.description", "§eL-Click§7 to §6mine§7 blocks");
+        this.add("tooltip.hyperdaimc.paradox.description.control", "While §esneaking§7, click to mine blocks §eone by one");
+        this.add("tooltip.hyperdaimc.paradox.description.control_inverted", "While §esneaking§7, click to §econtinuously§7 mine blocks");
+        this.add("tooltip.hyperdaimc.paradox.description.drop", "§eDropped items§7|§eexperiences§7 go into your §einventory§7. if not, they go §einside§7 this item");
         this.add("tooltip.hyperdaimc.paradox.description.transport", "§eHold§7 and §ethrow§7 this to §etransport§7 the internal items to the targeted §eStorage block");
         this.add("tooltip.hyperdaimc.paradox.description.chain", "§eR-Click§7 at a start point and an end point to create a §eCombo chain");
         this.add("tooltip.hyperdaimc.paradox.description.pick", "§eM-Click§7 at a combo chain to create §eCombo cluster");
         this.add("tooltip.hyperdaimc.paradox.description.unchain", "§eR-Click§7 while §esneaking§7 to remove a chain or a cluster");
+        this.add("tooltip.hyperdaimc.paradox.description.tconstruct", "Provides the §emodifier§7 for §9§oTinker's Construct§7");
         this.add("tooltip.hyperdaimc.vrx", "Creator VRX");
-        this.add("tooltip.hyperdaimc.vrx.description", "§eR-CLick§7 on a block or a entity to open gui");
-        this.add("tooltip.hyperdaimc.vrx.description.close", "§eClose§7 the gui to set §6V.R.X.§7 as the target");
-        this.add("tooltip.hyperdaimc.vrx.description.erase", "§eL-Click§7 on a block or a entity to remove its §6V.R.X.§7");
+        this.add("tooltip.hyperdaimc.vrx.description", "§eR-CLick§7 on a block or a entity to open §6V.R.X.§7");
+        this.add("tooltip.hyperdaimc.vrx.description.close", "§eClose§7 the gui to set V.R.X. as the target");
+        this.add("tooltip.hyperdaimc.vrx.description.erase", "§eL-Click§7 on a block or a entity to remove its V.R.X.");
+        this.add("tooltip.hyperdaimc.vrx.description.player", "§eR-CLick§7 on the player model in the gui to open V.R.X. as yours");
+        this.add("tooltip.hyperdaimc.vrx.description.jei", "Can configure V.R.X. in the gui from §9§oJust Enough Items§7");
+        this.add("tooltip.hyperdaimc.vrx.description.emi", "Can configure V.R.X. in the gui from §9§oEMI§7");
         this.add("tooltip.hyperdaimc.vrx.description.configurables", "Configurables: [%s]");
-        this.add("tooltip.hyperdaimc.vrx.description.player", "§eR-CLick§7 on the player model in the inventory to open gui as yours");
-        this.add("tooltip.hyperdaimc.vrx.description.jei", "Can configure contents in the gui from §eJEI§7");
         this.add("tooltip.hyperdaimc.vrx.face", "Contents in %s of %s");
         this.add("tooltip.hyperdaimc.vrx.face.empty", " -Empty");
         this.add("tooltip.hyperdaimc.vrx.indexes", "%3$s %1$s / %2$s %4$s");
@@ -169,11 +171,11 @@ public class HyperEnglishProvider extends LanguageProvider {
         this.add("modifier.hyperdaimc.novel.description", "All attacks kill the target instantly.");
         this.add("modifier.hyperdaimc.paradox", "Perfect Knockout99");
         this.add("modifier.hyperdaimc.paradox.flavor", "50+50=99!");
-        this.add("modifier.hyperdaimc.paradox.description", "Can instantly destroy any block.");
+        this.add("modifier.hyperdaimc.paradox.description", "Can instantly mine any block.");
     }
 
     @Nullable
-    private <T> String specialize(T entry, ResourceLocation name) {
+    private <T> String specialize(T entry) {
         if (entry == HyperBlocks.DESK.get())
             return "Gamacrafter";
         if (entry == HyperBlocks.SOUL.get())
@@ -207,7 +209,7 @@ public class HyperEnglishProvider extends LanguageProvider {
     }
 
     private <T> String defaultName(T entry, ResourceLocation name) {
-        String special = specialize(entry, name);
+        String special = this.specialize(entry);
         if (special != null)
             return special;
 

@@ -101,8 +101,9 @@ public class BugStarInformation extends HyperInformation {
         long millis = Util.getMillis();
         if (100 < millis - this.lastMillis) {
             this.stars.clear();
+            boolean xFlag = RANDOM.nextBoolean();
             for (int i = 0, j = RANDOM.nextInt(5, 9); i < j; i++) {
-                int x = (RANDOM.nextInt(120, 126)) + (i % 2) * RANDOM.nextInt(16, 19);
+                int x = RANDOM.nextInt(120, 126) + (xFlag ? 16 : 0) + (i % 2) * RANDOM.nextInt(16, 19) * (xFlag ? -1 : 1);
                 int yOffset = 50 - j * 4;
                 int y = Math.round(yOffset + i * 6 + RANDOM.nextFloat() * 3);
                 this.stars.add(new Star(x, y));

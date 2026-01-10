@@ -118,11 +118,47 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("subtitles.hyperdaimc.soul", "ソウルが脈動する");
 
         this.add("tooltip.hyperdaimc.muteki", "流星のごとく輝け！");
+        this.add("tooltip.hyperdaimc.muteki.description", "このアイテムが§eホットバー§7にある時、あなたは§6ムテキ§7になる");
+        this.add("tooltip.hyperdaimc.muteki.curios_description", "このアイテムが§eホットバー§7、または§9§oCurios§eスロット§7にある時、あなたは§6ムテキ§7になる");
+        this.add("tooltip.hyperdaimc.muteki.description.theft", "あなたのアイテムは§e盗まれない");
+        this.add("tooltip.hyperdaimc.muteki.description.command", "あなたは§eコマンドセレクタ§7に§e選ばれない");
+        this.add("tooltip.hyperdaimc.muteki.description.novel", "ノベルカリバーを無視する");
+
         this.add("tooltip.hyperdaimc.novel", "俺の言う通りのストーリー！");
+        this.add("tooltip.hyperdaimc.novel.description", "このアイテムで§e左クリック§7した時、視線付近のエンティティ全てを§6倒す");
+        this.add("tooltip.hyperdaimc.novel.description.sneaking", "§eスニーク§7していれば、§e視線先のエンティティ一体§7を倒す");
+        this.add("tooltip.hyperdaimc.novel.description_inverted", "このアイテムで§e左クリック§7した時、視線先のエンティティ一体を§6倒す");
+        this.add("tooltip.hyperdaimc.novel.description_inverted.sneaking", "§eスニーク§7していれば、§e視線付近のエンティティ全て§7を倒す");
+        this.add("tooltip.hyperdaimc.novel.description.work", "§eレアドロップ§7や§e経験オーブ§7をドロップさせ、また、§eエンチャント§7能力も機能する");
+        this.add("tooltip.hyperdaimc.novel.description.tconstruct", "§9§oTinker's Construct§7における§e修飾子§7として使える");
+
         this.add("tooltip.hyperdaimc.chronicle", "時は今こそ極まれり！");
+        this.add("tooltip.hyperdaimc.chronicle.description", "このアイテムで始点と終点を§e右クリック§7した時、その領域を§6保護§7する");
+        this.add("tooltip.hyperdaimc.chronicle.description.restart", "このアイテムで保護領域を§e左クリック§7した時、その保護を解く");
+        this.add("tooltip.hyperdaimc.chronicle.description.free_owner", "保護領域は、§e保護者にのみ§7作用§eできる");
+        this.add("tooltip.hyperdaimc.chronicle.description.paused_owner", "保護領域は、§e保護者だろうと§7作用§eできない");
+        this.add("tooltip.hyperdaimc.chronicle.description.paradox", "ピックドクスを無視する");
+
         this.add("tooltip.hyperdaimc.paradox", "交差する強さ連鎖！");
-        this.add("tooltip.hyperdaimc.paradox.r_click_to_clear", "カーソルで右クリックして中身をクリア");
+        this.add("tooltip.hyperdaimc.paradox.r_click_to_clear", "カーソルで§e右クリック§7して中身をクリアする");
+        this.add("tooltip.hyperdaimc.paradox.description", "このアイテムで§e左クリック§7した時、ブロックを§6採掘§7する");
+        this.add("tooltip.hyperdaimc.paradox.description.control", "§eスニーク§7していれば、§e1つづつ§7ブロックを採掘する");
+        this.add("tooltip.hyperdaimc.paradox.description.control_inverted", "§eスニーク§7していれば、§e連続して§7ブロックを採掘する");
+        this.add("tooltip.hyperdaimc.paradox.description.drop", "§eドロップアイテム§7・§e経験オーブ§7は、あなたのインベントリに§e直§7に入る。そうでなければ、このアイテムの§e中§7に入る");
+        this.add("tooltip.hyperdaimc.paradox.description.transport", "このアイテムを§e投げた§7時、中身のアイテムを視線先のストレージに§e搬入§7する");
+        this.add("tooltip.hyperdaimc.paradox.description.chain", "このアイテムで始点と終点を§e右クリック§7した時、その範囲の§eコンボチェイン§7を作る");
+        this.add("tooltip.hyperdaimc.paradox.description.pick", "このアイテムでコンボチェインを§e中クリック§7した時、§eコンボクラスター§7を作る");
+        this.add("tooltip.hyperdaimc.paradox.description.unchain", "このアイテムでチェイン、またはクラスターを§e右クリック§7した時、§eスニーク§7していれば、それを解く");
+        this.add("tooltip.hyperdaimc.paradox.description.tconstruct", "§9§oTinker's Construct§7における§e修飾子§7として使える");
+
         this.add("tooltip.hyperdaimc.vrx", "天地創造ゲットメイク！");
+        this.add("tooltip.hyperdaimc.vrx.description", "このアイテムでブロック、またはエンティティを§e右クリック§7した時、その§6V.R.X.§7を開く");
+        this.add("tooltip.hyperdaimc.vrx.description.close", "Guiを§e閉じた§7時、設定されたV.R.X.を対象に与える");
+        this.add("tooltip.hyperdaimc.vrx.description.erase", "このアイテムでブロック、またはエンティティを§e左クリック§7した時、そのV.R.X.を解く");
+        this.add("tooltip.hyperdaimc.vrx.description.player", "このアイテムでGui内のプレイヤーを§e右クリック§7した時、あなたのV.R.X.を開く");
+        this.add("tooltip.hyperdaimc.vrx.description.jei", "V.R.X.の内容を§9§oJust Enough Items§7から設定できる");
+        this.add("tooltip.hyperdaimc.vrx.description.emi", "V.R.X.の内容を§9§oEMI§7から設定できる");
+        this.add("tooltip.hyperdaimc.vrx.description.configurables", "設定可能: [%s]");
         this.add("tooltip.hyperdaimc.vrx.face", "%s方向からの%sの内容確認");
         this.add("tooltip.hyperdaimc.vrx.face.empty", " -無いようです");
         this.add("tooltip.hyperdaimc.vrx.indexes", "%3$s %1$s / %2$s %4$s");
@@ -183,7 +219,7 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("modifier.hyperdaimc.novel.description", "全ての攻撃が相手を即死させる");
         this.add("modifier.hyperdaimc.paradox", "パーフェクトノックアウト99");
         this.add("modifier.hyperdaimc.paradox.flavor", "50と50で99だ！");
-        this.add("modifier.hyperdaimc.paradox.description", "全てのブロックを即座に破壊する");
+        this.add("modifier.hyperdaimc.paradox.description", "全てのブロックを即座に採掘できる");
     }
 
     private <T> String specialize(T entry, String name) {
@@ -240,12 +276,11 @@ public class HyperJapaneseProvider extends LanguageProvider {
     }
 
     private <T> String defaultName(T entry, ResourceLocation name) {
-        String special = specialize(entry, name.getPath());
+        String special = this.specialize(entry, name.getPath());
 
         return Arrays.stream(special.split("_")).map(s -> {
-            if (MAP.containsKey(s)) {
+            if (MAP.containsKey(s))
                 return MAP.get(s);
-            }
             char splinter = Character.toUpperCase(s.charAt(0));
             return splinter + s.substring(1);
         }).collect(Collectors.joining());

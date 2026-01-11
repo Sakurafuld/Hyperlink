@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.tconstruct.ticex;
 
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityTicEx;
 import mods.flammpfeil.slashblade.entity.EntityDrive;
 import net.minecraft.server.level.ServerLevel;

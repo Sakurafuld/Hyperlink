@@ -107,7 +107,7 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("subtitles.hyperdaimc.paradox_select", "連鎖範囲を選ぶ");
         this.add("subtitles.hyperdaimc.paradox_chain", "連鎖範囲を選び終わる");
         this.add("subtitles.hyperdaimc.paradox_unchain", "連鎖範囲を無くす");
-        this.add("subtitles.hyperdaimc.vrx_open", "V.R.X.を開く");
+        this.add("subtitles.hyperdaimc.vrx_open", "VRXを開く");
         this.add("subtitles.hyperdaimc.vrx_create", "V!R!X!");
         this.add("subtitles.hyperdaimc.vrx_erase", "X!R!V!");
         this.add("subtitles.hyperdaimc.fumetsu_ambient", "フメツウィザーが怒る");
@@ -117,47 +117,45 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("subtitles.hyperdaimc.chemical_maximization", "ソウルが凝固していく");
         this.add("subtitles.hyperdaimc.soul", "ソウルが脈動する");
 
+        this.add("tooltip.hyperdaimc.show_description", "[§fShift§7]で概要");
         this.add("tooltip.hyperdaimc.muteki", "流星のごとく輝け！");
-        this.add("tooltip.hyperdaimc.muteki.description", "このアイテムが§eホットバー§7にある時、あなたは§6ムテキ§7になる");
-        this.add("tooltip.hyperdaimc.muteki.curios_description", "このアイテムが§eホットバー§7、または§9§oCurios§eスロット§7にある時、あなたは§6ムテキ§7になる");
+        this.add("tooltip.hyperdaimc.muteki.description", "§eホットバー§7にある時、あなたは§6ムテキ§7になる");
+        this.add("tooltip.hyperdaimc.muteki.curios_description", "§eホットバー§7、または§b§oCurios§eスロット§7にある時、あなたは§6ムテキ§7になる");
         this.add("tooltip.hyperdaimc.muteki.description.theft", "あなたのアイテムは§e盗まれない");
         this.add("tooltip.hyperdaimc.muteki.description.command", "あなたは§eコマンドセレクタ§7に§e選ばれない");
         this.add("tooltip.hyperdaimc.muteki.description.novel", "ノベルカリバーを無視する");
-
         this.add("tooltip.hyperdaimc.novel", "俺の言う通りのストーリー！");
-        this.add("tooltip.hyperdaimc.novel.description", "このアイテムで§e左クリック§7した時、視線付近のエンティティ全てを§6倒す");
+        this.add("tooltip.hyperdaimc.novel.description", "§e左クリック§7した時、視線付近のエンティティ全てを§6倒す");
         this.add("tooltip.hyperdaimc.novel.description.sneaking", "§eスニーク§7していれば、§e視線先のエンティティ一体§7を倒す");
-        this.add("tooltip.hyperdaimc.novel.description_inverted", "このアイテムで§e左クリック§7した時、視線先のエンティティ一体を§6倒す");
+        this.add("tooltip.hyperdaimc.novel.description_inverted", "§e左クリック§7した時、視線先のエンティティ一体を§6倒す");
         this.add("tooltip.hyperdaimc.novel.description_inverted.sneaking", "§eスニーク§7していれば、§e視線付近のエンティティ全て§7を倒す");
         this.add("tooltip.hyperdaimc.novel.description.work", "§eレアドロップ§7や§e経験オーブ§7をドロップさせ、また、§eエンチャント§7能力も機能する");
-        this.add("tooltip.hyperdaimc.novel.description.tconstruct", "§9§oTinker's Construct§7における§e修飾子§7として使える");
-
+        this.add("tooltip.hyperdaimc.novel.description.tconstruct", "§b§oTinker's Construct§7における§e修飾子§7として使える");
         this.add("tooltip.hyperdaimc.chronicle", "時は今こそ極まれり！");
-        this.add("tooltip.hyperdaimc.chronicle.description", "このアイテムで始点と終点を§e右クリック§7した時、その領域を§6保護§7する");
-        this.add("tooltip.hyperdaimc.chronicle.description.restart", "このアイテムで保護領域を§e左クリック§7した時、その保護を解く");
-        this.add("tooltip.hyperdaimc.chronicle.description.free_owner", "保護領域は、§e保護者にのみ§7作用§eできる");
-        this.add("tooltip.hyperdaimc.chronicle.description.paused_owner", "保護領域は、§e保護者だろうと§7作用§eできない");
+        this.add("tooltip.hyperdaimc.chronicle.description", "始点と終点を§e右クリック§7した時、その領域を§6保護§7する");
+        this.add("tooltip.hyperdaimc.chronicle.description.restart", "保護領域を§e左クリック§7した時、その保護を解く");
+        this.add("tooltip.hyperdaimc.chronicle.description.free_owner", "保護領域には、§e保護者のみが§7作用§eできる");
+        this.add("tooltip.hyperdaimc.chronicle.description.paused_owner", "保護領域には、§e保護者だろうと§7作用§eできない");
+        this.add("tooltip.hyperdaimc.chronicle.description.interaction", "保護領域には、アドベンチャーモードであるかのように§e触れない§7");
         this.add("tooltip.hyperdaimc.chronicle.description.paradox", "ピックドクスを無視する");
-
         this.add("tooltip.hyperdaimc.paradox", "交差する強さ連鎖！");
         this.add("tooltip.hyperdaimc.paradox.r_click_to_clear", "カーソルで§e右クリック§7して中身をクリアする");
-        this.add("tooltip.hyperdaimc.paradox.description", "このアイテムで§e左クリック§7した時、ブロックを§6採掘§7する");
-        this.add("tooltip.hyperdaimc.paradox.description.control", "§eスニーク§7していれば、§e1つづつ§7ブロックを採掘する");
-        this.add("tooltip.hyperdaimc.paradox.description.control_inverted", "§eスニーク§7していれば、§e連続して§7ブロックを採掘する");
-        this.add("tooltip.hyperdaimc.paradox.description.drop", "§eドロップアイテム§7・§e経験オーブ§7は、あなたのインベントリに§e直§7に入る。そうでなければ、このアイテムの§e中§7に入る");
+        this.add("tooltip.hyperdaimc.paradox.description", "§e左クリック§7した時、見ているブロックを§6採掘§7する");
+        this.add("tooltip.hyperdaimc.paradox.description.control", "§eスニーク§7していれば、§e1つづつ§7採掘する");
+        this.add("tooltip.hyperdaimc.paradox.description.control_inverted", "§eスニーク§7していれば、§e連続して§7採掘する");
+        this.add("tooltip.hyperdaimc.paradox.description.drop", "§eドロップアイテム§7は、あなたのインベントリに§e直§7に入る。そうでなければ、このアイテムの§e中§7に入る");
         this.add("tooltip.hyperdaimc.paradox.description.transport", "このアイテムを§e投げた§7時、中身のアイテムを視線先のストレージに§e搬入§7する");
-        this.add("tooltip.hyperdaimc.paradox.description.chain", "このアイテムで始点と終点を§e右クリック§7した時、その範囲の§eコンボチェイン§7を作る");
-        this.add("tooltip.hyperdaimc.paradox.description.pick", "このアイテムでコンボチェインを§e中クリック§7した時、§eコンボクラスター§7を作る");
-        this.add("tooltip.hyperdaimc.paradox.description.unchain", "このアイテムでチェイン、またはクラスターを§e右クリック§7した時、§eスニーク§7していれば、それを解く");
-        this.add("tooltip.hyperdaimc.paradox.description.tconstruct", "§9§oTinker's Construct§7における§e修飾子§7として使える");
-
+        this.add("tooltip.hyperdaimc.paradox.description.chain", "始点と終点を§e右クリック§7した時、その範囲の§eコンボチェイン§7を作る");
+        this.add("tooltip.hyperdaimc.paradox.description.cluster", "コンボチェインを§e中クリック§7した時、§eコンボクラスター§7を作る");
+        this.add("tooltip.hyperdaimc.paradox.description.unchain", "チェイン、またはクラスターを§e右クリック§7した時、§eスニーク§7していれば、それを解く");
+        this.add("tooltip.hyperdaimc.paradox.description.tconstruct", "§b§oTinker's Construct§7における§e修飾子§7として使える");
         this.add("tooltip.hyperdaimc.vrx", "天地創造ゲットメイク！");
-        this.add("tooltip.hyperdaimc.vrx.description", "このアイテムでブロック、またはエンティティを§e右クリック§7した時、その§6V.R.X.§7を開く");
-        this.add("tooltip.hyperdaimc.vrx.description.close", "Guiを§e閉じた§7時、設定されたV.R.X.を対象に与える");
-        this.add("tooltip.hyperdaimc.vrx.description.erase", "このアイテムでブロック、またはエンティティを§e左クリック§7した時、そのV.R.X.を解く");
-        this.add("tooltip.hyperdaimc.vrx.description.player", "このアイテムでGui内のプレイヤーを§e右クリック§7した時、あなたのV.R.X.を開く");
-        this.add("tooltip.hyperdaimc.vrx.description.jei", "V.R.X.の内容を§9§oJust Enough Items§7から設定できる");
-        this.add("tooltip.hyperdaimc.vrx.description.emi", "V.R.X.の内容を§9§oEMI§7から設定できる");
+        this.add("tooltip.hyperdaimc.vrx.description", "ブロック、またはエンティティを§e右クリック§7した時、その§6VRX§7を開く");
+        this.add("tooltip.hyperdaimc.vrx.description.close", "Guiを§e閉じた§7時、設定されたVRXを対象に与える");
+        this.add("tooltip.hyperdaimc.vrx.description.erase", "ブロック、またはエンティティを§e左クリック§7した時、そのVRXを解く");
+        this.add("tooltip.hyperdaimc.vrx.description.player", "Gui内のプレイヤーを§e右クリック§7した時、あなたのVRXを開く");
+        this.add("tooltip.hyperdaimc.vrx.description.jei", "VRXの内容を§b§oJust Enough Items§7から設定できる");
+        this.add("tooltip.hyperdaimc.vrx.description.emi", "VRXの内容を§b§oEMI§7から設定できる");
         this.add("tooltip.hyperdaimc.vrx.description.configurables", "設定可能: [%s]");
         this.add("tooltip.hyperdaimc.vrx.face", "%s方向からの%sの内容確認");
         this.add("tooltip.hyperdaimc.vrx.face.empty", " -無いようです");
@@ -171,7 +169,7 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("tooltip.hyperdaimc.face.south", "南");
         this.add("tooltip.hyperdaimc.face.west", "西");
         this.add("tooltip.hyperdaimc.face.east", "東");
-        this.add("tooltip.hyperdaimc.vrx.player", "現在のV.R.X.の内容");
+        this.add("tooltip.hyperdaimc.vrx.player", "現在のVRXの内容");
         this.add("tooltip.hyperdaimc.vrx.energy", "底なしのエネルギー");
         this.add("tooltip.hyperdaimc.vrx.energy.description", "ForgeEnergy, RedstoneFlux, Jouleなど");
         this.add("tooltip.hyperdaimc.desk.minecrafting", "マインしてクラフトだ！");
@@ -200,6 +198,15 @@ public class HyperJapaneseProvider extends LanguageProvider {
         this.add("permissions.requires.muteki", "このコマンドを実行するためには§6ムテキ§e状態§cで無いエンティティが必要です");
 
         // 連携.
+        this.add("tooltip.hyperdaimc.vrx.botania_mana", "底なしのマナ");
+        this.add("tooltip.hyperdaimc.vrx.botania_mana.description", "マナプールや、インベントリ内のマナタブレットへ");
+        this.add("tooltip.hyperdaimc.vrx.source", "底なしのソース");
+        this.add("tooltip.hyperdaimc.vrx.source.description", "プレイヤーや、ソースジャーへ");
+        this.add("tooltip.hyperdaimc.vrx.irons_spellbooks_mana", "底なしのマナ");
+        this.add("tooltip.hyperdaimc.vrx.irons_spellbooks_mana.description", "エンティティへ");
+        this.add("tooltip.hyperdaimc.vrx.emc", "底なしのEMC");
+        this.add("tooltip.hyperdaimc.vrx.emc.description", "プレイヤーや、コンデンサー、インベントリ内のクラインの星へ");
+
         this.add("curios.identifier.maximum", "マキシマム");
 
         this.add("recipe.hyperdaimc.desk", "ゲーマクラフト");

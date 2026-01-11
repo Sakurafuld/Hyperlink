@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.novel;
 
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.IMetapotentFlashfurNovel;
 import flashfur.omnimobs.entities.anticheat.AccessChecker;
 import flashfur.omnimobs.entities.metapotent_flashfur.MetapotentFlashfur;

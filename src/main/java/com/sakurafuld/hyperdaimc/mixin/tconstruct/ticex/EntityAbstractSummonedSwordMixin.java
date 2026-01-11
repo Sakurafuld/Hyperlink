@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.mixin.tconstruct.ticex;
 
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityTicEx;
 import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticleOptions;
 import mods.flammpfeil.slashblade.entity.EntityAbstractSummonedSword;

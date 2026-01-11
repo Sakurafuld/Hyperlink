@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.content.hyper.fumetsu.skull;
 
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.Calculates;
 import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;

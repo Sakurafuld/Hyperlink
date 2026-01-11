@@ -16,6 +16,7 @@ public class ChronicleItem extends AbstractGashatItem {
     private static final Component DESCRIPTION_UNSELECT = Component.translatable("tooltip.hyperdaimc.chronicle.description.restart").withStyle(ChatFormatting.GRAY);
     private static final Component DESCRIPTION_FREE_OWNER = Component.translatable("tooltip.hyperdaimc.chronicle.description.free_owner").withStyle(ChatFormatting.GRAY);
     private static final Component DESCRIPTION_PAUSED_OWNER = Component.translatable("tooltip.hyperdaimc.chronicle.description.paused_owner").withStyle(ChatFormatting.GRAY);
+    private static final Component DESCRIPTION_INTERACTION = Component.translatable("tooltip.hyperdaimc.chronicle.description.interaction").withStyle(ChatFormatting.GRAY);
     private static final Component DESCRIPTION_PARADOX = Component.translatable("tooltip.hyperdaimc.chronicle.description.paradox").withStyle(style -> style.withColor(0xAA00AA));
 
     public ChronicleItem(String name, Properties pProperties) {
@@ -29,6 +30,8 @@ public class ChronicleItem extends AbstractGashatItem {
         if (HyperCommonConfig.CHRONICLE_OWNER.get())
             tooltip.add(DESCRIPTION_PAUSED_OWNER);
         else tooltip.add(DESCRIPTION_FREE_OWNER);
+        if (HyperCommonConfig.CHRONICLE_INTERACT.get())
+            tooltip.add(DESCRIPTION_INTERACTION);
         if (HyperCommonConfig.CHRONICLE_PARADOX.get())
             tooltip.add(DESCRIPTION_PARADOX);
     }

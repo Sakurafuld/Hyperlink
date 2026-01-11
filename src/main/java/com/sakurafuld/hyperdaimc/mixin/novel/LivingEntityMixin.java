@@ -4,7 +4,7 @@ import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuEntity;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelDamageSource;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityNovel;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.ILivingEntityMuteki;
 import com.sakurafuld.hyperdaimc.infrastructure.render.GashatParticleOptions;

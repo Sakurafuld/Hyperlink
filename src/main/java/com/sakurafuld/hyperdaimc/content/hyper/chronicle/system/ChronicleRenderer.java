@@ -34,7 +34,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.Comparator;
-import java.util.Objects;
 
 import static com.sakurafuld.hyperdaimc.infrastructure.Deets.HYPERDAIMC;
 
@@ -53,8 +52,11 @@ public class ChronicleRenderer {
             return;
 
         Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = Objects.requireNonNull(mc.player);
-        ClientLevel level = Objects.requireNonNull(mc.level);
+        LocalPlayer player = mc.player;
+        ClientLevel level = mc.level;
+        if (player == null || level == null)
+            return;
+
         PoseStack poseStack = event.getPoseStack();
         Vec3 camera = event.getCamera().getPosition();
         long millis = System.currentTimeMillis();
@@ -146,8 +148,11 @@ public class ChronicleRenderer {
             event.setCanceled(true);
         else if (HyperCommonConfig.CHRONICLE_SHOW_PROTECTION.get()) {
             Minecraft mc = Minecraft.getInstance();
-            LocalPlayer player = Objects.requireNonNull(mc.player);
-            ClientLevel level = Objects.requireNonNull(mc.level);
+            LocalPlayer player = mc.player;
+            ClientLevel level = mc.level;
+            if (player == null || level == null)
+                return;
+
             BlockHitResult result = event.getTarget();
             BlockPos pos = result.getBlockPos();
 

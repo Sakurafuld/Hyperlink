@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.screens.DeathScreen;

@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.mixin.muteki;
 
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.FumetsuHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;

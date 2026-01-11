@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc.addon.tconstruct;
 
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.Writes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;

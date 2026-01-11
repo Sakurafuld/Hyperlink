@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.network.novel;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
 import com.sakurafuld.hyperdaimc.content.HyperItems;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;

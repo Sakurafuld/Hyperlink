@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.mixin.novel;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.IMetapotentFlashfurNovel;
 import flashfur.omnimobs.entities.metapotent_flashfur.MetapotentFlashfurEntity;
 import flashfur.omnimobs.entities.metapotent_flashfur.MetapotentFlashfurRenderer;

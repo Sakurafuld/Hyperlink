@@ -6,7 +6,7 @@ import com.sakurafuld.hyperdaimc.content.HyperItems;
 import com.sakurafuld.hyperdaimc.content.HyperSounds;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.ai.*;
 import com.sakurafuld.hyperdaimc.content.hyper.fumetsu.skull.FumetsuSkull;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.Boxes;
 import com.sakurafuld.hyperdaimc.infrastructure.Writes;
 import com.sakurafuld.hyperdaimc.infrastructure.entity.IFumetsu;

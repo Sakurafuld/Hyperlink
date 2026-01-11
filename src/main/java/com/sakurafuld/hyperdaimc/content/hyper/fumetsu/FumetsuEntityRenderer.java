@@ -3,7 +3,7 @@ package com.sakurafuld.hyperdaimc.content.hyper.fumetsu;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.Renders;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -68,7 +68,7 @@ public class FumetsuEntityRenderer extends MobRenderer<FumetsuEntity, FumetsuEnt
         this.model.setupAnim(pEntity, limbSwing, limbSwingAmount, ticks, yHeadRot, xRot);
         Minecraft mc = Minecraft.getInstance();
         boolean visible = this.isBodyVisible(pEntity);
-        boolean invisibleTeam = !visible && !pEntity.isInvisibleTo(mc.player);
+        boolean invisibleTeam = !visible && !(mc.player != null && pEntity.isInvisibleTo(mc.player));
         boolean glowing = mc.shouldEntityAppearGlowing(pEntity);
         RenderType rendertype = this.getRenderType(pEntity, visible, invisibleTeam, glowing);
         if (rendertype != null) {

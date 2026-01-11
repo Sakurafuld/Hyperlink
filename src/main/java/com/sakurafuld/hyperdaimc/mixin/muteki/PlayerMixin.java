@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;

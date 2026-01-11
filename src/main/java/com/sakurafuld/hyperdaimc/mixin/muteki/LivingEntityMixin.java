@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.mixin.muteki;
 
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.ILivingEntityMuteki;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;

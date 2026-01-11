@@ -19,7 +19,6 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 import static com.sakurafuld.hyperdaimc.infrastructure.Deets.identifier;
 
@@ -30,9 +29,11 @@ public class VRXOverlay implements IGuiOverlay {
     @Override
     public void render(ForgeGui gui, GuiGraphics graphics, float partialTick, int width, int height) {
         Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
+        if (player == null)
+            return;
 
         HitResult hit = mc.hitResult;
-        LocalPlayer player = Objects.requireNonNull(mc.player);
         if (hit == null || hit.getType() == HitResult.Type.MISS)
             return;
         if (!player.getMainHandItem().is(HyperItems.VRX.get()) && !player.getOffhandItem().is(HyperItems.VRX.get()))

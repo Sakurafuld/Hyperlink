@@ -1,6 +1,6 @@
 package com.sakurafuld.hyperdaimc;
 
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.content.hyper.paradox.system.ParadoxHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -143,7 +143,7 @@ public class HyperCommonConfig {
                                 "Default: false")
                         .define("Pause owner", false);
                 CHRONICLE_INTERACT = builder
-                        .comment("Cannot interact with blocks in Chronicle ( Like in Adventure Mode )",
+                        .comment("Cannot interact with blocks in Chronicle ( Like in Adventure mode )",
                                 "Default: false")
                         .define("Pause interaction", false);
                 CHRONICLE_SHOW_PROTECTION = builder

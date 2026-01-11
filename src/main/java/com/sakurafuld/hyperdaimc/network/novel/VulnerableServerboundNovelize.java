@@ -1,7 +1,7 @@
 package com.sakurafuld.hyperdaimc.network.novel;
 
 import com.sakurafuld.hyperdaimc.HyperCommonConfig;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;

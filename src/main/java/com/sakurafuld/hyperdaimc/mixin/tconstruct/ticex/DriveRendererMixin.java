@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.mixin.tconstruct.ticex;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import com.sakurafuld.hyperdaimc.infrastructure.Calculates;
 import com.sakurafuld.hyperdaimc.infrastructure.Renders;
 import com.sakurafuld.hyperdaimc.infrastructure.mixin.IEntityTicEx;

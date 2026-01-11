@@ -2,7 +2,7 @@ package com.sakurafuld.hyperdaimc.mixin.muteki;
 
 import com.mojang.authlib.GameProfile;
 import com.sakurafuld.hyperdaimc.content.hyper.muteki.MutekiHandler;
-import com.sakurafuld.hyperdaimc.content.hyper.novel.NovelHandler;
+import com.sakurafuld.hyperdaimc.content.hyper.novel.system.NovelHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;

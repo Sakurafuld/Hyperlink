@@ -186,9 +186,14 @@ public class VRXHandler {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void createOrErase(ScreenEvent.MouseButtonPressed.Pre event) {
-        if (!HyperCommonConfig.ENABLE_VRX.get()) return;
+        if (!HyperCommonConfig.ENABLE_VRX.get())
+            return;
+
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null)
+            return;
+
         if (event.getScreen() instanceof AbstractContainerScreen<?> screen && screen.getMenu().getCarried().is(HyperItems.VRX.get()) && Check.INSTANCE.isIn(screen, event.getMouseX(), event.getMouseY())) {
-            LocalPlayer player = Minecraft.getInstance().player;
             if (event.getButton() == InputConstants.MOUSE_BUTTON_RIGHT) {
                 event.setCanceled(true);
                 HyperConnection.INSTANCE.sendToServer(new ServerboundVRXMyself(true));
@@ -210,8 +215,11 @@ public class VRXHandler {
     public static void cancelHighlight(RenderHighlightEvent.Block event) {
         if (!HyperCommonConfig.ENABLE_VRX.get()) return;
         Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = Objects.requireNonNull(mc.player);
-        ClientLevel level = Objects.requireNonNull(mc.level);
+        LocalPlayer player = mc.player;
+        ClientLevel level = mc.level;
+        if (player == null || level == null)
+            return;
+
         BlockPos pos = event.getTarget().getBlockPos();
         if (!player.getMainHandItem().is(HyperItems.VRX.get()) && !player.getOffhandItem().is(HyperItems.VRX.get()))
             return;
@@ -226,8 +234,11 @@ public class VRXHandler {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) return;
 
         Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = Objects.requireNonNull(mc.player);
-        ClientLevel level = Objects.requireNonNull(mc.level);
+        LocalPlayer player = mc.player;
+        ClientLevel level = mc.level;
+        if (player == null || level == null)
+            return;
+
         PoseStack poseStack = event.getPoseStack();
         Vec3 camera = event.getCamera().getPosition();
 
@@ -318,8 +329,11 @@ public class VRXHandler {
         if (!HyperCommonConfig.ENABLE_VRX.get()) return;
 
         Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = Objects.requireNonNull(mc.player);
-        ClientLevel level = Objects.requireNonNull(mc.level);
+        LocalPlayer player = mc.player;
+        ClientLevel level = mc.level;
+        if (player == null || level == null)
+            return;
+
         LivingEntity entity = event.getEntity();
         PoseStack poseStack = event.getPoseStack();
         float partialTick = event.getPartialTick();
@@ -371,7 +385,10 @@ public class VRXHandler {
         if (!HyperCommonConfig.ENABLE_VRX.get()) return;
         if (event.getScreen() instanceof AbstractContainerScreen<?> screen && screen.getMenu().getCarried().is(HyperItems.VRX.get()) && Check.INSTANCE.isIn(screen, event.getMouseX(), event.getMouseY())) {
             Minecraft mc = Minecraft.getInstance();
-            LocalPlayer player = Objects.requireNonNull(mc.player);
+            LocalPlayer player = mc.player;
+            if (player == null)
+                return;
+
             player.getCapability(VRXCapability.TOKEN).ifPresent(vrx -> {
                 List<VRXOne> ones = vrx.getEntries().isEmpty() ? Collections.emptyList()
                         : vrx.getEntries().stream()

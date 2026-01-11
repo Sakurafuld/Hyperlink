@@ -1,9 +1,9 @@
-# Hyperlink(v3.0での情報も含む)
+# Hyperlink
 MinecraftForge
 
 ハイパー桁外れなアイテムとボスを追加するMod
 
-# ↓Config(すべて1.20.1でのデフォルトの値)
+# ↓Config(すべて1.20.1でのデフォルトの値、v3.0での情報も含む)
 
 - Config warning = true
   - バージョン2.0でコンフィグファイルが統合されたことをログイン時に警告するか

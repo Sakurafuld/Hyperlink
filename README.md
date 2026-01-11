@@ -1,4 +1,4 @@
-# Hyperlink
+# Hyperlink(v3.0での情報も含む)
 MinecraftForge
 
 ハイパー桁外れなアイテムとボスを追加するMod

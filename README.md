@@ -25,7 +25,7 @@ MinecraftForge
   - ノベルカリバーのプログラム的脆弱性を有効にするか
 - Ignore entities = [ "minecraft:item", "minecraft:experience_orb", "hyperdaimc:fumetsu_skull", "hyperdaimc:fumetsu_storm", "hyperdaimc:fumetsu_storm_skull" ]
   - ノベルカリバーを無視するエンティティのリスト
-- Special entities = [ "minecraft:ender_dragon", "draconicevolution:draconic_guardian", "cataclysm:ender_guardian", "cataclysm:netherite_monstrosity", "cataclysm:ignis", "cataclysm:the_harbinger", "cataclysm:the_prowler", "cataclysm:coralssus", "cataclysm:amethyst_crab", "cataclysm:ancient_remnant", "cataclysm:wadjet", "cataclysm:maledictus", "cataclysm:aptrgangr" ]
+- Special entities = [ "minecraft:ender_dragon", "draconicevolution:draconic_guardian", "cataclysm:ender_guardian", "cataclysm:netherite_monstrosity", "cataclysm:ignis", "cataclysm:the_harbinger", "cataclysm:the_prowler", "cataclysm:coralssus", "cataclysm:amethyst_crab", "cataclysm:ancient_remnant", "cataclysm:wadjet", "cataclysm:maledictus", "cataclysm:aptrgangr", "iceandfire:ice_dragon", "iceandfire:fire_dragon", "iceandfire:lightning_dragon", "fantasy_ending:ultimate_order_manager" ]
   - 死亡処理を中断しないエンティティのリスト(撃破演出を持っているなど)
 - Novel reach = 6.0
   - 殴れる最大リーチ

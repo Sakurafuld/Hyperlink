@@ -21,23 +21,33 @@ MinecraftForge
 
 - Enable Novel = true
   - ノベルカリバーを機能させるのか
+- Novel vulnerabilization = false
+  - ノベルカリバーのプログラム的脆弱性を有効にするか
 - Ignore entities = [ "minecraft:item", "minecraft:experience_orb", "hyperdaimc:fumetsu_skull", "hyperdaimc:fumetsu_storm", "hyperdaimc:fumetsu_storm_skull" ]
   - ノベルカリバーを無視するエンティティのリスト
 - Special entities = [ "minecraft:ender_dragon", "draconicevolution:draconic_guardian", "cataclysm:ender_guardian", "cataclysm:netherite_monstrosity", "cataclysm:ignis", "cataclysm:the_harbinger", "cataclysm:the_prowler", "cataclysm:coralssus", "cataclysm:amethyst_crab", "cataclysm:ancient_remnant", "cataclysm:wadjet", "cataclysm:maledictus", "cataclysm:aptrgangr" ]
   - 死亡処理を中断しないエンティティのリスト(撃破演出を持っているなど)
+- Novel reach = 6.0
+  - 殴れる最大リーチ
 - Invert Novel control = false
   - スニーク時の操作挙動を反転させるか(デフォルトではスニークすると単体攻撃)
+- Rendering level = ALL
+  - パーティクルなどをどのレベルまで表示するか(NONEで全て無効化、UNIQUEで小っちゃいヤツだけ無効化)
 
 ## Chronicle
 
 - Enable Chronicle = true
   - クロニクロックを機能させるのか
+- Chronicle vulnerabilization = false
+  - クロニクロックのプログラム的脆弱性を有効にするか
 - Hyper Chronicle = false
   - クロニクロックがピックドクスの破壊を完全に弾くか
 - Pause owner = false
   - 保護した本人が影響を受けるか
 - Pause interaction = false
   - アドベンチャーモードのようにブロックへのインタラクトを防ぐか
+- Show protection = true
+  - 保護領域を殴った時などに演出を出すか
 - Selection size = 16384
   - 一度に設定できる保護の最大範囲
 - Invert Chronicle control = false
@@ -49,13 +59,25 @@ MinecraftForge
   - ピックドクスを機能させるのか
 - Fluid Paradox = true
   - 液体を破壊できるか
+- Destroy at once = 256
+  - チェイン採掘時、一度に破壊する数
+- Destroy per ticks = 4
+  - チェイン採掘時、破壊を何tickごとに行うか
+- Fade duration = 200
+  - ピックドクスから手を放してチェインが消えるまでのtick時間
 - Invert Paradox control = false
   - スニーク時の操作挙動を反転させるか(デフォルトではスニークすると1ブロックずつ破壊)
+- Disable chaining particles = false
+  - チェイン採掘時のパーティクルを完全に無効化するか
+- Rendering level = TERRAIN
+  - パーティクルをどのレベルまで表示するか(NONEで全て無効化、ALLで小っちゃいヤツを有効化)
 
 ## VRX
 
 - Enable VRX = true
   - V.R.X.を機能させるのか
+- VRX vulnerabilization = false
+  - V.R.X.のプログラム的脆弱性を有効にするか
 - Keep VRX = true
   - 自身を対象としたV.R.X.が死亡後も保たれるか
 - Create for others = false
@@ -64,6 +86,8 @@ MinecraftForge
   - V.R.X.のセットアップをJEIから行えるか
 - Seal Hyperlink = true
   - V.R.X.にHyperlinkのアイテムを設定できなくするか
+- Emc value = "9223372036854775807"
+  - EMCの供給速度(ProjectEが導入されている場合のみ)
 
 ## Fumetsu
 
